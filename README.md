@@ -113,3 +113,7 @@ Kế hoạch thực hiện: Phần mềm được làm trong 2 tuần, đầu th
 
 - Sau khi hoàn thành đợt tiêm chủng, cần lấy dữ liệu kết xuất từ CSDL Quốc gia về tiêm chủng để cập nhật lại danh sách những người đã được tiêm chủng, phục vụ loại bỏ trùng ở bước đăng ký tiêm chủng.
 
+# Các địa chỉ mạng xã hội
+- Group Facebook: https://www.facebook.com/groups/vaccom.vn
+- Fanpage: https://www.facebook.com/vaccom.vn
+
