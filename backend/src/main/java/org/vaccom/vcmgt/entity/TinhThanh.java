@@ -28,11 +28,11 @@ public class TinhThanh implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "TinhThanh_Ma")
-	private String tinhThanh_Ma;
+	@Column(name = "TinhThanhMa")
+	private String tinhThanhMa;
 
-	@Column(name = "TinhThanh_Ten")
-	private String tinhThanh_Ten;
+	@Column(name = "TinhThanhTen")
+	private String tinhThanhTen;
 
 	public long getId() {
 		return id;
@@ -42,20 +42,20 @@ public class TinhThanh implements Serializable {
 		this.id = id;
 	}
 
-	public String getTinhThanh_Ma() {
-		return tinhThanh_Ma;
+	public String getTinhThanhMa() {
+		return tinhThanhMa;
 	}
 
-	public void setTinhThanh_Ma(String tinhThanh_Ma) {
-		this.tinhThanh_Ma = tinhThanh_Ma;
+	public void setTinhThanhMa(String tinhThanhMa) {
+		this.tinhThanhMa = tinhThanhMa;
 	}
 
-	public String getTinhThanh_Ten() {
-		return tinhThanh_Ten;
+	public String getTinhThanhTen() {
+		return tinhThanhTen;
 	}
 
-	public void setTinhThanh_Ten(String tinhThanh_Ten) {
-		this.tinhThanh_Ten = tinhThanh_Ten;
+	public void setTinhThanhTen(String tinhThanhTen) {
+		this.tinhThanhTen = tinhThanhTen;
 	}
 
 }

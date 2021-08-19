@@ -68,38 +68,38 @@ public class NguoiTiemChung implements Serializable {
 	@Column(name = "DiaChiNoiO")
 	private int diaChiNoiO;
 
-	@Column(name = "TinhThanh_Ma")
-	private String tinhThanh_Ma;
+	@Column(name = "TinhThanhMa")
+	private String tinhThanhMa;
 
-	@Column(name = "TinhThanh_Ten")
-	private String tinhThanh_Ten;
+	@Column(name = "TinhThanhTen")
+	private String tinhThanhTen;
 
-	@Column(name = "QuanHuyen_Ma")
-	private String quanHuyen_Ma;
+	@Column(name = "QuanHuyenMa")
+	private String quanHuyenMa;
 
-	@Column(name = "QuanHuyen_Ten")
-	private String quanHuyen_Ten;
+	@Column(name = "QuanHuyenTen")
+	private String quanHuyenTen;
 
-	@Column(name = "PhuongXa_Ma")
-	private String phuongXa_Ma;
+	@Column(name = "PhuongXaMa")
+	private String phuongXaMa;
 
-	@Column(name = "PhuongXa_Ten")
-	private String phuongXa_Ten;
+	@Column(name = "PhuongXaTen")
+	private String phuongXaTen;
 
-	@Column(name = "DiaBanCoSo_ID")
-	private long diaBanCoSo_ID;
+	@Column(name = "DiaBanCoSoID")
+	private long diaBanCoSoID;
 
-	@Column(name = "CoSoYTe_Ma")
-	private String coSoYTe_Ma;
+	@Column(name = "CoSoYTeMa")
+	private String coSoYTeMa;
 
-	@Column(name = "CoSoYTe_Ten")
-	private String coSoYTe_Ten;
+	@Column(name = "CoSoYTeTen")
+	private String coSoYTeTen;
 
-	@Column(name = "DanToc_Ma")
-	private String danToc_Ma;
+	@Column(name = "DanTocMa")
+	private String danTocMa;
 
-	@Column(name = "QuocTich_Ma")
-	private String quocTich_Ma;
+	@Column(name = "QuocTichMa")
+	private String quocTichMa;
 
 	@Column(name = "TienSuDiUng")
 	private String tienSuDiUng;
@@ -223,92 +223,92 @@ public class NguoiTiemChung implements Serializable {
 		this.diaChiNoiO = diaChiNoiO;
 	}
 
-	public String getTinhThanh_Ma() {
-		return tinhThanh_Ma;
+	public String getTinhThanhMa() {
+		return tinhThanhMa;
 	}
 
-	public void setTinhThanh_Ma(String tinhThanh_Ma) {
-		this.tinhThanh_Ma = tinhThanh_Ma;
+	public void setTinhThanhMa(String tinhThanhMa) {
+		this.tinhThanhMa = tinhThanhMa;
 	}
 
-	public String getTinhThanh_Ten() {
-		return tinhThanh_Ten;
+	public String getTinhThanhTen() {
+		return tinhThanhTen;
 	}
 
-	public void setTinhThanh_Ten(String tinhThanh_Ten) {
-		this.tinhThanh_Ten = tinhThanh_Ten;
+	public void setTinhThanhTen(String tinhThanhTen) {
+		this.tinhThanhTen = tinhThanhTen;
 	}
 
-	public String getQuanHuyen_Ma() {
-		return quanHuyen_Ma;
+	public String getQuanHuyenMa() {
+		return quanHuyenMa;
 	}
 
-	public void setQuanHuyen_Ma(String quanHuyen_Ma) {
-		this.quanHuyen_Ma = quanHuyen_Ma;
+	public void setQuanHuyenMa(String quanHuyenMa) {
+		this.quanHuyenMa = quanHuyenMa;
 	}
 
-	public String getQuanHuyen_Ten() {
-		return quanHuyen_Ten;
+	public String getQuanHuyenTen() {
+		return quanHuyenTen;
 	}
 
-	public void setQuanHuyen_Ten(String quanHuyen_Ten) {
-		this.quanHuyen_Ten = quanHuyen_Ten;
+	public void setQuanHuyenTen(String quanHuyenTen) {
+		this.quanHuyenTen = quanHuyenTen;
 	}
 
-	public String getPhuongXa_Ma() {
-		return phuongXa_Ma;
+	public String getPhuongXaMa() {
+		return phuongXaMa;
 	}
 
-	public void setPhuongXa_Ma(String phuongXa_Ma) {
-		this.phuongXa_Ma = phuongXa_Ma;
+	public void setPhuongXaMa(String phuongXaMa) {
+		this.phuongXaMa = phuongXaMa;
 	}
 
-	public String getPhuongXa_Ten() {
-		return phuongXa_Ten;
+	public String getPhuongXaTen() {
+		return phuongXaTen;
 	}
 
-	public void setPhuongXa_Ten(String phuongXa_Ten) {
-		this.phuongXa_Ten = phuongXa_Ten;
+	public void setPhuongXaTen(String phuongXaTen) {
+		this.phuongXaTen = phuongXaTen;
 	}
 
-	public long getDiaBanCoSo_ID() {
-		return diaBanCoSo_ID;
+	public long getDiaBanCoSoID() {
+		return diaBanCoSoID;
 	}
 
-	public void setDiaBanCoSo_ID(long diaBanCoSo_ID) {
-		this.diaBanCoSo_ID = diaBanCoSo_ID;
+	public void setDiaBanCoSoID(long diaBanCoSoID) {
+		this.diaBanCoSoID = diaBanCoSoID;
 	}
 
-	public String getCoSoYTe_Ma() {
-		return coSoYTe_Ma;
+	public String getCoSoYTeMa() {
+		return coSoYTeMa;
 	}
 
-	public void setCoSoYTe_Ma(String coSoYTe_Ma) {
-		this.coSoYTe_Ma = coSoYTe_Ma;
+	public void setCoSoYTeMa(String coSoYTeMa) {
+		this.coSoYTeMa = coSoYTeMa;
 	}
 
-	public String getCoSoYTe_Ten() {
-		return coSoYTe_Ten;
+	public String getCoSoYTeTen() {
+		return coSoYTeTen;
 	}
 
-	public void setCoSoYTe_Ten(String coSoYTe_Ten) {
-		this.coSoYTe_Ten = coSoYTe_Ten;
+	public void setCoSoYTeTen(String coSoYTeTen) {
+		this.coSoYTeTen = coSoYTeTen;
 	}
 
-	public String getDanToc_Ma() {
-		return danToc_Ma;
+	public String getDanTocMa() {
+		return danTocMa;
 	}
 
-	public void setDanToc_Ma(String danToc_Ma) {
-		this.danToc_Ma = danToc_Ma;
+	public void setDanTocMa(String danTocMa) {
+		this.danTocMa = danTocMa;
 	}
 
-	public String getQuocTich_Ma() {
-		return quocTich_Ma;
+	public String getQuocTichMa() {
+		return quocTichMa;
 	}
 
-	public void setQuocTich_Ma(String quocTich_Ma) {
-		this.quocTich_Ma = quocTich_Ma;
+	public void setQuocTichMa(String quocTichMa) {
+		this.quocTichMa = quocTichMa;
 	}
 
 	public String getTienSuDiUng() {

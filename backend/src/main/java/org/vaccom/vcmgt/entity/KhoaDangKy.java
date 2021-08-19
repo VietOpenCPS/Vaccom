@@ -11,15 +11,15 @@ import javax.persistence.Table;
 import org.vaccom.vcmgt.constant.DBConstant;
 
 @Entity
-@Table(name = DBConstant._KHOA_TABLE_NAME)
-public class Khoa implements Serializable {
+@Table(name = DBConstant._KHOADANGKY_TABLE_NAME)
+public class KhoaDangKy implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Khoa() {
+	public KhoaDangKy() {
 
 	}
 
@@ -28,8 +28,8 @@ public class Khoa implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "NguoiDung_ID")
-	private long nguoiDung_ID;
+	@Column(name = "NguoiDungID")
+	private long nguoiDungID;
 
 	@Column(name = "KhoaCongKhai")
 	private String khoaCongKhai;
@@ -51,12 +51,12 @@ public class Khoa implements Serializable {
 		this.id = id;
 	}
 
-	public long getNguoiDung_ID() {
-		return nguoiDung_ID;
+	public long getNguoiDungID() {
+		return nguoiDungID;
 	}
 
-	public void setNguoiDung_ID(long nguoiDung_ID) {
-		this.nguoiDung_ID = nguoiDung_ID;
+	public void setNguoiDungID(long nguoiDungID) {
+		this.nguoiDungID = nguoiDungID;
 	}
 
 	public String getKhoaCongKhai() {

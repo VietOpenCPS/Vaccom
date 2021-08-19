@@ -28,11 +28,11 @@ public class QuocGia implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "DanToc_Ma")
-	private String danToc_Ma;
+	@Column(name = "QuocGiaMa")
+	private String quocGiaMa;
 
-	@Column(name = "DanToc_Ten")
-	private String danToc_Ten;
+	@Column(name = "QuocGiaTen")
+	private String quocGiaTen;
 
 	public long getId() {
 		return id;
@@ -42,20 +42,20 @@ public class QuocGia implements Serializable {
 		this.id = id;
 	}
 
-	public String getDanToc_Ma() {
-		return danToc_Ma;
+	public String getQuocGiaMa() {
+		return quocGiaMa;
 	}
 
-	public void setDanToc_Ma(String danToc_Ma) {
-		this.danToc_Ma = danToc_Ma;
+	public void setQuocGiaMa(String quocGiaMa) {
+		this.quocGiaMa = quocGiaMa;
 	}
 
-	public String getDanToc_Ten() {
-		return danToc_Ten;
+	public String getQuocGiaTen() {
+		return quocGiaTen;
 	}
 
-	public void setDanToc_Ten(String danToc_Ten) {
-		this.danToc_Ten = danToc_Ten;
+	public void setQuocGiaTen(String quocGiaTen) {
+		this.quocGiaTen = quocGiaTen;
 	}
 
 }

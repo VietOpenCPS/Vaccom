@@ -41,7 +41,6 @@ public class NguoiDung implements Serializable {
 	@Column(name = "ChucDanh")
 	private String chucDanh;
 
-	@NotBlank
 	@Column(name = "SoDienThoai")
 	private String soDienThoai;
 
@@ -51,11 +50,11 @@ public class NguoiDung implements Serializable {
 	@Column(name = "MatKhau")
 	private String matKhau;
 
-	@Column(name = "DiaBanCoSo_ID")
-	private long diaBanCoSo_ID;
+	@Column(name = "DiaBanCoSoID")
+	private long diaBanCoSoID;
 
-	@Column(name = "CoSoYTe_ID")
-	private long coSoYTe_ID;
+	@Column(name = "CoSoYTeID")
+	private long coSoYTeID;
 
 	@Column(name = "QuanTriHeThong")
 	private boolean quanTriHeThong;
@@ -119,20 +118,20 @@ public class NguoiDung implements Serializable {
 		this.matKhau = matKhau;
 	}
 
-	public long getDiaBanCoSo_ID() {
-		return diaBanCoSo_ID;
+	public long getDiaBanCoSoID() {
+		return diaBanCoSoID;
 	}
 
-	public void setDiaBanCoSo_ID(long diaBanCoSo_ID) {
-		this.diaBanCoSo_ID = diaBanCoSo_ID;
+	public void setDiaBanCoSoID(long diaBanCoSoID) {
+		this.diaBanCoSoID = diaBanCoSoID;
 	}
 
-	public long getCoSoYTe_ID() {
-		return coSoYTe_ID;
+	public long getCoSoYTeID() {
+		return coSoYTeID;
 	}
 
-	public void setCoSoYTe_ID(long coSoYTe_ID) {
-		this.coSoYTe_ID = coSoYTe_ID;
+	public void setCoSoYTeID(long coSoYTeID) {
+		this.coSoYTeID = coSoYTeID;
 	}
 
 	public boolean isQuanTriHeThong() {

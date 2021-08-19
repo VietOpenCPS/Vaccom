@@ -31,23 +31,23 @@ public class DiaBanCoSo implements Serializable {
 	@Column(name = "TenDiaBan")
 	private String tenDiaBan;
 
-	@Column(name = "TinhThanh_Ma")
-	private String tinhThanh_Ma;
+	@Column(name = "TinhThanhMa")
+	private String tinhThanhMa;
 
-	@Column(name = "TinhThanh_Ten")
-	private String tinhThanh_Ten;
+	@Column(name = "TinhThanhTen")
+	private String tinhThanhTen;
 
-	@Column(name = "QuanHuyen_Ma")
-	private String quanHuyen_Ma;
+	@Column(name = "QuanHuyenMa")
+	private String quanHuyenMa;
 
-	@Column(name = "QuanHuyen_Ten")
-	private String quanHuyen_Ten;
+	@Column(name = "QuanHuyenTen")
+	private String quanHuyenTen;
 
-	@Column(name = "PhuongXa_Ma")
-	private String phuongXa_Ma;
+	@Column(name = "PhuongXaMa")
+	private String phuongXaMa;
 
-	@Column(name = "PhuongXa_Ten")
-	private String phuongXa_Ten;
+	@Column(name = "PhuongXaTen")
+	private String phuongXaTen;
 
 	public long getId() {
 		return id;
@@ -65,52 +65,52 @@ public class DiaBanCoSo implements Serializable {
 		this.tenDiaBan = tenDiaBan;
 	}
 
-	public String getTinhThanh_Ma() {
-		return tinhThanh_Ma;
+	public String getTinhThanhMa() {
+		return tinhThanhMa;
 	}
 
-	public void setTinhThanh_Ma(String tinhThanh_Ma) {
-		this.tinhThanh_Ma = tinhThanh_Ma;
+	public void setTinhThanhMa(String tinhThanhMa) {
+		this.tinhThanhMa = tinhThanhMa;
 	}
 
-	public String getTinhThanh_Ten() {
-		return tinhThanh_Ten;
+	public String getTinhThanhTen() {
+		return tinhThanhTen;
 	}
 
-	public void setTinhThanh_Ten(String tinhThanh_Ten) {
-		this.tinhThanh_Ten = tinhThanh_Ten;
+	public void setTinhThanhTen(String tinhThanhTen) {
+		this.tinhThanhTen = tinhThanhTen;
 	}
 
-	public String getQuanHuyen_Ma() {
-		return quanHuyen_Ma;
+	public String getQuanHuyenMa() {
+		return quanHuyenMa;
 	}
 
-	public void setQuanHuyen_Ma(String quanHuyen_Ma) {
-		this.quanHuyen_Ma = quanHuyen_Ma;
+	public void setQuanHuyenMa(String quanHuyenMa) {
+		this.quanHuyenMa = quanHuyenMa;
 	}
 
-	public String getQuanHuyen_Ten() {
-		return quanHuyen_Ten;
+	public String getQuanHuyenTen() {
+		return quanHuyenTen;
 	}
 
-	public void setQuanHuyen_Ten(String quanHuyen_Ten) {
-		this.quanHuyen_Ten = quanHuyen_Ten;
+	public void setQuanHuyenTen(String quanHuyenTen) {
+		this.quanHuyenTen = quanHuyenTen;
 	}
 
-	public String getPhuongXa_Ma() {
-		return phuongXa_Ma;
+	public String getPhuongXaMa() {
+		return phuongXaMa;
 	}
 
-	public void setPhuongXa_Ma(String phuongXa_Ma) {
-		this.phuongXa_Ma = phuongXa_Ma;
+	public void setPhuongXaMa(String phuongXaMa) {
+		this.phuongXaMa = phuongXaMa;
 	}
 
-	public String getPhuongXa_Ten() {
-		return phuongXa_Ten;
+	public String getPhuongXaTen() {
+		return phuongXaTen;
 	}
 
-	public void setPhuongXa_Ten(String phuongXa_Ten) {
-		this.phuongXa_Ten = phuongXa_Ten;
+	public void setPhuongXaTen(String phuongXaTen) {
+		this.phuongXaTen = phuongXaTen;
 	}
 
 }
