@@ -14,7 +14,7 @@ import org.vaccom.vcmgt.entity.NguoiDung;
 @Transactional
 public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
 
-	public NguoiDung findByID(long id);
+	public NguoiDung findById(long id);
 
 	public NguoiDung findByTenDangNhap(String tenDangNhap);
 
