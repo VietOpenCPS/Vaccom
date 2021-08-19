@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS `t_nguoidung` (
   `SoDienThoai` varchar(20) DEFAULT NULL,
   `Email` varchar(64) DEFAULT NULL,
   `MatKhau` varchar(512) NOT NULL,
-  `DiaBanCoSo_ID` bigint(20) DEFAULT NULL,
-  `CoSoYTe_ID` bigint(20) DEFAULT NULL,
+  `DiaBanCoSoID` bigint(20) DEFAULT NULL,
+  `CoSoYTeID` bigint(20) DEFAULT NULL,
   `QuanTriHeThong` boolean DEFAULT FALSE,
   `KhoaTaiKhoan` boolean DEFAULT FALSE,
   PRIMARY KEY (`ID`)
@@ -17,12 +17,12 @@ CREATE TABLE IF NOT EXISTS `t_nguoidung` (
 
 CREATE TABLE IF NOT EXISTS `t_diabancoso` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TinhThanh_Ma` varchar(5) NOT NULL,
-  `TinhThanh_Ten` varchar(64) NOT NULL,
-  `QuanHuyen_Ma` varchar(5) NOT NULL,
-  `QuanHuyen_Ten` varchar(64) NOT NULL,
-  `PhuongXa_Ma` varchar(5) NOT NULL,
-  `PhuongXa_Ten` varchar(64) NOT NULL,
+  `TinhThanhMa` varchar(5) NOT NULL,
+  `TinhThanhTen` varchar(64) NOT NULL,
+  `QuanHuyenMa` varchar(5) NOT NULL,
+  `QuanHuyenTen` varchar(64) NOT NULL,
+  `PhuongXaMa` varchar(5) NOT NULL,
+  `PhuongXaTen` varchar(64) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
@@ -30,12 +30,12 @@ CREATE TABLE IF NOT EXISTS `t_cosoyte` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `MaCoSo` varchar(5) NOT NULL,
   `TenCoSo` varchar(256) NOT NULL,
-  `TinhThanh_Ma` varchar(5) NOT NULL,
-  `TinhThanh_Ten` varchar(64) NOT NULL,
-  `QuanHuyen_Ma` varchar(5) NOT NULL,
-  `QuanHuyen_Ten` tinyint(64) NOT NULL,
-  `PhuongXa_Ma` varchar(5) NOT NULL,
-  `PhuongXa_Ten` tinyint(64) NOT NULL,
+  `TinhThanhMa` varchar(5) NOT NULL,
+  `TinhThanhTen` varchar(64) NOT NULL,
+  `QuanHuyenMa` varchar(5) NOT NULL,
+  `QuanHuyenTen` tinyint(64) NOT NULL,
+  `PhuongXaMa` varchar(5) NOT NULL,
+  `PhuongXaTen` tinyint(64) NOT NULL,
   `DiaChiCoSo` varchar(512) NOT NULL,
   `NguoiDaiDien` varchar(128) DEFAULT NULL,
   `SoDienThoai` varchar(20) DEFAULT NULL,
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `t_cosoyte` (
 
 CREATE TABLE IF NOT EXISTS `t_phieuhentiem` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `LichTiemChung_ID` bigint(20) NOT NULL,
-  `NguoiTiemChung_ID` bigint(20) NOT NULL,
+  `LichTiemChungID` bigint(20) NOT NULL,
+  `NguoiTiemChungID` bigint(20) NOT NULL,
   `MaPhieuHen` varchar(10) NOT NULL,
   `NgayHenTiem` varchar(6) NOT NULL,
   `GioHenTiem` varchar(4) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `t_phieuhentiem` (
 
 CREATE TABLE IF NOT EXISTS `t_lichtiemchung` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `CoSoYTe_ID` bigint(20) NOT NULL,
+  `CoSoYTeID` bigint(20) NOT NULL,
   `TenDot` varchar(256) NOT NULL,
   `NgayBatDau` varchar(6) NOT NULL,
   `NgayKetThuc` varchar(6) NOT NULL,
@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS `t_muitiemchung` (
   `HoVaTen` varchar(128) NOT NULL,
   `NgaySinh` varchar(6) NOT NULL,
   `CMTCCCD` varchar(20) NOT NULL,
-  `CoSoYTe_Ma` varchar(64) NOT NULL,
-  `CoSoYTe_Ten` varchar(256) NOT NULL,
+  `CoSoYTeMa` varchar(64) NOT NULL,
+  `CoSoYTeTen` varchar(256) NOT NULL,
   `LanTiem` tinyint(4) NOT NULL,
   `NgayTiemChung` varchar(6) NOT NULL,
   `GioTiemChung` varchar(4) NOT NULL,
@@ -101,17 +101,17 @@ CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `MaSoBHXH` varchar(64) DEFAULT NULL,
   `SoTheBHYT` varchar(64) DEFAULT NULL,
   `DiaChiNoiO` varchar(512) NOT NULL,
-  `TinhThanh_Ma` varchar(5) NOT NULL,
-  `TinhThanh_Ten` varchar(64) NOT NULL,
-  `QuanHuyen_Ma` varchar(5) NOT NULL,
-  `QuanHuyen_Ten` tinyint(64) NOT NULL,
-  `PhuongXa_Ma` varchar(5) NOT NULL,
-  `PhuongXa_Ten` tinyint(64) NOT NULL,
-  `DiaBanCoSo_ID` bigint(20) NOT NULL,
-  `CoSoYTe_Ma` tinyint(64) DEFAULT NULL,
-  `CoSoYTe_Ten` tinyint(64) DEFAULT NULL,
-  `DanToc_Ma` varchar(2) NOT NULL,
-  `QuocTich_Ma` varchar(3) NOT NULL,
+  `TinhThanhMa` varchar(5) NOT NULL,
+  `TinhThanhTen` varchar(64) NOT NULL,
+  `QuanHuyenMa` varchar(5) NOT NULL,
+  `QuanHuyenTen` tinyint(64) NOT NULL,
+  `PhuongXaMa` varchar(5) NOT NULL,
+  `PhuongXaTen` tinyint(64) NOT NULL,
+  `DiaBanCoSoID` bigint(20) NOT NULL,
+  `CoSoYTeMa` tinyint(64) DEFAULT NULL,
+  `CoSoYTeTen` tinyint(64) DEFAULT NULL,
+  `DanTocMa` varchar(2) NOT NULL,
+  `QuocTichMa` varchar(3) NOT NULL,
   `TienSuDiUng` varchar(512) DEFAULT NULL,
   `CacBenhLyDangMac` varchar(512) DEFAULT NULL,
   `CacThuocDangDung` varchar(512) DEFAULT NULL,
@@ -123,47 +123,55 @@ CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
 
 CREATE TABLE IF NOT EXISTS `t_quocgia` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `QuocGia_Ma` varchar(5) NOT NULL,
-  `QuocGia_Ten` varchar(256) NOT NULL,
+  `QuocGiaMa` varchar(5) NOT NULL,
+  `QuocGiaTen` varchar(256) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
 CREATE TABLE IF NOT EXISTS `t_dantoc` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `DanToc_Ma` varchar(5) NOT NULL,
-  `DanToc_Ten` varchar(64) NOT NULL,
+  `DanTocMa` varchar(5) NOT NULL,
+  `DanTocTen` varchar(64) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
 CREATE TABLE IF NOT EXISTS `t_tinhthanh` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TinhThanh_Ma` varchar(5) NOT NULL,
-  `TinhThanh_Ten` varchar(64) NOT NULL,
+  `TinhThanhMa` varchar(5) NOT NULL,
+  `TinhThanhTen` varchar(64) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
 CREATE TABLE IF NOT EXISTS `t_quanhuyen` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `QuanHuyen_Ma` varchar(5) NOT NULL,
-  `QuanHuyen_Ten` varchar(64) NOT NULL,
-  `TinhThanh_ID` bigint(20) NOT NULL,
+  `QuanHuyenMa` varchar(5) NOT NULL,
+  `QuanHuyenTen` varchar(64) NOT NULL,
+  `TinhThanhID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
 CREATE TABLE IF NOT EXISTS `t_phuongxa` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `PhuongXa_Ma` varchar(5) NOT NULL,
-  `PhuongXa_Ten` varchar(64) NOT NULL,
-  `QuanHuyen_ID` bigint(20) NOT NULL,
+  `PhuongXaMa` varchar(5) NOT NULL,
+  `PhuongXaTen` varchar(64) NOT NULL,
+  `QuanHuyenID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
-CREATE TABLE IF NOT EXISTS `vc_khoa` (
+CREATE TABLE IF NOT EXISTS `vc_khoadangky` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `NguoiDung_ID` bigint(20) NOT NULL,
+  `NguoiDungID` bigint(20) NOT NULL,
   `KhoaCongKhai` varchar(128) NOT NULL,
   `KhoaBiMat` varchar(128) NOT NULL,
   `PhamVi` varchar(20) NOT NULL,
+  `TrangThai` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ;
+
+CREATE TABLE IF NOT EXISTS `vc_khoatruycap` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `KhoaTruyCap` varchar(1024) NOT NULL,
+  `DoiTuong` varchar(128) NOT NULL,
   `TrangThai` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ;
