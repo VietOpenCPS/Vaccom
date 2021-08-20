@@ -28,8 +28,8 @@ public class LichTiemChung implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "CoSoYTe_ID")
-	private long coSoYTe_ID;
+	@Column(name = "CoSoYTeID")
+	private long coSoYTeID;
 
 	@Column(name = "TenDot")
 	private String tenDot;
@@ -69,12 +69,12 @@ public class LichTiemChung implements Serializable {
 		this.id = id;
 	}
 
-	public long getCoSoYTe_ID() {
-		return coSoYTe_ID;
+	public long getCoSoYTeID() {
+		return coSoYTeID;
 	}
 
-	public void setCoSoYTe_ID(long coSoYTe_ID) {
-		this.coSoYTe_ID = coSoYTe_ID;
+	public void setCoSoYTeID(long coSoYTeID) {
+		this.coSoYTeID = coSoYTeID;
 	}
 
 	public String getTenDot() {

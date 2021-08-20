@@ -28,14 +28,14 @@ public class QuanHuyen implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "QuanHuyen_Ma")
-	private String quanHuyen_Ma;
+	@Column(name = "QuanHuyenMa")
+	private String quanHuyenMa;
 
-	@Column(name = "QuanHuyen_Ten")
-	private String quanHuyen_Ten;
+	@Column(name = "QuanHuyenTen")
+	private String quanHuyenTen;
 
-	@Column(name = "TinhThanh_ID")
-	private long tinhThanh_ID;
+	@Column(name = "TinhThanhID")
+	private long tinhThanhID;
 
 	public long getId() {
 		return id;
@@ -45,28 +45,28 @@ public class QuanHuyen implements Serializable {
 		this.id = id;
 	}
 
-	public String getQuanHuyen_Ma() {
-		return quanHuyen_Ma;
+	public String getQuanHuyenMa() {
+		return quanHuyenMa;
 	}
 
-	public void setQuanHuyen_Ma(String quanHuyen_Ma) {
-		this.quanHuyen_Ma = quanHuyen_Ma;
+	public void setQuanHuyenMa(String quanHuyenMa) {
+		this.quanHuyenMa = quanHuyenMa;
 	}
 
-	public String getQuanHuyen_Ten() {
-		return quanHuyen_Ten;
+	public String getQuanHuyenTen() {
+		return quanHuyenTen;
 	}
 
-	public void setQuanHuyen_Ten(String quanHuyen_Ten) {
-		this.quanHuyen_Ten = quanHuyen_Ten;
+	public void setQuanHuyenTen(String quanHuyenTen) {
+		this.quanHuyenTen = quanHuyenTen;
 	}
 
-	public long getTinhThanh_ID() {
-		return tinhThanh_ID;
+	public long getTinhThanhID() {
+		return tinhThanhID;
 	}
 
-	public void setTinhThanh_ID(long tinhThanh_ID) {
-		this.tinhThanh_ID = tinhThanh_ID;
+	public void setTinhThanhID(long tinhThanhID) {
+		this.tinhThanhID = tinhThanhID;
 	}
 
 }

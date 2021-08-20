@@ -37,11 +37,11 @@ public class MuiTiemChung implements Serializable {
 	@Column(name = "CMTCCCD")
 	private String cmtcccd;
 
-	@Column(name = "CoSoYTe_Ma")
-	private String coSoYTe_Ma;
+	@Column(name = "CoSoYTeMa")
+	private String coSoYTeMa;
 
-	@Column(name = "CoSoYTe_Ten")
-	private String coSoYTe_Ten;
+	@Column(name = "CoSoYTeTen")
+	private String coSoYTeTen;
 
 	@Column(name = "LanTiem")
 	private int lanTiem;
@@ -99,20 +99,20 @@ public class MuiTiemChung implements Serializable {
 		this.cmtcccd = cmtcccd;
 	}
 
-	public String getCoSoYTe_Ma() {
-		return coSoYTe_Ma;
+	public String getCoSoYTeMa() {
+		return coSoYTeMa;
 	}
 
-	public void setCoSoYTe_Ma(String coSoYTe_Ma) {
-		this.coSoYTe_Ma = coSoYTe_Ma;
+	public void setCoSoYTeMa(String coSoYTeMa) {
+		this.coSoYTeMa = coSoYTeMa;
 	}
 
-	public String getCoSoYTe_Ten() {
-		return coSoYTe_Ten;
+	public String getCoSoYTeTen() {
+		return coSoYTeTen;
 	}
 
-	public void setCoSoYTe_Ten(String coSoYTe_Ten) {
-		this.coSoYTe_Ten = coSoYTe_Ten;
+	public void setCoSoYTeTen(String coSoYTeTen) {
+		this.coSoYTeTen = coSoYTeTen;
 	}
 
 	public int getLanTiem() {
