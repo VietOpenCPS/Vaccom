@@ -1,0 +1,100 @@
+# Vaccom -  phần mềm hỗ trợ quản lý và tổ chức điểm tiêm chủng Vaccine
+#     Copyright (C) 2021 Vaccom Development team
+
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
+
+#     You should have received a copy of the GNU Affero General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+version: '3.2'
+
+services:
+  vaccom-mariadb:
+    container_name: vaccom-mariadb
+    image: mariadb
+    hostname: vaccom-mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=Vaccom@2021
+      - MYSQL_DATABASE=db_vaccom
+      - MYSQL_USER=user_vaccom
+      - MYSQL_PASSWORD=Vaccom2021@
+    volumes:
+      - "./mariadb/databases:/var/lib/mysql"
+    networks:
+        vaccom:
+          ipv4_address: 20.0.0.2
+
+  vaccom-backend:
+    container_name: vaccom-backend
+    image: vaccom-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    hostname: vaccom-backend
+    restart: always
+    volumes:
+      - "./backend/code:/opt/code"
+    tty: true
+    networks:
+        vaccom:
+          ipv4_address: 20.0.0.3
+
+  vaccom-proxy:
+    container_name: vaccom-proxy
+    image: nginx
+    hostname: vaccom-proxy
+    restart: always
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    environment:
+      - DOMAIN=thachban.vaccom.vn
+    volumes:
+      - "./proxy/conf.d:/etc/nginx/conf.d"
+      - "./proxy/logs:/var/log/nginx"
+    ports:
+      - "119.17.200.21:8080:8080"
+    networks:
+        vaccom:
+          ipv4_address: 20.0.0.4
+
+  vaccom-frontend:
+    container_name: vaccom-frontend
+    image: vaccom-frontend
+    hostname: vaccom-frontend
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - CERTBOT_EMAIL=hieunv@iwayvietnam.com
+      - DOMAIN_LIST=thachban.vaccom.vn 
+      - DOMAIN=thachban.vaccom.vn 
+    volumes:
+      - "./frontend/config/letsencrypt:/etc/letsencrypt"
+      - "./frontend/config/nginx:/etc/nginx/conf.d"
+      - "./frontend/logs/letsencrypt:/var/log/letsencrypt"
+      - "./frontend/logs/nginx:/var/log/nginx"
+      - "./frontend/code:/usr/share/nginx/html"
+    ports: 
+      - '119.17.200.21:443:443'
+      - '119.17.200.21:80:80'
+    networks:
+        vaccom:
+          ipv4_address: 20.0.0.5
+
+networks:
+  vaccom:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 20.0.0.0/24
