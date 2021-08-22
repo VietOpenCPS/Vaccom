@@ -158,9 +158,12 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            page: 1,
-            size: 30
+            cosoyteid: filter.id
           }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
         }
         try {
           if (Vue.$cookies.get('Token')) {
@@ -325,7 +328,7 @@ export default new Vuex.Store({
           }
         } catch (error) {
         }
-        axios.get('', param).then(function (response) {
+        axios.get('/rest/v1/app/get/doituong', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
@@ -578,6 +581,27 @@ export default new Vuex.Store({
         }
         let dataPost = filter.data
         axios.put('/rest/v1/app/update/nguoidung/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    changeBlockUser ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {}
+        axios.put('/rest/v1/app/lock/nguoidung/' + filter.id + '/' + filter.block, dataPost, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {

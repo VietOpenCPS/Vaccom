@@ -370,7 +370,7 @@
                       dense
                       hide-details="auto"    
                       id="nhomdoituong"
-                      @keyup.enter="nextFocus('diabancoso')"          
+                      @keyup.enter="nextFocus('cosoyte')"          
                   ></v-autocomplete>
                 </v-col>
                 <!-- <v-col
@@ -395,21 +395,19 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Địa bàn cơ sở <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Cơ sở y tế</div>
                   <v-autocomplete
                       hide-no-data
-                      :items="listDiaBan"
-                      v-model="applicantInfo['DiaBanCoSo_ID']"
-                      item-text="TenDiaBan"
-                      item-value="ID"
-                      :rules="required"
-                      required
+                      :items="listCoSoYTe"
+                      v-model="coSoYTe"
+                      item-text="tenCoSo"
+                      item-value="maCoSo"
                       outlined
-                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+                      placeholder="Cơ sở y tế"
                       dense
                       hide-details="auto"
-                      id="diabancoso"
-                      @keyup.enter="nextFocus('cosoyte')"
+                      id="cosoyte"
+                      @keyup.enter="nextFocus('diabancoso')"
                   ></v-autocomplete>
                 </v-col>
                 <v-col
@@ -417,21 +415,25 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Cơ sở y tế</div>
+                  <div class="mb-2">Địa bàn cơ sở <span style="color:red">(*) </span> <i v-if="!coSoYTe" style="font-size: 12px">Chọn cơ sở y tế</i></div>
                   <v-autocomplete
                       hide-no-data
-                      :items="listCoSoYTe"
-                      v-model="coSoYTe"
-                      item-text="itemName"
-                      item-value="itemCode"
+                      :disabled="!coSoYTe"
+                      :items="listDiaBan"
+                      v-model="applicantInfo['DiaBanCoSo_ID']"
+                      item-text="tenDiaBan"
+                      item-value="id"
+                      :rules="required"
+                      required
                       outlined
-                      placeholder="Cơ sở y tế"
+                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
                       dense
                       hide-details="auto"
-                      id="cosoyte"
+                      id="diabancoso"
                       @keyup.enter="nextFocus('dantoc')"
                   ></v-autocomplete>
                 </v-col>
+                
                 <v-col
                   cols="12"
                   md="6"
@@ -674,21 +676,7 @@
           TinhTrangDangKi: 0
         },
         listGioiTinh: [{name: 'Nam', value: 0},{name: 'Nữ', value: 1},{name: 'Không xác định', value: 2}],
-        listDoiTuong: [
-          {
-            "id" : 1,
-            "value" : 1,
-            "name" : "1. Người làm việc trong các cơ sở y tế, ngành y tế (công lập và tư nhân)",
-          }, {
-            "id" : 2,
-            "value" : 2,
-            "name" : "2. Người tham gia phòng chống dịch (Thành viên Ban chỉ đạo phòng, chống dịch các cấp, người làm việc ở các khu cách ly, làm nhiệm vụ truy vết, điều tra dịch tễ, tổ Covid dựa vào cộng đồng, tình nguyện viên, phóng viên...)",
-          }, {
-            "id" : 3,
-            "value" : 3,
-            "name" : "3. Lực lượng Quân đội",
-          },
-        ],
+        listDoiTuong: [],
         listTinhThanh: [],
         tinhThanh: '',
         listQuanHuyen: [],
@@ -814,7 +802,8 @@
         this.applicantInfo.PhuongXa_Ma = val 
       },
       coSoYTe (val) {
-        this.applicantInfo.CoSoYTe_Ma = val 
+        this.applicantInfo.CoSoYTe_Ma = val
+        this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -848,7 +837,6 @@
       } catch (error) {
       }
       vm.getCoSoYTe()
-      vm.getDiaBanCoSo()
       vm.getQuocGia()
       vm.getNhomDoiTuong()
       vm.getDanToc()
@@ -1052,11 +1040,13 @@
           return false
         }
       },
-      getDiaBanCoSo () {
+      getDiaBanCoSo (val) {
         let vm = this
+        let obj = vm.listCoSoYTe.find(function (item) {
+          return item.maCoSo == val
+        })
         let filter = {
-          page: 1,
-          size: 30
+          id: obj['id']
         }
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           vm.listDiaBan = result ? result : []

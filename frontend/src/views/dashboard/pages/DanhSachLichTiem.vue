@@ -28,6 +28,12 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span>
             </span>
+            <v-btn color="#0072bc" class="mx-0" @click.stop="addMember('add')">
+                <v-icon left size="22">
+                  mdi-plus
+                </v-icon>
+                Thêm lịch tiêm
+              </v-btn>
           </div>
           <v-data-table
             :headers="headers"
@@ -191,161 +197,212 @@
         vm.$router.push({ path: '/login?redirect=/pages/lich-tiem-chung' })
         return
       }
-      vm.getCounter()
-      vm.getCustomer()
+      vm.getCoSoYTe()
+      vm.getTinhThanh()
     },
     computed: {
       breakpointName () {
         return this.$store.getters.getBreakpointName
-      },
-      userLogin () {
-        return this.$store.getters.getPermistion
       }
     },
     methods: {
-      searchDangKyTiem (data) {
+       getCoSoYTe () {
         let vm = this
-        console.log('dataSearch', data)
-      },
-      showTimKiem () {
-        let vm = this
-        vm.showAdvanceSearch = !vm.showAdvanceSearch
-      },
-      getBranchs () {
-        let vm = this
-        db.collection("users").get().then(function(querySnapshot) {
-          let users = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              users.push(item.data())
-            })
-            vm.listDaiLy = users
-          } else {
-            vm.listDaiLy = []
-          }
-        }).catch(function () {
+        let filter = {
+          page: 1,
+          size: 30
+        }
+        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+          vm.items = result ? result : []
+          vm.totalItem = result.length
         })
       },
-      getCounter () {
+      getTinhThanh () {
         let vm = this
-        let refs = db.collection('counters').doc('counterCustomer')
-        refs.collection('shards').get().then((snapshot) => {
-          let total = 0
-          let pageCount = 0
-          snapshot.forEach((doc) => {
-            total += doc.data().count
-          })
-          if (total && vm.itemsPerPage) {
-            pageCount = Math.ceil(total / vm.itemsPerPage)
+        let filter = {
+        }
+        vm.$store.dispatch('getDanhMucTinhThanh', filter).then(function (result) {
+          vm.listTinhThanh = result ? result : []
+          if (vm.tinhThanh) {
+            vm.getQuanHuyen(vm.tinhThanh)
           }
-          vm.totalItem = total
-          vm.pageCount = pageCount
-          console.log('pagination', total, pageCount)
         })
       },
-      searchCustomer () {
+      getQuanHuyen (code) {
         let vm = this
-        vm.loadingData = true
-        let keySearch = ''
-        let valueSearch = ''
-        if (vm.advanceSearchData['codeNumber']) {
-          keySearch = 'codeNumber'
-          valueSearch = vm.advanceSearchData['codeNumber']
+        if (!code) {
+          return
         }
-        if (vm.advanceSearchData['customerTelNo'] && !vm.advanceSearchData['codeNumber']) {
-          keySearch = 'customerTelNo'
-          valueSearch = vm.advanceSearchData['customerTelNo']
+        let obj = vm.listTinhThanh.find(function (item) {
+          return item.tinhThanhMa == code
+        })
+        let filter = {
+          idParent: obj['id']
         }
-        if (vm.dailySelected && !vm.advanceSearchData['codeNumber'] && !vm.advanceSearchData['customerTelNo']) {
-          keySearch = 'branchUid'
-          valueSearch = vm.dailySelected['uid']
+        vm.$store.dispatch('getDanhMucQuanHuyen', filter).then(function (result) {
+          vm.listQuanHuyen = result ? result : []
+          if (vm.quanHuyen) {
+            vm.getXaPhuong(vm.quanHuyen)
+          }
+        })
+      },
+      getXaPhuong (code) {
+        let vm = this
+        if (!code) {
+          return
         }
-        let refsCollection = db.collection("customers").where(keySearch, "==", valueSearch)
-        if (!valueSearch) {
-          refsCollection = db.collection("customers")
+        let obj = vm.listQuanHuyen.find(function (item) {
+          return item.quanHuyenMa == code
+        })
+        if (!obj) {
+          return
+        }
+        let filter = {
+          idParent: obj['id']
+        }
+        vm.$store.dispatch('getDanhMucXaPhuong', filter).then(function (result) {
+          vm.listXaPhuong = result ? result : []
+        })
+      },
+      addMember (type, user) {
+        let vm = this
+        vm.typeAction = type
+        vm.coSoUpdate = user
+        vm.dialogAddMember = true
+        if (type === 'add') {
+          setTimeout(function () {
+            vm.$refs.formAddMember.reset()
+            vm.$refs.formAddMember.resetValidation()
+          }, 200)
         } else {
-          valueSearch = String(valueSearch)
+          setTimeout(function () {
+            vm.thongTinCoSo.MaCoSo = vm.coSoUpdate.maCoSo
+            vm.thongTinCoSo.TenCoSo = vm.coSoUpdate.tenCoSo
+            vm.thongTinCoSo.DiaChiCoSo = vm.coSoUpdate.diaChiCoSo
+            vm.thongTinCoSo.NguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
+            vm.tinhThanh = vm.coSoUpdate.tinhThanhMa
+            vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
+            vm.xaPhuong = vm.coSoUpdate.phuongXaMa
+            vm.thongTinCoSo.SoDienThoai = vm.coSoUpdate.soDienThoai
+
+            vm.$refs.formAddMember.resetValidation()
+          }, 200)
         }
         
-        console.log('keySearch', keySearch, valueSearch)
-        refsCollection.get().then(function(querySnapshot) {
-          vm.loadingData = false
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
-            vm.totalItem = querySnapshot.size
-            vm.pageCount = Math.ceil(querySnapshot.size / vm.itemsPerPage)
-          } else {
-            vm.items = []
-            vm.totalItem = 0
-          }
-        }).catch(function () {
-          vm.loadingData = false
-          vm.items = []
-          vm.totalItem = 0
-        })
       },
-      getCustomer () {
+      formatDataInput () {
         let vm = this
-        vm.loadingData = true
-        db.collection("customers").orderBy('dealDate').limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.lastVisible = querySnapshot.docs[querySnapshot.docs.length-1]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
+        try {
+          if (vm.tinhThanh) {
+            let obj = vm.listTinhThanh.find(function (item) {
+              return item.tinhThanhMa == vm.tinhThanh
             })
-            vm.items = customers
-          } else {
-            vm.items = []
+            vm.thongTinCoSo.TinhThanh_Ma = vm.tinhThanh
+            vm.thongTinCoSo.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
           }
-        }).catch(function () {
-          vm.loadingData = false
-        })
+          if (vm.quanHuyen) {
+            let obj = vm.listQuanHuyen.find(function (item) {
+              return item.quanHuyenMa == vm.quanHuyen
+            })
+            vm.thongTinCoSo.QuanHuyen_Ma = vm.quanHuyen
+            vm.thongTinCoSo.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
+          }
+          if (vm.xaPhuong) {
+            let obj = vm.listXaPhuong.find(function (item) {
+              return item.phuongXaMa == vm.xaPhuong
+            })
+            vm.thongTinCoSo.PhuongXa_Ma = vm.xaPhuong
+            vm.thongTinCoSo.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
+          }
+          console.log('thongTinCoSo', vm.thongTinCoSo)
+        } catch (error) {
+          vm.processingAction = false
+        }
       },
-      prevPage () {
+      deleteCoSo (user) {
         let vm = this
-        vm.loadingData = true
-        vm.page -= 1
-        db.collection("customers").orderBy("dealDate").endBefore(vm.firstVisible).limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.lastVisible = querySnapshot.docs[querySnapshot.docs.length-1]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
-          } else {
-            vm.items = []
+        let x = confirm('Bạn có chắc chắn xóa cơ sở y tế này?')
+        if (x) {
+          let filter = {
+            id: user['id']
           }
-        }).catch(function () {
-          vm.loadingData = false
-        })
+          vm.loading = true
+          vm.$store.dispatch('deleteCoSoYTe', filter).then(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            setTimeout(function () {
+              vm.getCoSoYTe()
+            }, 500)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
+        }
+        
       },
-      nextPage () {
+      submitAddMember () {
         let vm = this
-        vm.loadingData = true
-        vm.page += 1
-        db.collection("customers").orderBy("dealDate").startAfter(vm.lastVisible).limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.firstVisible = querySnapshot.docs[0]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
+        if (vm.$refs.formAddMember.validate()) {
+          vm.formatDataInput()
+          if (vm.typeAction === 'add') {
+            let filter = {
+              data: vm.thongTinCoSo
+            }
+            vm.loading = true
+            vm.$store.dispatch('addCoSoYTe', filter).then(userCredential => {
+              vm.loading = false
+              vm.dialogAddMember = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm cơ sở thành công',
+                color: 'success',
+              })
+              vm.getCoSoYTe()
             })
-            vm.items = customers
+            .catch((error) => {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm cơ sở y tế không thành công',
+                color: 'error',
+              })
+              // ..
+            });
           } else {
-            vm.items = []
+            let filter = {
+              id: vm.coSoUpdate['id'],
+              data: vm.thongTinCoSo
+            }
+            vm.loading = true
+            vm.$store.dispatch('updateCoSoYTe', filter).then(function () {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Cập nhật thành công',
+                color: 'success',
+              })
+              vm.dialogAddMember = false
+              vm.getCoSoYTe()
+            }).catch(function () {
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Cập nhật thất bại',
+                color: 'error',
+              })
+            })
           }
-        }).catch(function () {
-          vm.loadingData = false
-        })
+          
+        }
+      },
+      cancelAddMember () {
+        let vm = this
+        vm.dialogAddMember = false
       },
     },
   }

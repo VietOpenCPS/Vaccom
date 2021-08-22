@@ -9,9 +9,23 @@
       <base-material-card
         style="margin-top: 20px"
         icon="mdi-clipboard-text"
-        title="Danh sách địa bàn cơ sơ"
+        title="Danh sách địa bàn cơ sở"
         class="px-5 py-3"
       >
+          <v-flex class="mx-4 mt-3">
+            <div class="mb-3"><span style="color: red">(*) </span>Chọn cơ sở y tế</div>
+            <v-autocomplete
+              class="flex xs12 md12"
+              hide-no-data
+              :items="listCoSoYTe"
+              v-model="coSoYTeSearch"
+              item-text="tenCoSo"
+              item-value="id"
+              outlined
+              dense
+              hide-details="auto"
+            ></v-autocomplete>
+          </v-flex>
           <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : ''">
             <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex mb-3'">
               <div class="mr-auto pt-2 mb-3" v-if="breakpointName === 'xs'">
@@ -27,6 +41,7 @@
                 Thêm địa bàn
               </v-btn>
             </div>
+            
             <v-data-table
               :headers="headers"
               :items="items"
@@ -204,6 +219,7 @@
         loading: false,
         loadingData: false,
         dialogAddMember: false,
+        coSoYTeSearch: '',
         coSoYTe: '',
         thongTinDiaBan: {
             TenDiaBan: '',
@@ -251,24 +267,24 @@
             sortable: false,
             text: 'Tên địa bàn',
             align: 'center',
-            value: 'TenDiaBan'
+            value: 'tenDiaBan'
           },
           {
             sortable: false,
             text: 'Tỉnh/ thành phố',
-            value: 'TinhThanh_Ten'
+            value: 'tinhThanhTen'
           },
           {
             sortable: false,
             text: 'Quận/ huyện',
             align: 'center',
-            value: 'QuanHuyen_Ten'
+            value: 'quanHuyenTen'
           },
           {
             sortable: false,
             text: 'Phường/ xã',
             align: 'center',
-            value: 'PhuongXa_Ten'
+            value: 'phuongXaTen'
           },
           {
             sortable: false,
@@ -282,7 +298,6 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getDiaBanCoSo()
       vm.getCoSoYTe ()
       vm.getTinhThanh()
     },
@@ -294,6 +309,11 @@
         this.tinhThanh = obj.tinhThanhMa
         this.quanHuyen = obj.quanHuyenMa
         this.xaPhuong = obj.phuongXaMa
+      },
+      coSoYTeSearch (val) {
+        if (val) {
+          this.getDiaBanCoSo(val)
+        }
       },
       tinhThanh (val) {
         this.thongTinDiaBan.TinhThanh_Ma = val
@@ -313,12 +333,15 @@
       }
     },
     methods: {
-       getDiaBanCoSo () {
+       getDiaBanCoSo (idCoSo) {
         let vm = this
         let filter = {
+          id: idCoSo,
+          page: 0,
+          size: 30
         }
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          vm.items = result ? result : []
         })
       },
       getCoSoYTe () {
@@ -327,6 +350,9 @@
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
           vm.listCoSoYTe = result ? result : []
+          if (vm.listCoSoYTe.length) {
+            vm.coSoYTeSearch = vm.listCoSoYTe[0]['id']
+          }
         })
       },
       getTinhThanh () {
@@ -385,6 +411,9 @@
           setTimeout(function () {
             vm.$refs.formAddMember.reset()
             vm.$refs.formAddMember.resetValidation()
+            if (vm.coSoYTeSearch) {
+              vm.coSoYTe = vm.coSoYTeSearch
+            }
           }, 200)
         } else {
           setTimeout(function () {

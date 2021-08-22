@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/vac/' : '/',
-  // outputDir: 'src/main/webapp',
+  outputDir: 'src/main/webapp',
   lintOnSave: false,
   devServer: {
     disableHostCheck: true,
