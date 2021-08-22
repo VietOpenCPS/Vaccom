@@ -28,5 +28,11 @@ public class QuocGiaServiceImpl implements QuocGiaService{
 	public List<QuocGia> findAll() {
 		return quocGiaRepository.findAll();
 	}
+
+	@Override
+	public QuocGia updateQuocGia(QuocGia quocGia) {
+
+		return quocGiaRepository.save(quocGia);
+	}
 	
 }

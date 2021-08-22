@@ -14,6 +14,8 @@ public interface NguoiDungService {
 	
 	public long countAll();
 	
+	public int countByDiaBanCoSoId(long id);
+	
 	public void deleteNguoiDung(long id) throws Exception;
 	
 	public void deleteNguoiDung(long nguoiDungId, long khoaDangKyId, long khoaTruyCapId) throws Exception;
@@ -22,7 +24,7 @@ public interface NguoiDungService {
 
 	public NguoiDung findByTenDanNhap(String tenDangNhap);
 
-	public List<NguoiDung> search(int page, int size);
+	public List<NguoiDung> findAll(int page, int size);
 	
 	public NguoiDung updateNguoiDung(NguoiDung nguoiDung);
 

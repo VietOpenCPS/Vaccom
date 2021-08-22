@@ -11,6 +11,8 @@ import org.vaccom.vcmgt.entity.CoSoYTe;
  */
 @Repository
 @Transactional
-public interface CoSoYTeRepository extends JpaRepository<CoSoYTe, Long>{
+public interface CoSoYTeRepository extends JpaRepository<CoSoYTe, Long> {
+	public CoSoYTe findById(long id);
 
+	public CoSoYTe findByMaCoSo(String maCoSo);
 }

@@ -3,6 +3,10 @@ package org.vaccom.vcmgt.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
@@ -75,9 +79,21 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 	}
 
 	@Override
-	public List<NguoiDung> search(int page, int size) {
+	public List<NguoiDung> findAll(int page, int size) {
 
-		return null;
+		if (page < 0 || size < 0) {
+			page = 0;
+			size = 30;
+		}
+		Sort sort = Sort.by(Sort.Direction.ASC, "id");
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<NguoiDung> pases = nguoiDungRepository.findAll(pageable);
+		return pases.getContent();
+	}
+
+	@Override
+	public int countByDiaBanCoSoId(long id) {
+		return nguoiDungRepository.countByDiaBanCoSoId(id);
 	}
 
 }

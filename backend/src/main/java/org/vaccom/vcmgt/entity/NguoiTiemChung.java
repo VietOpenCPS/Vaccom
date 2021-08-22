@@ -66,7 +66,7 @@ public class NguoiTiemChung implements Serializable {
 	private String soTheBHYT;
 
 	@Column(name = "DiaChiNoiO")
-	private int diaChiNoiO;
+	private String diaChiNoiO;
 
 	@Column(name = "TinhThanhMa")
 	private String tinhThanhMa;
@@ -87,7 +87,7 @@ public class NguoiTiemChung implements Serializable {
 	private String phuongXaTen;
 
 	@Column(name = "DiaBanCoSoID")
-	private long diaBanCoSoID;
+	private long diaBanCoSoId;
 
 	@Column(name = "CoSoYTeMa")
 	private String coSoYTeMa;
@@ -215,11 +215,11 @@ public class NguoiTiemChung implements Serializable {
 		this.soTheBHYT = soTheBHYT;
 	}
 
-	public int getDiaChiNoiO() {
+	public String getDiaChiNoiO() {
 		return diaChiNoiO;
 	}
 
-	public void setDiaChiNoiO(int diaChiNoiO) {
+	public void setDiaChiNoiO(String diaChiNoiO) {
 		this.diaChiNoiO = diaChiNoiO;
 	}
 
@@ -271,12 +271,12 @@ public class NguoiTiemChung implements Serializable {
 		this.phuongXaTen = phuongXaTen;
 	}
 
-	public long getDiaBanCoSoID() {
-		return diaBanCoSoID;
+	public long getDiaBanCoSoId() {
+		return diaBanCoSoId;
 	}
 
-	public void setDiaBanCoSoID(long diaBanCoSoID) {
-		this.diaBanCoSoID = diaBanCoSoID;
+	public void setDiaBanCoSoId(long diaBanCoSoId) {
+		this.diaBanCoSoId = diaBanCoSoId;
 	}
 
 	public String getCoSoYTeMa() {

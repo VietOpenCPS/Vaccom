@@ -25,8 +25,14 @@ public class PhuongXaServiceImpl implements PhuongXaService {
 	}
 
 	@Override
-	public List<PhuongXa> findByPhuongXaMa_QuanHuyenID(String phuongXaMa, long quanHuyenID) {
+	public List<PhuongXa> findByQuanHuyenID(long quanHuyenID) {
 
-		return phuongXaRepository.findByPhuongXaMa_QuanHuyenID(phuongXaMa, quanHuyenID);
+		return phuongXaRepository.findByQuanHuyenID(quanHuyenID);
+	}
+	
+	@Override
+	public PhuongXa updatePhuongXa(PhuongXa phuongXa) {
+
+		return phuongXaRepository.save(phuongXa);
 	}
 }

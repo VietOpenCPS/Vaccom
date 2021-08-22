@@ -29,10 +29,10 @@ public class PhieuHenTiem implements Serializable {
 	private long id;
 
 	@Column(name = "LichTiemChungID")
-	private long lichTiemChungID;
+	private long lichTiemChungId;
 
 	@Column(name = "NguoiTiemChungID")
-	private long nguoiTiemChungID;
+	private long nguoiTiemChungId;
 
 	@Column(name = "MaPhieuHen")
 	private String maPhieuHen;
@@ -54,20 +54,20 @@ public class PhieuHenTiem implements Serializable {
 		this.id = id;
 	}
 
-	public long getLichTiemChungID() {
-		return lichTiemChungID;
+	public long getLichTiemChungId() {
+		return lichTiemChungId;
 	}
 
-	public void setLichTiemChungID(long lichTiemChungID) {
-		this.lichTiemChungID = lichTiemChungID;
+	public void setLichTiemChungId(long lichTiemChungId) {
+		this.lichTiemChungId = lichTiemChungId;
 	}
 
-	public long getNguoiTiemChungID() {
-		return nguoiTiemChungID;
+	public long getNguoiTiemChungId() {
+		return nguoiTiemChungId;
 	}
 
-	public void setNguoiTiemChungID(long nguoiTiemChungID) {
-		this.nguoiTiemChungID = nguoiTiemChungID;
+	public void setNguoiTiemChungId(long nguoiTiemChungId) {
+		this.nguoiTiemChungId = nguoiTiemChungId;
 	}
 
 	public String getMaPhieuHen() {

@@ -31,4 +31,10 @@ public class TinhThanhServiceimpl implements TinhThanhService {
 		return tinhThanhRepository.findAll();
 	}
 
+	@Override
+	public TinhThanh updateTinhThanh(TinhThanh tinhThanh) {
+
+		return tinhThanhRepository.save(tinhThanh);
+	}
+
 }
