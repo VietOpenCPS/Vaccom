@@ -85,15 +85,6 @@ export default {
           vm.$cookies.set('Token',result.access_token,60 * 60 * 1)
           vm.$store.commit('SET_ISSIGNED', true)
           localStorage.setItem('user', JSON.stringify(result))
-          // if (vm.$cookies.get('Token')) {
-          //   vm.$store.commit('SET_ISSIGNED', true)
-          //   axios.interceptors.request.use(async (config) => {
-          //     if (token) {
-          //       config.headers.Authorization = 'Bearer ' + vm.$cookies.get('Token');
-          //     }
-          //     return config;
-          //   });
-          // }
           // 
           let redirect = vm.$route.query.redirect
           let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }

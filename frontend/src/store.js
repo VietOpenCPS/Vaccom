@@ -93,31 +93,31 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         let name = String(username).trim()
         let pass = String(password).trim()
-        // let configs = {
-        //   headers: {
-        //     'Authorization': 'Basic ' + window.btoa(name + ":" + pass)
-        //   },
-        // }
-        // let dataPostApplicant = new URLSearchParams()
-        // axios.post('/rest/v1/security/login', dataPostApplicant, configs).then(function (response) {
-        //   resolve(response.data)
-        // }).catch(function (error) {
-        //   reject(error)
-        // })
-        $.ajax({
-          url: 'http://119.17.200.69:8630/rest/v1/security/login',
-          type: 'POST',
+        let configs = {
           headers: {
             'Authorization': 'Basic ' + window.btoa(name + ":" + pass)
           },
-          success: function (result) {
-            let serializable = result
-            resolve(serializable)
-          },
-          error: function (xhr) {
-            reject(xhr)
-          }
+        }
+        let dataPostApplicant = new URLSearchParams()
+        axios.post('/rest/v1/security/login', dataPostApplicant, configs).then(function (response) {
+          resolve(response.data)
+        }).catch(function (error) {
+          reject(error)
         })
+        // $.ajax({
+        //   url: 'http://119.17.200.69:8630/rest/v1/security/login',
+        //   type: 'POST',
+        //   headers: {
+        //     'Authorization': 'Basic ' + window.btoa(name + ":" + pass)
+        //   },
+        //   success: function (result) {
+        //     let serializable = result
+        //     resolve(serializable)
+        //   },
+        //   error: function (xhr) {
+        //     reject(xhr)
+        //   }
+        // })
       })
     },
     register({ commit, dispatch }, data) {
@@ -158,15 +158,68 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            page: filter.page,
-            size: filter.size
+            page: 1,
+            size: 30
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         axios.get('/rest/v1/app/get/diabancoso', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
           reject([])
+        })
+      })
+    },
+    addDiaBanCoSo ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            Authorization: 'Bearer ' + Vue.$cookies.get('Token')
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/add/diabancoso', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    updateDiaBanCoSo ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/diabancoso/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
         })
       })
     },
@@ -178,6 +231,12 @@ export default new Vuex.Store({
           params: {
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         let dataPost = filter.data
         axios.post('/rest/v1/app/add/cosoyte', dataPost, param).then(function (response) {
           let serializable = response.data
@@ -187,15 +246,64 @@ export default new Vuex.Store({
         })
       })
     },
+    updateCoSoYTe ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/cosoyte/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    deleteCoSoYTe ({commit, state}, filter) {
+      let param = {
+        headers: {
+        },
+        params: {
+        }
+      }
+      try {
+        if (Vue.$cookies.get('Token')) {
+          param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+        }
+      } catch (error) {
+      }
+      axios.delete('/rest/v1/app/delete/cosoyte/' + filter.id, param).then(function (response) {
+        let serializable = response
+        resolve(serializable)
+      }).catch(function (error) {
+        reject(error)
+      })
+    },
     getCoSoYTe ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
           headers: {
           },
           params: {
-            page: filter.page,
-            size: filter.size
+            // page: filter.page,
+            // size: filter.size
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         axios.get('/rest/v1/app/get/cosoyte', param).then(function (response) {
           let serializable = response.data
@@ -211,6 +319,12 @@ export default new Vuex.Store({
           headers: {
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -224,6 +338,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         axios.get('/rest/v1/app/get/quocgia', param).then(function (response) {
           let serializable = response.data
@@ -239,6 +359,12 @@ export default new Vuex.Store({
           headers: {
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('/rest/v1/app/get/dantoc', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -252,6 +378,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         axios.get('/rest/v1/app/get/tinhthanh', param).then(function (response) {
           let serializable = response.data
@@ -267,6 +399,12 @@ export default new Vuex.Store({
           headers: {
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('/rest/v1/app/get/quanhuyen/' + filter.idParent, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -280,6 +418,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         axios.get('/rest/v1/app/get/quanhuyen/' + filter.idParent, param).then(function (response) {
           let serializable = response.data
@@ -295,6 +439,12 @@ export default new Vuex.Store({
           headers: {
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('/rest/v1/app/get/phuongxa/' + filter.idParent, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -308,6 +458,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         let dataPost = filter.data
         axios.post('/rest/v1/app/add/nguoitiemchung', dataPost, param).then(function (response) {
@@ -323,6 +479,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         let dataPost = filter.data
         axios.put('/rest/v1/app/update/nguoitiemchung/' + filter.id, dataPost, param).then(function (response) {
@@ -343,6 +505,12 @@ export default new Vuex.Store({
             size: 30
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('/rest/v1/app/get/nguoitiemchung', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -356,6 +524,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         let dataPost = filter
         axios.post('/rest/v1/app/add/nguoidung', dataPost, param).then(function (response) {
@@ -376,6 +550,12 @@ export default new Vuex.Store({
             size: filter.size
           }
         }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
         axios.get('/rest/v1/app/get/nguoidung', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
@@ -389,6 +569,12 @@ export default new Vuex.Store({
         let param = {
           headers: {
           }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
         }
         let dataPost = filter.data
         axios.put('/rest/v1/app/update/nguoidung/' + filter.id, dataPost, param).then(function (response) {

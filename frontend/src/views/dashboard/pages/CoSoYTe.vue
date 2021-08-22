@@ -51,9 +51,9 @@
                 </template>
                 <span>Sửa</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['role'] === 'Member'">
+              <v-tooltip top >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="deleteUser(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                  <v-btn @click="deleteCoSo(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-delete</v-icon>
                   </v-btn>
                 </template>
@@ -246,7 +246,7 @@
         pageCount: 0,
         itemsPerPage: 5,
         typeAction: '',
-        userUpdate: '',
+        coSoUpdate: '',
         items: [],
         validFormAdd: true,
         required: [
@@ -407,7 +407,7 @@
       addMember (type, user) {
         let vm = this
         vm.typeAction = type
-        vm.userUpdate = user
+        vm.coSoUpdate = user
         vm.dialogAddMember = true
         if (type === 'add') {
           setTimeout(function () {
@@ -416,19 +416,15 @@
           }, 200)
         } else {
           setTimeout(function () {
-            // diaChiCoSo: "203 Bồ Đề"
-            // id: 2
-            // maCoSo: "001"
-            // nguoiDaiDien: "Nguyễn Văn Nam"
-            // phuongXaMa: "00139"
-            // phuongXaTen: "Phường Bồ Đề"
-            // quanHuyenMa: "004"
-            // quanHuyenTen: "Quận Long Biên"
-            // soDienThoai: "0897893123"
-            // tenCoSo: "Trung tâm y tế phường Bồ Đề"
-            // tinhThanhMa: "01"
-            // tinhThanhTen: "Thành phố Hà Nội"
-            // vm.thongTinCoSo = 
+            vm.thongTinCoSo.MaCoSo = vm.coSoUpdate.maCoSo
+            vm.thongTinCoSo.TenCoSo = vm.coSoUpdate.tenCoSo
+            vm.thongTinCoSo.DiaChiCoSo = vm.coSoUpdate.diaChiCoSo
+            vm.thongTinCoSo.NguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
+            vm.tinhThanh = vm.coSoUpdate.tinhThanhMa
+            vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
+            vm.xaPhuong = vm.coSoUpdate.phuongXaMa
+            vm.thongTinCoSo.SoDienThoai = vm.coSoUpdate.soDienThoai
+
             vm.$refs.formAddMember.resetValidation()
           }, 200)
         }
@@ -463,12 +459,32 @@
           vm.processingAction = false
         }
       },
-      updateStatusUser (type, user) {
+      deleteCoSo (user) {
         let vm = this
-        vm.userUpdate = user
-      },
-      deleteUser (user) {
-        let vm = this
+        let x = confirm('Bạn có chắc chắn xóa cơ sở y tế này?')
+        if (x) {
+          let filter = {
+            id: user['id']
+          }
+          vm.loading = true
+          vm.$store.dispatch('deleteCoSoYTe', filter).then(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            setTimeout(function () {
+              vm.getCoSoYTe()
+            }, 500)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
+        }
+        
       },
       submitAddMember () {
         let vm = this
@@ -487,7 +503,7 @@
                 text: 'Thêm cơ sở thành công',
                 color: 'success',
               })
-              vm.getMembers()
+              vm.getCoSoYTe()
             })
             .catch((error) => {
               vm.loading = false
@@ -500,7 +516,7 @@
             });
           } else {
             let filter = {
-              id: '',
+              id: vm.coSoUpdate['id'],
               data: vm.thongTinCoSo
             }
             vm.loading = true
@@ -512,7 +528,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getMembers()
+              vm.getCoSoYTe()
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
