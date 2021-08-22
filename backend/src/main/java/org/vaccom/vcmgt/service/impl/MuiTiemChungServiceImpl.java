@@ -21,6 +21,12 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 
 	@Autowired
 	private MuiTiemChungRepository muiTiemChungRepository;
+	
+	@Override
+	public long countByCoSoYTeMa(String coSoYTeMa) {
+		// TODO Auto-generated method stub
+		return muiTiemChungRepository.countByCoSoYTeMa(coSoYTeMa);
+	}
 
 	@Override
 	public MuiTiemChung findById(long id) {

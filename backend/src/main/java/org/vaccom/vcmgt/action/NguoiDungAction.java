@@ -8,6 +8,8 @@ import org.vaccom.vcmgt.entity.NguoiDung;
 @Service
 public interface NguoiDungAction {
 	
+	public long countAll();
+	
 	public NguoiDung addNguoiDung(String reqBody) throws Exception;
 	
 	public boolean deleteNguoiDung(long id) throws Exception;
@@ -15,6 +17,8 @@ public interface NguoiDungAction {
 	public void initNguoiDung() throws Exception;
 	
 	public List<NguoiDung> findAll(int page, int size);
+	
+	public NguoiDung findById(long id);
 	
 	public NguoiDung lockNguoiDung(long id, boolean isKhoaTaiKhoan) throws Exception;
 	

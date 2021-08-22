@@ -16,6 +16,11 @@ import org.vaccom.vcmgt.service.NguoiTiemChungService;
 public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	@Autowired
 	private NguoiTiemChungRepository nguoiTiemChungRepository;
+	
+	@Override
+	public long countAll() {
+		return nguoiTiemChungRepository.count();
+	}
 
 	@Override
 	public NguoiTiemChung findByCmtcccd(String cmtcccd) {
@@ -54,7 +59,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	}
 
 	@Override
-	public int countByDiaBanCoSoId(long id) {
+	public long countByDiaBanCoSoId(long id) {
 		return nguoiTiemChungRepository.countByDiaBanCoSoId(id);
 	}
 }

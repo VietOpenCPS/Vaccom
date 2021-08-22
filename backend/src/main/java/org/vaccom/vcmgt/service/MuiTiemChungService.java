@@ -13,6 +13,8 @@ import org.vaccom.vcmgt.entity.MuiTiemChung;
 @Service
 public interface MuiTiemChungService {
 	
+	public long countByCoSoYTeMa(String coSoYTeMa);
+	
 	public void deleteById(long id);
 	
 	public MuiTiemChung updateMuiTiemChung(MuiTiemChung muiTiemChung);

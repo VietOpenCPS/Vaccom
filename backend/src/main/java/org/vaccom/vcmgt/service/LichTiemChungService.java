@@ -13,6 +13,8 @@ import org.vaccom.vcmgt.entity.LichTiemChung;
 @Service
 public interface LichTiemChungService {
 	
+	public long countAll();
+	
 	public void deleteById(long id);
 	
 	public LichTiemChung updateLichTiemChung(LichTiemChung lichTiemChung);

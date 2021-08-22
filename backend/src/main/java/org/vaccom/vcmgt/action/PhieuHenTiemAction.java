@@ -18,6 +18,8 @@ public interface PhieuHenTiemAction {
 	public boolean deleteById(long id) throws Exception;
 
 	public PhieuHenTiem findById(long id);
+	
+	public long countByLichTiemChungId(long id);
 
 	public List<PhieuHenTiem> findByLichTiemChungId(long id, int page, int size);
 

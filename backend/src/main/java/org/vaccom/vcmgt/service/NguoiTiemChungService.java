@@ -8,7 +8,9 @@ import org.vaccom.vcmgt.entity.NguoiTiemChung;
 @Service
 public interface NguoiTiemChungService {
 	
-	public int countByDiaBanCoSoId(long id);
+	public long countByDiaBanCoSoId(long id);
+	
+	public long countAll();
 	
 	public NguoiTiemChung findById(long id);
 	

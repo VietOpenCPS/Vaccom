@@ -10,12 +10,10 @@ import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.MuiTiemChungService;
-import org.vaccom.vcmgt.service.DiaBanCoSoService;
 import org.vaccom.vcmgt.util.MessageUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author vaccom
@@ -27,9 +25,11 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	@Autowired
 	private MuiTiemChungService muiTiemChungService;
 
-	@Autowired
-	private DiaBanCoSoService diaBanCoSoService;
-
+	@Override
+	public long countCoSoYTeMa(String coSoYTeMa) {
+		return muiTiemChungService.countByCoSoYTeMa(coSoYTeMa);
+	}
+	
 	@Override
 	public MuiTiemChung addMuiTiemChung(String reqBody) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();

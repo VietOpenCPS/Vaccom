@@ -12,7 +12,8 @@ import org.vaccom.vcmgt.entity.NguoiTiemChung;
 @Repository
 @Transactional
 public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, Long> {
-	public int countByDiaBanCoSoId(long id);
+	
+	public long countByDiaBanCoSoId(long id);
 
 	public NguoiTiemChung findById(long id);
 

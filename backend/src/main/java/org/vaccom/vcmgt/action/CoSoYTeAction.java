@@ -12,7 +12,7 @@ import org.vaccom.vcmgt.entity.CoSoYTe;
  */
 @Service
 public interface CoSoYTeAction {
-	
+
 	public CoSoYTe addCoSoYTe(String reqBody) throws Exception;
 	
 	public boolean deleteById(long id) throws Exception;

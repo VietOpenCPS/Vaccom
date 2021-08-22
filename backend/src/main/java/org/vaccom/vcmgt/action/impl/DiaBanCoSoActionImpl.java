@@ -104,7 +104,7 @@ public class DiaBanCoSoActionImpl implements DiaBanCoSoAction {
 					HttpStatus.NOT_FOUND.value());
 		}
 
-		int count = nguoiDungService.countByDiaBanCoSoId(diaBanCoSo.getId());
+		long count = nguoiDungService.countByDiaBanCoSoId(diaBanCoSo.getId());
 
 		if (count > 0) {
 			throw new ActionException(MessageUtil.getVNMessageText("diabancoso.inuse"),

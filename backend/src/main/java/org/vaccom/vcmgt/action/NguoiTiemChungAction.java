@@ -13,6 +13,8 @@ public interface NguoiTiemChungAction {
 	
 	public boolean deleteNguoiTiemChung(long id) throws Exception ;
 	
+	public long countAll();
+	
 	public List<NguoiTiemChung> searchNguoiTiemChung(int page, int size);
 	
 	public NguoiTiemChung updateNguoiTiemChung(long id, String reqBody) throws Exception;

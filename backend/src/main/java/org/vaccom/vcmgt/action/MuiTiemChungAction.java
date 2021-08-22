@@ -12,6 +12,8 @@ import org.vaccom.vcmgt.entity.MuiTiemChung;
  */
 @Service
 public interface MuiTiemChungAction {
+	
+	public long countCoSoYTeMa(String coSoYTeMa);
 
 	public MuiTiemChung addMuiTiemChung(String reqBody) throws Exception;
 

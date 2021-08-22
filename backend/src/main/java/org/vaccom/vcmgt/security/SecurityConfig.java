@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/rest/v1/security/login", "/rest/v1/app/get/*", "/rest/v1/app/get/quanhuyen/*", "/rest/v1/app/get/phuongxa/*", "/rest/v1/app/get/muitiemchung/cosoyte/*").permitAll().anyRequest().authenticated();
+				.antMatchers("/rest/v1/security/login", "/rest/v1/app/get/*", "/rest/v1/app/get/quanhuyen/*", "/rest/v1/app/get/phuongxa/*", "/rest/v1/app/get/muitiemchung/cosoyte/*", "/rest/v1/app/get/nguoidung/*").permitAll().anyRequest().authenticated();
 
 		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
