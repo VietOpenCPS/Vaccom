@@ -27,6 +27,11 @@ public class LichTiemChungServiceImpl implements LichTiemChungService {
 
 		return lichTiemChungRepository.findById(id);
 	}
+	
+	@Override
+	public long countAll() {
+		return lichTiemChungRepository.count();
+	}
 
 	@Override
 	public LichTiemChung updateLichTiemChung(LichTiemChung lichTiemChung) {

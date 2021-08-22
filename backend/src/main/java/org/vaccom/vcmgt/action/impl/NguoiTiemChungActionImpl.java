@@ -24,6 +24,12 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 	@Autowired
 	NguoiTiemChungService nguoiTiemChungService;
+	
+	@Override
+	public long countAll() {
+
+		return nguoiTiemChungService.countAll();
+	}
 
 	@Override
 	public NguoiTiemChung addNguoiTiemChung(String reqBody) throws Exception {

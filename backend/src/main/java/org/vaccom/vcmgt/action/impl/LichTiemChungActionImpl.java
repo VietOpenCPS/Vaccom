@@ -28,6 +28,11 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 	@Autowired
 	private PhieuHenTiemService phieuHenTiemService;
+	
+	@Override
+	public long countAll() {
+		return lichTiemChungService.countAll();
+	}
 
 	@Override
 	public LichTiemChung addLichTiemChung(String reqBody) throws Exception {

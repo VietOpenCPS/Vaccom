@@ -43,6 +43,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 	@Autowired
 	KhoaTruyCapService khoaTruyCapService;
+	
+	@Override
+	public long countAll() {
+		return nguoiDungService.countAll();
+	}
 
 	@Override
 	public NguoiDung addNguoiDung(String reqBody) throws Exception {
@@ -242,6 +247,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	}
 
 	@Override
+	public NguoiDung findById(long id) {
+		return nguoiDungService.findByID(id);
+	}
+	
+	@Override
 	public List<NguoiDung> findAll(int page, int size) {
 		return nguoiDungService.findAll(page, size);
 	}
@@ -304,5 +314,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 		return khoaDangKy;
 	}
+
+	
 
 }

@@ -26,6 +26,10 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	@Autowired
 	private PhieuHenTiemService phieuHenTiemService;
 
+	@Override
+	public long countByLichTiemChungId(long id) {
+		return phieuHenTiemService.countByLichTiemChungId(id);
+	}
 
 	@Override
 	public PhieuHenTiem addPhieuHenTiem(String reqBody) throws Exception {

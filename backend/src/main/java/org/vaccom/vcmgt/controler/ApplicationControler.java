@@ -46,6 +46,7 @@ import org.vaccom.vcmgt.entity.QuanHuyen;
 import org.vaccom.vcmgt.entity.QuocGia;
 import org.vaccom.vcmgt.entity.TinhThanh;
 import org.vaccom.vcmgt.exception.ActionException;
+import org.vaccom.vcmgt.response.DataResponeBody;
 import org.vaccom.vcmgt.util.MessageUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 
@@ -322,9 +323,38 @@ public class ApplicationControler {
 
 		try {
 
+			long total = nguoiDungAction.countAll();
+			
 			List<NguoiDung> lstNguoiDung = nguoiDungAction.findAll(page, size);
 
-			return ResponseEntity.status(HttpStatus.OK).body(lstNguoiDung);
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiDung));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			_log.error(e.getMessage());
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+	
+	@RequestMapping(value = "/get/nguoidung/{id}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getNguoiDung(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") long id) {
+
+		try {
+
+			NguoiDung nguoiDung = nguoiDungAction.findById(id);
+			
+			nguoiDung.setMatKhau("");
+
+			return ResponseEntity.status(HttpStatus.OK).body(nguoiDung);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -586,10 +616,12 @@ public class ApplicationControler {
 			@RequestParam("page") int page, @RequestParam("size") int size) {
 
 		try {
+			
+			long total = nguoiTiemChungAction.countAll();
 
 			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(page, size);
 
-			return ResponseEntity.status(HttpStatus.OK).body(lstNguoiTiemChung);
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiTiemChung));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -810,12 +842,11 @@ public class ApplicationControler {
 	}
 
 	@RequestMapping(value = "/get/cosoyte", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<?> getDSCoSoYTe(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("page") int page, @RequestParam("size") int size) {
+	public ResponseEntity<?> getDSCoSoYTe(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
 
-			List<CoSoYTe> lstCoSoYTe = coSoYTeAction.findAll(page, size);
+			List<CoSoYTe> lstCoSoYTe = coSoYTeAction.findAll();
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstCoSoYTe);
 
@@ -1016,10 +1047,12 @@ public class ApplicationControler {
 			@RequestParam("page") int page, @RequestParam("size") int size) {
 
 		try {
+			
+			long total = lichTiemChungAction.countAll();
 
 			List<LichTiemChung> lstLichTiemChung = lichTiemChungAction.findAll(page, size);
 
-			return ResponseEntity.status(HttpStatus.OK).body(lstLichTiemChung);
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstLichTiemChung));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1132,9 +1165,11 @@ public class ApplicationControler {
 
 		try {
 
+			long total = muiTiemChungAction.countCoSoYTeMa(coSoYTeMa);
+			
 			List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findCoSoYTeMa(coSoYTeMa, page, size);
 
-			return ResponseEntity.status(HttpStatus.OK).body(lstMuiTiemChung);
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstMuiTiemChung));
 
 		} catch (Exception e) {
 			e.printStackTrace();

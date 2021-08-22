@@ -13,6 +13,8 @@ import org.vaccom.vcmgt.entity.LichTiemChung;
 @Service
 public interface LichTiemChungAction {
 	
+	public long countAll();
+	
 	public LichTiemChung addLichTiemChung(String reqBody) throws Exception;
 	
 	public boolean deleteById(long id) throws Exception;
