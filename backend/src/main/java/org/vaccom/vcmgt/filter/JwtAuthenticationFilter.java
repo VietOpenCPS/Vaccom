@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
+
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.KhoaTruyCap;
@@ -19,10 +19,15 @@ import org.vaccom.vcmgt.service.NguoiDungService;
 import org.vaccom.vcmgt.service.impl.CustomUserDetailsServiceImpl;
 import org.vaccom.vcmgt.util.RequestUtil;
 
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -57,6 +62,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String method = request.getMethod();
 		
 		System.out.println("method: " + method);
+		
+		//&& !requestUri.contains("/rest/v1/app/add/nguoitiemchung")
 
 		if (method.equalsIgnoreCase("post") || method.equalsIgnoreCase("put") || method.equalsIgnoreCase("patch")
 				|| method.equalsIgnoreCase("delete"))

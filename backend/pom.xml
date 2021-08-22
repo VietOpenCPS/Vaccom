@@ -170,7 +170,7 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-console</artifactId>
-		</dependency>
+		</dependency>	
 
 	</dependencies>
 
