@@ -1,3 +1,19 @@
+# Vaccom -  phần mềm hỗ trợ quản lý và tổ chức điểm tiêm chủng Vaccine
+#     Copyright (C) 2021 Vaccom Development team
+
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
+
+#     You should have received a copy of the GNU Affero General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 version: '3.2'
 
 services:
@@ -7,10 +23,10 @@ services:
     hostname: vaccom-mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=Vaccom@2021
-      - MYSQL_DATABASE=db_vaccom
-      - MYSQL_USER=user_vaccom
-      - MYSQL_PASSWORD=Vaccom2021@
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
     volumes:
       - "./mariadb/databases:/var/lib/mysql"
     networks:
@@ -37,11 +53,16 @@ services:
     image: nginx
     hostname: vaccom-proxy
     restart: always
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    environment:
+      - DOMAIN=thachban.vaccom.vn
     volumes:
       - "./proxy/conf.d:/etc/nginx/conf.d"
       - "./proxy/logs:/var/log/nginx"
     ports:
-      - "119.17.200.21:8080:8080"
+      - "$IP:8080:8080"
     networks:
         vaccom:
           ipv4_address: 20.0.0.4
@@ -55,9 +76,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - CERTBOT_EMAIL=hieunv@iwayvietnam.com
-      - DOMAIN_LIST=thachban.vaccom.vn 
-      - DOMAIN=thachban.vaccom.vn 
+      - CERTBOT_EMAIL=$CERTBOT_EMAIL
+      - DOMAIN_LIST=$DOMAIN_LIST
+      - DOMAIN=$DOMAIN
     volumes:
       - "./frontend/config/letsencrypt:/etc/letsencrypt"
       - "./frontend/config/nginx:/etc/nginx/conf.d"
@@ -65,8 +86,8 @@ services:
       - "./frontend/logs/nginx:/var/log/nginx"
       - "./frontend/code:/usr/share/nginx/html"
     ports: 
-      - '119.17.200.21:443:443'
-      - '119.17.200.21:80:80'
+      - '$IP:443:443'
+      - '$IP:80:80'
     networks:
         vaccom:
           ipv4_address: 20.0.0.5
