@@ -4,15 +4,7 @@
 ```bash
 $ git clone https://github.com/VietOpenCPS/Vaccom.git && cd docker-deploy
 ```
-##### Edit variable in docker-compose.yml then run docker-compose
-###### MYSQL_ROOT_PASSWORD
-###### MYSQL_DATABASE
-###### MYSQL_USER
-###### MYSQL_PASSWORD
-###### DOMAIN
-###### DOMAIN_LIST
-###### CERTBOT_EMAIL
-###### 119.17.200.21
+##### Edit all variable in .env then run docker-compose
 
 ##### Necessary: Before run "docker-compose up -d". Download java-jre8 at https://www.oracle.com/java/technologies/javase-jre8-downloads.html (Product / File Description: Linux x64 RPM Package) Then rename file download to jre8-latest.rpm and copy to docker-deploy/backend/
 

@@ -23,10 +23,10 @@ services:
     hostname: vaccom-mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=Vaccom@2021
-      - MYSQL_DATABASE=db_vaccom
-      - MYSQL_USER=user_vaccom
-      - MYSQL_PASSWORD=Vaccom2021@
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
     volumes:
       - "./mariadb/databases:/var/lib/mysql"
     networks:
@@ -62,7 +62,7 @@ services:
       - "./proxy/conf.d:/etc/nginx/conf.d"
       - "./proxy/logs:/var/log/nginx"
     ports:
-      - "119.17.200.21:8080:8080"
+      - "$IP:8080:8080"
     networks:
         vaccom:
           ipv4_address: 20.0.0.4
@@ -76,9 +76,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - CERTBOT_EMAIL=hieunv@iwayvietnam.com
-      - DOMAIN_LIST=thachban.vaccom.vn 
-      - DOMAIN=thachban.vaccom.vn 
+      - CERTBOT_EMAIL=$CERTBOT_EMAIL
+      - DOMAIN_LIST=$DOMAIN_LIST
+      - DOMAIN=$DOMAIN
     volumes:
       - "./frontend/config/letsencrypt:/etc/letsencrypt"
       - "./frontend/config/nginx:/etc/nginx/conf.d"
@@ -86,8 +86,8 @@ services:
       - "./frontend/logs/nginx:/var/log/nginx"
       - "./frontend/code:/usr/share/nginx/html"
     ports: 
-      - '119.17.200.21:443:443'
-      - '119.17.200.21:80:80'
+      - '$IP:443:443'
+      - '$IP:80:80'
     networks:
         vaccom:
           ipv4_address: 20.0.0.5
