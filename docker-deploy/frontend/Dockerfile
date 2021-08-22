@@ -1,20 +1,23 @@
-FROM rockylinux/rockylinux
-MAINTAINER Nguyen Van Hieu <ngvanhieu112233@gmail.com>
+# Vaccom -  phần mềm hỗ trợ quản lý và tổ chức điểm tiêm chủng Vaccine
+#     Copyright (C) 2021 Vaccom Development team
 
-RUN yum update -y && yum install -y \
-  glibc-langpack-en \
-  crontabs wget nginx python38
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
 
-RUN ln -s -f /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
 
-ENV LANGUAGE=en_US.UTF-8
+#     You should have received a copy of the GNU Affero General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-ENV LC_ALL=en_US.UTF-8
+FROM nginx
 
-VOLUME ["/etc/letsencrypt", "/var/log/nginx", "/etc/nginx/conf.d", "/var/log/letsencrypt"]
+RUN apt-get update -y && apt-get install wget cron -y
 
-EXPOSE 443 80
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-COPY start.sh /opt/
-
-ENTRYPOINT ["/bin/bash", "/opt/start.sh", "-d"]
+RUN chmod +x /docker-entrypoint.sh

@@ -13,11 +13,18 @@
 
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+FROM rockylinux/rockylinux
+MAINTAINER Nguyen Van Hieu <ngvanhieu112233@gmail.com>
 
-FROM nginx
+RUN yum update -y && yum install -y \
+  glibc-langpack-en
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY jre8-latest.rpm /opt/
 
-COPY templates/default.conf /opt/
+RUN yum localinstall /opt/jre8-latest.rpm -y && rm -rf /opt/jre8-latest.rpm
 
-RUN chmod +x /docker-entrypoint.sh
+RUN ln -s -f /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
+
+ENV LANGUAGE=en_US.UTF-8
+
+ENV LC_ALL=en_US.UTF-8
