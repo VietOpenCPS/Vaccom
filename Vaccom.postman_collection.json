@@ -203,12 +203,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "KillCovid19",
+							"value": "",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "admin",
+							"value": "",
 							"type": "string"
 						}
 					]
