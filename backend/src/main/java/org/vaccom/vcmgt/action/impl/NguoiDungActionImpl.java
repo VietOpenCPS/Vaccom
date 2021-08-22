@@ -1,5 +1,7 @@
 package org.vaccom.vcmgt.action.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,7 @@ import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.KhoaTruyCap;
 import org.vaccom.vcmgt.entity.NguoiDung;
-import org.vaccom.vcmgt.exception.NguoiDungException;
+import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.security.impl.RandomString;
 import org.vaccom.vcmgt.security.impl.StrongTextDataEncryptor;
 import org.vaccom.vcmgt.service.KhoaDangKyService;
@@ -70,11 +72,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 				: StringPool.BLANK;
 
 		// TODO validate
-		long diaBanCoSo_ID = bodyData.has(EntityConstant.DIABANCOSO_ID)
+		long diaBanCoSoId = bodyData.has(EntityConstant.DIABANCOSO_ID)
 				? bodyData.get(EntityConstant.DIABANCOSO_ID).longValue()
 				: 0;
 		// TODO validate
-		long coSoYTe_ID = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
+		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
 
 		boolean khoaTaiKhoan = bodyData.has(EntityConstant.KHOATAIKHOAN)
@@ -82,37 +84,34 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 				: false;
 
 		if (Validator.isNull(tenDangNhap)) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("tendangnhap.empty"),
+			throw new ActionException(MessageUtil.getVNMessageText("tendangnhap.empty"),
 					HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		if (tenDangNhap.equalsIgnoreCase("admin")) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("tendangnhap.not_allow"),
+			throw new ActionException(MessageUtil.getVNMessageText("tendangnhap.not_allow"),
 					HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		NguoiDung nguoiDung = nguoiDungService.findByTenDanNhap(tenDangNhap);
 
 		if (nguoiDung != null) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("tendangnhap.exist"),
-					HttpStatus.CONFLICT.value());
+			throw new ActionException(MessageUtil.getVNMessageText("tendangnhap.exist"), HttpStatus.CONFLICT.value());
 		}
 
 		if (Validator.isNull(matKhau)) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("matkhau.empty"),
-					HttpStatus.NOT_ACCEPTABLE.value());
+			throw new ActionException(MessageUtil.getVNMessageText("matkhau.empty"), HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		if (Validator.isNull(hoVaTen)) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("hovaten.empty"),
-					HttpStatus.NOT_ACCEPTABLE.value());
+			throw new ActionException(MessageUtil.getVNMessageText("hovaten.empty"), HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		nguoiDung = new NguoiDung();
 
 		nguoiDung.setChucDanh(chucDanh);
-		nguoiDung.setCoSoYTeID(coSoYTe_ID);
-		nguoiDung.setDiaBanCoSoID(diaBanCoSo_ID);
+		nguoiDung.setCoSoYTeId(coSoYTeId);
+		nguoiDung.setDiaBanCoSoId(diaBanCoSoId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
@@ -132,7 +131,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
 		if (nguoiDung == null) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
 
@@ -155,21 +154,20 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 				: StringPool.BLANK;
 
 		// TODO validate
-		long diaBanCoSo_ID = bodyData.has(EntityConstant.DIABANCOSO_ID)
+		long diaBanCoSoId = bodyData.has(EntityConstant.DIABANCOSO_ID)
 				? bodyData.get(EntityConstant.DIABANCOSO_ID).longValue()
 				: 0;
 		// TODO validate
-		long coSoYTe_ID = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
+		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
 
 		if (Validator.isNull(hoVaTen)) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("hovaten.empty"),
-					HttpStatus.NOT_ACCEPTABLE.value());
+			throw new ActionException(MessageUtil.getVNMessageText("hovaten.empty"), HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		nguoiDung.setChucDanh(chucDanh);
-		nguoiDung.setCoSoYTeID(coSoYTe_ID);
-		nguoiDung.setDiaBanCoSoID(diaBanCoSo_ID);
+		nguoiDung.setCoSoYTeId(diaBanCoSoId);
+		nguoiDung.setDiaBanCoSoId(coSoYTeId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setQuanTriHeThong(quanTriHeThong);
@@ -187,8 +185,8 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 			nguoiDung = new NguoiDung();
 			nguoiDung.setChucDanh("Admin");
-			nguoiDung.setCoSoYTeID(0);
-			nguoiDung.setDiaBanCoSoID(0);
+			nguoiDung.setCoSoYTeId(0);
+			nguoiDung.setDiaBanCoSoId(0);
 			nguoiDung.setEmail("admin@vaccom.vn");
 			nguoiDung.setHoVaTen("Super");
 			nguoiDung.setKhoaTaiKhoan(false);
@@ -209,7 +207,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
 		if (nguoiDung == null) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
 
@@ -229,12 +227,12 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
 		if (nguoiDung == null) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
 
 		if (nguoiDung.getTenDangNhap().equals("admin")) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("nguoidung.lock.not_allow"),
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.lock.not_allow"),
 					HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
@@ -244,17 +242,22 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	}
 
 	@Override
+	public List<NguoiDung> findAll(int page, int size) {
+		return nguoiDungService.findAll(page, size);
+	}
+
+	@Override
 	public NguoiDung changeMatKhau(long id, String matKhauMoi) throws Exception {
-		
+
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
-		
+
 		if (nguoiDung == null) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
-		
-		if(Validator.isNull(matKhauMoi)) {
-			throw new NguoiDungException(MessageUtil.getVNMessageText("matkhau.empty"),
+
+		if (Validator.isNull(matKhauMoi)) {
+			throw new ActionException(MessageUtil.getVNMessageText("matkhau.empty"),
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
 
