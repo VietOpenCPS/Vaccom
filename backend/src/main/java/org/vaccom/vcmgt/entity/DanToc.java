@@ -28,11 +28,11 @@ public class DanToc implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "QuocGiaMa")
-	private String quocGiaMa;
+	@Column(name = "DanTocMa")
+	private String danTocMa;
 
-	@Column(name = "QuocGiaTen")
-	private String quocGiaTen;
+	@Column(name = "DanTocTen")
+	private String danTocTen;
 
 	public long getId() {
 		return id;
@@ -42,20 +42,20 @@ public class DanToc implements Serializable {
 		this.id = id;
 	}
 
-	public String getQuocGiaMa() {
-		return quocGiaMa;
+	public String getDanTocMa() {
+		return danTocMa;
 	}
 
-	public void setQuocGiaMa(String quocGiaMa) {
-		this.quocGiaMa = quocGiaMa;
+	public void setDanTocMa(String danTocMa) {
+		this.danTocMa = danTocMa;
 	}
 
-	public String getQuocGiaTen() {
-		return quocGiaTen;
+	public String getDanTocTen() {
+		return danTocTen;
 	}
 
-	public void setQuocGiaTen(String quocGiaTen) {
-		this.quocGiaTen = quocGiaTen;
+	public void setDanTocTen(String danTocTen) {
+		this.danTocTen = danTocTen;
 	}
 
 }

@@ -29,7 +29,7 @@ public class LichTiemChung implements Serializable {
 	private long id;
 
 	@Column(name = "CoSoYTeID")
-	private long coSoYTeID;
+	private long coSoYTeId;
 
 	@Column(name = "TenDot")
 	private String tenDot;
@@ -69,12 +69,12 @@ public class LichTiemChung implements Serializable {
 		this.id = id;
 	}
 
-	public long getCoSoYTeID() {
-		return coSoYTeID;
+	public long getCoSoYTeId() {
+		return coSoYTeId;
 	}
 
-	public void setCoSoYTeID(long coSoYTeID) {
-		this.coSoYTeID = coSoYTeID;
+	public void setCoSoYTeId(long coSoYTeId) {
+		this.coSoYTeId = coSoYTeId;
 	}
 
 	public String getTenDot() {

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.vaccom.vcmgt.constant.DBConstant;
 
 @Entity
-@Table(name = DBConstant._PHIEUTIEM_TABLE_NAME)
+@Table(name = DBConstant._COSOYTE_TABLE_NAME)
 public class CoSoYTe implements Serializable {
 
 	/**

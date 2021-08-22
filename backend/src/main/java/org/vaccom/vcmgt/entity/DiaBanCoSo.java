@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.vaccom.vcmgt.constant.DBConstant;
 
 @Entity
-@Table(name = DBConstant._PHIEUTIEM_TABLE_NAME)
+@Table(name = DBConstant._DIABANCOSO_TABLE_NAME)
 public class DiaBanCoSo implements Serializable {
 
 	/**
@@ -48,6 +48,9 @@ public class DiaBanCoSo implements Serializable {
 
 	@Column(name = "PhuongXaTen")
 	private String phuongXaTen;
+
+	@Column(name = "CoSoYTeId")
+	private long coSoYTeId;
 
 	public long getId() {
 		return id;
@@ -111,6 +114,14 @@ public class DiaBanCoSo implements Serializable {
 
 	public void setPhuongXaTen(String phuongXaTen) {
 		this.phuongXaTen = phuongXaTen;
+	}
+
+	public long getCoSoYTeId() {
+		return coSoYTeId;
+	}
+
+	public void setCoSoYTeId(long coSoYTeId) {
+		this.coSoYTeId = coSoYTeId;
 	}
 
 }

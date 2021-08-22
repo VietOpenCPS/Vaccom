@@ -1,5 +1,7 @@
 package org.vaccom.vcmgt.action;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.entity.NguoiDung;
 
@@ -11,6 +13,8 @@ public interface NguoiDungAction {
 	public boolean deleteNguoiDung(long id) throws Exception;
 	
 	public void initNguoiDung() throws Exception;
+	
+	public List<NguoiDung> findAll(int page, int size);
 	
 	public NguoiDung lockNguoiDung(long id, boolean isKhoaTaiKhoan) throws Exception;
 	

@@ -24,9 +24,9 @@ public class NguoiDungPrincipal implements UserDetails {
 	@JsonIgnore
 	private String matKhau;
 	@JsonIgnore
-	private long diaBanCoSoID;
+	private long diaBanCoSoId;
 	@JsonIgnore
-	private long coSoYTeID;
+	private long coSoYTeId;
 	@JsonIgnore
 	private boolean quanTriHeThong;
 	@JsonIgnore
@@ -35,7 +35,7 @@ public class NguoiDungPrincipal implements UserDetails {
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public NguoiDungPrincipal(long id, String tenDangNhap, String hoVaTen, String chucDanh, String soDienThoai,
-			String email, String matKhau, long diaBanCoSoID, long coSoYTeID, boolean quanTriHeThong,
+			String email, String matKhau, long diaBanCoSoId, long coSoYTeId, boolean quanTriHeThong,
 			boolean khoaTaiKhoan) {
 		this.id = id;
 		this.tenDangNhap = tenDangNhap;
@@ -44,8 +44,8 @@ public class NguoiDungPrincipal implements UserDetails {
 		this.soDienThoai = soDienThoai;
 		this.email = email;
 		this.matKhau = matKhau;
-		this.diaBanCoSoID = diaBanCoSoID;
-		this.coSoYTeID = coSoYTeID;
+		this.diaBanCoSoId = diaBanCoSoId;
+		this.coSoYTeId = coSoYTeId;
 		this.quanTriHeThong = quanTriHeThong;
 		this.khoaTaiKhoan = khoaTaiKhoan;
 	}
@@ -54,7 +54,7 @@ public class NguoiDungPrincipal implements UserDetails {
 
 		return new NguoiDungPrincipal(nguoiDung.getId(), nguoiDung.getTenDangNhap(), nguoiDung.getHoVaTen(),
 				nguoiDung.getChucDanh(), nguoiDung.getSoDienThoai(), nguoiDung.getEmail(), nguoiDung.getMatKhau(),
-				nguoiDung.getDiaBanCoSoID(), nguoiDung.getCoSoYTeID(), nguoiDung.isQuanTriHeThong(),
+				nguoiDung.getDiaBanCoSoId(), nguoiDung.getCoSoYTeId(), nguoiDung.isQuanTriHeThong(),
 				nguoiDung.isKhoaTaiKhoan());
 	}
 
@@ -169,20 +169,20 @@ public class NguoiDungPrincipal implements UserDetails {
 		this.matKhau = matKhau;
 	}
 
-	public long getDiaBanCoSoID() {
-		return diaBanCoSoID;
+	public long getDiaBanCoSoId() {
+		return diaBanCoSoId;
 	}
 
-	public void setDiaBanCoSoID(long diaBanCoSoID) {
-		this.diaBanCoSoID = diaBanCoSoID;
+	public void setDiaBanCoSoId(long diaBanCoSoId) {
+		this.diaBanCoSoId = diaBanCoSoId;
 	}
 
-	public long getCoSoYTeID() {
-		return coSoYTeID;
+	public long getCoSoYTeId() {
+		return coSoYTeId;
 	}
 
-	public void setCoSoYTeID(long coSoYTeID) {
-		this.coSoYTeID = coSoYTeID;
+	public void setCoSoYTeId(long coSoYTeId) {
+		this.coSoYTeId = coSoYTeId;
 	}
 
 	public boolean isQuanTriHeThong() {

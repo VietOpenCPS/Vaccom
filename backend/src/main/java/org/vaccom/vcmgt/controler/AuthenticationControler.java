@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liferay.petra.string.StringPool;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/rest/v1/security")
 public class AuthenticationControler {
@@ -76,12 +78,29 @@ public class AuthenticationControler {
 		String token = StringPool.BLANK;
 
 		if (authorization != null) {
-			authorization = authorization.replace("Basic ", StringPool.BLANK);
-			authorization = new String(Base64.getDecoder().decode(authorization.getBytes()));
-			String[] basicInfo = authorization.split(StringPool.COLON);
-			if (basicInfo != null && basicInfo.length == 2) {
-				tenDangNhap = basicInfo[0];
-				matKhau = basicInfo[1];
+
+			try {
+				authorization = authorization.replace("Basic ", StringPool.BLANK);
+				authorization = new String(Base64.getDecoder().decode(authorization.getBytes()));
+				String[] basicInfo = authorization.split(StringPool.COLON);
+				if (basicInfo != null && basicInfo.length == 2) {
+					tenDangNhap = basicInfo[0];
+					matKhau = basicInfo[1];
+				}
+			} catch (Exception e) {
+				if (e instanceof IllegalArgumentException) {
+					_log.info("Illegal base64 character 5f");
+					try {
+						authorization = new String(Base64.getUrlDecoder().decode(authorization.getBytes()));
+
+					} catch (Exception e1) {
+						if (e1 instanceof IllegalArgumentException) {
+							_log.info("Illegal base64 character 2f");
+						} else {
+							_log.error(e1);
+						}
+					}
+				}
 			}
 		}
 
@@ -116,7 +135,7 @@ public class AuthenticationControler {
 
 				vaiTro = VaccomUtil.getRoleName(nguoiDung.isQuanTriHeThong());
 
-			}else {
+			} else {
 				String msg = MessageUtil.getVNMessageText("nguoidung.not_exist_or_locked");
 
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(msg);

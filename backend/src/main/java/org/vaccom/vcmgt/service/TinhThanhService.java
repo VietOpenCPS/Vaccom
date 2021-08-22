@@ -12,7 +12,10 @@ import org.vaccom.vcmgt.entity.TinhThanh;
  */
 @Service
 public interface TinhThanhService {
+	
 	public TinhThanh findByTinhThanhMa(String tinhThanhMa);
 
 	public List<TinhThanh> findAll();
+	
+	public TinhThanh updateTinhThanh(TinhThanh tinhThanh);
 }

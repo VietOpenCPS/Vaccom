@@ -12,5 +12,7 @@ import org.vaccom.vcmgt.entity.QuanHuyen;
 public interface QuanHuyenService{
 	public QuanHuyen findByQuanHuyenMa(String quanHuyenMa);
 
-	public List<QuanHuyen> findByQuanHuyenMa_TinhThanhID(String quanHuyenMa, long tinhThanhID);
+	public List<QuanHuyen> findByTinhThanhID(long tinhThanhID);
+	
+	public QuanHuyen updateQuanHuyen(QuanHuyen quanHuyen);
 }

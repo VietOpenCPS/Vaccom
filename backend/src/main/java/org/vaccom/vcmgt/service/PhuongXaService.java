@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import org.vaccom.vcmgt.entity.PhuongXa;
 
+
 /**
  * @author vaccom
  *
@@ -14,5 +15,7 @@ import org.vaccom.vcmgt.entity.PhuongXa;
 public interface PhuongXaService {
 	public PhuongXa findByPhuongXaMa(String phuongXaMa);
 
-	public List<PhuongXa> findByPhuongXaMa_QuanHuyenID(String phuongXaMa, long quanHuyenID);
+	public List<PhuongXa> findByQuanHuyenID(long quanHuyenID);
+	
+	public PhuongXa updatePhuongXa(PhuongXa phuongXa);
 }

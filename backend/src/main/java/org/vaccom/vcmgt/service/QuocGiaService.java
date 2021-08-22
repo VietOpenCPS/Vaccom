@@ -12,6 +12,9 @@ import org.vaccom.vcmgt.entity.QuocGia;
  */
 @Service
 public interface QuocGiaService {
+	
+	public QuocGia updateQuocGia(QuocGia quocGia);
+	
 	public QuocGia findByQuocGiaMa(String quocGiaMa);
 
 	public List<QuocGia> findAll();

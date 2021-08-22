@@ -24,8 +24,14 @@ public class QuanHuyenServiceImpl implements QuanHuyenService {
 	}
 
 	@Override
-	public List<QuanHuyen> findByQuanHuyenMa_TinhThanhID(String quanHuyenMa, long tinhThanhID) {
-		return quanHuyenRepository.findByQuanHuyenMa_TinhThanhID(quanHuyenMa, tinhThanhID);
+	public List<QuanHuyen> findByTinhThanhID(long tinhThanhID) {
+		return quanHuyenRepository.findByTinhThanhID(tinhThanhID);
+	}
+
+	@Override
+	public QuanHuyen updateQuanHuyen(QuanHuyen quanHuyen) {
+
+		return quanHuyenRepository.save(quanHuyen);
 	}
 
 }
