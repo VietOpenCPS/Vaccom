@@ -209,4 +209,36 @@ public class DiaBanCoSoActionImpl implements DiaBanCoSoAction {
 		return diaBanCoSoService.findByCoSoYTeId(id);
 	}
 
+	@Override
+	public DiaBanCoSo addDiaBanCoSo(String tenDiaBan, String tinhThanhMa, String tinhThanhTen, String quanHuyenMa,
+			String quanHuyenTen, String phuongXaMa, String phuongXaTen, long coSoYTeId) throws Exception {
+
+		if (Validator.isNotNull(tenDiaBan)) {
+			List<DiaBanCoSo> lstDiaBanCoSo = diaBanCoSoService.findAll();
+
+			if (lstDiaBanCoSo != null) {
+				for (DiaBanCoSo diaBanCoSo : lstDiaBanCoSo) {
+					if (diaBanCoSo.getTenDiaBan().toLowerCase().replace(" ", "")
+							.equals(tenDiaBan.toLowerCase().replace(" ", ""))) {
+						return null;
+					}
+				}
+			}
+
+			DiaBanCoSo diaBanCoSo = new DiaBanCoSo();
+			diaBanCoSo.setPhuongXaMa(phuongXaMa);
+			diaBanCoSo.setPhuongXaTen(phuongXaTen);
+			diaBanCoSo.setQuanHuyenMa(quanHuyenMa);
+			diaBanCoSo.setQuanHuyenTen(quanHuyenTen);
+			diaBanCoSo.setTenDiaBan(tenDiaBan);
+			diaBanCoSo.setTinhThanhMa(tinhThanhMa);
+			diaBanCoSo.setTinhThanhTen(tinhThanhTen);
+			diaBanCoSo.setCoSoYTeId(coSoYTeId);
+			return diaBanCoSoService.updateDiaBanCoSo(diaBanCoSo);
+		}
+
+		return null;
+
+	}
+
 }

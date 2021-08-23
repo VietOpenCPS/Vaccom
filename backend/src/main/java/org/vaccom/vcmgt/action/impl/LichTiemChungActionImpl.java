@@ -42,7 +42,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
-		String tenDot = bodyData.has(EntityConstant.TENDOT) ? bodyData.get(EntityConstant.TENDOT).textValue()
+		String maDot = bodyData.has(EntityConstant.MADOT) ? bodyData.get(EntityConstant.MADOT).textValue()
 				: StringPool.BLANK;
 		String ngayBatDau = bodyData.has(EntityConstant.NGAYBATDAU)
 				? bodyData.get(EntityConstant.NGAYBATDAU).textValue()
@@ -84,7 +84,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setNgayKetThuc(ngayKetThuc);
 		lichTiemChung.setNoiSanXuat(noiSanXuat);
 		lichTiemChung.setSoLoThuoc(soLoThuoc);
-		lichTiemChung.setTenDot(tenDot);
+		lichTiemChung.setMaDot(maDot);
 		lichTiemChung.setTinhTrangLich(tinhTrangLich);
 		lichTiemChung.setTongSoMuiTiem(tongSoMuiTiem);
 
@@ -133,7 +133,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
-		String tenDot = bodyData.has(EntityConstant.TENDOT) ? bodyData.get(EntityConstant.TENDOT).textValue()
+		String maDot = bodyData.has(EntityConstant.MADOT) ? bodyData.get(EntityConstant.MADOT).textValue()
 				: StringPool.BLANK;
 		String ngayBatDau = bodyData.has(EntityConstant.NGAYBATDAU)
 				? bodyData.get(EntityConstant.NGAYBATDAU).textValue()
@@ -172,7 +172,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setNgayKetThuc(ngayKetThuc);
 		lichTiemChung.setNoiSanXuat(noiSanXuat);
 		lichTiemChung.setSoLoThuoc(soLoThuoc);
-		lichTiemChung.setTenDot(tenDot);
+		lichTiemChung.setMaDot(maDot);
 		lichTiemChung.setTinhTrangLich(tinhTrangLich);
 		lichTiemChung.setTongSoMuiTiem(tongSoMuiTiem);
 

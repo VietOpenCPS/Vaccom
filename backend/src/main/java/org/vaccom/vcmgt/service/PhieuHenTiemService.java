@@ -21,8 +21,6 @@ public interface PhieuHenTiemService {
 	
 	public PhieuHenTiem findById(long id);
 	
-	public PhieuHenTiem findByMaPhieuHen(String maPhieuHen);
-
 	public List<PhieuHenTiem> findAll();
 	
 	public List<PhieuHenTiem> findByLichTiemChungId(long id, int page, int size);

@@ -30,7 +30,7 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 	NguoiDungService nguoiDungService;
 
 	@Autowired
-	KhoaDangKyService khoaService;
+	KhoaDangKyService khoaDangKyService;
 
 	@Override
 	public String generateToken(Authentication authentication, int exprireIn) {
@@ -60,7 +60,7 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 			return "error01";
 		}
 
-		KhoaDangKy khoa = khoaService.findByNguoiDungID(nguoiDung.getId());
+		KhoaDangKy khoa = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
 
 		if (khoa == null) {
 			return "error02";
@@ -83,7 +83,7 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 			return "error01";
 		}
 
-		KhoaDangKy khoa = khoaService.findByNguoiDungID(nguoiDung.getId());
+		KhoaDangKy khoa = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
 
 		if (khoa == null) {
 			return "error02";
@@ -136,7 +136,9 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 			return StringPool.BLANK;
 		}
 
-		return  VaccomUtil.getRoleName(nguoiDung.isQuanTriHeThong());
+		KhoaDangKy khoaDangKy = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
+
+		return khoaDangKy != null ? khoaDangKy.getPhamVi() : StringPool.BLANK;
 	}
 
 	@Override
@@ -173,7 +175,7 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 			return false;
 		}
 
-		KhoaDangKy khoa = khoaService.findByNguoiDungID(nguoiDung.getId());
+		KhoaDangKy khoa = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
 
 		if (khoa == null) {
 			return false;

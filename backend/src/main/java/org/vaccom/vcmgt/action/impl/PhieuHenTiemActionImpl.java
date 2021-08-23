@@ -73,17 +73,18 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
 
+		/*
 		PhieuHenTiem phieuHenTiem = phieuHenTiemService.findByMaPhieuHen(maPhieuHen);
 
 		if (phieuHenTiem != null) {
 			throw new ActionException(MessageUtil.getVNMessageText("phieuhentiem.maphieuhen.exist"),
 					HttpStatus.CONFLICT.value());
 		}
-
-		phieuHenTiem = new PhieuHenTiem();
+		*/
+		PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
 		phieuHenTiem.setGioHenTiem(gioHenTiem);
 		phieuHenTiem.setLichTiemChungId(lichTiemChungId);
-		phieuHenTiem.setMaPhieuHen(maPhieuHen);
+		
 		phieuHenTiem.setNgayHenTiem(ngayHenTiem);
 		phieuHenTiem.setNguoiTiemChungId(nguoiTiemChungId);
 		phieuHenTiem.setTinhTrangXacNhan(tinhTrangXacNhan);
@@ -166,16 +167,16 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
 
+		/*
 		PhieuHenTiem phieuHenTiemTemp = phieuHenTiemService.findByMaPhieuHen(maPhieuHen);
 
 		if (phieuHenTiemTemp != null && phieuHenTiemTemp.getId() != id) {
 			throw new ActionException(MessageUtil.getVNMessageText("phieuhentiem.maphieuhen.exist"),
 					HttpStatus.CONFLICT.value());
 		}
-
+		*/
 		phieuHenTiem.setGioHenTiem(gioHenTiem);
 		phieuHenTiem.setLichTiemChungId(lichTiemChungId);
-		phieuHenTiem.setMaPhieuHen(maPhieuHen);
 		phieuHenTiem.setNgayHenTiem(ngayHenTiem);
 		phieuHenTiem.setNguoiTiemChungId(nguoiTiemChungId);
 		phieuHenTiem.setTinhTrangXacNhan(tinhTrangXacNhan);

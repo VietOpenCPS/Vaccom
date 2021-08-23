@@ -56,11 +56,6 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 	}
 
 	@Override
-	public PhieuHenTiem findByMaPhieuHen(String maPhieuHen) {
-		return phieuHenTiemRepository.findByMaPhieuHen(maPhieuHen);
-	}
-
-	@Override
 	public List<PhieuHenTiem> findByLichTiemChungId(long id, int page, int size) {
 		if (page < 0 || size < 0) {
 			page = 0;

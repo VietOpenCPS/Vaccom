@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.KhoaTruyCap;
 import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.security.JwtTokenProvider;
+import org.vaccom.vcmgt.service.KhoaDangKyService;
 import org.vaccom.vcmgt.service.KhoaTruyCapService;
 import org.vaccom.vcmgt.service.NguoiDungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -42,13 +44,16 @@ public class AuthenticationControler {
 	private int expireIn;
 
 	@Autowired
-	NguoiDungService nguoiDungService;
+	private NguoiDungService nguoiDungService;
 
 	@Autowired
-	KhoaTruyCapService khoaTruyCapService;
+	private KhoaTruyCapService khoaTruyCapService;
+	
+	@Autowired
+	private KhoaDangKyService khoaDangKyService;
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	JwtTokenProvider tokenProvider;
@@ -107,6 +112,8 @@ public class AuthenticationControler {
 		try {
 
 			NguoiDung nguoiDung = nguoiDungService.findByTenDanNhap(tenDangNhap);
+			
+			KhoaDangKy khoaDangKy = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
 
 			if (nguoiDung != null && !nguoiDung.isKhoaTaiKhoan()) {
 
@@ -133,7 +140,7 @@ public class AuthenticationControler {
 
 				}
 
-				vaiTro = VaccomUtil.getRoleName(nguoiDung.isQuanTriHeThong());
+				vaiTro = khoaDangKy != null ? khoaDangKy.getPhamVi() : StringPool.BLANK;
 
 			} else {
 				String msg = MessageUtil.getVNMessageText("nguoidung.not_exist_or_locked");

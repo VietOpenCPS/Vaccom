@@ -31,8 +31,11 @@ public class LichTiemChung implements Serializable {
 	@Column(name = "CoSoYTeID")
 	private long coSoYTeId;
 
-	@Column(name = "TenDot")
-	private String tenDot;
+	@Column(name = "MaQR")
+	private String maQR;
+
+	@Column(name = "MaDot")
+	private String maDot;
 
 	@Column(name = "NgayBatDau")
 	private String ngayBatDau;
@@ -61,6 +64,18 @@ public class LichTiemChung implements Serializable {
 	@Column(name = "TinhTrangLich")
 	private int tinhTrangLich;
 
+	@Column(name = "SoCaTiem")
+	private int soCaTiem;
+
+	@Column(name = "SoMuiMotCa")
+	private int soMuiMotCa;
+
+	@Column(name = "BacSiKham")
+	private String bacSiKham;
+
+	@Column(name = "SoDienThoai")
+	private String soDienThoai;
+
 	public long getId() {
 		return id;
 	}
@@ -75,14 +90,6 @@ public class LichTiemChung implements Serializable {
 
 	public void setCoSoYTeId(long coSoYTeId) {
 		this.coSoYTeId = coSoYTeId;
-	}
-
-	public String getTenDot() {
-		return tenDot;
-	}
-
-	public void setTenDot(String tenDot) {
-		this.tenDot = tenDot;
 	}
 
 	public String getNgayBatDau() {
@@ -155,6 +162,54 @@ public class LichTiemChung implements Serializable {
 
 	public void setTinhTrangLich(int tinhTrangLich) {
 		this.tinhTrangLich = tinhTrangLich;
+	}
+
+	public String getMaQR() {
+		return maQR;
+	}
+
+	public void setMaQR(String maQR) {
+		this.maQR = maQR;
+	}
+
+	public String getMaDot() {
+		return maDot;
+	}
+
+	public void setMaDot(String maDot) {
+		this.maDot = maDot;
+	}
+
+	public int getSoCaTiem() {
+		return soCaTiem;
+	}
+
+	public void setSoCaTiem(int soCaTiem) {
+		this.soCaTiem = soCaTiem;
+	}
+
+	public int getSoMuiMotCa() {
+		return soMuiMotCa;
+	}
+
+	public void setSoMuiMotCa(int soMuiMotCa) {
+		this.soMuiMotCa = soMuiMotCa;
+	}
+
+	public String getBacSiKham() {
+		return bacSiKham;
+	}
+
+	public void setBacSiKham(String bacSiKham) {
+		this.bacSiKham = bacSiKham;
+	}
+
+	public String getSoDienThoai() {
+		return soDienThoai;
+	}
+
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
 	}
 
 }

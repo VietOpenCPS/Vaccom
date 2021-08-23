@@ -3,12 +3,12 @@ package org.vaccom.vcmgt.util;
 import com.liferay.portal.kernel.util.Validator;
 
 public class VaccomUtil {
-	public static String getRoleName(boolean isQuanTriHeThong) {
+	public static String getManagerRoleName(boolean isQuanTriHeThong) {
 		if (isQuanTriHeThong) {
 			return "admin";
 		}
 
-		return "user";
+		return "mod";
 	}
 
 	public static boolean isQuanTriHeThong(String roleName) {

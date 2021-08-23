@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -531,21 +529,21 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
-			
+
 			/*
-
-			HttpSession session = request.getSession(true);
-
-			String captcha = GetterUtil.getString(request.getParameter("captcha"));
-
-			if (Validator.isNull(captcha)
-					|| !captcha.equals(GetterUtil.getString(session.getAttribute("captcha"), StringPool.BLANK))) {
-				String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.captcha_incorrect");
-
-				return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(msg);
-			}
-
-			*/
+			 * 
+			 * HttpSession session = request.getSession(true);
+			 * 
+			 * String captcha = GetterUtil.getString(request.getParameter("captcha"));
+			 * 
+			 * if (Validator.isNull(captcha) ||
+			 * !captcha.equals(GetterUtil.getString(session.getAttribute("captcha"),
+			 * StringPool.BLANK))) { String msg =
+			 * MessageUtil.getVNMessageText("nguoitiemchung.add.captcha_incorrect");
+			 * 
+			 * return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(msg); }
+			 * 
+			 */
 			nguoiTiemChungAction.addNguoiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.success");
@@ -628,6 +626,62 @@ public class ApplicationControler {
 		}
 	}
 
+	@RequestMapping(value = "/update/nguoitiemchung/tinhtrangdangky", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateTinhTrangDangKy(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+
+			nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			_log.error(e.getMessage());
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+	
+	@RequestMapping(value = "/delete/nguoitiemchung", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<?> deleteListNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+
+			nguoiTiemChungAction.deleteNguoiTiemChung(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			_log.error(e.getMessage());
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
 	@RequestMapping(value = "/get/nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> getDSNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -658,20 +712,23 @@ public class ApplicationControler {
 
 	@RequestMapping(value = "/get/search/nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> searchNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("cmtcccd") String cmtcccd, @RequestParam("nhomdoituong") Integer nhomdoituong,
+			@RequestParam(name="cmtcccd", defaultValue = "") String cmtcccd,
+			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
 			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
-			@RequestParam("diabancosoid") Long diabancosoid, @RequestParam("cosoytema") String cosoytema,
-			@RequestParam("page") int page, @RequestParam("size") int size) {
+			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
+			@RequestParam("cosoytema") String cosoytema,
+			@RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangky,
+			@RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "30") int size) {
 
 		try {
 
-			// long total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong,
-			// ngaydangki, hovaten,
-			// diabancosoid, cosoytema);
+			long total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
+					diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
 
-			long total = 0;
 			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong,
-					ngaydangki, hovaten, diabancosoid, cosoytema, page, size);
+					ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size);
 
 			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiTiemChung));
 

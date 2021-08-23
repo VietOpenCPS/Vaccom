@@ -56,6 +56,9 @@ public class NguoiDung implements Serializable {
 	@Column(name = "CoSoYTeID")
 	private long coSoYTeId;
 
+	@Column(name = "NguoiTiemChungID ")
+	private long nguoiTiemChungId;
+
 	@Column(name = "QuanTriHeThong")
 	private boolean quanTriHeThong;
 
@@ -148,6 +151,14 @@ public class NguoiDung implements Serializable {
 
 	public void setKhoaTaiKhoan(boolean khoaTaiKhoan) {
 		this.khoaTaiKhoan = khoaTaiKhoan;
+	}
+
+	public long getNguoiTiemChungId() {
+		return nguoiTiemChungId;
+	}
+
+	public void setNguoiTiemChungId(long nguoiTiemChungId) {
+		this.nguoiTiemChungId = nguoiTiemChungId;
 	}
 
 }

@@ -19,10 +19,12 @@ import org.vaccom.vcmgt.entity.NguoiTiemChung;
 public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, Long> {
 
 	public long countByDiaBanCoSoId(long id);
+	
+	public long countByCmtcccd(String cmtcccd);
 
 	public NguoiTiemChung findById(long id);
-
-	public NguoiTiemChung findByCmtcccd(String cmtcccd);
+	
+	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
 	
 	
 	@Query(value = "SELECT count(*) FROM " + DBConstant._NGUOITIEMCHUNG_TABLE_NAME
