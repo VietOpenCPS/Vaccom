@@ -1,0 +1,47 @@
+2021/08/23 11:02:32 [emerg] 1#1: host not found in upstream "vaccom-backend" in /etc/nginx/conf.d/default.conf:10
+2021/08/23 11:02:35 [emerg] 1#1: host not found in upstream "vaccom-backend" in /etc/nginx/conf.d/default.conf:10
+2021/08/23 11:02:38 [notice] 1#1: using the "epoll" event method
+2021/08/23 11:02:38 [notice] 1#1: nginx/1.21.1
+2021/08/23 11:02:38 [notice] 1#1: built by gcc 8.3.0 (Debian 8.3.0-6) 
+2021/08/23 11:02:38 [notice] 1#1: OS: Linux 3.10.0-1160.31.1.el7.x86_64
+2021/08/23 11:02:38 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2021/08/23 11:02:38 [notice] 1#1: start worker processes
+2021/08/23 11:02:38 [notice] 1#1: start worker process 31
+2021/08/23 11:02:38 [notice] 1#1: start worker process 32
+2021/08/23 11:02:38 [notice] 1#1: start worker process 33
+2021/08/23 11:02:38 [notice] 1#1: start worker process 34
+2021/08/23 11:13:19 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+2021/08/23 11:13:19 [notice] 31#31: gracefully shutting down
+2021/08/23 11:13:19 [notice] 31#31: exiting
+2021/08/23 11:13:19 [notice] 34#34: gracefully shutting down
+2021/08/23 11:13:19 [notice] 34#34: exiting
+2021/08/23 11:13:19 [notice] 31#31: exit
+2021/08/23 11:13:19 [notice] 34#34: exit
+2021/08/23 11:13:19 [notice] 33#33: gracefully shutting down
+2021/08/23 11:13:19 [notice] 33#33: exiting
+2021/08/23 11:13:19 [notice] 33#33: exit
+2021/08/23 11:13:19 [notice] 32#32: gracefully shutting down
+2021/08/23 11:13:19 [notice] 32#32: exiting
+2021/08/23 11:13:19 [notice] 32#32: exit
+2021/08/23 11:13:19 [notice] 1#1: signal 17 (SIGCHLD) received from 31
+2021/08/23 11:13:19 [notice] 1#1: worker process 31 exited with code 0
+2021/08/23 11:13:19 [notice] 1#1: signal 29 (SIGIO) received
+2021/08/23 11:13:19 [notice] 1#1: signal 17 (SIGCHLD) received from 33
+2021/08/23 11:13:19 [notice] 1#1: worker process 33 exited with code 0
+2021/08/23 11:13:19 [notice] 1#1: signal 29 (SIGIO) received
+2021/08/23 11:13:19 [notice] 1#1: signal 17 (SIGCHLD) received from 32
+2021/08/23 11:13:19 [notice] 1#1: worker process 32 exited with code 0
+2021/08/23 11:13:19 [notice] 1#1: signal 29 (SIGIO) received
+2021/08/23 11:13:19 [notice] 1#1: signal 17 (SIGCHLD) received from 34
+2021/08/23 11:13:19 [notice] 1#1: worker process 34 exited with code 0
+2021/08/23 11:13:19 [notice] 1#1: exit
+2021/08/23 11:13:22 [notice] 1#1: using the "epoll" event method
+2021/08/23 11:13:22 [notice] 1#1: nginx/1.21.1
+2021/08/23 11:13:22 [notice] 1#1: built by gcc 8.3.0 (Debian 8.3.0-6) 
+2021/08/23 11:13:22 [notice] 1#1: OS: Linux 3.10.0-1160.31.1.el7.x86_64
+2021/08/23 11:13:22 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2021/08/23 11:13:22 [notice] 1#1: start worker processes
+2021/08/23 11:13:22 [notice] 1#1: start worker process 32
+2021/08/23 11:13:22 [notice] 1#1: start worker process 33
+2021/08/23 11:13:22 [notice] 1#1: start worker process 34
+2021/08/23 11:13:22 [notice] 1#1: start worker process 35

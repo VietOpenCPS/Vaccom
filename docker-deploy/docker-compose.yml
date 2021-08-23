@@ -42,7 +42,7 @@ services:
     hostname: vaccom-backend
     restart: always
     volumes:
-      - "./backend/code:/opt/code"
+      - "./backend/vaccom:/opt/vaccom"
     tty: true
     networks:
         vaccom:
@@ -62,35 +62,35 @@ services:
       - "./proxy/conf.d:/etc/nginx/conf.d"
       - "./proxy/logs:/var/log/nginx"
     ports:
-      - "$PUBLIC_IP:8080:8080"
+      - "8080:8080"
     networks:
         vaccom:
           ipv4_address: 20.0.0.4
 
-  vaccom-frontend:
-    container_name: vaccom-frontend
-    image: vaccom-frontend
-    hostname: vaccom-frontend
-    restart: always
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    environment:
-      - CERTBOT_EMAIL=$CERTBOT_EMAIL
-      - DOMAIN_LIST=$DOMAIN_LIST
-      - DOMAIN=$DOMAIN
-    volumes:
-      - "./frontend/config/letsencrypt:/etc/letsencrypt"
-      - "./frontend/config/nginx:/etc/nginx/conf.d"
-      - "./frontend/logs/letsencrypt:/var/log/letsencrypt"
-      - "./frontend/logs/nginx:/var/log/nginx"
-      - "./frontend/code:/usr/share/nginx/html"
-    ports: 
-      - '$PUBLIC_IP:443:443'
-      - '$PUBLIC_IP:80:80'
-    networks:
-        vaccom:
-          ipv4_address: 20.0.0.5
+  # vaccom-frontend:
+  #   container_name: vaccom-frontend
+  #   image: vaccom-frontend
+  #   hostname: vaccom-frontend
+  #   restart: always
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - CERTBOT_EMAIL=$CERTBOT_EMAIL
+  #     - DOMAIN_LIST=$DOMAIN_LIST
+  #     - DOMAIN=$DOMAIN
+  #   volumes:
+  #     - "./frontend/config/letsencrypt:/etc/letsencrypt"
+  #     - "./frontend/config/nginx:/etc/nginx/conf.d"
+  #     - "./frontend/logs/letsencrypt:/var/log/letsencrypt"
+  #     - "./frontend/logs/nginx:/var/log/nginx"
+  #     - "./frontend/code:/usr/share/nginx/html"
+  #   ports: 
+  #     - '$PUBLIC_IP:443:443'
+  #     - '$PUBLIC_IP:80:80'
+  #   networks:
+  #       vaccom:
+  #         ipv4_address: 20.0.0.5
 
 networks:
   vaccom:
