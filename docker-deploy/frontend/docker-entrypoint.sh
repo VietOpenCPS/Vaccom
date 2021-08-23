@@ -39,6 +39,7 @@ server {
 	error_log /var/log/nginx/$DOMAIN-error.log;
 }
 EOF
+/usr/sbin/cron -n &
 else
 /usr/sbin/cron -n &
 fi
