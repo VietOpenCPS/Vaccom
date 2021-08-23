@@ -7,7 +7,7 @@ if [ ! -f "$FILE" ]; then
 wget https://raw.githubusercontent.com/certbot/certbot/7f0fa18c570942238a7de73ed99945c3710408b4/letsencrypt-auto-source/letsencrypt-auto -O /usr/sbin/certbot-auto
 chmod +x /usr/sbin/certbot-auto
 /usr/sbin/certbot-auto certonly --standalone --agree-tos -m "$CERTBOT_EMAIL" -n -d $DOMAIN_LIST
-echo -e "#!/bin/bash\n\n# renew cert\n/usr/sbin/certbot-auto renew --nginx" > /etc/cron.daily/letsencrypt-renew
+echo -e '#!/bin/bash\n\n# renew cert\n/usr/sbin/certbot-auto renew --nginx' > /etc/cron.daily/letsencrypt-renew
 
 cat > /etc/nginx/conf.d/default.conf <<EOF
 server {
