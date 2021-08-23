@@ -328,5 +328,18 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		return nguoiTiemChungService.searchNguoiTiemChung(page, size);
 	}
+	
+	@Override
+	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
+			Long diabancosoid, String cosoytema) {
+		// TODO Auto-generated method stub
+		return nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid, cosoytema);
+	}
+	
+	@Override
+	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
+			String hovaten, Long diabancosoid, String cosoytema, Integer page, Integer size) {
+		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid, cosoytema, page, size);
+	}
 
 }

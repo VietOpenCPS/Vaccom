@@ -25,4 +25,5 @@ public interface NguoiDungAction {
 	public NguoiDung changeMatKhau(long id, String matKhauMoi) throws Exception;
 	
 	public NguoiDung updateNguoiDung(long id, String reqBody) throws Exception;
+
 }
