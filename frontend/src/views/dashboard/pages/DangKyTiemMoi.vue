@@ -361,8 +361,8 @@
                       :items="listDoiTuong"
                       placeholder="Nhóm đối tượng"
                       v-model="applicantInfo['NhomDoiTuong']"
-                      item-text="name"
-                      item-value="value"
+                      item-text="doiTuongMoTa"
+                      item-value="doiTuongMa"
                       hide-no-data
                       :rules="required"
                       required
@@ -371,22 +371,16 @@
                       hide-details="auto"    
                       id="nhomdoituong"
                       @keyup.enter="nextFocus('cosoyte')"          
-                  ></v-autocomplete>
+                  >
+                    <!-- <template v-slot:selection="data">
+                      <span>{{ data.item.doiTuongMa }} {{ data.item.doiTuongMoTa }}</span>
+                    </template>
+                    <template v-slot:item="data">
+                      <span>{{ data.item.doiTuongMa }} {{ data.item.doiTuongMoTa }}</span>
+                    </template> -->
+                  </v-autocomplete>
                 </v-col>
-                <!-- <v-col
-                  cols="12"
-                  md="6"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Ghi chú đối tượng</div>
-                  <v-text-field
-                    v-model="applicantInfo['GhiChuNhomDoiTuong']"
-                    outlined
-                    placeholder="Bổ sung thông tin đối tượng tiêm"
-                    dense
-                    hide-details="auto"
-                  ></v-text-field>
-                </v-col> -->
+                
               </v-row>
               <!-- row 5 -->
               <v-row>
@@ -604,6 +598,12 @@
               cols="12"
               class="text-center"
             >
+              <v-btn class="mr-4" v-if="String(uid) === '0'" color="red" @click="huyDangKy">
+                <v-icon left>
+                  mdi-close
+                </v-icon>
+                <span>HỦY</span>
+              </v-btn>
               <v-btn v-if="String(uid) === '0'" class="mr-3" color="#0072bc" @click="submitForm" :loading="processingAction" :disabled="processingAction">
                 <v-icon left>
                   mdi-content-save-outline
@@ -615,12 +615,6 @@
                   mdi-content-save-outline
                 </v-icon>
                 <span>CẬP NHẬT THÔNG TIN</span>
-              </v-btn>
-              <v-btn class="mr-0" v-if="String(uid) === '0'" color="red" @click="huyDangKy">
-                <v-icon left>
-                  mdi-close
-                </v-icon>
-                <span>HỦY</span>
               </v-btn>
             </v-col>
           </v-row>
@@ -678,14 +672,12 @@
         listGioiTinh: [{name: 'Nam', value: 0},{name: 'Nữ', value: 1},{name: 'Không xác định', value: 2}],
         listDoiTuong: [],
         listTinhThanh: [],
-        tinhThanh: '',
+        tinhThanh: '01',
         listQuanHuyen: [],
-        quanHuyen: '',
+        quanHuyen: '004',
         listXaPhuong: [],
-        xaPhuong: '',
+        xaPhuong: '00148',
         listDiaBan: [
-          {ID: 1, TenDiaBan: 'Tổ dân phố số 6'},
-          {ID: 2, TenDiaBan: 'Tổ dân phố số 7'}
         ],
         listCoSoYTe: [],
         coSoYTe: '',
@@ -1055,8 +1047,6 @@
       getCoSoYTe () {
         let vm = this
         let filter = {
-          page: 1,
-          size: 30
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
           vm.listCoSoYTe = result ? result : []

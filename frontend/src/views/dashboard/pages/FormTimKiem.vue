@@ -56,12 +56,13 @@
                 :items="listDoiTuong"
                 placeholder="Nhóm đối tượng"
                 v-model="dataSearch['NhomDoiTuong']"
-                item-text="name"
-                item-value="value"
+                item-text="doiTuongMoTa"
+                item-value="doiTuongMa"
                 hide-no-data
                 outlined
                 dense
-                hide-details="auto"               
+                hide-details="auto"
+                clearable    
             ></v-autocomplete>
           </v-col>
           <v-col
@@ -70,17 +71,17 @@
             class="pb-0"
           >
             <v-autocomplete
-                hide-no-data
-                :items="listDiaBan"
-                v-model="dataSearch['DiaBanCoSo_ID']"
-                item-text="itemName"
-                item-value="itemCode"
-                clearable
-                outlined
-                placeholder="Địa bàn cơ sở"
-                dense
-                hide-details="auto"
-            ></v-autocomplete>
+              hide-no-data
+              :items="listCoSoYTe"
+              v-model="coSoYTe"
+              item-text="tenCoSo"
+              item-value="maCoSo"
+              outlined
+              placeholder="Cơ sở y tế"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
           </v-col>
           <v-col
             cols="12"
@@ -88,18 +89,19 @@
             class="pb-0"
           >
             <v-autocomplete
-                hide-no-data
-                :items="listCoSoYTe"
-                v-model="dataSearch['CoSoYTe_Ma']"
-                item-text="itemName"
-                item-value="itemCode"
-                clearable
-                outlined
-                placeholder="Cơ sở y tế"
-                dense
-                hide-details="auto"
-            ></v-autocomplete>
+              hide-no-data
+              :items="listDiaBan"
+              v-model="dataSearch['DiaBanCoSo_ID']"
+              item-text="tenDiaBan"
+              item-value="id"
+              outlined
+              placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
           </v-col>
+          
         </v-row>
         <v-row class="justify-end">
           <v-btn color="#0072bc" class="mt-3 mx-3" @click="$emit('trigger-search', dataSearch)">
@@ -124,6 +126,7 @@
         listDoiTuong: [],
         listDiaBan: [],
         listCoSoYTe: [],
+        coSoYTe: '',
         dataSearch: {
           HoVaTen: '',
           CMTCCCD: '',
@@ -137,8 +140,13 @@
     created () {
       let vm = this
       vm.getCoSoYTe()
-      vm.getDiaBanCoSo()
       vm.getNhomDoiTuong()
+    },
+    watch: {
+      coSoYTe (val) {
+        this.dataSearch.CoSoYTe_Ma = val
+        this.getDiaBanCoSo(val)
+      },
     },
     computed: {
       breakpointName () {
@@ -149,12 +157,16 @@
       }
     },
     methods: {
-      getDiaBanCoSo () {
+      getDiaBanCoSo (val) {
         let vm = this
+        let obj = vm.listCoSoYTe.find(function (item) {
+          return item.maCoSo == val
+        })
         let filter = {
+          id: obj['id']
         }
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result.hasOwnProperty('data') ? result.data : []
+          vm.listDiaBan = result ? result : []
         })
       },
       getCoSoYTe () {
@@ -162,7 +174,7 @@
         let filter = {
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
-          vm.listCoSoYTe = result.hasOwnProperty('data') ? result.data : []
+          vm.listCoSoYTe = result ? result : []
         })
       },
       getNhomDoiTuong () {
@@ -170,7 +182,7 @@
         let filter = {
         }
         vm.$store.dispatch('getNhomDoiTuong', filter).then(function (result) {
-          vm.listDoiTuong = result.hasOwnProperty('data') ? result.data : []
+          vm.listDoiTuong = result ? result : []
         })
       },
     },

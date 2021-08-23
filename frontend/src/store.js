@@ -316,6 +316,55 @@ export default new Vuex.Store({
         })
       })
     },
+    addLichTiem ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/add/lichtiemchung', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    getLichTiem ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        axios.get('/rest/v1/app/get/lichtiemchung', param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
+        })
+      })
+    },
     getNhomDoiTuong ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -504,9 +553,24 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            page: 0,
-            size: 30
+            cmtcccd: filter.hasOwnProperty('cmtcccd') ? filter.cmtcccd : '',
+            nhomdoituong: filter.hasOwnProperty('nhomdoituong') ? filter.nhomdoituong : '',
+            ngaydangki: filter.hasOwnProperty('ngaydangki') ? filter.ngaydangki : '',
+            hovaten: filter.hasOwnProperty('hovaten') ? filter.hovaten : '',
+            diabancosoid: filter.hasOwnProperty('diabancosoid') ? filter.diabancosoid : '',
+            cosoytema: filter.hasOwnProperty('cosoytema') ? filter.cosoytema : '',
+            tinhtrangdangky: filter.hasOwnProperty('tinhtrangdangky') ? filter.tinhtrangdangky : ''
           }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['cmtcccd'] = filter.cmtcccd
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['cmtcccd'] = filter.cmtcccd
         }
         try {
           if (Vue.$cookies.get('Token')) {
@@ -519,6 +583,27 @@ export default new Vuex.Store({
           resolve(serializable)
         }).catch(function (error) {
           reject([])
+        })
+      })
+    },
+    updateRegistrationStatus ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/nguoitiemchung/trangthai', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
         })
       })
     },

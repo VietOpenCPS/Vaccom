@@ -77,35 +77,152 @@
         </v-card-text>
       </base-material-card>
       <v-dialog
-        max-width="700"
-        v-model="dialog"
+        max-width="1000"
+        v-model="dialogAddMember"
       >
         <v-card>
           <v-toolbar
             dark
-            color="primary"
+            color="#0072bc"
           >
-            <v-toolbar-title>Thông tin chi tiết</v-toolbar-title>
+            <v-toolbar-title v-if="typeAction === 'add'">Thêm lịch tiêm</v-toolbar-title>
+            <v-toolbar-title v-else>Cập nhật thông tin</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn
                 icon
                 dark
-                @click="dialog = false"
+                @click="dialogAddMember = false"
               >
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text class="mt-5">
-            
+            <v-form
+              ref="formAddLichTiem"
+              v-model="validFormAdd"
+              lazy-validation
+            >
+                <v-layout wrap>
+                    <v-autocomplete
+                        class="flex xs12 md12"
+                        hide-no-data
+                        :items="listCoSoYTe"
+                        v-model="coSoYTe"
+                        item-text="tenCoSo"
+                        item-value="id"
+                        clearable
+                        :rules="required"
+                        required
+                        outlined
+                        label="Cơ sở y tế"
+                        dense
+                    ></v-autocomplete>
+                    <v-text-field
+                        class="flex xs12 md12"
+                        v-model="thongTinLichTiem.TenDot"
+                        outlined
+                        label="Tên đợt tiêm"
+                        placeholder="Tên đợt tiêm"
+                        prepend-inner-icon="mdi-account-check-outline"
+                        dense
+                        clearable
+                    ></v-text-field>
+                    <v-text-field
+                      label="Ngày bắt đầu"
+                      class="flex xs12 md6"
+                      v-model="startDateFormatted"
+                      placeholder="dd/mm/yyyy, ddmmyyyy"
+                      @blur="formatStartDate"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Ngày kết thúc"
+                      class="flex xs12 md6 pl-2"
+                      v-model="endDateFormatted"
+                      placeholder="dd/mm/yyyy, ddmmyyyy"
+                      @blur="formatEndDate"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Địa chỉ tiêm chủng"
+                      class="flex xs12 md12"
+                      v-model="thongTinLichTiem.DiaDiemTiemChung"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Loại thuốc tiêm"
+                      class="flex xs12 md6"
+                      v-model="thongTinLichTiem.LoaiThuocTiem"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Nơi sản xuất"
+                      class="flex xs12 md6 pl-2"
+                      v-model="thongTinLichTiem.NoiSanXuat"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Số lô thuốc"
+                      class="flex xs12 md6"
+                      v-model="thongTinLichTiem.SoLoThuoc"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Hạn sử dụng"
+                      class="flex xs12 md6 pl-2"
+                      v-model="expDateFormatted"
+                      @blur="formatExpDate"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Tổng số mũi tiêm"
+                      class="flex xs12 md6"
+                      v-model="thongTinLichTiem.TongSoMuiTiem"
+                      dense
+                      outlined
+                    ></v-text-field>
+
+                    <v-autocomplete
+                        class="flex xs12 md6 pl-2"
+                        hide-no-data
+                        :items="tinhTrangList"
+                        v-model="thongTinLichTiem.TinhTrangLich"
+                        item-text="name"
+                        item-value="value"
+                        clearable
+                        :rules="required"
+                        required
+                        outlined
+                        label="Tình trạng lịch tiêm"
+                        dense
+                    ></v-autocomplete>
+                    
+                </v-layout>
+            </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialog = false">
+            
+            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="cancelAddMember">
               <v-icon left>
                 mdi-close
               </v-icon>
               Thoát
+            </v-btn>
+            <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitAddMember">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span v-if="typeAction === 'add'">Thêm mới</span>
+              <span v-else>Cập nhật</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -136,13 +253,39 @@
         page: 1,
         pageCount: 0,
         itemsPerPage: 10,
+        typeAction: 'add',
+        dialogAddMember: false,
         items: [],
+        listCoSoYTe: [],
+        coSoYTe: '',
+        startDateFormatted: '',
+        endDateFormatted: '',
+        expDateFormatted: '',
+        tinhTrangList: [
+          {name: 'Chưa mở danh sách', value: 0},
+          {name: 'Đang mở danh sách', value: 1},
+          {name: 'Đã đóng kết thúc', value: 2}
+        ],
+        thongTinLichTiem: {
+          CoSoYTe_ID: '',
+          TenDot: '',
+          NgayBatDau: '',
+          NgayKetThuc: '',
+          DiaDiemTiemChung: '',
+          LoaiThuocTiem: '',
+          NoiSanXuat: '',
+          SoLoThuoc: '',
+          HanSuDung: '',
+          TongSoMuiTiem: '',
+          TinhTrangLich: ''
+        },
         advanceSearchData: {
           codeNumber: '',
           customerTelNo: '',
           branchUid: ''
         },
         showAdvanceSearch: false,
+        lichTiemUpdate: '',
         headers: [
           {
             sortable: false,
@@ -166,25 +309,25 @@
             sortable: false,
             text: 'Ngày kết thúc',
             align: 'left',
-            value: 'NhomDoiTuong'
+            value: 'NgayKetThuc'
           },
           {
             sortable: false,
-            text: 'Số điện thoại',
+            text: 'Địa chỉ tiêm chủng',
             align: 'left',
-            value: 'CMTCCCD'
+            value: 'DiaChiTiemChung'
           },
           {
             sortable: false,
-            text: 'Địa chỉ',
+            text: 'Tổng số mũi tiêm',
             align: 'left',
-            value: 'DiaChiNoiO'
+            value: 'TongSoMuiTiem'
           },
           {
             sortable: false,
-            text: 'Ngày đăng ký tiêm',
-            align: 'center',
-            value: 'NgayDangKi'
+            text: 'Thông tin lô thuốc',
+            align: 'left',
+            value: 'LoaiThuocTiem'
           }
         ],
       }
@@ -197,8 +340,8 @@
         vm.$router.push({ path: '/login?redirect=/pages/lich-tiem-chung' })
         return
       }
+      vm.getLichTiem()
       vm.getCoSoYTe()
-      vm.getTinhThanh()
     },
     computed: {
       breakpointName () {
@@ -206,86 +349,86 @@
       }
     },
     methods: {
-       getCoSoYTe () {
+      formatStartDate () {
+        let vm = this
+        let lengthDate = String(vm.startDateFormatted).trim().length
+        let splitDate = String(vm.startDateFormatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.startDateFormatted = vm.translateDate(vm.startDateFormatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.startDateFormatted)
+          vm.startDateFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.startDateFormatted = ''
+        }
+      },
+      formatEndDate () {
+        let vm = this
+        let lengthDate = String(vm.endDateFormatted).trim().length
+        let splitDate = String(vm.endDateFormatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.endDateFormatted = vm.translateDate(vm.endDateFormatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.endDateFormatted)
+          vm.endDateFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.endDateFormatted = ''
+        }
+      },
+      formatExpDate () {
+        let vm = this
+        let lengthDate = String(vm.expDateFormatted).trim().length
+        let splitDate = String(vm.expDateFormatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.expDateFormatted = vm.translateDate(vm.expDateFormatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.expDateFormatted)
+          vm.expDateFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.expDateFormatted = ''
+        }
+      },
+      getLichTiem () {
         let vm = this
         let filter = {
           page: 1,
           size: 30
         }
-        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+        vm.$store.dispatch('getLichTiem', filter).then(function (result) {
           vm.items = result ? result : []
-          vm.totalItem = result.length
         })
       },
-      getTinhThanh () {
+      getCoSoYTe () {
         let vm = this
         let filter = {
         }
-        vm.$store.dispatch('getDanhMucTinhThanh', filter).then(function (result) {
-          vm.listTinhThanh = result ? result : []
-          if (vm.tinhThanh) {
-            vm.getQuanHuyen(vm.tinhThanh)
-          }
+        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+          vm.listCoSoYTe = result ? result : []
         })
       },
-      getQuanHuyen (code) {
-        let vm = this
-        if (!code) {
-          return
-        }
-        let obj = vm.listTinhThanh.find(function (item) {
-          return item.tinhThanhMa == code
-        })
-        let filter = {
-          idParent: obj['id']
-        }
-        vm.$store.dispatch('getDanhMucQuanHuyen', filter).then(function (result) {
-          vm.listQuanHuyen = result ? result : []
-          if (vm.quanHuyen) {
-            vm.getXaPhuong(vm.quanHuyen)
-          }
-        })
-      },
-      getXaPhuong (code) {
-        let vm = this
-        if (!code) {
-          return
-        }
-        let obj = vm.listQuanHuyen.find(function (item) {
-          return item.quanHuyenMa == code
-        })
-        if (!obj) {
-          return
-        }
-        let filter = {
-          idParent: obj['id']
-        }
-        vm.$store.dispatch('getDanhMucXaPhuong', filter).then(function (result) {
-          vm.listXaPhuong = result ? result : []
-        })
-      },
+      
       addMember (type, user) {
         let vm = this
         vm.typeAction = type
-        vm.coSoUpdate = user
+        vm.lichTiemUpdate = user
         vm.dialogAddMember = true
         if (type === 'add') {
           setTimeout(function () {
-            vm.$refs.formAddMember.reset()
-            vm.$refs.formAddMember.resetValidation()
+            vm.$refs.formAddLichTiem.reset()
+            vm.$refs.formAddLichTiem.resetValidation()
           }, 200)
         } else {
           setTimeout(function () {
-            vm.thongTinCoSo.MaCoSo = vm.coSoUpdate.maCoSo
-            vm.thongTinCoSo.TenCoSo = vm.coSoUpdate.tenCoSo
-            vm.thongTinCoSo.DiaChiCoSo = vm.coSoUpdate.diaChiCoSo
-            vm.thongTinCoSo.NguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
-            vm.tinhThanh = vm.coSoUpdate.tinhThanhMa
-            vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
-            vm.xaPhuong = vm.coSoUpdate.phuongXaMa
-            vm.thongTinCoSo.SoDienThoai = vm.coSoUpdate.soDienThoai
+            vm.thongTinLichTiem.MaCoSo = vm.lichTiemUpdate.maCoSo
+            vm.thongTinLichTiem.TenCoSo = vm.lichTiemUpdate.tenCoSo
+            vm.thongTinLichTiem.DiaChiCoSo = vm.lichTiemUpdate.diaChiCoSo
+            vm.thongTinLichTiem.NguoiDaiDien = vm.lichTiemUpdate.nguoiDaiDien
+            vm.tinhThanh = vm.lichTiemUpdate.tinhThanhMa
+            vm.quanHuyen = vm.lichTiemUpdate.quanHuyenMa
+            vm.xaPhuong = vm.lichTiemUpdate.phuongXaMa
+            vm.thongTinLichTiem.SoDienThoai = vm.lichTiemUpdate.soDienThoai
 
-            vm.$refs.formAddMember.resetValidation()
+            vm.$refs.formAddLichTiem.resetValidation()
           }, 200)
         }
         
@@ -293,30 +436,14 @@
       formatDataInput () {
         let vm = this
         try {
-          if (vm.tinhThanh) {
-            let obj = vm.listTinhThanh.find(function (item) {
-              return item.tinhThanhMa == vm.tinhThanh
-            })
-            vm.thongTinCoSo.TinhThanh_Ma = vm.tinhThanh
-            vm.thongTinCoSo.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
-          }
-          if (vm.quanHuyen) {
-            let obj = vm.listQuanHuyen.find(function (item) {
-              return item.quanHuyenMa == vm.quanHuyen
-            })
-            vm.thongTinCoSo.QuanHuyen_Ma = vm.quanHuyen
-            vm.thongTinCoSo.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
-          }
-          if (vm.xaPhuong) {
-            let obj = vm.listXaPhuong.find(function (item) {
-              return item.phuongXaMa == vm.xaPhuong
-            })
-            vm.thongTinCoSo.PhuongXa_Ma = vm.xaPhuong
-            vm.thongTinCoSo.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
-          }
-          console.log('thongTinCoSo', vm.thongTinCoSo)
+          let splitNgayBatDau = String(vm.startDateFormatted).split('/')
+          vm.thongTinLichTiem.NgayBatDau = splitNgayBatDau[2] + splitNgayBatDau[1] + splitNgayBatDau[0]
+          let splitNgayKetThuc = String(vm.endDateFormatted).split('/')
+          vm.thongTinLichTiem.NgayKetThuc = splitNgayKetThuc[2] + splitNgayKetThuc[1] + splitNgayKetThuc[0]
+          let splitHanSuDung = String(vm.expDateFormatted).split('/')
+          vm.thongTinLichTiem.HanSuDung = splitHanSuDung[2] + splitHanSuDung[1] + splitHanSuDung[0]
+          console.log('thongTinLichTiem', vm.thongTinLichTiem)
         } catch (error) {
-          vm.processingAction = false
         }
       },
       deleteCoSo (user) {
@@ -348,39 +475,39 @@
       },
       submitAddMember () {
         let vm = this
-        if (vm.$refs.formAddMember.validate()) {
-          vm.formatDataInput()
+        if (vm.$refs.formAddLichTiem.validate()) {
           if (vm.typeAction === 'add') {
+            vm.formatDataInput()
             let filter = {
-              data: vm.thongTinCoSo
+              data: vm.thongTinLichTiem
             }
             vm.loading = true
-            vm.$store.dispatch('addCoSoYTe', filter).then(userCredential => {
+            vm.$store.dispatch('addLichTiem', filter).then(userCredential => {
               vm.loading = false
               vm.dialogAddMember = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
-                text: 'Thêm cơ sở thành công',
+                text: 'Thêm lịch tiêm thành công',
                 color: 'success',
               })
-              vm.getCoSoYTe()
+              vm.getLichTiem()
             })
             .catch((error) => {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
-                text: 'Thêm cơ sở y tế không thành công',
+                text: 'Thêm lịch tiêm không thành công',
                 color: 'error',
               })
               // ..
             });
           } else {
             let filter = {
-              id: vm.coSoUpdate['id'],
-              data: vm.thongTinCoSo
+              id: vm.lichTiemUpdate['id'],
+              data: vm.thongTinLichTiem
             }
             vm.loading = true
-            vm.$store.dispatch('updateCoSoYTe', filter).then(function () {
+            vm.$store.dispatch('updateLichTiem', filter).then(function () {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -388,7 +515,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getCoSoYTe()
+              vm.getLichTiem()
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,

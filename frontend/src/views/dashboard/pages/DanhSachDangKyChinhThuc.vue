@@ -21,7 +21,7 @@
           <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
-          <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex mb-3'">
+          <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
             <div class="mr-auto pt-2 mb-3" v-if="breakpointName === 'xs'">
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </div>
@@ -29,7 +29,10 @@
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
           </div>
+          
           <v-data-table
+            v-model="selected"
+            show-select
             :headers="headers"
             :items="items"
             hide-default-footer
@@ -39,39 +42,33 @@
             loading-text="Đang tải... "
           >
             <template v-slot:item.index="{ item, index }">
-              <span>{{ page * itemsPerPage - itemsPerPage + index + 1 }}</span>
+              <span>{{ (page+1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
-            <template v-slot:item.HoVaTen="{ item, index }">
-                <p class="mb-2">{{ item.HoVaTen}}</p>
-                <p class="mb-2" style="color: blue">Ngày sinh: {{ item.NgaySinh}}</p>
+            <template v-slot:item.hoVaTen="{ item, index }">
+                <p class="mb-0" style="font-weight: 500;">{{ item.hoVaTen}}</p>
+                <p class="mb-2" style="color: blue">Ngày sinh: {{ parseDate(item.ngaySinh)}}</p>
             </template>
-            <template v-slot:item.DiaChiNoiO="{ item, index }">
-                <p class="mb-2">{{ item.DiaChiNoiO}} - {{item.PhuongXa_Ten}} - {{item.QuanHuyen_Ten}} - {{item.TinhThanh_Ten}}</p>
+            <template v-slot:item.diaChiNoiO="{ item, index }">
+                <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
+            <template v-slot:item.ngayDangKi="{ item, index }">
+                <p class="mb-2">{{ parseDate(item.ngayDangKi)}}</p>
+            </template>
+            <!-- <template v-slot:item.action="{ item }">
+              <div style="width: 100px">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="editRegistration(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Sửa thông tin</span>
+                </v-tooltip>
+              </div>
+              
+            </template> -->
           </v-data-table>
-          <div class="text-center mt-4" v-if="pageCount">
-            <nav role="navigation" aria-label="Pagination Navigation">
-              <ul class="v-pagination theme--light">
-                <li>
-                  <button @click="prevPage"  type="button" aria-label="Previous page" 
-                    :class="page == 1 ? 'v-pagination__navigation v-pagination__navigation--disabled' : 'v-pagination__navigation'">
-                    <i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-left theme--light"></i>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-current="true" class="v-pagination__item v-pagination__item--active primary">
-                    {{page}}
-                  </button>
-                </li>
-                <li>
-                  <button @click="nextPage" type="button" aria-label="Next page" 
-                    :class="page == pageCount ? 'v-pagination__navigation v-pagination__navigation--disabled' : 'v-pagination__navigation'">
-                    <i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-right theme--light"></i>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
         </v-card-text>
       </base-material-card>
       <v-dialog
@@ -116,10 +113,12 @@
 
 <script>
   import Search from './FormTimKiem.vue'
+  import Pagination from './Pagination'
   export default {
     name: 'Customers',
     components: {
-    'tim-kiem': Search
+    'tim-kiem': Search,
+    'pagination': Pagination
     },
     data () {
       return {
@@ -131,9 +130,9 @@
         lastVisible: '',
         firstVisible: '',
         totalItem: 0,
-        page: 1,
+        page: 0,
         pageCount: 0,
-        itemsPerPage: 10,
+        itemsPerPage: 5,
         items: [],
         advanceSearchData: {
           codeNumber: '',
@@ -141,6 +140,8 @@
           branchUid: ''
         },
         showAdvanceSearch: false,
+        selected: [],
+        dataInputSearch: '',
         headers: [
           {
             sortable: false,
@@ -152,38 +153,44 @@
             sortable: false,
             text: 'Họ tên',
             align: 'left',
-            value: 'HoVaTen'
+            value: 'hoVaTen'
           },
           {
             sortable: false,
             text: 'Số CMND/ CCCD',
             align: 'left',
-            value: 'CMTCCCD'
+            value: 'cmtcccd'
           },
           {
             sortable: false,
-            text: 'Đối tượng',
+            text: 'Mã nhóm đối tượng',
             align: 'left',
-            value: 'NhomDoiTuong'
+            value: 'nhomDoiTuong'
           },
           {
             sortable: false,
             text: 'Số điện thoại',
             align: 'left',
-            value: 'CMTCCCD'
+            value: 'soDienThoai'
           },
           {
             sortable: false,
             text: 'Địa chỉ',
             align: 'left',
-            value: 'DiaChiNoiO'
+            value: 'diaChiNoiO'
           },
           {
             sortable: false,
             text: 'Ngày đăng ký tiêm',
             align: 'center',
-            value: 'NgayDangKi'
-          }
+            value: 'ngayDangKi'
+          },
+          // {
+          //   sortable: false,
+          //   text: 'Thao tác',
+          //   align: 'center',
+          //   value: 'action'
+          // },
         ],
       }
     },
@@ -192,11 +199,10 @@
       vm.$store.commit('SET_INDEXTAB', 1)
       let isSigned = this.$store.getters.getIsSigned
       if (!isSigned) {
-        vm.$router.push({ path: '/login?redirect=/pages/danh-sach-dang-ky-chinh-thuc' })
+        vm.$router.push({ path: '/login?redirect=/pages/danh-sach-dang-ky-tiem-moi' })
         return
       }
-      vm.getCounter()
-      vm.getCustomer()
+      vm.getDanhSachDangKyChinhThuc(0)
     },
     computed: {
       breakpointName () {
@@ -210,106 +216,62 @@
       searchDangKyTiem (data) {
         let vm = this
         console.log('dataSearch', data)
+        vm.dataInputSearch = data
+        vm.getDanhSachDangKyChinhThuc(0, data)
       },
       showTimKiem () {
         let vm = this
         vm.showAdvanceSearch = !vm.showAdvanceSearch
       },
-      getBranchs () {
-        let vm = this
-        db.collection("users").get().then(function(querySnapshot) {
-          let users = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              users.push(item.data())
-            })
-            vm.listDaiLy = users
-          } else {
-            vm.listDaiLy = []
-          }
-        }).catch(function () {
-        })
-      },
-      getCounter () {
-        let vm = this
-        let refs = db.collection('counters').doc('counterCustomer')
-        refs.collection('shards').get().then((snapshot) => {
-          let total = 0
-          let pageCount = 0
-          snapshot.forEach((doc) => {
-            total += doc.data().count
-          })
-          if (total && vm.itemsPerPage) {
-            pageCount = Math.ceil(total / vm.itemsPerPage)
-          }
-          vm.totalItem = total
-          vm.pageCount = pageCount
-          console.log('pagination', total, pageCount)
-        })
-      },
-      searchCustomer () {
+      getDanhSachDangKyChinhThuc (pageIn, dataSearch) {
         let vm = this
         vm.loadingData = true
-        let keySearch = ''
-        let valueSearch = ''
-        if (vm.advanceSearchData['codeNumber']) {
-          keySearch = 'codeNumber'
-          valueSearch = vm.advanceSearchData['codeNumber']
+        let filter = {
+          page: pageIn,
+          size: vm.itemsPerPage,
+          tinhtrangdangky: 1,
+          cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
+          nhomdoituong: dataSearch && dataSearch['NhomDoiTuong'] ? dataSearch['NhomDoiTuong'] : '',
+          ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
+          hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
+          diabancosoid: dataSearch && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
+          cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : ''
         }
-        if (vm.advanceSearchData['customerTelNo'] && !vm.advanceSearchData['codeNumber']) {
-          keySearch = 'customerTelNo'
-          valueSearch = vm.advanceSearchData['customerTelNo']
-        }
-        if (vm.dailySelected && !vm.advanceSearchData['codeNumber'] && !vm.advanceSearchData['customerTelNo']) {
-          keySearch = 'branchUid'
-          valueSearch = vm.dailySelected['uid']
-        }
-        let refsCollection = db.collection("customers").where(keySearch, "==", valueSearch)
-        if (!valueSearch) {
-          refsCollection = db.collection("customers")
-        } else {
-          valueSearch = String(valueSearch)
-        }
-        
-        console.log('keySearch', keySearch, valueSearch)
-        refsCollection.get().then(function(querySnapshot) {
+        vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
-            vm.totalItem = querySnapshot.size
-            vm.pageCount = Math.ceil(querySnapshot.size / vm.itemsPerPage)
+          if (result) {
+            vm.items = result.hasOwnProperty('data') ? result.data : []
+            vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+            vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
           } else {
             vm.items = []
             vm.totalItem = 0
           }
         }).catch(function () {
           vm.loadingData = false
-          vm.items = []
-          vm.totalItem = 0
         })
       },
-      getCustomer () {
+      changePage (config) {
         let vm = this
-        vm.loadingData = true
-        db.collection("customers").orderBy('dealDate').limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.lastVisible = querySnapshot.docs[querySnapshot.docs.length-1]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
+        vm.page = config.page
+        vm.getDanhSachDangKyChinhThuc(config.page, vm.dataInputSearch)
+      },
+      editRegistration (item) {
+        let vm = this
+        vm.$store.commit('SET_RegistrationUpdate', item)
+        vm.$router.push('/pages/dang-ky-tiem-moi/' + item.id)
+      },
+      parseDate (date) {
+        if (!date) {
+          return ''
+        } else {
+          let lengthDate = String(date).length
+          if (lengthDate === 4) {
+            return date
           } else {
-            vm.items = []
+            return String(date).slice(6,8) + '/' + String(date).slice(4,6) + '/' + String(date).slice(0,4)
           }
-        }).catch(function () {
-          vm.loadingData = false
-        })
+        }
       },
       prevPage () {
         let vm = this
