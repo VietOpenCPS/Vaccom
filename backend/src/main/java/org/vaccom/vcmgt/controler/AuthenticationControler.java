@@ -157,6 +157,8 @@ public class AuthenticationControler {
 			result.put("expires_in", expireIn);
 
 			result.put("token_type", "Bearer");
+			
+			result.put("user_id", nguoiDung.getId());
 
 			return ResponseEntity.status(HttpStatus.OK).body(result.toString());
 

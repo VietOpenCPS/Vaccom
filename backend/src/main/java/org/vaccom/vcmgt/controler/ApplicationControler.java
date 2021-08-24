@@ -1,5 +1,6 @@
 package org.vaccom.vcmgt.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -544,6 +545,8 @@ public class ApplicationControler {
 			 * return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(msg); }
 			 * 
 			 */
+			
+			//TODO check role
 			nguoiTiemChungAction.addNguoiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.success");
@@ -653,7 +656,7 @@ public class ApplicationControler {
 
 		}
 	}
-	
+
 	@RequestMapping(value = "/delete/nguoitiemchung", method = RequestMethod.DELETE, produces = "application/json")
 	public ResponseEntity<?> deleteListNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String reqBody) {
@@ -712,7 +715,7 @@ public class ApplicationControler {
 
 	@RequestMapping(value = "/get/search/nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> searchNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(name="cmtcccd", defaultValue = "") String cmtcccd,
+			@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
 			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
 			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
 			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
@@ -842,7 +845,13 @@ public class ApplicationControler {
 
 		try {
 
-			List<DiaBanCoSo> lstDiaBanCoSo = diaBanCoSoAction.findByCoSoYTeId(id);
+			List<DiaBanCoSo> lstDiaBanCoSo = new ArrayList<DiaBanCoSo>();
+
+			if (id < 0) {
+				lstDiaBanCoSo = diaBanCoSoAction.findAll();
+			} else {
+				lstDiaBanCoSo = diaBanCoSoAction.findByCoSoYTeId(id);
+			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstDiaBanCoSo);
 
