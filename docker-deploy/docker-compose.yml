@@ -62,7 +62,7 @@ services:
       - "./proxy/conf.d:/etc/nginx/conf.d"
       - "./proxy/logs:/var/log/nginx"
     ports:
-      - "8080:8080"
+      - "$PUBLIC_IP:8080:8080"
     networks:
         vaccom:
           ipv4_address: 20.0.0.4
