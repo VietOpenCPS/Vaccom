@@ -30,11 +30,9 @@
             <v-data-table
               :headers="headers"
               :items="items"
-              :page.sync="page"
               :items-per-page="itemsPerPage"
               hide-default-footer
               class="elevation-1"
-              @page-count="pageCount = $event"
               no-data-text="Không có"
               :loading="loadingData"
               loading-text="Đang tải... "
@@ -86,12 +84,7 @@
             </template>
             
             </v-data-table>
-            <div class="text-center mt-4">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-              ></v-pagination>
-            </div>
+            <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
           </v-card-text>
       </base-material-card>
       <v-dialog
@@ -175,7 +168,6 @@
                         class="flex xs12 md6"
                         v-model="userInfo.SoDienThoai"
                         :rules="telNoRules"
-                        required
                         outlined
                         label="Số điện thoại"
                         prepend-inner-icon="mdi-phone-in-talk-outline"
@@ -255,9 +247,12 @@
 </template>
 
 <script>
+  import Pagination from './Pagination'
   export default {
     name: 'Users',
-
+    components: {
+    'pagination': Pagination
+    },
     data () {
       return {
         loading: false,
@@ -278,9 +273,9 @@
           KhoaTaiKhoan: false
         },
         totalItem: 0,
-        page: 1,
+        page: 0,
         pageCount: 0,
-        itemsPerPage: 5,
+        itemsPerPage: 20,
         typeAction: '',
         userUpdate: '',
         items: [],
@@ -305,8 +300,8 @@
         ],
         telNo: '',
         telNoRules: [
-          v => !!v || 'Số điện thoại là bắt buộc',
-          v => /^0([1-9]{1}\d{8})$/.test(v) || 'Số điện thoại gồm 10 chữ số',
+          // v => !!v || 'Số điện thoại là bắt buộc',
+          // v => /^0([1-9]{1}\d{8})$/.test(v) || 'Số điện thoại gồm 10 chữ số',
         ],
         address: '',
         addressRules: [
@@ -375,8 +370,9 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getMembers()
+      vm.getMembers(0)
       vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
     },
     watch: {
       coSoYTe (val) {
@@ -392,12 +388,18 @@
     methods: {
       getDiaBanCoSo (val) {
         let vm = this
-        let obj = vm.listCoSoYTe.find(function (item) {
-          return item.maCoSo == val
-        })
         let filter = {
-          id: obj['id']
+          id: -1
         }
+        if (val) {
+          let obj = vm.listCoSoYTe.find(function (item) {
+            return item.maCoSo == val
+          })
+          filter = {
+            id: obj['id']
+          }
+        }
+        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           vm.listDiaBan = result ? result : []
         })
@@ -410,12 +412,12 @@
           vm.listCoSoYTe = result ? result : []
         })
       },
-      getMembers () {
+      getMembers (pageIn) {
         let vm = this
         vm.loadingData = true
         let filter = {
-          page: 0,
-          size: 30
+          page: pageIn,
+          size: vm.itemsPerPage,
         }
         vm.$store.dispatch('getNguoiDung', filter).then(function (result) {
           vm.loadingData = false
@@ -464,8 +466,13 @@
             text: 'Cập nhật thành công',
             color: 'success',
           })
-          vm.getMembers()
+          vm.getMembers(0)
         })
+      },
+      changePage (config) {
+        let vm = this
+        vm.page = config.page
+        vm.getMembers(config.page)
       },
       deleteUser (user) {
         let vm = this
@@ -484,7 +491,7 @@
                 text: 'Thêm người dùng thành công',
                 color: 'success',
               })
-              vm.getMembers()
+              vm.getMembers(0)
             })
             .catch((error) => {
               vm.loading = false
@@ -521,7 +528,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getMembers()
+              vm.getMembers(0)
             }).catch(function () {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {

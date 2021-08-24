@@ -14,9 +14,10 @@ Vue.use(VueCookies)
 Vue.directive('mask', VueMaskDirective);
 
 // const baseURL = 'http://119.17.200.69:8630'
-// if (typeof baseURL !== 'undefined') {
-//   axios.defaults.baseURL = baseURL
-// }
+const baseURL = 'https://thachban.vaccom.vn:8080'
+if (typeof baseURL !== 'undefined') {
+  axios.defaults.baseURL = baseURL
+}
 if (Vue.$cookies.get('Token')) {
   store.commit('SET_ISSIGNED', true)
 } else {

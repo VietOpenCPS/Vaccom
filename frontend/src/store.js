@@ -104,20 +104,32 @@ export default new Vuex.Store({
         }).catch(function (error) {
           reject(error)
         })
-        // $.ajax({
-        //   url: 'http://119.17.200.69:8630/rest/v1/security/login',
-        //   type: 'POST',
-        //   headers: {
-        //     'Authorization': 'Basic ' + window.btoa(name + ":" + pass)
-        //   },
-        //   success: function (result) {
-        //     let serializable = result
-        //     resolve(serializable)
-        //   },
-        //   error: function (xhr) {
-        //     reject(xhr)
-        //   }
-        // })
+      })
+    },
+    getUserInfo ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        if (!filter.user_id) {
+          reject('')
+          return
+        }
+        axios.get('/rest/v1/app/get/nguoidung/' + filter.user_id, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
       })
     },
     register({ commit, dispatch }, data) {
@@ -141,16 +153,6 @@ export default new Vuex.Store({
         
       })
       
-    },
-    // get current login user info
-    fetchProfile({ commit, dispatch, rootState }) {
-      return request({
-        url: '/me',
-        method: 'get',
-      }).then((resp) => {
-        commit('SET_LOGIN_PROFILE', resp.data)
-        return resp
-      })
     },
     getDiaBanCoSo ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
@@ -298,9 +300,11 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            // page: filter.page,
-            // size: filter.size
           }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
         }
         try {
           if (Vue.$cookies.get('Token')) {
@@ -553,32 +557,29 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            cmtcccd: filter.hasOwnProperty('cmtcccd') ? filter.cmtcccd : '',
-            nhomdoituong: filter.hasOwnProperty('nhomdoituong') ? filter.nhomdoituong : '',
-            ngaydangki: filter.hasOwnProperty('ngaydangki') ? filter.ngaydangki : '',
-            hovaten: filter.hasOwnProperty('hovaten') ? filter.hovaten : '',
-            diabancosoid: filter.hasOwnProperty('diabancosoid') ? filter.diabancosoid : '',
-            cosoytema: filter.hasOwnProperty('cosoytema') ? filter.cosoytema : '',
-            tinhtrangdangky: filter.hasOwnProperty('tinhtrangdangky') ? filter.tinhtrangdangky : ''
+            cmtcccd: filter.hasOwnProperty('cmtcccd') ? filter.cmtcccd : -1,
+            nhomdoituong: filter.hasOwnProperty('nhomdoituong') ? filter.nhomdoituong : -1,
+            ngaydangki: filter.hasOwnProperty('ngaydangki') ? filter.ngaydangki : -1,
+            hovaten: filter.hasOwnProperty('hovaten') ? filter.hovaten : -1,
+            diabancosoid: filter.hasOwnProperty('diabancosoid') ? filter.diabancosoid : -1,
+            cosoytema: filter.hasOwnProperty('cosoytema') ? filter.cosoytema : -1,
+            tinhtrangdangky: filter.hasOwnProperty('tinhtrangdangky') ? filter.tinhtrangdangky : '',
+            kiemtratrung: filter.hasOwnProperty('kiemtratrung') ? filter.kiemtratrung : '',
           }
         }
         if (filter.hasOwnProperty('page')) {
           param.params['page'] = filter.page
           param.params['size'] = filter.size
         }
-        if (filter.hasOwnProperty('page')) {
-          param.params['cmtcccd'] = filter.cmtcccd
-        }
-        if (filter.hasOwnProperty('page')) {
-          param.params['cmtcccd'] = filter.cmtcccd
-        }
+
         try {
           if (Vue.$cookies.get('Token')) {
             param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
           }
         } catch (error) {
         }
-        axios.get('/rest/v1/app/get/nguoitiemchung', param).then(function (response) {
+        // axios.get('/rest/v1/app/get/nguoitiemchung', param).then(function (response) {
+        axios.get('/rest/v1/app/get/search/nguoitiemchung', param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
@@ -599,7 +600,28 @@ export default new Vuex.Store({
         } catch (error) {
         }
         let dataPost = filter.data
-        axios.put('/rest/v1/app/update/nguoitiemchung/trangthai', dataPost, param).then(function (response) {
+        axios.put('/rest/v1/app/update/nguoitiemchung/tinhtrangdangky', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    removeRegistrationStatus ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/delete/nguoitiemchung', dataPost, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
@@ -694,5 +716,39 @@ export default new Vuex.Store({
         })
       })
     },
+    exportDanhSach ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            'Content-Type': 'application/octet-stream'
+          },
+          params: filter.data,
+          responseType: 'blob'
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {}
+        axios.post('/rest/v1/export/nguoitiemchung', dataPost, param).then(function (response) {
+          // let fileNames = response.headers['content-disposition']
+          // let fileName = fileNames.split('filename=')[1] || 'danhsach'
+          // fileName = fileName.split('"').join('')
+          let a = document.createElement('a')
+          document.body.appendChild(a)
+          a.style = 'display: none'
+          let url = window.URL.createObjectURL(response.data)
+          a.href = url
+          a.download = filter.typeList + '.xls'
+          a.click()
+          window.URL.revokeObjectURL(url)
+          resolve(response.data)
+        }).catch(xhr => {
+          reject(xhr)
+        })
+      })
+    }
   },
 })

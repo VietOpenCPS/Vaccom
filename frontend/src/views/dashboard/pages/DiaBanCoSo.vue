@@ -13,7 +13,7 @@
         class="px-5 py-3"
       >
           <v-flex class="mx-4 mt-3">
-            <div class="mb-3"><span style="color: red">(*) </span>Chọn cơ sở y tế</div>
+            <div class="mb-3">Chọn cơ sở y tế</div>
             <v-autocomplete
               class="flex xs12 md12"
               hide-no-data
@@ -45,14 +45,12 @@
             <v-data-table
               :headers="headers"
               :items="items"
-              :page.sync="page"
-              :items-per-page="itemsPerPage"
               hide-default-footer
               class="elevation-1"
-              @page-count="pageCount = $event"
               no-data-text="Không có"
               :loading="loadingData"
               loading-text="Đang tải... "
+              :items-per-page="itemsPerPage"
             >
             <template v-slot:item.index="{ item, index }">
               <span>{{ index + 1 }}</span>
@@ -77,12 +75,7 @@
             </template>
             
             </v-data-table>
-            <div class="text-center mt-4">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-              ></v-pagination>
-            </div>
+            <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
           </v-card-text>
       </base-material-card>
       <v-dialog
@@ -133,8 +126,6 @@
                         item-text="tenCoSo"
                         item-value="id"
                         clearable
-                        :rules="required"
-                        required
                         outlined
                         label="Cơ sở y tế"
                         dense
@@ -211,9 +202,12 @@
 </template>
 
 <script>
+  import Pagination from './Pagination'
   export default {
     name: 'Users',
-
+    components: {
+      'pagination': Pagination
+    },
     data () {
       return {
         loading: false,
@@ -241,7 +235,7 @@
         totalItem: 0,
         page: 1,
         pageCount: 0,
-        itemsPerPage: 5,
+        itemsPerPage: 100,
         typeAction: '',
         userUpdate: '',
         items: [],
@@ -312,7 +306,7 @@
       },
       coSoYTeSearch (val) {
         if (val) {
-          this.getDiaBanCoSo(val)
+          this.getDiaBanCoSo(0, val)
         }
       },
       tinhThanh (val) {
@@ -333,15 +327,19 @@
       }
     },
     methods: {
-       getDiaBanCoSo (idCoSo) {
+       getDiaBanCoSo (pageIn, idCoSo) {
         let vm = this
         let filter = {
-          id: idCoSo,
-          page: 0,
-          size: 30
+          id: idCoSo ? idCoSo : -1,
+          page: pageIn,
+          size: vm.itemsPerPage
         }
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
+          // vm.items = result.hasOwnProperty('data') ? result.data : []
+          // vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+          // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
           vm.items = result ? result : []
+          vm.totalItem = result.length
         })
       },
       getCoSoYTe () {
@@ -350,9 +348,9 @@
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
           vm.listCoSoYTe = result ? result : []
-          if (vm.listCoSoYTe.length) {
-            vm.coSoYTeSearch = vm.listCoSoYTe[0]['id']
-          }
+          // if (vm.listCoSoYTe.length) {
+          //   vm.coSoYTeSearch = vm.listCoSoYTe[0]['id']
+          // }
         })
       },
       getTinhThanh () {
@@ -483,7 +481,7 @@
                 text: 'Thêm địa bàn thành công',
                 color: 'success',
               })
-              vm.getDiaBanCoSo()
+              vm.getDiaBanCoSo(0, vm.coSoYTeSearch)
             })
             .catch((error) => {
               vm.loading = false
@@ -508,7 +506,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getDiaBanCoSo()
+              vm.getDiaBanCoSo(0, vm.coSoYTeSearch)
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -519,6 +517,11 @@
           }
           
         }
+      },
+      changePage (config) {
+        let vm = this
+        vm.page = config.page
+        vm.getDiaBanCoSo(config.page, vm.coSoYTeSearch)
       },
       cancelAddMember () {
         let vm = this

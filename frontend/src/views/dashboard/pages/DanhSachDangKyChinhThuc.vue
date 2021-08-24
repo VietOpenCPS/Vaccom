@@ -12,10 +12,11 @@
         title="DANH SÁCH ĐĂNG KÝ TIÊM CHÍNH THỨC"
         class="px-5 py-3"
       >
-        <v-btn class="mx-0" fab dark small color="#0072bc" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
-          <v-icon dark>
-            mdi-magnify
+        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+          <v-icon left size="20">
+            mdi-filter-plus-outline
           </v-icon>
+          Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
           <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem"></tim-kiem>
@@ -28,6 +29,18 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
+            <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-export
+              </v-icon>
+              Xuất danh sách
+            </v-btn>
+            <v-btn color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-backup-restore
+              </v-icon>
+              Rút đăng ký chính thức
+            </v-btn>  
           </div>
           
           <v-data-table
@@ -35,6 +48,7 @@
             show-select
             :headers="headers"
             :items="items"
+            :items-per-page="itemsPerPage"
             hide-default-footer
             class="elevation-1"
             no-data-text="Không có"
@@ -45,14 +59,16 @@
               <span>{{ (page+1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
             <template v-slot:item.hoVaTen="{ item, index }">
+              <div :style="item.kiemTraTrung == 2 ? 'background: yellow' : ''" :title="item.kiemTraTrung == 2 ? 'Đăng ký trùng lặp' : ''">
                 <p class="mb-0" style="font-weight: 500;">{{ item.hoVaTen}}</p>
-                <p class="mb-2" style="color: blue">Ngày sinh: {{ parseDate(item.ngaySinh)}}</p>
+                <p class="mb-2" style="color: blue">Ngày sinh: {{ item.ngaySinh }}</p>
+              </div>
             </template>
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
             <template v-slot:item.ngayDangKi="{ item, index }">
-                <p class="mb-2">{{ parseDate(item.ngayDangKi)}}</p>
+                <p class="mb-2">{{item.ngayDangKi}}</p>
             </template>
             <!-- <template v-slot:item.action="{ item }">
               <div style="width: 100px">
@@ -124,6 +140,7 @@
       return {
         loading: false,
         loadingData: false,
+        processingAction: false,
         listDaiLy: [],
         dailySelected: '',
         dialog: false,
@@ -132,7 +149,7 @@
         totalItem: 0,
         page: 0,
         pageCount: 0,
-        itemsPerPage: 5,
+        itemsPerPage: 50,
         items: [],
         advanceSearchData: {
           codeNumber: '',
@@ -217,6 +234,9 @@
         let vm = this
         console.log('dataSearch', data)
         vm.dataInputSearch = data
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
         vm.getDanhSachDangKyChinhThuc(0, data)
       },
       showTimKiem () {
@@ -235,7 +255,8 @@
           ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
           hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
           diabancosoid: dataSearch && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
-          cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : ''
+          cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : '',
+          kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : ''
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false
@@ -250,6 +271,70 @@
         }).catch(function () {
           vm.loadingData = false
         })
+      },
+      exportDanhSach () {
+        let vm = this
+        vm.processingAction = true
+        let filter = {
+          typeList: 'DanhSachTiemChinhThuc',
+          data: {
+            page: -1,
+            size: -1,
+            tinhtrangdangky: 1,
+            cmtcccd: vm.dataInputSearch && vm.dataInputSearch['CMTCCCD'] ? vm.dataInputSearch['CMTCCCD'] : '',
+            nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
+            ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
+            hovaten: vm.dataInputSearch && vm.dataInputSearch['HoVaTen'] ? vm.dataInputSearch['HoVaTen'] : '',
+            diabancosoid: vm.dataInputSearch && vm.dataInputSearch['DiaBanCoSo_ID'] ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
+            cosoytema: vm.dataInputSearch && vm.dataInputSearch['CoSoYTe_Ma'] ? vm.dataInputSearch['CoSoYTe_Ma'] : '',
+            kiemtratrung: vm.dataInputSearch && vm.dataInputSearch['KiemTraTrung'] ? vm.dataInputSearch['KiemTraTrung'] : -1
+          }
+        }
+        vm.$store.dispatch('exportDanhSach', filter).then(function(result) {
+          vm.processingAction = false
+        }).catch(function () {
+          vm.processingAction = false
+        })
+      },
+      translateStatus (item) {
+        let vm = this
+        let arrIds = ''
+        if (item === 'multiple') {
+          if (vm.selected.length === 0) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Vui lòng chọn người muốn rút đăng ký',
+              color: 'success',
+            })
+            return
+          }
+          console.log('selected', vm.selected)
+          arrIds = vm.selected.map(function(item) {
+            return item['id']
+          }).toString()
+          console.log('selected', arrIds)
+        }
+        let filter = {
+          data: {
+            ids: item === 'multiple' ? arrIds : String(item.id)
+          }
+        }
+        vm.$store.dispatch('removeRegistrationStatus', filter).then(function (result) {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Rút đăng ký thành công',
+            color: 'success',
+          })
+          vm.getDanhSachDangKyChinhThuc(0)
+          vm.selected = []
+        }).catch(function () {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Rút đăng ký thất bại',
+            color: 'error',
+          })
+        })
+        
       },
       changePage (config) {
         let vm = this
@@ -272,47 +357,7 @@
             return String(date).slice(6,8) + '/' + String(date).slice(4,6) + '/' + String(date).slice(0,4)
           }
         }
-      },
-      prevPage () {
-        let vm = this
-        vm.loadingData = true
-        vm.page -= 1
-        db.collection("customers").orderBy("dealDate").endBefore(vm.firstVisible).limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.lastVisible = querySnapshot.docs[querySnapshot.docs.length-1]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
-          } else {
-            vm.items = []
-          }
-        }).catch(function () {
-          vm.loadingData = false
-        })
-      },
-      nextPage () {
-        let vm = this
-        vm.loadingData = true
-        vm.page += 1
-        db.collection("customers").orderBy("dealDate").startAfter(vm.lastVisible).limit(vm.itemsPerPage).get().then(function(querySnapshot) {
-          vm.loadingData = false
-          vm.firstVisible = querySnapshot.docs[0]
-          let customers = []
-          if (querySnapshot.size) {
-            querySnapshot.docs.forEach(function(item) {
-              customers.push(item.data())
-            })
-            vm.items = customers
-          } else {
-            vm.items = []
-          }
-        }).catch(function () {
-          vm.loadingData = false
-        })
-      },
+      }
     },
   }
 </script>

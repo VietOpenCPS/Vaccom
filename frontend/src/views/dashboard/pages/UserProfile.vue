@@ -190,20 +190,15 @@
     methods: {
       getUserInfo () {
         let vm = this
-        // async function getUid() {
-        //   let curr = await firebase.auth().currentUser
-        //   // console.log('curr', curr)
-        //   let uidad = curr.uid
-        //   let infoad = db.collection("users").doc(uidad)
-        //   infoad.get().then((querySnapshot) => {
-        //     if (querySnapshot.exists) {
-        //       vm.userInfo = querySnapshot.data()
-        //       // console.log('userInfo',vm.userInfo)
-        //     }
-        //   }).catch((error) => {
-        //   })
+        let dataUser = JSON.parse(localStorage.getItem('user'))
+        vm.userInfo = dataUser
+        // let filter = {
+        //   id: dataUser['id']
         // }
-        // getUid()
+        // vm.$store.dispatch('getUserInfo', filter).then(function(dataInfo) {
+        //   vm.userInfo = dataInfo
+        // }).catch (function () {
+        // })
       },
       showChangePass () {
         let vm = this

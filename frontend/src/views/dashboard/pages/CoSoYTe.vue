@@ -30,44 +30,36 @@
             <v-data-table
               :headers="headers"
               :items="items"
-              :page.sync="page"
-              :items-per-page="itemsPerPage"
               hide-default-footer
               class="elevation-1"
-              @page-count="pageCount = $event"
               no-data-text="Không có"
               :loading="loadingData"
               loading-text="Đang tải... "
+              :items-per-page="itemsPerPage"
             >
-            <template v-slot:item.index="{ item, index }">
-              <span>{{ index + 1 }}</span>
-            </template>
-            <template v-slot:item.action="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
-                    <v-icon size="22">mdi-pencil</v-icon>
-                  </v-btn>
-                </template>
-                <span>Sửa</span>
-              </v-tooltip>
-              <v-tooltip top >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="deleteCoSo(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
-                    <v-icon size="22">mdi-delete</v-icon>
-                  </v-btn>
-                </template>
-                <span>Xóa</span>
-              </v-tooltip>
-            </template>
-            
+              <template v-slot:item.index="{ item, index }">
+                <span>{{ index + 1 }}</span>
+              </template>
+              <template v-slot:item.action="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Sửa</span>
+                </v-tooltip>
+                <v-tooltip top >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="deleteCoSo(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa</span>
+                </v-tooltip>
+              </template>
             </v-data-table>
-            <div class="text-center mt-4">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-              ></v-pagination>
-            </div>
+            <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
           </v-card-text>
       </base-material-card>
       <v-dialog
@@ -214,9 +206,12 @@
 </template>
 
 <script>
+  import Pagination from './Pagination'
   export default {
     name: 'Users',
-
+    components: {
+      'pagination': Pagination
+    },
     data () {
       return {
         loading: false,
@@ -242,9 +237,9 @@
         listXaPhuong: [],
         xaPhuong: '',
         totalItem: 0,
-        page: 1,
+        page: 0,
         pageCount: 0,
-        itemsPerPage: 5,
+        itemsPerPage: 100,
         typeAction: '',
         coSoUpdate: '',
         items: [],
@@ -324,7 +319,7 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getCoSoYTe()
+      vm.getCoSoYTe(0)
       vm.getTinhThanh()
     },
     watch: {
@@ -346,13 +341,16 @@
       }
     },
     methods: {
-       getCoSoYTe () {
+       getCoSoYTe (pageIn) {
         let vm = this
         let filter = {
-          page: 1,
-          size: 30
+          page: pageIn,
+          size: vm.itemsPerPage
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+          // vm.items = result.hasOwnProperty('data') ? result.data : []
+          // vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+          // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
           vm.items = result ? result : []
           vm.totalItem = result.length
         })
@@ -474,7 +472,7 @@
               color: 'success',
             })
             setTimeout(function () {
-              vm.getCoSoYTe()
+              vm.getCoSoYTe(0)
             }, 500)
           }).catch(function () {
             vm.$store.commit('SHOW_SNACKBAR', {
@@ -503,7 +501,7 @@
                 text: 'Thêm cơ sở thành công',
                 color: 'success',
               })
-              vm.getCoSoYTe()
+              vm.getCoSoYTe(0)
             })
             .catch((error) => {
               vm.loading = false
@@ -528,7 +526,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getCoSoYTe()
+              vm.getCoSoYTe(0)
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -539,6 +537,11 @@
           }
           
         }
+      },
+      changePage (config) {
+        let vm = this
+        vm.page = config.page
+        vm.getCoSoYTe(config.page)
       },
       cancelAddMember () {
         let vm = this

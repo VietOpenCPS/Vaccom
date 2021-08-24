@@ -178,10 +178,10 @@
                     dense
                     hide-details="auto"
                     id="sdt"
-                    @keyup.enter="nextFocus('sdtzalo')"
+                    @keyup.enter="nextFocus('email')"
                   ></v-text-field>
                 </v-col>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="3"
                   class="pb-0"
@@ -197,10 +197,10 @@
                     id="sdtzalo"
                     @keyup.enter="nextFocus('email')"
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <v-col
                   cols="12"
-                  md="3"
+                  md="6"
                   class="pb-0"
                 >
                   <div class="mb-2">Email</div>
@@ -211,24 +211,9 @@
                     dense
                     id="email"
                     hide-details="auto"
-                    @keyup.enter="nextFocus('tinhthanh')"
+                    @keyup.enter="nextFocus('noio')"
                   ></v-text-field>
                 </v-col>
-                <!-- <v-col
-                  cols="12"
-                  md="3"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Mã số BHXH</div>
-                  <v-text-field
-                    v-model="applicantInfo['MaSoBHXH']"
-                    outlined
-                    placeholder="Mã số bảo hiểm xã hội"
-                    dense
-                    
-                    hide-details="auto"
-                  ></v-text-field>
-                </v-col> -->
                 
               </v-row>
               <!-- row 3 -->
@@ -362,7 +347,7 @@
                       placeholder="Nhóm đối tượng"
                       v-model="applicantInfo['NhomDoiTuong']"
                       item-text="doiTuongMoTa"
-                      item-value="doiTuongMa"
+                      item-value="id"
                       hide-no-data
                       :rules="required"
                       required
@@ -402,6 +387,7 @@
                       hide-details="auto"
                       id="cosoyte"
                       @keyup.enter="nextFocus('diabancoso')"
+                      clearable
                   ></v-autocomplete>
                 </v-col>
                 <v-col
@@ -409,22 +395,19 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Địa bàn cơ sở <span style="color:red">(*) </span> <i v-if="!coSoYTe" style="font-size: 12px">Chọn cơ sở y tế</i></div>
+                  <div class="mb-2">Địa bàn cơ sở </div>
                   <v-autocomplete
                       hide-no-data
-                      :disabled="!coSoYTe"
                       :items="listDiaBan"
                       v-model="applicantInfo['DiaBanCoSo_ID']"
                       item-text="tenDiaBan"
                       item-value="id"
-                      :rules="required"
-                      required
                       outlined
                       placeholder="Tổ dân phố, khóm ấp, thôn bản…"
                       dense
                       hide-details="auto"
                       id="diabancoso"
-                      @keyup.enter="nextFocus('dantoc')"
+                      @keyup.enter="nextFocus('tsdiung')"
                   ></v-autocomplete>
                 </v-col>
                 
@@ -734,7 +717,7 @@
             if (value) {
               return pattern.test(value) || 'Số điện thoại gồm 10 số'
             } else {
-              return []
+              return true
             }
           },
           (value) => {
@@ -750,7 +733,7 @@
           if (value) {
             return pattern.test(value) || 'Số điện thoại gồm 10 số'
           } else {
-            return []
+            return true
           }
         },
         require: (value) => {
@@ -829,6 +812,7 @@
       } catch (error) {
       }
       vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
       vm.getQuocGia()
       vm.getNhomDoiTuong()
       vm.getDanToc()
@@ -848,7 +832,8 @@
           return
         }
         vm.processingAction = true
-        let validateTuoi = vm.ngayDuKienFormatted ? vm.checkTuoi() : true
+        // let validateTuoi = vm.ngayDuKienFormatted ? vm.checkTuoi() : true
+        let validateTuoi = true
         if (vm.$refs.formDangKy.validate()) {
           if (vm.typeAction === 'add') {
             try {
@@ -955,8 +940,10 @@
         vm.applicantInfo.GioiTinh = vm.registrationUpdate.gioiTinh
         vm.applicantInfo.HoVaTen = vm.registrationUpdate.hoVaTen
         vm.applicantInfo.MaSoBHXH = vm.registrationUpdate.maSoBHXH
-        vm.ngayDuKienFormatted = vm.convertDate(vm.registrationUpdate.ngayDangKi)
-        vm.applicantDateFormatted = vm.convertDate(vm.registrationUpdate.ngaySinh)
+        // vm.ngayDuKienFormatted = vm.convertDate(vm.registrationUpdate.ngayDangKi)
+        // vm.applicantDateFormatted = vm.convertDate(vm.registrationUpdate.ngaySinh)
+        vm.ngayDuKienFormatted = vm.registrationUpdate.ngayDangKi
+        vm.applicantDateFormatted = vm.registrationUpdate.ngaySinh
         vm.applicantInfo.NgheNghiep = vm.registrationUpdate.ngheNghiep
         vm.applicantInfo.NhomDoiTuong = vm.registrationUpdate.nhomDoiTuong
         vm.tinhThanh = vm.registrationUpdate.tinhThanhMa
@@ -999,15 +986,17 @@
             vm.applicantInfo.CoSoYTe_Ma = vm.coSoYTe
             vm.applicantInfo.CoSoYTe_Ten = obj ? obj['TenCoSo'] : ''
           }
-          let splitNgayDangKy = String(vm.ngayDuKienFormatted).split('/')
-          vm.applicantInfo.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
-          let lengthDate = String(vm.applicantDateFormatted).trim().length
-          let splitDate = String(vm.applicantDateFormatted).split('/')
-          if (lengthDate && lengthDate == 4) {
-            vm.applicantInfo.NgaySinh = vm.applicantDateFormatted + '0000'
-          } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
-            vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
-          }
+          vm.applicantInfo.NgaySinh = vm.applicantDateFormatted
+          vm.applicantInfo.NgayDangKi = vm.ngayDuKienFormatted
+          // let splitNgayDangKy = String(vm.ngayDuKienFormatted).split('/')
+          // vm.applicantInfo.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
+          // let lengthDate = String(vm.applicantDateFormatted).trim().length
+          // let splitDate = String(vm.applicantDateFormatted).split('/')
+          // if (lengthDate && lengthDate == 4) {
+          //   vm.applicantInfo.NgaySinh = vm.applicantDateFormatted + '0000'
+          // } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
+          //   vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
+          // }
           console.log('applicantInfo', vm.applicantInfo)
         } catch (error) {
           vm.processingAction = false
@@ -1034,12 +1023,18 @@
       },
       getDiaBanCoSo (val) {
         let vm = this
-        let obj = vm.listCoSoYTe.find(function (item) {
-          return item.maCoSo == val
-        })
         let filter = {
-          id: obj['id']
+          id: -1
         }
+        if (val) {
+          let obj = vm.listCoSoYTe.find(function (item) {
+            return item.maCoSo == val
+          })
+          filter = {
+            id: obj['id']
+          }
+        }
+        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           vm.listDiaBan = result ? result : []
         })

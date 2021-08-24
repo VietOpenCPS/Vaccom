@@ -242,6 +242,7 @@
     },
     data () {
       return {
+        validFormAdd: true,
         loading: false,
         loadingData: false,
         listDaiLy: [],
@@ -286,6 +287,15 @@
         },
         showAdvanceSearch: false,
         lichTiemUpdate: '',
+        required: [
+          (value) => {
+            if(String(value).trim()){
+                return true
+              } else {
+                return 'Thông tin bắt buộc'
+              } 
+          }
+        ],
         headers: [
           {
             sortable: false,

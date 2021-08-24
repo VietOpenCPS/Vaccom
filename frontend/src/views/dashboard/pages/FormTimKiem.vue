@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-text>
+    <v-card-text class="px-0">
         <v-row>
           <v-col
             cols="12"
@@ -39,9 +39,9 @@
           >
             <v-text-field
               label="Ngày đăng ký tiêm"
-              v-model="dataSearch['NgayDangKi']"
+              v-model="ngayDangKyFormatted"
               outlined
-              placeholder="Ngày đăng ký tiêm"
+              placeholder="dd/mm/yyyy, ddmmyyyy"
               dense
               clearable
               hide-details="auto"
@@ -53,16 +53,16 @@
             class="pb-0"
           >
             <v-autocomplete
-                :items="listDoiTuong"
-                placeholder="Nhóm đối tượng"
-                v-model="dataSearch['NhomDoiTuong']"
-                item-text="doiTuongMoTa"
-                item-value="doiTuongMa"
-                hide-no-data
-                outlined
-                dense
-                hide-details="auto"
-                clearable    
+              :items="listDoiTuong"
+              placeholder="Nhóm đối tượng"
+              v-model="dataSearch['NhomDoiTuong']"
+              item-text="doiTuongMoTa"
+              item-value="id"
+              hide-no-data
+              outlined
+              dense
+              hide-details="auto"
+              clearable
             ></v-autocomplete>
           </v-col>
           <v-col
@@ -101,14 +101,31 @@
               clearable
           ></v-autocomplete>
           </v-col>
-          
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-autocomplete
+              hide-no-data
+              :items="listTrangThaiTrung"
+              v-model="dataSearch['KiemTraTrung']"
+              item-text="name"
+              item-value="value"
+              outlined
+              placeholder="Kiểm tra trùng lặp"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
+          </v-col>
         </v-row>
         <v-row class="justify-end">
-          <v-btn color="#0072bc" class="mt-3 mx-3" @click="$emit('trigger-search', dataSearch)">
-              <v-icon left size="22">
-              mdi-magnify
+          <v-btn color="#0072bc" small class="mt-3 mx-3" @click="$emit('trigger-search', dataSearch)">
+              <v-icon left size="20">
+              mdi-content-save
               </v-icon>
-              Tìm kiếm
+              Lọc danh sách
           </v-btn>
         </v-row>
     </v-card-text>
@@ -133,13 +150,21 @@
           NhomDoiTuong: '',
           DiaBanCoSo_ID: '',
           CoSoYTe_Ma: '',
-          NgayDangKi: ''
+          NgayDangKi: '',
+          KiemTraTrung: -1
         },
+        listTrangThaiTrung: [
+          {name: 'Chưa kiểm tra', value: 0},
+          {name: 'Đã kiểm tra, không trùng lặp', value: 1},
+          {name: 'Đã kiểm tra, bị trùng lặp', value: 2}
+        ],
+        ngayDangKyFormatted: ''
       }
     },
     created () {
       let vm = this
       vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
       vm.getNhomDoiTuong()
     },
     watch: {
@@ -147,6 +172,10 @@
         this.dataSearch.CoSoYTe_Ma = val
         this.getDiaBanCoSo(val)
       },
+      // ngayDangKyFormatted (val) {
+      //   let splitNgayDangKy = String(val).split('/')
+      //   this.dataSearch.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
+      // }
     },
     computed: {
       breakpointName () {
@@ -159,12 +188,18 @@
     methods: {
       getDiaBanCoSo (val) {
         let vm = this
-        let obj = vm.listCoSoYTe.find(function (item) {
-          return item.maCoSo == val
-        })
         let filter = {
-          id: obj['id']
+          id: -1
         }
+        if (val) {
+          let obj = vm.listCoSoYTe.find(function (item) {
+            return item.maCoSo == val
+          })
+          filter = {
+            id: obj['id']
+          }
+        }
+        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           vm.listDiaBan = result ? result : []
         })
@@ -184,6 +219,19 @@
         vm.$store.dispatch('getNhomDoiTuong', filter).then(function (result) {
           vm.listDoiTuong = result ? result : []
         })
+      },
+      formatNgayDangKy () {
+        let vm = this
+        let lengthDate = String(vm.ngayDangKyFormatted).trim().length
+        let splitDate = String(vm.ngayDangKyFormatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.ngayDangKyFormatted = vm.translateDate(vm.ngayDangKyFormatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.ngayDangKyFormatted)
+          vm.ngayDangKyFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.ngayDangKyFormatted = ''
+        }
       },
     },
   }

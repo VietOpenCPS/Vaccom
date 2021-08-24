@@ -6,7 +6,7 @@
     :expand-on-hover="expandOnHover"
     :right="$vuetify.rtl"
     src="/vac/images/bg-draw-2.jpg"
-    mobile-break-point="960"
+    mobile-breakpoint="960"
     app
     :width="breakpointName === 'xs' || breakpointName === 'sm' ? 260 : 0"
     v-bind="$attrs"

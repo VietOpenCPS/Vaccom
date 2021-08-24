@@ -6,7 +6,7 @@
           <v-card class="pa-3 page-login__card" tile>
             <v-card-title class="mx-3 py-0">
               <div class="image-title-login text-center my-2">
-                <img src="/vac/images/logo.png?t=1619886615424" alt="" height="80" contain />
+                <img style="border-radius: 10px;" src="/vac/images/logo.png?t=1619886615424" alt="" height="80" contain />
               </div>
               <div class="text-title-login white--text text-center">HỆ THỐNG QUẢN LÝ TIÊM CHỦNG</div>
             </v-card-title>
@@ -64,8 +64,8 @@ export default {
       loading: false,
       formValid: false,
       formModel: {
-        username: 'admin',
-        password: 'KillCovid19'
+        username: '',
+        password: ''
       },
       formRule: {
         username: [(v) => !!v || this.$t('Thông tin bắt buộc', ['username'])],
@@ -80,16 +80,24 @@ export default {
       if (vm.$refs.form.validate()) {
         vm.loading = true
         vm.$store.dispatch('loginApp', vm.formModel).then(function(result) {
-          // login success
-          console.log('result', result)
-          vm.$cookies.set('Token',result.access_token,60 * 60 * 1)
+          vm.$cookies.set('Token',result.access_token,60 * 60 * 10)
+          let dataUser = {
+            role_name: result.role_name,
+            user_id: result.user_id
+          }
+          localStorage.setItem('user', JSON.stringify(dataUser))
           vm.$store.commit('SET_ISSIGNED', true)
-          localStorage.setItem('user', JSON.stringify(result))
-          // 
-          let redirect = vm.$route.query.redirect
-          let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
-          vm.$router.push(route)
-          vm.loading = false
+          vm.$store.dispatch('getUserInfo', result).then(function(dataInfo) {
+            let redirect = vm.$route.query.redirect
+            let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+            vm.$router.push(route)
+            vm.loading = false
+          }).catch (function () {
+            let redirect = vm.$route.query.redirect
+            let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+            vm.$router.push(route)
+            vm.loading = false
+          })
         }).catch(() => {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,
