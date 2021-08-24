@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoidung` (
   `CoSoYTeID` bigint(20) DEFAULT 0,
   `QuanTriHeThong` boolean DEFAULT FALSE,
   `KhoaTaiKhoan` boolean DEFAULT FALSE,
-  `NguoiTiemChungID ` bigint(20) DEFAULT NULL,
+  `NguoiTiemChungID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 
