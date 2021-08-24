@@ -1,2 +1,2 @@
 docker-deploy/backend/jre8-latest.rpm
-docker-deploy/backend/org.vaccom.vcmgt-1.0.0.jar
+docker-deploy/backend/vaccom/org.vaccom.vcmgt-1.0.0.jar
