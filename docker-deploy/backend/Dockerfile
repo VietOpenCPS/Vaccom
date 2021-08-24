@@ -29,4 +29,4 @@ ENV LANGUAGE=en_US.UTF-8
 
 ENV LC_ALL=en_US.UTF-8
 
-CMD ["nohup", "/bin/bash", "/opt/vaccom/start.sh", "-d"]
+CMD ["/bin/bash", "/opt/vaccom/start.sh", "-d"]
