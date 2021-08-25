@@ -620,8 +620,7 @@ export default new Vuex.Store({
           }
         } catch (error) {
         }
-        let dataPost = filter.data
-        axios.put('/rest/v1/app/delete/nguoitiemchung', dataPost, param).then(function (response) {
+        axios.delete('/rest/v1/app/delete/nguoitiemchung/' + filter.id, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
@@ -688,6 +687,27 @@ export default new Vuex.Store({
         }
         let dataPost = filter.data
         axios.put('/rest/v1/app/update/nguoidung/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    changePassNguoiDung ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/changepwd/' + filter.id, dataPost, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {

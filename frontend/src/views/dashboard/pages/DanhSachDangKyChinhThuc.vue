@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem"></tim-kiem>
+          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -39,7 +39,7 @@
               <v-icon left size="20">
                 mdi-backup-restore
               </v-icon>
-              Rút đăng ký chính thức
+              Rút đăng ký
             </v-btn>  
           </div>
           
@@ -70,19 +70,27 @@
             <template v-slot:item.ngayDangKi="{ item, index }">
                 <p class="mb-2">{{item.ngayDangKi}}</p>
             </template>
-            <!-- <template v-slot:item.action="{ item }">
+            <template v-slot:item.action="{ item }">
               <div style="width: 100px">
-                <v-tooltip top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editRegistration(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-pencil</v-icon>
                     </v-btn>
                   </template>
                   <span>Sửa thông tin</span>
+                </v-tooltip> -->
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="translateStatus(item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-backup-restore</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Rút đăng ký</span>
                 </v-tooltip>
               </div>
               
-            </template> -->
+            </template>
           </v-data-table>
           <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
         </v-card-text>
@@ -202,12 +210,12 @@
             align: 'center',
             value: 'ngayDangKi'
           },
-          // {
-          //   sortable: false,
-          //   text: 'Thao tác',
-          //   align: 'center',
-          //   value: 'action'
-          // },
+          {
+            sortable: false,
+            text: 'Thao tác',
+            align: 'center',
+            value: 'action'
+          },
         ],
       }
     },
@@ -239,9 +247,18 @@
         vm.pageCount = 0
         vm.getDanhSachDangKyChinhThuc(0, data)
       },
+      cancelSearchDangKyTiem (data) {
+        let vm = this
+        vm.showAdvanceSearch = false
+        vm.dataInputSearch = data
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
+        vm.getDanhSachDangKyChinhThuc(0, data)
+      },
       showTimKiem () {
         let vm = this
-        vm.showAdvanceSearch = !vm.showAdvanceSearch
+        vm.showAdvanceSearch = true
       },
       getDanhSachDangKyChinhThuc (pageIn, dataSearch) {
         let vm = this
@@ -308,7 +325,6 @@
             })
             return
           }
-          console.log('selected', vm.selected)
           arrIds = vm.selected.map(function(item) {
             return item['id']
           }).toString()
@@ -316,25 +332,31 @@
         }
         let filter = {
           data: {
-            ids: item === 'multiple' ? arrIds : String(item.id)
+            ids: item === 'multiple' ? arrIds : String(item.id),
+            TinhTrangDangKi: 2
           }
         }
-        vm.$store.dispatch('removeRegistrationStatus', filter).then(function (result) {
-          vm.$store.commit('SHOW_SNACKBAR', {
-            show: true,
-            text: 'Rút đăng ký thành công',
-            color: 'success',
+        if (!filter['data']['ids']) {
+          return
+        }
+        let x = confirm('Bạn có chắc chắn thực hiện hành động này?')
+        if (x) {
+          vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Rút đăng ký thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDangKyChinhThuc(0)
+            vm.selected = []
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Rút đăng ký thất bại',
+              color: 'error',
+            })
           })
-          vm.getDanhSachDangKyChinhThuc(0)
-          vm.selected = []
-        }).catch(function () {
-          vm.$store.commit('SHOW_SNACKBAR', {
-            show: true,
-            text: 'Rút đăng ký thất bại',
-            color: 'error',
-          })
-        })
-        
+        }
       },
       changePage (config) {
         let vm = this

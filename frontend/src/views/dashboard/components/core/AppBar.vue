@@ -69,16 +69,16 @@
   </v-app-bar>
   <div v-else id="header-desktop">
     <header id="banner">
-        <div class="container layout wrap" style="padding-top: 10px;padding-bottom: 5px;padding-left: 10px;"> 
-          <a href="" class="mLogo col-sm-4 py-0" style="text-decoration: none;display: flex"> 
-            <img style="width: 52px;height: 52px;border-radius: 10px;" src="/vac/images/logo.png">
+        <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
+          <a href="" class="mLogo col-sm-4 py-0" style="text-decoration: none;display: block"> 
+            <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
             <div>
-              <span class="ml-3" style="font-size: 18px; color: #fff;line-height: 60px;">HỆ THỐNG QUẢN LÝ TIÊM CHỦNG</span>
+              <p class="ml-2 mb-2" style="font-size: 16px; color: #fff;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             </div>
             
           </a>
           <div class="col-sm-8 text-right py-0" style="color:#ff6a00;">
-            <nav class="sort-pages modify-pages" id="navigation"> 
+            <nav class="sort-pages modify-pages mt-3" id="navigation"> 
                 <ul aria-label="Site Pages" role="menubar" class="container">
                     <li v-for="(item, i) in items" :key="i" :class="indexTab == i ? 'selected' : ''" :id="'layout_'+i" role="presentation">
                       <v-menu
@@ -294,7 +294,7 @@
           },
           {
             icon: 'mdi-shield-plus-outline',
-            title: 'Quản trị hệ thống',
+            title: 'Quản trị',
             id: 'search',
             childItems: [
               {
@@ -316,6 +316,12 @@
                 id: 'search',
               }
             ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
           },
         ]
       } else {
@@ -377,31 +383,12 @@
               },
             ]
           },
-          // {
-          //   icon: 'mdi-shield-plus-outline',
-          //   title: 'Quản trị',
-          //   id: 'search',
-          //   childItems: [
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Cơ sở y tế',
-          //       to: '/pages/co-so-y-te',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Địa bàn cơ sở',
-          //       to: '/pages/dia-ban-co-so',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Người dùng',
-          //       to: '/pages/nguoi-dung',
-          //       id: 'search',
-          //     }
-          //   ]
-          // },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
         ]
       }
       // let index = vm.items.findIndex(function (item) {

@@ -15,6 +15,20 @@ export default {
       loading: false
     }
   },
+  created () {
+    let vm = this
+    // if (!vm.isSigned) {
+      vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+    // }
+  },
+  watch: {
+    '$route': function (newRoute, oldRoute) {
+      let vm = this
+      // if (!vm.isSigned) {
+        vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+      // }
+    }
+  },
   computed: {
 
   },
