@@ -2,7 +2,7 @@
   <v-footer
     id="dashboard-core-footer" class="py-0"
   >
-    <v-container>
+    <v-container class="pt-1">
       <v-row
         align="center"
         no-gutters
@@ -12,7 +12,8 @@
           cols="auto"
         >
           <div>
-            <p class="mb-2" style="text-transform: uppercase;">Phần mềm hỗ trợ quản lý và tổ chức Điểm tiêm chủng Vaccine</p>
+            <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
+            <p class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-home-city-outline</v-icon> </p> -->
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
             <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
@@ -28,8 +29,10 @@
         >
           <div class="text-body-1 pt-md-0">
             <div>
-              <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-phone-in-talk</v-icon> Điện thoại: </p>
-              <p><v-icon color="#fff" class="mr-1">mdi-email</v-icon> Email: </p> -->
+              <img class="mr-4" style="width: 80px;height: 52px;" src="/vac/images/logo_fds.png">
+              <img class="mr-4" style="width: 90px;height: 42px;" src="/vac/images/logo_netnam.png">
+              <img class="mr-4" style="width: 90px;height: 42px;" src="/vac/images/logo_iway.png">
+              <img class="pt-1" style="width: 90px;height: 42px;" src="/vac/images/logo_epacific.png">
             </div>
           </div>
         </v-col>
@@ -58,8 +61,9 @@
 </style>
 <style lang="css" scoped>
   #dashboard-core-footer{
-    background-color: #3122ad!important;
+    background: linear-gradient(65deg,#171cc2,#ff5200);
     color: #fff;
+    height: 120px;
   }
   #dashboard-core-footer .container {
     padding-bottom: 0px !important;

@@ -298,13 +298,13 @@
                     dense
                     id="noio"
                     hide-details="auto"
-                    @keyup.enter="nextFocus('nghenghiep')"
+                    @keyup.enter="nextFocus('nhomdoituong')"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <!-- row 4 -->
               <v-row>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="6"
                   class="pb-0"
@@ -319,26 +319,10 @@
                     hide-details="auto"
                     @keyup.enter="nextFocus('donvicongtac')"
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <v-col
                   cols="12"
                   md="6"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Đơn vị công tác</div>
-                  <v-text-field
-                    v-model="applicantInfo['DonViCongTac']"
-                    outlined
-                    placeholder="Đơn vị công tác"
-                    dense
-                    id="donvicongtac"
-                    hide-details="auto"
-                    @keyup.enter="nextFocus('nhomdoituong')"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="12"
                   class="pb-0"
                 >
                   <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
@@ -355,15 +339,31 @@
                       dense
                       hide-details="auto"    
                       id="nhomdoituong"
-                      @keyup.enter="nextFocus('cosoyte')"          
+                      @keyup.enter="nextFocus('donvicongtac')"          
                   >
-                    <!-- <template v-slot:selection="data">
-                      <span>{{ data.item.doiTuongMa }} {{ data.item.doiTuongMoTa }}</span>
+                  <template v-slot:selection="data">
+                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
                     </template>
                     <template v-slot:item="data">
-                      <span>{{ data.item.doiTuongMa }} {{ data.item.doiTuongMoTa }}</span>
-                    </template> -->
+                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                    </template>
                   </v-autocomplete>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Đơn vị công tác</div>
+                  <v-text-field
+                    v-model="applicantInfo['DonViCongTac']"
+                    outlined
+                    placeholder="Đơn vị công tác"
+                    dense
+                    id="donvicongtac"
+                    hide-details="auto"
+                    @keyup.enter="nextFocus('cosoyte')"
+                  ></v-text-field>
                 </v-col>
                 
               </v-row>
@@ -374,11 +374,13 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Cơ sở y tế</div>
+                  <div class="mb-2">Cơ sở y tế <span style="color:red">(*)</span></div>
                   <v-autocomplete
                       hide-no-data
                       :items="listCoSoYTe"
                       v-model="coSoYTe"
+                      :rules="required"
+                      required
                       item-text="tenCoSo"
                       item-value="maCoSo"
                       outlined
@@ -778,7 +780,7 @@
       },
       coSoYTe (val) {
         this.applicantInfo.CoSoYTe_Ma = val
-        this.getDiaBanCoSo(val)
+        // this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -823,7 +825,13 @@
         vm.typeAction = 'update'
         vm.bindDataUpdate()
       }
-      let current = vm.$router.history.current.query
+      try {
+        let data = localStorage.getItem('user')
+        if (data && JSON.parse(data)) {
+          vm.applicantInfo['DiaBanCoSo_ID'] = JSON.parse(data)['diaBanCoSoId']
+        }
+      } catch (error) {
+      }
     },
     methods: {
       submitForm () {
@@ -930,7 +938,7 @@
         vm.applicantInfo.CacBenhLyDangMac = vm.registrationUpdate.cacBenhLyDangMac
         vm.applicantInfo.CacThuocDangDung = vm.registrationUpdate.cacThuocDangDung
         vm.applicantInfo['CMTCCCD'] = vm.registrationUpdate.cmtcccd
-        vm.applicantInfo.coSoYTe = vm.registrationUpdate.coSoYTeMa
+        vm.coSoYTe = vm.registrationUpdate.coSoYTeMa
         vm.applicantInfo.DanToc_Ma = vm.registrationUpdate.danTocMa
         vm.applicantInfo.DiaBanCoSo_ID = vm.registrationUpdate.diaBanCoSoID
         vm.applicantInfo.DiaChiNoiO = vm.registrationUpdate.diaChiNoiO

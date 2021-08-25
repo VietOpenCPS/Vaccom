@@ -6,9 +6,10 @@
           <v-card class="pa-3 page-login__card" tile>
             <v-card-title class="mx-3 py-0">
               <div class="image-title-login text-center my-2">
-                <img style="border-radius: 10px;" src="/vac/images/logo.png?t=1619886615424" alt="" height="80" contain />
+                <!-- <img style="border-radius: 10px;" src="/vac/images/logo.png?t=1619886615424" alt="" height="80" contain /> -->
+                <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
               </div>
-              <div class="text-title-login white--text text-center">HỆ THỐNG QUẢN LÝ TIÊM CHỦNG</div>
+              <div class="text-title-login white--text text-center mb-3">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</div>
             </v-card-title>
             <v-card-text class="pb-0">
               <v-form ref="form" v-model="formValid" class="mt-10 mb-5" lazy-validation>
@@ -88,6 +89,11 @@ export default {
           localStorage.setItem('user', JSON.stringify(dataUser))
           vm.$store.commit('SET_ISSIGNED', true)
           vm.$store.dispatch('getUserInfo', result).then(function(dataInfo) {
+            dataUser['hoVaTen'] = dataInfo.hoVaTen
+            dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
+            dataUser['coSoYTeId'] = dataInfo.coSoYTeId
+            dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
+            localStorage.setItem('user', JSON.stringify(dataUser))
             let redirect = vm.$route.query.redirect
             let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
             vm.$router.push(route)

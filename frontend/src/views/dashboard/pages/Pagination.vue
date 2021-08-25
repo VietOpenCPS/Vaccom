@@ -1,6 +1,6 @@
 <template>
   <div class="text-center mt-4">
-    <nav role="navigation" aria-label="Pagination Navigation">
+    <nav role="navigation" aria-label="Pagination Navigation" style="position: relative;">
         <ul class="v-pagination theme--light">
         <li>
             <button @click="prevPage"  type="button" aria-label="Previous page" 
@@ -10,7 +10,7 @@
         </li>
         <li>
             <button type="button" aria-current="true" class="v-pagination__item v-pagination__item--active primary">
-            {{currentPage + 1}}
+            {{currentPage + 1}} / {{pageCount}}
             </button>
         </li>
         <li>
@@ -20,8 +20,24 @@
             </button>
         </li>
         </ul>
+        <v-autocomplete
+            class=""
+            hide-no-data
+            :items="listPage"
+            v-model="currentPagePagination"
+            item-text="name"
+            item-value="value"
+            dense
+            outlined
+            hide-details="auto"
+            style="display: inline-block;
+            position: absolute;
+            right: 0px;
+            width: 150px;"
+        ></v-autocomplete>
     </nav>
-    </div>
+    
+  </div>
   
 </template>
 
@@ -35,20 +51,49 @@
         },
         pageCount: {
             type: Number,
-            default: 30
+            default: 0
         },
     },
     data () {
       return {
-        currentPage: 0
+        currentPage: 0,
+        currentPagePagination: 1,
+        listPage: []
       }
     },
     created () {
-        this.currentPage = this.pageInput
+      let vm = this
+      vm.currentPage = vm.pageInput
+      vm.currentPagePagination = vm.currentPage + 1
+      for (let i = 1; i <= vm.pageCount; i++) {
+        let item = {
+          name: 'Trang ' + i,
+          value: i
+        }
+        vm.listPage.push(item)
+      }
     },
     watch: {
         pageInput (val) {
             this.currentPage = val
+            this.currentPagePagination = this.currentPage + 1
+        },
+        pageCount (val) {
+          let vm = this
+          for (let i = 1; i <= val; i++) {
+            let item = {
+              name: 'Trang ' + i,
+              value: i
+            }
+            vm.listPage.push(item)
+          }
+        },
+        currentPagePagination (val) {
+          let vm = this
+          vm.currentPage = val -1
+          vm.$emit('tiny:change-page', {
+            page: vm.currentPage
+          })
         }
     },
     computed: {

@@ -121,6 +121,12 @@
           </v-col>
         </v-row>
         <v-row class="justify-end">
+          <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
+              <v-icon left size="20">
+              mdi-close
+              </v-icon>
+              Thoát
+          </v-btn>
           <v-btn color="#0072bc" small class="mt-3 mx-3" @click="$emit('trigger-search', dataSearch)">
               <v-icon left size="20">
               mdi-content-save
@@ -186,6 +192,19 @@
       }
     },
     methods: {
+      cancelSearch () {
+        let vm = this
+        vm.dataSearch = {
+          HoVaTen: '',
+          CMTCCCD: '',
+          NhomDoiTuong: '',
+          DiaBanCoSo_ID: '',
+          CoSoYTe_Ma: '',
+          NgayDangKi: '',
+          KiemTraTrung: -1
+        },
+        vm.$emit('trigger-cancel', vm.dataSearch)
+      },
       getDiaBanCoSo (val) {
         let vm = this
         let filter = {

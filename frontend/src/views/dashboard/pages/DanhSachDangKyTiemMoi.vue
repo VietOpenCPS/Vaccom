@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem"></tim-kiem>
+          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -35,6 +35,12 @@
               </v-icon>
               Xuất danh sách
             </v-btn>
+            <!-- <v-btn color="red" small class="mx-0 mr-4" @click.stop="translateStatus('multiple', 'remove')" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-delete
+              </v-icon>
+              Xóa đăng ký
+            </v-btn>   -->
             <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-transfer
@@ -80,7 +86,7 @@
                 <p class="mb-2">{{ item.ngayDangKi }}</p>
             </template>
             <template v-slot:item.action="{ item }">
-              <div style="width: 100px">
+              <div style="width: 150px">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editRegistration(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
@@ -88,6 +94,14 @@
                     </v-btn>
                   </template>
                   <span>Sửa thông tin</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="removeRegistrationStatus(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa đăng ký</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -256,9 +270,18 @@
         vm.pageCount = 0
         vm.getDanhSachDangKyMoi(0, data)
       },
+      cancelSearchDangKyTiem (data) {
+        let vm = this
+        vm.showAdvanceSearch = false
+        vm.dataInputSearch = data
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
+        vm.getDanhSachDangKyMoi(0, data)
+      },
       showTimKiem () {
         let vm = this
-        vm.showAdvanceSearch = !vm.showAdvanceSearch
+        vm.showAdvanceSearch = true
       },
       getDanhSachDangKyMoi (pageIn, dataSearch) {
         let vm = this
@@ -289,7 +312,7 @@
           vm.loadingData = false
         })
       },
-      translateStatus (item) {
+      translateStatus (item, type) {
         let vm = this
         let arrIds = ''
         if (item === 'multiple') {
@@ -301,7 +324,6 @@
             })
             return
           }
-          console.log('selected', vm.selected)
           arrIds = vm.selected.map(function(item) {
             return item['id']
           }).toString()
@@ -310,25 +332,54 @@
         let filter = {
           data: {
             ids: item === 'multiple' ? arrIds : String(item.id),
-            TinhTrangDangKi: 1
+            TinhTrangDangKi: type === 'remove' ? 2 : 1
           }
         }
-        vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
-          vm.$store.commit('SHOW_SNACKBAR', {
-            show: true,
-            text: 'Chuyển thành công',
-            color: 'success',
+        if (!filter['data']['ids']) {
+          return
+        }
+        let textConfirm = type === 'remove' ? 'Bạn có chắc chắn muốn Rút đăng ký' : 'Bạn có chắc chắn muốn Chuyển đăng ký'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: type === 'remove' ? 'Rút thành công' : 'Chuyển thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDangKyMoi(0)
+            vm.selected = []
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: type === 'remove' ? 'Rút thất bại' : 'Chuyển thất bại',
+              color: 'error',
+            })
           })
-          vm.getDanhSachDangKyMoi(0)
-          vm.selected = []
-        }).catch(function () {
-          vm.$store.commit('SHOW_SNACKBAR', {
-            show: true,
-            text: 'Chuyển thất bại',
-            color: 'error',
-          })
-        })
+        }
         
+      },
+      removeRegistrationStatus (item) {
+        let vm = this
+        let textConfirm = 'Bạn có chắc chắn muốn xóa đăng ký'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('removeRegistrationStatus', item).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDangKyMoi(0)
+            vm.selected = []
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
+        }
       },
       exportDanhSach () {
         let vm = this

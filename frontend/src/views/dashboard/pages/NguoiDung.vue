@@ -49,14 +49,14 @@
               <span style="color: blue" v-else>Đang mở</span>
             </template>
             <template v-slot:item.action="{ item }">
-              <!-- <v-tooltip top>
+              <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-pencil</v-icon>
                   </v-btn>
                 </template>
                 <span>Cập nhật thông tin</span>
-              </v-tooltip> -->
+              </v-tooltip>
               <v-tooltip top v-if="!item['khoaTaiKhoan']">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="updateStatusUser('block', item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
@@ -156,8 +156,6 @@
                     <v-text-field
                         class="flex xs12 md6 pl-2"
                         v-model="userInfo.ChucDanh"
-                        :rules="nameRules"
-                        required
                         outlined
                         label="Chức danh"
                         prepend-inner-icon="mdi-card-account-details-outline"
@@ -192,8 +190,6 @@
                         v-model="coSoYTe"
                         item-text="tenCoSo"
                         item-value="id"
-                        :rules="required"
-                        required
                         outlined
                         label="Cơ sở y tế quản lý"
                         dense
@@ -204,7 +200,6 @@
                         hide-no-data
                         :items="listDiaBan"
                         v-model="userInfo['DiaBanCoSo_ID']"
-                        :disabled="!coSoYTe"
                         item-text="tenDiaBan"
                         item-value="id"
                         clearable
@@ -284,8 +279,7 @@
         coSoYTe: '',
         diaBanCoSo: '',
         nameRules: [
-          v => !!v || 'Tên người dùng là bắt buộc',
-          v => (v && v.length <= 100) || 'Tên không quá 100 ký tự',
+          v => !!v || 'Tên người dùng là bắt buộc'
         ],
         account: '',
         accountRules: [
@@ -326,7 +320,7 @@
           {
             sortable: false,
             text: 'Họ và tên',
-            align: 'center',
+            align: 'left',
             value: 'hoVaTen'
           },
           {
@@ -345,6 +339,18 @@
             text: 'Chức danh',
             align: 'center',
             value: 'chucDanh'
+          },
+          {
+            sortable: false,
+            text: 'Cơ sở y tế',
+            align: 'left',
+            value: 'coSoYTeId'
+          },
+          {
+            sortable: false,
+            text: 'Địa bàn',
+            align: 'left',
+            value: 'diaBanCoSoId'
           },
           {
             sortable: false,
