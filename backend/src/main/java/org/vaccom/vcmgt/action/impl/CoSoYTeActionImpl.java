@@ -12,6 +12,8 @@ import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.CoSoYTeService;
 import org.vaccom.vcmgt.service.DiaBanCoSoService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.petra.string.StringPool;
@@ -99,7 +101,7 @@ public class CoSoYTeActionImpl implements CoSoYTeAction {
 		coSoYTe.setNguoiDaiDien(nguoiDaiDien);
 		coSoYTe.setSoDienThoai(soDienThoai);
 		coSoYTe.setDiaChiCoSo(diaChiCoSo);
-
+		coSoYTe.setMaQR(VaccomUtil.generateQRCode("csyt", 6));
 		return coSoYTeService.updateCoSoYTe(coSoYTe);
 	}
 

@@ -23,9 +23,8 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	private MuiTiemChungRepository muiTiemChungRepository;
 	
 	@Override
-	public long countByCoSoYTeMa(String coSoYTeMa) {
-		// TODO Auto-generated method stub
-		return muiTiemChungRepository.countByCoSoYTeMa(coSoYTeMa);
+	public long countByCoSoYTeId(long coSoYTeId) {
+		return muiTiemChungRepository.countByCoSoYTeId(coSoYTeId);
 	}
 
 	@Override
@@ -55,16 +54,21 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd) {
 		return muiTiemChungRepository.findByCmtcccd(cmtcccd);
 	}
+	
+	@Override
+	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
+		return muiTiemChungRepository.findByNguoiTiemChungId(id);
+	}
 
 	@Override
-	public List<MuiTiemChung> findByCoSoYTeMa(String coSoYTeMa, int page, int size) {
+	public List<MuiTiemChung> findByCoSoYTeId(long coSoYTeId, int page, int size) {
 		if (page < 0 || size < 0) {
 			page = 0;
 			size = 30;
 		}
 		Sort sort = Sort.by(Sort.Direction.ASC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<MuiTiemChung> pases = muiTiemChungRepository.findByCoSoYTeMa(coSoYTeMa, pageable);
+		Page<MuiTiemChung> pases = muiTiemChungRepository.findByCoSoYTeId(coSoYTeId, pageable);
 		return pases.getContent();
 	}
 

@@ -61,6 +61,9 @@ public class CoSoYTe implements Serializable {
 	@Column(name = "SoDienThoai")
 	private String soDienThoai;
 
+	@Column(name = "MaQR")
+	private String maQR;
+
 	public long getId() {
 		return id;
 	}
@@ -155,6 +158,14 @@ public class CoSoYTe implements Serializable {
 
 	public void setSoDienThoai(String soDienThoai) {
 		this.soDienThoai = soDienThoai;
+	}
+
+	public String getMaQR() {
+		return maQR;
+	}
+
+	public void setMaQR(String maQR) {
+		this.maQR = maQR;
 	}
 
 }

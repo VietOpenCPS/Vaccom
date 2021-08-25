@@ -8,7 +8,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
-import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -161,6 +160,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
+		
+		em.close();
 
 		return typedQuery.getSingleResult();
 	}
@@ -246,6 +247,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(cq);
 
 		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		
+		em.close();
 
 		return lstNguoiTiemChung;
 	}

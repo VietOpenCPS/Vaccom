@@ -13,13 +13,15 @@ import org.vaccom.vcmgt.entity.PhieuHenTiem;
 @Service
 public interface PhieuHenTiemService {
 	
-	public int countByLichTiemChungId(long id);
+	public long countByLichTiemChungId(long id);
 	
 	public void deleteById(long id);
 	
 	public PhieuHenTiem updatePhieuHenTiem(PhieuHenTiem phieuHenTiem);
 	
 	public PhieuHenTiem findById(long id);
+	
+	public PhieuHenTiem findByMaQR(String maQR);
 	
 	public List<PhieuHenTiem> findAll();
 	

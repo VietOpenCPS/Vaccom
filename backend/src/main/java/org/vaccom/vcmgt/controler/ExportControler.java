@@ -3,6 +3,9 @@ package org.vaccom.vcmgt.controler;
 import java.io.File;
 import java.io.FileInputStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.vaccom.vcmgt.action.ExportDataAction;
+import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
+
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -26,7 +34,8 @@ public class ExportControler {
 	private ExportDataAction exportDataAction;
 
 	@RequestMapping(value = "/nguoitiemchung", method = RequestMethod.POST, produces = "application/octet-stream")
-	public ResponseEntity<?> exportNguoiTiemChung(@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
+	public ResponseEntity<?> exportNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
 			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
 			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
 			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
@@ -34,24 +43,30 @@ public class ExportControler {
 			@RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangki,
 			@RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung) {
 		try {
-			File file = exportDataAction.exportNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid, cosoytema,
-					tinhtrangdangki, kiemtratrung);
-			
-			
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("data.export.permission_error"));
+			}
+
+			File file = exportDataAction.exportNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
+					cosoytema, tinhtrangdangki, kiemtratrung);
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nguoitiemchung.xls");
 			headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
 			headers.add("Pragma", "no-cache");
 			headers.add("Expires", "0");
-			
+
 			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
 			return ResponseEntity.ok().headers(headers).contentLength(file.length())
 					.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 

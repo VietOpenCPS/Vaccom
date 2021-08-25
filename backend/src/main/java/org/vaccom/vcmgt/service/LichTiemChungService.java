@@ -15,13 +15,17 @@ public interface LichTiemChungService {
 	
 	public long countAll();
 	
+	public long countCoSoYTeId(long id);
+	
 	public void deleteById(long id);
 	
 	public LichTiemChung updateLichTiemChung(LichTiemChung lichTiemChung);
 	
 	public LichTiemChung findById(long id);
 		
-	public List<LichTiemChung> findCoSoYTeId(long id);
+	public List<LichTiemChung> findByCoSoYTeId(long id);
+	
+	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size);
 
 	public List<LichTiemChung> findAll(int page, int size);
 }

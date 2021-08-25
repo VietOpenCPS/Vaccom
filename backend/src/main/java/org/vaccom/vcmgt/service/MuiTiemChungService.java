@@ -13,7 +13,7 @@ import org.vaccom.vcmgt.entity.MuiTiemChung;
 @Service
 public interface MuiTiemChungService {
 	
-	public long countByCoSoYTeMa(String coSoYTeMa);
+	public long countByCoSoYTeId(long coSoYTeId);
 	
 	public void deleteById(long id);
 	
@@ -22,8 +22,10 @@ public interface MuiTiemChungService {
 	public MuiTiemChung findById(long id);
 	
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd);
+	
+	public List<MuiTiemChung> findByNguoiTiemChungId(long id);
 
-	public List<MuiTiemChung> findByCoSoYTeMa(String coSoYTeMa, int page, int size);
+	public List<MuiTiemChung> findByCoSoYTeId(long id, int page, int size);
 	
 	public List<MuiTiemChung> findAll();
 }

@@ -17,7 +17,6 @@ import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 
 import org.vaccom.vcmgt.exception.ActionException;
-import org.vaccom.vcmgt.init.StartupApplicationListener;
 import org.vaccom.vcmgt.security.impl.RandomString;
 import org.vaccom.vcmgt.security.impl.StrongTextDataEncryptor;
 import org.vaccom.vcmgt.service.NguoiDungService;
@@ -31,7 +30,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+
 
 @Service
 public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
@@ -172,11 +171,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
 
-		//String maQR = PortalUUIDUtil.generate();
 		
-		RandomString random = new RandomString(6);
-		String maQR = random.nextString() + "-" + random.nextString() + "-" + random.nextString() + "-"
-				+ random.nextString() + "-" + random.nextString();
 
 		nguoiTiemChung.setCacBenhLyDangMac(cacBenhLyDangMac);
 		nguoiTiemChung.setCacThuocDangDung(cacThuocDangDung);
@@ -207,7 +202,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setTinhThanhMa(tinhThanhMa);
 		nguoiTiemChung.setTinhThanhTen(tinhThanhTen);
 		nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
-		nguoiTiemChung.setMaQR(maQR.toLowerCase());
+		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
 
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 	}
@@ -440,13 +435,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					: StringPool.BLANK;
 
 			List<String> lstId = StringUtil.split(ids);
-			
-			System.out.println(lstId.size() + "|" + tinhTrangDangKi);
 
 			if (lstId != null) {
 				for (String strId : lstId) {
 					long id = GetterUtil.getLong(strId, 0);
-					System.out.println("ID " + id);
+					
 					if (id > 0) {
 						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
 
@@ -516,11 +509,6 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
 
-		// String maQR = PortalUUIDUtil.generate();
-		RandomString random = new RandomString(6);
-		String maQR = random.nextString() + "-" + random.nextString() + "-" + random.nextString() + "-"
-				+ random.nextString() + "-" + random.nextString();
-
 		nguoiTiemChung.setCacBenhLyDangMac(cacBenhLyDangMac);
 		nguoiTiemChung.setCacThuocDangDung(cacThuocDangDung);
 		nguoiTiemChung.setCmtcccd(cmtcccd);
@@ -548,7 +536,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setTinhThanhMa(tinhThanhMa);
 		nguoiTiemChung.setTinhThanhTen(tinhThanhTen);
 		nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
-		nguoiTiemChung.setMaQR(maQR.toLowerCase());
+		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
 		
 
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
@@ -617,5 +605,5 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		return khoaDangKy;
 	}
 
-	private Log _log = LogFactory.getLog(StartupApplicationListener.class);
+	private final Log _log = LogFactory.getLog(NguoiTiemChungActionImpl.class);
 }

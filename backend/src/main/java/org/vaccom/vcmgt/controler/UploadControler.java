@@ -18,6 +18,7 @@ import org.vaccom.vcmgt.response.UploadFileResponse;
 @RestController
 @RequestMapping("/rest/v1/upload")
 public class UploadControler {
+	/*
 	@Autowired
 	private FileStorageAction fileStorageAction;
 
@@ -37,4 +38,5 @@ public class UploadControler {
 	public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
 		return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
 	}
+	*/
 }

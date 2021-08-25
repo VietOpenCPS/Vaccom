@@ -28,4 +28,8 @@ public interface PhieuHenTiemAction {
 	public List<PhieuHenTiem> findAll();
 
 	public PhieuHenTiem updatePhieuHenTiem(long id, String reqBody) throws Exception;
+	
+	public void updateTinhTrangXacNhan(String reqBody);
+	
+	public boolean checkin(String qrcode);
 }

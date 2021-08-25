@@ -37,8 +37,8 @@ public class CaTiemChung implements Serializable {
 	@Column(name = "NgayHenTiem")
 	private String ngayHenTiem;
 
-	@Column(name = "GioHenTien")
-	private String gioHenTien;
+	@Column(name = "GioHenTiem")
+	private String gioHenTiem;
 
 	@Column(name = "SoMuiTiem")
 	private int soMuiTiem;
@@ -81,12 +81,12 @@ public class CaTiemChung implements Serializable {
 		this.ngayHenTiem = ngayHenTiem;
 	}
 
-	public String getGioHenTien() {
-		return gioHenTien;
+	public String getGioHenTiem() {
+		return gioHenTiem;
 	}
 
-	public void setGioHenTien(String gioHenTien) {
-		this.gioHenTien = gioHenTien;
+	public void setGioHenTiem(String gioHenTiem) {
+		this.gioHenTiem = gioHenTiem;
 	}
 
 	public int getSoMuiTiem() {
@@ -113,5 +113,4 @@ public class CaTiemChung implements Serializable {
 		this.soPhieuHen = soPhieuHen;
 	}
 
-	
 }

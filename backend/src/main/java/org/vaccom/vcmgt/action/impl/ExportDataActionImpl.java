@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbookFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.ExportDataAction;
+import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
+import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.service.NguoiTiemChungService;
 
 import com.liferay.petra.string.StringPool;
@@ -31,6 +35,9 @@ public class ExportDataActionImpl implements ExportDataAction {
 	@Autowired
 	private NguoiTiemChungService nguoiTiemChungService;
 
+	@Autowired
+	private MuiTiemChungService muiTiemChungService;
+
 	@Override
 	public File exportNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung) throws Exception {
@@ -40,24 +47,22 @@ public class ExportDataActionImpl implements ExportDataAction {
 		if (!destDir.exists()) {
 			destDir.mkdir();
 		}
-		
+
 		String fileDir = exportDir + "/" + System.currentTimeMillis() + ".xls";
 
 		File export = new File(fileDir);
 
 		long total = nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangki, kiemtratrung);
-		
-		System.out.println(total);
 
 		List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong,
 				ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangki, kiemtratrung, 0, (int) total);
-		
-		System.out.println(lstNguoiTiemChung.size());
 
 		if (lstNguoiTiemChung != null) {
 
 			File file = new File(templates + "/nguoitiemchung.xls");
+			
+			//System.out.println(file.getCanonicalPath());
 
 			Workbook workbook = null;
 
@@ -68,7 +73,7 @@ public class ExportDataActionImpl implements ExportDataAction {
 				Sheet sheet = workbook.getSheetAt(0);
 
 				int rowIndex = 8;
-				
+
 				int stt = 1;
 
 				for (NguoiTiemChung nguoiTiemChung : lstNguoiTiemChung) {
@@ -123,25 +128,47 @@ public class ExportDataActionImpl implements ExportDataAction {
 					Cell cell15 = row.createCell(15);
 					cell15.setCellValue(nguoiTiemChung.getDiaChiNoiO());
 
+					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService
+							.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
 					Cell cell16 = row.createCell(16);
-					cell16.setCellValue(StringPool.BLANK);
+					cell16.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 1)
+							? lstMuiTiemChung.get(0).getLoaiThuocTiem()
+							: StringPool.BLANK);
 
 					Cell cell17 = row.createCell(17);
-					cell17.setCellValue(StringPool.BLANK);
+					cell17.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 1)
+							? (lstMuiTiemChung.get(0).getNgayTiemChung() + StringPool.SPACE
+									+ lstMuiTiemChung.get(0).getGioTiemChung())
+							: StringPool.BLANK);
 					Cell cell18 = row.createCell(18);
-					cell18.setCellValue(StringPool.BLANK);
+					cell18.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 1)
+							? lstMuiTiemChung.get(0).getSoLoThuoc()
+							: StringPool.BLANK);
 					Cell cell19 = row.createCell(19);
-					cell19.setCellValue(StringPool.BLANK);
+					cell19.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 1)
+							? lstMuiTiemChung.get(0).getDiaDiemTiemChung()
+							: StringPool.BLANK);
 					Cell cell20 = row.createCell(20);
-					cell20.setCellValue(StringPool.BLANK);
+
+					cell20.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 2)
+							? lstMuiTiemChung.get(1).getLoaiThuocTiem()
+							: StringPool.BLANK);
 					Cell cell21 = row.createCell(21);
-					cell21.setCellValue(StringPool.BLANK);
+					cell21.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 2)
+							? (lstMuiTiemChung.get(1).getNgayTiemChung() + StringPool.SPACE
+									+ lstMuiTiemChung.get(1).getGioTiemChung())
+							: StringPool.BLANK);
 					Cell cell22 = row.createCell(22);
-					cell22.setCellValue(StringPool.BLANK);
+					cell22.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 2)
+							? lstMuiTiemChung.get(1).getSoLoThuoc()
+							: StringPool.BLANK);
 					Cell cell23 = row.createCell(23);
-					cell23.setCellValue(StringPool.BLANK);
+					cell23.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 2)
+							? lstMuiTiemChung.get(1).getDiaDiemTiemChung()
+							: StringPool.BLANK);
 					Cell cell24 = row.createCell(24);
-					cell24.setCellValue(StringPool.BLANK);
+					cell24.setCellValue(nguoiTiemChung.getGhiChu());
 					Cell cell25 = row.createCell(25);
 					cell25.setCellValue(StringPool.BLANK);
 
@@ -156,13 +183,17 @@ public class ExportDataActionImpl implements ExportDataAction {
 				outputStream.close();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				_log.error(e);
 			} finally {
 				workbook.close();
 			}
 		}
+		
+		//System.out.println(new File(fileDir).getCanonicalPath());
 
 		return new File(fileDir);
 
 	}
+
+	private final Log _log = LogFactory.getLog(ExportDataActionImpl.class);
 }

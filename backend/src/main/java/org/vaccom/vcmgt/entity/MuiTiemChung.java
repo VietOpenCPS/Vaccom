@@ -32,7 +32,7 @@ public class MuiTiemChung implements Serializable {
 	private long nguoiTiemChungId;
 
 	@Column(name = "CoSoYTeID")
-	private long coSoYTeID;
+	private long coSoYTeId;
 
 	@Column(name = "HoVaTen")
 	private String hoVaTen;
@@ -193,12 +193,12 @@ public class MuiTiemChung implements Serializable {
 		this.nguoiTiemChungId = nguoiTiemChungId;
 	}
 
-	public long getCoSoYTeID() {
-		return coSoYTeID;
+	public long getCoSoYTeId() {
+		return coSoYTeId;
 	}
 
-	public void setCoSoYTeID(long coSoYTeID) {
-		this.coSoYTeID = coSoYTeID;
+	public void setCoSoYTeId(long coSoYTeId) {
+		this.coSoYTeId = coSoYTeId;
 	}
 
 }

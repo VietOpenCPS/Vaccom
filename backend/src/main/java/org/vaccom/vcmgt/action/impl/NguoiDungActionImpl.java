@@ -130,7 +130,6 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		return nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 	}
 
-	
 	@Override
 	public NguoiDung updateNguoiDung(long id, String reqBody) throws Exception {
 
@@ -145,9 +144,9 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 		JsonNode bodyData = mapper.readTree(reqBody);
 
-		boolean quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG)
-				? bodyData.get(EntityConstant.QUANTRIHETHONG).booleanValue()
-				: false;
+		// boolean quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG)
+		// ? bodyData.get(EntityConstant.QUANTRIHETHONG).booleanValue()
+		// : false;
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
 				: StringPool.BLANK;
@@ -176,9 +175,24 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setDiaBanCoSoId(coSoYTeId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		// nguoiDung.setQuanTriHeThong(quanTriHeThong);
 		nguoiDung.setSoDienThoai(soDienThoai);
 
+		return nguoiDungService.updateNguoiDung(nguoiDung);
+	}
+
+	@Override
+	public NguoiDung updateNguoiDung(long id, boolean quanTriHeThong) throws Exception {
+
+		NguoiDung nguoiDung = nguoiDungService.findByID(id);
+
+		if (nguoiDung == null) {
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+					HttpStatus.NOT_FOUND.value());
+		}
+		
+		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		
 		return nguoiDungService.updateNguoiDung(nguoiDung);
 	}
 
