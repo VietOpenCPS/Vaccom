@@ -1,0 +1,194 @@
+
+
+@import vuetify-material/sidebar
+@import vuetify-material/appbar
+@import vuetify-material/buttons
+@import vuetify-material/pagination
+@import vuetify-material/footer
+@import vuetify-material/view
+@import vuetify-material/settings
+@import vuetify-material/card
+@import vuetify-material/table
+@import vuetify-material/tab
+@import vuetify-material/notification
+@import vuetify-material/modal
+@import vuetify-material/map
+@import vuetify-material/chip
+
+.v-btn.v-size--default,
+.v-btn.v-size--large
+  &:not(.v-btn--icon):not(.v-btn--fab)
+    padding: 0 30px !important
+.v-sheet button.v-btn.v-size--default:not(.v-btn--icon):not(.v-btn--fab)
+  padding: 12px 15px !important
+.theme--light.v-list-item .v-list-item__action-text,
+.theme--light.v-list-item .v-list-item__subtitle
+  color: #999
+
+.theme--light.v-text-field>.v-input__control>.v-input__slot:before
+  border-color: #d2d2d2
+
+.v-label.v-label,
+.v-alert.v-alert
+  font-size: $font-size-root
+
+.theme--light .v-content
+  background-color: #eee
+table
+  border-top: thin solid rgba(0,0,0,.12)
+.v-btn.v-size--default
+  font-size: 1rem
+.v-data-table-header th 
+  font-size: 14px !important
+  color: black !important
+  font-weight: 400 !important
+section.container
+  max-width: 1366px !important
+  min-height: calc(100vh - 92px) !important
+.v-btn__content .v-icon.v-icon--left, 
+.v-btn__content .v-icon.v-icon--right
+  font-size: 20px
+.v-snack__content 
+  font-size: 1rem !important
+.v-data-table .v-data-table-header tr th:not(:last-child),
+.v-data-table tbody tr td:not(:last-child)
+  border-right: 1px solid #dedede
+.v-data-table-header-mobile
+  display: none !important
+.v-card
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%) !important
+.counter-up-down input[type=number]::-webkit-inner-spin-button,
+.counter-up-down input[type=number]::-webkit-outer-spin-button 
+  -webkit-appearance: none
+  margin: 0
+.counter-up-down input[type=number]
+  text-align: center
+.v-select-list .v-list-item
+  border-bottom: 1px dotted #b9b9b9
+main.v-content
+  padding-top: 0px !important
+
+.theme--light.v-pagination .v-pagination__item
+  background: #fff
+  color: rgba(0,0,0,.87)
+
+.theme--light.v-pagination .v-pagination__item--active
+  color: #fff
+
+.theme--light.v-pagination .v-pagination__navigation
+  background: #fff
+
+.theme--dark.v-pagination .v-pagination__item 
+  background: #1e1e1e
+  color: #fff
+
+.theme--dark.v-pagination .v-pagination__item--active
+  color: #fff
+
+.theme--dark.v-pagination .v-pagination__navigation
+  background: #1e1e1e
+.theme--light.v-picker--date
+  margin-top: 0px
+  margin-bottom: 0px
+.v-input--checkbox label
+  color: black !important
+.v-pagination 
+  -webkit-box-align: center
+  -ms-flex-align: center
+  align-items: center
+  display: -webkit-inline-box
+  display: -ms-inline-flexbox
+  display: inline-flex
+  list-style-type: none
+  -webkit-box-pack: center
+  -ms-flex-pack: center
+  justify-content: center
+  margin: 0
+  max-width: 100%
+  width: 100%
+
+.v-pagination.v-pagination
+  padding-left: 0
+
+.v-pagination>li 
+  -webkit-box-align: center
+  -ms-flex-align: center
+  align-items: center
+  display: -webkit-box
+  display: -ms-flexbox
+  display: flex
+
+
+.v-pagination--circle .v-pagination__item,.v-pagination--circle .v-pagination__more,.v-pagination--circle .v-pagination__navigation
+  border-radius: 50%
+.v-pagination--disabled
+  pointer-events: none
+  opacity: .6
+
+.v-pagination__item 
+  background: transparent
+  border-radius: 4px
+  font-size: 1rem
+  height: 34px
+  margin: .3rem
+  min-width: 34px
+  padding: 0 5px
+  text-decoration: none
+  -webkit-transition: .3s cubic-bezier(0,0,.2,1)
+  transition: .3s cubic-bezier(0,0,.2,1)
+  width: auto
+  -webkit-box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
+
+
+.v-pagination__item--active
+  -webkit-box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)
+
+
+.v-pagination__navigation
+  -webkit-box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
+  border-radius: 4px
+  display: -webkit-inline-box
+  display: -ms-inline-flexbox
+  display: inline-flex
+  -webkit-box-pack: center
+  -ms-flex-pack: center
+  justify-content: center
+  -webkit-box-align: center
+  -ms-flex-align: center
+  align-items: center
+  text-decoration: none
+  height: 32px
+  width: 32px
+  margin: .3rem 10px
+
+.v-pagination__navigation .v-icon
+  -webkit-transition: .2s cubic-bezier(.4,0,.6,1)
+  transition: .2s cubic-bezier(.4,0,.6,1)
+  vertical-align: middle
+
+.v-pagination__navigation--disabled 
+  opacity: .6
+  pointer-events: none
+
+.v-pagination__more 
+  margin: .3rem
+  display: -webkit-inline-box
+  display: -ms-inline-flexbox
+  display: inline-flex
+  -webkit-box-align: end
+  -ms-flex-align: end
+  align-items: flex-end
+  -webkit-box-pack: center
+  -ms-flex-pack: center
+  justify-content: center
+  height: 32px
+  width: 32px
+table th, table td
+  padding-left: 8px !important
+  padding-right: 8px !important
+
+#banner .container, #dashboard-core-footer .container
+  max-width: 1300px !important
