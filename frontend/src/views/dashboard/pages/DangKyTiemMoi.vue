@@ -780,7 +780,7 @@
       },
       coSoYTe (val) {
         this.applicantInfo.CoSoYTe_Ma = val
-        // this.getDiaBanCoSo(val)
+        this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -1047,7 +1047,9 @@
         }
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {

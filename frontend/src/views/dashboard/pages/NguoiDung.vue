@@ -398,16 +398,15 @@
           id: -1
         }
         if (val) {
-          let obj = vm.listCoSoYTe.find(function (item) {
-            return item.maCoSo == val
-          })
           filter = {
-            id: obj['id']
+            id: val
           }
         }
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {
@@ -454,7 +453,7 @@
             vm.userInfo.SoDienThoai = user.soDienThoai
             vm.userInfo.Email = user.email
             vm.userInfo.DiaBanCoSo_ID = user.diaBanCoSoId
-            vm.userInfo.CoSoYTe_ID = user.coSoYTeId
+            vm.coSoYTe = user.coSoYTeId
             vm.userInfo.QuanTriHeThong = user.quanTriHeThong
             vm.$refs.formAddMember.resetValidation()
           }, 200)

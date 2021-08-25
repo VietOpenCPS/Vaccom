@@ -343,6 +343,29 @@ export default new Vuex.Store({
         })
       })
     },
+    updateLichTiem ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/lichtiemchung/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
     getLichTiem ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
