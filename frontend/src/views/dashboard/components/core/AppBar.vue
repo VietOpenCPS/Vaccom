@@ -294,7 +294,7 @@
           },
           {
             icon: 'mdi-shield-plus-outline',
-            title: 'Quản trị hệ thống',
+            title: 'Quản trị',
             id: 'search',
             childItems: [
               {
@@ -316,6 +316,12 @@
                 id: 'search',
               }
             ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
           },
         ]
       } else {
@@ -377,31 +383,12 @@
               },
             ]
           },
-          // {
-          //   icon: 'mdi-shield-plus-outline',
-          //   title: 'Quản trị',
-          //   id: 'search',
-          //   childItems: [
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Cơ sở y tế',
-          //       to: '/pages/co-so-y-te',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Địa bàn cơ sở',
-          //       to: '/pages/dia-ban-co-so',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Người dùng',
-          //       to: '/pages/nguoi-dung',
-          //       id: 'search',
-          //     }
-          //   ]
-          // },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
         ]
       }
       // let index = vm.items.findIndex(function (item) {
