@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `t_catiemchung` (
   `LichTiemChungID` bigint(20) NOT NULL,
   `STT` tinyint(4) NOT NULL,
   `NgayHenTiem` varchar(10) DEFAULT NULL,
-  `GioHenTien` varchar(6) DEFAULT NULL,
+  `GioHenTiem` varchar(6) DEFAULT NULL,
   `SoMuiTiem` tinyint(4) DEFAULT NULL,
   `DiaBanCoSoID` bigint(20) NOT NULL,
   `SoPhieuHen` tinyint(4) NOT NULL,
