@@ -1,8 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:vaccom/src/auth/auth_bloc.dart';
 import 'package:vaccom/src/Dialog/loading_dialog.dart';
 import 'package:vaccom/src/Dialog/msg_dilog.dart';
 import 'package:vaccom/src/Screen/home_page.dart';
 import 'package:flutter/material.dart';
+
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -36,16 +39,16 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 height: 140,
               ),
-              Image.asset('ic_car_red.png'),
+              Image.asset('assets/images/logo.png'),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 6),
                 child: Text(
-                  "Welcome Aboard!",
+                  "Welcome Vaccom",
                   style: TextStyle(fontSize: 22, color: Color(0xff333333)),
                 ),
               ),
               Text(
-                "Signup with iCab in simple steps",
+                "Signup Vaccom Users",
                 style: TextStyle(fontSize: 16, color: Color(0xff606470)),
               ),
               Padding(
@@ -140,6 +143,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(color: Color(0xff606470), fontSize: 16),
                       children: <TextSpan>[
                         TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()));
+                              },
                             text: "Login now",
                             style: TextStyle(
                                 color: Color(0xff3277D8), fontSize: 16))

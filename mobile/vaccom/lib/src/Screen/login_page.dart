@@ -100,6 +100,17 @@ class _LoginPageState extends State<LoginPage> {
                       text: "New user? ",
                       style: TextStyle(color: Color(0xff606470), fontSize: 16),
                       children: <TextSpan>[
+                        TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RegisterPage()));
+                              },
+                            text: "Sign up for a new account",
+                            style: TextStyle(
+                                color: Color(0xff3277D8), fontSize: 16))
                       ]),
                 ),
               )

@@ -8,8 +8,9 @@ class MyApp extends InheritedWidget {
   MyApp(this.authBloc, this.child) : super(child: child);
   static MyApp of(BuildContext context) {
     final MyApp? result = context.dependOnInheritedWidgetOfExactType<MyApp>();
-    assert(result != null, 'No FrogColor found in context');
+    assert(result != null, 'No MyApp found in context');
     return result!;
+
   }
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
