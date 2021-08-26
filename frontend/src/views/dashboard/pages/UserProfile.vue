@@ -273,7 +273,9 @@
         }
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {

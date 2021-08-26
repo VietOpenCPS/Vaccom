@@ -34,7 +34,8 @@
             position: absolute;
             right: 0px;
             width: 150px;"
-        ></v-autocomplete>
+        >
+        </v-autocomplete>
     </nav>
     
   </div>
@@ -58,7 +59,8 @@
       return {
         currentPage: 0,
         currentPagePagination: 1,
-        listPage: []
+        listPage: [],
+        type: ''
       }
     },
     created () {
@@ -75,8 +77,8 @@
     },
     watch: {
         pageInput (val) {
-            this.currentPage = val
-            this.currentPagePagination = this.currentPage + 1
+            // this.currentPage = val
+            // this.currentPagePagination = this.currentPage + 1
         },
         pageCount (val) {
           let vm = this
@@ -105,16 +107,18 @@
       prevPage () {
         let vm = this
         vm.currentPage -= 1
-        vm.$emit('tiny:change-page', {
-          page: vm.currentPage
-        })
+        vm.currentPagePagination = vm.currentPage + 1
+        // vm.$emit('tiny:change-page', {
+        //   page: vm.currentPage
+        // })
       },
       nextPage () {
         let vm = this
         vm.currentPage += 1
-        vm.$emit('tiny:change-page', {
-          page: vm.currentPage
-        })
+        vm.currentPagePagination = vm.currentPage + 1
+        // vm.$emit('tiny:change-page', {
+        //   page: vm.currentPage
+        // })
       },
     },
   }

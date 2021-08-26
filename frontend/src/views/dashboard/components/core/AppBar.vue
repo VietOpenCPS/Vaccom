@@ -71,7 +71,7 @@
     <header id="banner">
         <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
           <a href="" class="mLogo col-sm-4 py-0" style="text-decoration: none;display: block"> 
-            <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
+            <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
             <div>
               <p class="ml-2 mb-2" style="font-size: 16px; color: #fff;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             </div>
@@ -508,7 +508,7 @@
     z-index: 2;
   }
   #header-desktop #banner .btns a.login {
-    background-image: url(/vac/images/icon-login-white.png);
+    background-image: url(/images/icon-login-white.png);
   }
   #header-desktop #banner .btns a {
     display: inline-block;

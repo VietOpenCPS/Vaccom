@@ -6,8 +6,8 @@
           <v-card class="pa-3 page-login__card" tile>
             <v-card-title class="mx-3 py-0">
               <div class="image-title-login text-center my-2">
-                <!-- <img style="border-radius: 10px;" src="/vac/images/logo.png?t=1619886615424" alt="" height="80" contain /> -->
-                <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
+                <!-- <img style="border-radius: 10px;" src="/images/logo.png?t=1619886615424" alt="" height="80" contain /> -->
+                <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
               </div>
               <div class="text-title-login white--text text-center mb-3">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</div>
             </v-card-title>
@@ -134,7 +134,7 @@ export default {
 <style lang="css" scoped>
 .wrap-page-login{
   height: 100vh;
-  background-image: url(/vac/images/bg_active.jpg);
+  background-image: url(/images/bg_active.jpg);
   background-position: top;
   background-size: auto
 }

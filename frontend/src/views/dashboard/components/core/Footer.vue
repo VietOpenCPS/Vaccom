@@ -12,7 +12,7 @@
           cols="auto"
         >
           <div>
-            <img style="width: auto;height: 52px;border-radius: 10px;" src="/vac/images/logo_banner.png">
+            <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
             <p class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-home-city-outline</v-icon> </p> -->
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
@@ -29,10 +29,10 @@
         >
           <div class="text-body-1 pt-md-0">
             <div>
-              <img class="mr-4" style="width: 80px;height: 52px;" src="/vac/images/logo_fds.png">
-              <img class="mr-4" style="width: 90px;height: 42px;" src="/vac/images/logo_netnam.png">
-              <img class="mr-4" style="width: 90px;height: 42px;" src="/vac/images/logo_iway.png">
-              <img class="pt-1" style="width: 90px;height: 42px;" src="/vac/images/logo_epacific.png">
+              <img class="mr-4" style="width: 80px;height: 52px;" src="/images/logo_fds.png">
+              <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_netnam.png">
+              <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_iway.png">
+              <img class="pt-1" style="width: 90px;height: 42px;" src="/images/logo_epacific.png">
             </div>
           </div>
         </v-col>
