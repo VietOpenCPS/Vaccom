@@ -24,6 +24,7 @@
               outlined
               dense
               hide-details="auto"
+              clearable
             ></v-autocomplete>
           </v-flex>
           <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : ''">
@@ -233,9 +234,9 @@
         listXaPhuong: [],
         xaPhuong: '',
         totalItem: 0,
-        page: 1,
+        page: 0,
         pageCount: 0,
-        itemsPerPage: 100,
+        itemsPerPage: 30,
         typeAction: '',
         userUpdate: '',
         items: [],
@@ -292,7 +293,8 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getCoSoYTe ()
+      vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
       vm.getTinhThanh()
     },
     watch: {
@@ -335,11 +337,9 @@
           size: vm.itemsPerPage
         }
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          // vm.items = result.hasOwnProperty('data') ? result.data : []
-          // vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
-          // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-          vm.items = result ? result : []
-          vm.totalItem = result.length
+          vm.items = result.hasOwnProperty('data') ? result.data : []
+          vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+          vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
         })
       },
       getCoSoYTe () {

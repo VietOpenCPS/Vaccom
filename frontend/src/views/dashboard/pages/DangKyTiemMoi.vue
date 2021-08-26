@@ -697,7 +697,7 @@
         ],
         requiredCredit: [
           (value) => {
-            if (value.length === 9) {
+            if (value && value.length === 9) {
               const pattern = /^(([0-9]{9,9}))$/
               return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
             } else {
@@ -780,7 +780,7 @@
       },
       coSoYTe (val) {
         this.applicantInfo.CoSoYTe_Ma = val
-        // this.getDiaBanCoSo(val)
+        this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -843,19 +843,19 @@
         // let validateTuoi = vm.ngayDuKienFormatted ? vm.checkTuoi() : true
         let validateTuoi = true
         if (vm.$refs.formDangKy.validate()) {
-          if (vm.typeAction === 'add') {
-            try {
-              localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
-              vm.dataHistory = vm.applicantInfo ? vm.applicantInfo : ''
-            } catch (error) {
-            }
-          }
           if (validateTuoi) {
             vm.formatDataInput()
             let filter = {
               data: vm.applicantInfo
             }
             // thực hiện thêm mới
+            if (vm.typeAction === 'add') {
+              try {
+                localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
+                vm.dataHistory = vm.applicantInfo ? vm.applicantInfo : ''
+              } catch (error) {
+              }
+            }
             if (vm.typeAction === 'add') {
               vm.$store.dispatch('createRegistration', filter).then(function (result) {
                 vm.$store.commit('SHOW_SNACKBAR', {
@@ -866,6 +866,9 @@
                 vm.processingAction = false
                 vm.$refs.formDangKy.reset()
                 vm.$refs.formDangKy.resetValidation()
+                vm.tinhThanh = '01'
+                vm.quanHuyen = '004'
+                vm.xaPhuong = '00148'
                 vm.applicantInfo['DanToc_Ma'] = '01'
                 vm.applicantInfo['QuocTich_Ma'] = 'VN'
                 $('html, body').animate({
@@ -922,7 +925,7 @@
         vm.quanHuyen = vm.dataHistory['QuanHuyen_Ma']
         vm.xaPhuong = vm.dataHistory['PhuongXa_Ma']
         vm.applicantInfo['DiaBanCoSo_ID'] = vm.dataHistory['DiaBanCoSo_ID']
-        vm.applicantInfo['CoSoYTe_Ma'] = vm.dataHistory['CoSoYTe_Ma']
+        vm.coSoYTe = vm.dataHistory['CoSoYTe_Ma']
         vm.applicantInfo['DanToc_Ma'] = vm.dataHistory['DanToc_Ma']
         vm.applicantInfo['QuocTich_Ma'] = vm.dataHistory['QuocTich_Ma']
       },
@@ -1044,7 +1047,9 @@
         }
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {

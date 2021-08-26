@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-page-login" style="min-height: calc(100vh - 92px) !important">
-    <iframe src="/vac/documents/hdsd.pdf" type="application/pdf" width="100%" height="100%" style="overflow: auto;min-height: 1000px;" frameborder="0"></iframe>
+    <iframe src="/documents/hdsd.pdf" type="application/pdf" width="100%" height="100%" style="overflow: auto;min-height: 1000px;" frameborder="0"></iframe>
   </div>
 </template>
 
