@@ -1622,6 +1622,85 @@ public class ApplicationControler {
 		}
 	}
 
+	@RequestMapping(value = "/get/lichtiemchung/{id}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getLichTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("id") long id) {
+
+		try {
+
+			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro) || reqId <= 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.permission_error"));
+			}
+
+			LichTiemChung lichTiemChung = lichTiemChungAction.findById(id);
+
+			if (lichTiemChung == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.not_found"));
+			}
+
+			NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
+
+			if (nguoiDung == null) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.error"));
+			}
+
+			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.OK).body(lichTiemChung);
+			} else if (VaccomUtil.isCanBoXuLy(vaiTro)) {
+				if (lichTiemChung.getCoSoYTeId() == nguoiDung.getCoSoYTeId()) {
+					return ResponseEntity.status(HttpStatus.OK).body(lichTiemChung);
+				} else {
+					return ResponseEntity.status(HttpStatus.FORBIDDEN)
+							.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.permission_error"));
+				}
+			} else {
+				NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiDung.getNguoiTiemChungId());
+
+				if (nguoiTiemChung == null) {
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+							.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.error"));
+				}
+
+				List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+				if (lstPhieuHenTiem == null || lstPhieuHenTiem.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.FORBIDDEN)
+							.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.permission_error"));
+				}
+
+				for (PhieuHenTiem phieuHenTiem : lstPhieuHenTiem) {
+					if (phieuHenTiem.getLichTiemChungId() == lichTiemChung.getId()) {
+						return ResponseEntity.status(HttpStatus.OK).body(lichTiemChung);
+					}
+				}
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.not_found"));
+
+			}
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
 	@RequestMapping(value = "/add/muitiemchung", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<?> updateMuiTiemChung(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String reqBody) {

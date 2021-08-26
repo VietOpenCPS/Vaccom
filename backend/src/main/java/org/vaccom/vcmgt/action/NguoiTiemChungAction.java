@@ -22,6 +22,8 @@ public interface NguoiTiemChungAction {
 	public void deleteNguoiTiemChung(String reqBody);
 
 	public long countAll();
+	
+	public NguoiTiemChung findById(long id);
 
 	public List<NguoiTiemChung> searchNguoiTiemChung(int page, int size);
 

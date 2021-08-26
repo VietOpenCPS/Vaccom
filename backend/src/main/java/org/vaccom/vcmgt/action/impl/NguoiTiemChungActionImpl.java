@@ -399,6 +399,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		}
 
 	}
+	
+	@Override
+	public NguoiTiemChung findById(long id) {
+		return nguoiTiemChungService.findById(id);
+	}
 
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(int page, int size) {
