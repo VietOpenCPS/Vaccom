@@ -55,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding: const EdgeInsets.fromLTRB(0, 80, 0, 20),
                 child: StreamBuilder(
                     stream: authBloc.nameStream,
+                    initialData: null,
                     builder: (context, snapshot) => TextField(
                       controller: _nameController,
                       style: TextStyle(fontSize: 18, color: Colors.black),
