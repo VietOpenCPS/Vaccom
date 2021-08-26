@@ -2,6 +2,7 @@ import 'package:vaccom/src/app.dart';
 import 'package:vaccom/src/Dialog/loading_dialog.dart';
 import 'package:vaccom/src/Dialog/msg_dilog.dart';
 import 'package:vaccom/src/Screen/home_page.dart';
+import 'package:vaccom/src/Screen/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
