@@ -8,7 +8,7 @@ void main() {
   runApp(MyApp(
       new AuthBloc(),
       MaterialApp(
-        home: HomePage(),
+        home: LoginPage(),
       )
     )
   );

@@ -1,3 +1,4 @@
+import 'package:vaccom/src/Screen/widgets/car_pickup.dart';
 import 'package:vaccom/src/Screen/widgets/home_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -7,11 +8,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _tripDistance = 0;
   @override
   Widget build(BuildContext context) {
     print("build UI");
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         constraints: BoxConstraints.expand(),
         color: Colors.white,
@@ -38,12 +41,7 @@ class _HomePageState extends State<HomePage> {
                         child: Image.asset("assets/images/ic_menu.png")),
                     actions: <Widget>[Image.asset("assets/images/ic_notify.png")],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                    child: Text(
-                        " "
-                    ),
-                  ),
+
                 ],
               ),
             ),
@@ -52,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               bottom: 40,
               height: 248,
               child: Text(
-                  " "
+                "main home"
               ),
             )
           ],

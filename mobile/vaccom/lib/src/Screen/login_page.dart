@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Text(
-                "Login to continue using iCab",
+                "Login to continue using Vaccom",
                 style: TextStyle(fontSize: 16, color: Color(0xff606470)),
               ),
               Padding(
