@@ -42,7 +42,7 @@ services:
     hostname: vaccom-backend
     restart: always
     volumes:
-      - "./backend/vaccom:/opt/vaccom"
+      - "./backend/vaccom-backend:/opt/vaccom"
     tty: true
     networks:
         vaccom:
@@ -57,7 +57,10 @@ services:
       context: ./proxy
       dockerfile: Dockerfile
     environment:
-      - DOMAIN=thachban.vaccom.vn
+      - CONTAINER_ROOT_PASSWORD=$CONTAINER_ROOT_PASSWORD
+      - CERTBOT_EMAIL=$CERTBOT_EMAIL
+      - DOMAIN_LIST=$DOMAIN_LIST
+      - DOMAIN=$DOMAIN
     volumes:
       - "./proxy/conf.d:/etc/nginx/conf.d"
       - "./proxy/logs:/var/log/nginx"
@@ -76,6 +79,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
+      - CONTAINER_ROOT_PASSWORD=$CONTAINER_ROOT_PASSWORD
       - CERTBOT_EMAIL=$CERTBOT_EMAIL
       - DOMAIN_LIST=$DOMAIN_LIST
       - DOMAIN=$DOMAIN
@@ -84,7 +88,7 @@ services:
       - "./frontend/config/nginx:/etc/nginx/conf.d"
       - "./frontend/logs/letsencrypt:/var/log/letsencrypt"
       - "./frontend/logs/nginx:/var/log/nginx"
-      - "./frontend/vaccom:/usr/share/nginx/html"
+      - "./frontend/vaccom-frontend:/usr/share/nginx/html"
     ports: 
       - '$PUBLIC_IP:443:443'
       - '$PUBLIC_IP:80:80'

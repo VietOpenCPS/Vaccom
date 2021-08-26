@@ -7,7 +7,13 @@ if [ ! -f "$FILE" ]; then
 wget https://raw.githubusercontent.com/certbot/certbot/7f0fa18c570942238a7de73ed99945c3710408b4/letsencrypt-auto-source/letsencrypt-auto -O /usr/sbin/certbot-auto
 chmod +x /usr/sbin/certbot-auto
 /usr/sbin/certbot-auto certonly --nginx --agree-tos -m "$CERTBOT_EMAIL" -n -d $DOMAIN_LIST
-echo -e '#!/bin/bash\n\n# renew cert\n/usr/sbin/certbot-auto renew --nginx' > /etc/cron.daily/letsencrypt-renew
+
+cat > /etc/cron.daily/letsencrypt-renew <<EOF
+#!/bin/bash
+
+#renew cert
+/usr/sbin/certbot-auto renew --nginx
+EOF
 
 cat > /etc/nginx/conf.d/default.conf <<EOF
 server {
@@ -39,8 +45,29 @@ server {
 	error_log /var/log/nginx/$DOMAIN-error.log;
 }
 EOF
+
+cat > /opt/change_root_password.txt <<EOF
+$CONTAINER_ROOT_PASSWORD
+$CONTAINER_ROOT_PASSWORD
+EOF
+# Change password root
+passwd < /opt/change_root_password.txt
+rm -f /opt/change_root_password.txt
+# Permit root login
+sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd_config
+
+sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id root@vaccom-proxy
+
+# Sync certificate SSL to vaccom-proxy
+rsync -av /etc/letsencrypt/archive/thachban.vaccom.vn/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
+rsync -av /etc/letsencrypt/archive/thachban.vaccom.vn/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
+
+# Start services
+mkdir /run/sshd
+/usr/sbin/sshd -D &
 /usr/sbin/cron -n &
 else
+/usr/sbin/sshd -D &
 /usr/sbin/cron -n &
 fi
 
