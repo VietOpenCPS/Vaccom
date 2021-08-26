@@ -1,13 +1,14 @@
 package org.vaccom.vcmgt.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.vaccom.vcmgt.action.CaTiemChungAction;
 import org.vaccom.vcmgt.action.CoSoYTeAction;
 import org.vaccom.vcmgt.action.DanTocAction;
 import org.vaccom.vcmgt.action.DiaBanCoSoAction;
@@ -34,6 +36,8 @@ import org.vaccom.vcmgt.action.NguoiTiemChungAction;
 import org.vaccom.vcmgt.action.PhieuHenTiemAction;
 import org.vaccom.vcmgt.action.QuocGiaAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
+import org.vaccom.vcmgt.entity.PhieuHenTiem;
+import org.vaccom.vcmgt.entity.CaTiemChung;
 import org.vaccom.vcmgt.entity.CoSoYTe;
 import org.vaccom.vcmgt.entity.DanToc;
 import org.vaccom.vcmgt.entity.DiaBanCoSo;
@@ -50,9 +54,10 @@ import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.response.DataResponeBody;
 import org.vaccom.vcmgt.util.MessageUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -62,7 +67,7 @@ import com.liferay.portal.kernel.util.Validator;
 @RequestMapping("/rest/v1/app")
 public class ApplicationControler {
 
-	private final Logger _log = LoggerFactory.getLogger(ApplicationControler.class);
+	private final Log _log = LogFactory.getLog(ApplicationControler.class);
 
 	@Autowired
 	private NguoiDungAction nguoiDungAction;
@@ -86,6 +91,9 @@ public class ApplicationControler {
 	private MuiTiemChungAction muiTiemChungAction;
 
 	@Autowired
+	private CaTiemChungAction caTiemChungAction;
+
+	@Autowired
 	private PhieuHenTiemAction phieuHenTiemAction;
 
 	@Autowired
@@ -101,7 +109,7 @@ public class ApplicationControler {
 	private AuthenticationManager authenticationManager;
 
 	@RequestMapping(value = "/add/nguoidung", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<?> updateNguoiDung(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<?> addNguoiDung(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String reqBody) {
 
 		try {
@@ -110,7 +118,7 @@ public class ApplicationControler {
 
 			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
-						.body(MessageUtil.getVNMessageText("nguoidung.add.error"));
+						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
 
 			nguoiDungAction.addNguoiDung(reqBody);
@@ -120,8 +128,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -145,7 +153,7 @@ public class ApplicationControler {
 
 			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
-						.body(MessageUtil.getVNMessageText("nguoidung.add.error"));
+						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
 
 			boolean result = nguoiDungAction.deleteNguoiDung(id);
@@ -159,8 +167,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("nguoidung.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -184,7 +192,7 @@ public class ApplicationControler {
 
 			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
-						.body(MessageUtil.getVNMessageText("nguoidung.lock.error"));
+						.body(MessageUtil.getVNMessageText("nguoidung.lock.permission_error"));
 			}
 
 			nguoiDungAction.lockNguoiDung(id, isKhoaTaiKhoan);
@@ -194,8 +202,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -269,8 +277,8 @@ public class ApplicationControler {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -294,7 +302,7 @@ public class ApplicationControler {
 
 			if (reqId <= 0 || reqId != id) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
-						.body(MessageUtil.getVNMessageText("nguoidung.update.error"));
+						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
 			}
 
 			nguoiDungAction.updateNguoiDung(reqId, reqBody);
@@ -305,7 +313,42 @@ public class ApplicationControler {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/update/nguoidung/{id}/quantri/{isquantri}", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateNguoiDungQuanTri(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "id") long id, @PathVariable(value = "isquantri") boolean isquantri) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
+			}
+
+			nguoiDungAction.updateNguoiDung(id, isquantri);
+
+			String msg = MessageUtil.getVNMessageText("nguoidung.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -325,6 +368,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoidung.danhsach.permission_error"));
+			}
+
 			long total = nguoiDungAction.countAll();
 
 			List<NguoiDung> lstNguoiDung = nguoiDungAction.findAll(page, size);
@@ -332,8 +382,7 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiDung));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -353,6 +402,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoidung.chitiet.permission_error"));
+			}
+
 			NguoiDung nguoiDung = nguoiDungAction.findById(id);
 
 			nguoiDung.setMatKhau("");
@@ -360,8 +416,7 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(nguoiDung);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -371,7 +426,6 @@ public class ApplicationControler {
 			} else {
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 			}
-
 		}
 	}
 
@@ -380,12 +434,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("doituong.danhsach.permission_error"));
+			}
+
 			List<DoiTuong> lstDoiTuong = doiTuongAction.findAll();
+
 			return ResponseEntity.status(HttpStatus.OK).body(lstDoiTuong);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -404,13 +466,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("quocgia.danhsach.permission_error"));
+			}
+
 			List<QuocGia> lstQuocGia = quocGiaAction.finAll();
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstQuocGia);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -429,13 +498,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("dantoc.danhsach.permission_error"));
+			}
+
 			List<DanToc> lstDanToc = danTocAction.findAll();
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstDanToc);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -454,13 +530,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("tinhthanh.danhsach.permission_error"));
+			}
+
 			List<TinhThanh> lstTinhThanh = donViHanhChinhAction.findAll();
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstTinhThanh);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -480,13 +563,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("quanhuyen.danhsach.permission_error"));
+			}
+
 			List<QuanHuyen> lstQuanHuyen = donViHanhChinhAction.findByTinhThanhID(id);
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstQuanHuyen);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -506,13 +596,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("phuongxa.danhsach.permission_error"));
+			}
+
 			List<PhuongXa> lsPhuongXa = donViHanhChinhAction.findByQuanHuyenID(id);
 
 			return ResponseEntity.status(HttpStatus.OK).body(lsPhuongXa);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -531,21 +628,14 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
-			
-			/*
 
-			HttpSession session = request.getSession(true);
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
 
-			String captcha = GetterUtil.getString(request.getParameter("captcha"));
-
-			if (Validator.isNull(captcha)
-					|| !captcha.equals(GetterUtil.getString(session.getAttribute("captcha"), StringPool.BLANK))) {
-				String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.captcha_incorrect");
-
-				return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(msg);
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.add.permission_error"));
 			}
 
-			*/
 			nguoiTiemChungAction.addNguoiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.success");
@@ -553,8 +643,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -574,6 +664,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.update.permission_error"));
+			}
+
 			nguoiTiemChungAction.updateNguoiTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
@@ -581,8 +678,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -602,6 +699,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
+			}
+
 			boolean result = nguoiTiemChungAction.deleteNguoiTiemChung(id);
 
 			if (result) {
@@ -613,8 +717,78 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("nguoitiemchung.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/update/nguoitiemchung/tinhtrangdangky", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateTinhTrangDangKy(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.update.permission_error"));
+			}
+
+			nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/delete/nguoitiemchung", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<?> deleteListNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
+			}
+
+			nguoiTiemChungAction.deleteNguoiTiemChung(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -634,15 +808,78 @@ public class ApplicationControler {
 
 		try {
 
-			long total = nguoiTiemChungAction.countAll();
+			ObjectMapper mapper = new ObjectMapper();
 
-			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(page, size);
+			ArrayNode data = mapper.createArrayNode();
 
-			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiTiemChung));
+			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro) || reqId <= 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
+			}
+
+			long total = 0;
+
+			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
+
+			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				total = nguoiTiemChungAction.countAll();
+
+				lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(page, size);
+
+			} else {
+				NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
+
+				if (nguoiDung == null) {
+					return ResponseEntity.status(HttpStatus.FORBIDDEN)
+							.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
+				}
+
+				String coSoYTeMa = StringPool.BLANK;
+
+				if (nguoiDung.getCoSoYTeId() > 0) {
+					CoSoYTe coSoYTe = coSoYTeAction.findById(nguoiDung.getCoSoYTeId());
+					coSoYTeMa = coSoYTe != null ? coSoYTe.getMaCoSo() : StringPool.BLANK;
+				}
+
+				total = nguoiTiemChungAction.countNguoiTiemChung(StringPool.BLANK, -1, StringPool.BLANK,
+						StringPool.BLANK, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
+						-1, -1);
+
+				lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(StringPool.BLANK, -1, StringPool.BLANK,
+						StringPool.BLANK, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
+						-1, -1, page, size);
+
+			}
+
+			lstNguoiTiemChung.forEach(nguoiTiemChung -> {
+				// JsonNode node = mapper.valueToTree(nguoiTiemChung);
+
+				List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+				ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
+
+				ObjectNode node = mapper.convertValue(nguoiTiemChung, ObjectNode.class);
+
+				node.put("muiTiemChung", jsonArrayObj);
+
+				List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+				jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+				node.put("phieuHenTiem", jsonArrayObj);
+
+				data.add(node);
+			});
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, data));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -658,26 +895,91 @@ public class ApplicationControler {
 
 	@RequestMapping(value = "/get/search/nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> searchNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("cmtcccd") String cmtcccd, @RequestParam("nhomdoituong") Integer nhomdoituong,
+			@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
+			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
 			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
-			@RequestParam("diabancosoid") Long diabancosoid, @RequestParam("cosoytema") String cosoytema,
-			@RequestParam("page") int page, @RequestParam("size") int size) {
+			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
+			@RequestParam("cosoytema") String cosoytema,
+			@RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangky,
+			@RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "30") int size) {
 
 		try {
 
-			// long total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong,
-			// ngaydangki, hovaten,
-			// diabancosoid, cosoytema);
+			ObjectMapper mapper = new ObjectMapper();
+
+			ArrayNode data = mapper.createArrayNode();
+
+			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro) || reqId <= 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
+			}
 
 			long total = 0;
-			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong,
-					ngaydangki, hovaten, diabancosoid, cosoytema, page, size);
 
-			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiTiemChung));
+			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
+
+			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
+						diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
+
+				lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
+						hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size);
+
+			} else {
+				NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
+
+				if (nguoiDung == null) {
+					return ResponseEntity.status(HttpStatus.FORBIDDEN)
+							.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
+				}
+
+				String coSoYTeMa = StringPool.BLANK;
+
+				if (nguoiDung.getCoSoYTeId() > 0) {
+					CoSoYTe coSoYTe = coSoYTeAction.findById(nguoiDung.getCoSoYTeId());
+					coSoYTeMa = coSoYTe != null ? coSoYTe.getMaCoSo() : StringPool.BLANK;
+				}
+
+				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
+						nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa, tinhtrangdangky,
+						kiemtratrung);
+
+				lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
+						hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
+						tinhtrangdangky, kiemtratrung, page, size);
+
+			}
+
+			lstNguoiTiemChung.forEach(nguoiTiemChung -> {
+				// JsonNode node = mapper.valueToTree(nguoiTiemChung);
+
+				List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+				ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
+
+				ObjectNode node = mapper.convertValue(nguoiTiemChung, ObjectNode.class);
+
+				node.put("muiTiemChung", jsonArrayObj);
+
+				List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+				jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+				node.put("phieuHenTiem", jsonArrayObj);
+
+				data.add(node);
+			});
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, data));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -697,6 +999,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("diabancoso.add.permission_error"));
+			}
+
 			diaBanCoSoAction.addDiaBanCoSo(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("diabancoso.add.success");
@@ -704,8 +1013,7 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -725,6 +1033,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("diabancoso.update.permission_error"));
+			}
+
 			diaBanCoSoAction.updateDiaBanCoSo(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("diabancoso.update.success");
@@ -732,8 +1047,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -752,6 +1067,12 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id) {
 
 		try {
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("diabancoso.delete.permission_error"));
+			}
 
 			boolean result = diaBanCoSoAction.deleteById(id);
 
@@ -764,8 +1085,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("diabancoso.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -785,13 +1106,29 @@ public class ApplicationControler {
 
 		try {
 
-			List<DiaBanCoSo> lstDiaBanCoSo = diaBanCoSoAction.findByCoSoYTeId(id);
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
 
-			return ResponseEntity.status(HttpStatus.OK).body(lstDiaBanCoSo);
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("diabancoso.danhsach.permission_error"));
+			}
+
+			List<DiaBanCoSo> lstDiaBanCoSo = new ArrayList<DiaBanCoSo>();
+
+			if (id < 0) {
+				lstDiaBanCoSo = diaBanCoSoAction.findAll();
+
+			} else {
+				lstDiaBanCoSo = diaBanCoSoAction.findByCoSoYTeId(id);
+			}
+
+			long total = lstDiaBanCoSo.size();
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstDiaBanCoSo));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -811,6 +1148,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("cosoyte.add.permission_error"));
+			}
+
 			coSoYTeAction.addCoSoYTe(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("cosoyte.add.success");
@@ -818,8 +1162,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -839,6 +1183,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("cosoyte.update.permission_error"));
+			}
+
 			coSoYTeAction.updateCoSoYTe(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("cosoyte.update.success");
@@ -846,8 +1197,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -867,6 +1218,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("cosoyte.delete.permission_error"));
+			}
+
 			boolean result = coSoYTeAction.deleteById(id);
 
 			if (result) {
@@ -878,8 +1236,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("cosoyte.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -898,13 +1256,20 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (Validator.isNull(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("cosoyte.danhsach.permission_error"));
+			}
+
 			List<CoSoYTe> lstCoSoYTe = coSoYTeAction.findAll();
 
 			return ResponseEntity.status(HttpStatus.OK).body(lstCoSoYTe);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -924,6 +1289,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("phieuhentiem.add.permission_error"));
+			}
+
 			phieuHenTiemAction.addPhieuHenTiem(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
@@ -931,8 +1303,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -952,6 +1324,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("phieuhentiem.update.permission_error"));
+			}
+
 			phieuHenTiemAction.updatePhieuHenTiem(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.update.success");
@@ -959,8 +1338,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -974,11 +1353,85 @@ public class ApplicationControler {
 		}
 	}
 
+	@RequestMapping(value = "/update/phieuhentiem/tinhtrangxacnhan", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateTinhTrangXacNhan(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("phieuhentiem.update.permission_error"));
+			}
+
+			phieuHenTiemAction.updateTinhTrangXacNhan(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("phieuhentiem.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/update/phieuhentiem/checkin/{qrcode}", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> checkin(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "qrcode") String qrcode) {
+
+		try {
+
+			boolean result = phieuHenTiemAction.checkin(qrcode);
+
+			if (result) {
+				String msg = MessageUtil.getVNMessageText("phieuhentiem.checkin.success");
+
+				return ResponseEntity.status(HttpStatus.OK).body(msg);
+			} else {
+				String msg = MessageUtil.getVNMessageText("phieuhentiem.checkin.error");
+
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(msg);
+			}
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
 	@RequestMapping(value = "/delete/phieuhentiem/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public ResponseEntity<?> deletePhieuHenTiem(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable(value = "id") long id) {
 
 		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("phieuhentiem.delete.permission_error"));
+			}
 
 			boolean result = phieuHenTiemAction.deleteById(id);
 
@@ -991,8 +1444,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("phieuhentiem.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1012,6 +1465,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.add.permission_error"));
+			}
+
 			lichTiemChungAction.addLichTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("lichtiemchung.add.success");
@@ -1019,8 +1479,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1040,6 +1500,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.update.permission_error"));
+			}
+
 			lichTiemChungAction.updateLichTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("lichtiemchung.update.success");
@@ -1047,8 +1514,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1068,6 +1535,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.delete.permission_error"));
+			}
+
 			boolean result = lichTiemChungAction.deleteById(id);
 
 			if (result) {
@@ -1079,8 +1553,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("lichtiemchung.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1100,15 +1574,41 @@ public class ApplicationControler {
 
 		try {
 
-			long total = lichTiemChungAction.countAll();
+			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			List<LichTiemChung> lstLichTiemChung = lichTiemChungAction.findAll(page, size);
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
 
-			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstLichTiemChung));
+			if (!VaccomUtil.hasUpdatePermission(vaiTro) || reqId <= 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("lichtiemchung.danhsach.permission_error"));
+			}
+
+			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				long total = lichTiemChungAction.countAll();
+
+				List<LichTiemChung> lstLichTiemChung = lichTiemChungAction.findAll(page, size);
+
+				return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstLichTiemChung));
+			} else {
+
+				NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
+
+				if (nguoiDung == null) {
+					return ResponseEntity.status(HttpStatus.FORBIDDEN)
+							.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
+				}
+
+				long total = lichTiemChungAction.countCoSoYTeId(nguoiDung.getCoSoYTeId());
+
+				List<LichTiemChung> lstLichTiemChung = lichTiemChungAction.findByCoSoYTeId(nguoiDung.getCoSoYTeId(),
+						page, size);
+
+				return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstLichTiemChung));
+			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1127,6 +1627,12 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("muitiemchung.add.permission_error"));
+			}
 
 			muiTiemChungAction.addMuiTiemChung(reqBody);
 
@@ -1135,8 +1641,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1156,6 +1662,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("muitiemchung.update.permission_error"));
+			}
+
 			muiTiemChungAction.updateMuiTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("muitiemchung.update.success");
@@ -1163,8 +1676,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1184,6 +1697,13 @@ public class ApplicationControler {
 
 		try {
 
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("muitiemchung.delete.permission_error"));
+			}
+
 			boolean result = muiTiemChungAction.deleteById(id);
 
 			if (result) {
@@ -1195,8 +1715,8 @@ public class ApplicationControler {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("muitiemchung.delete.error");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1217,15 +1737,63 @@ public class ApplicationControler {
 
 		try {
 
-			long total = muiTiemChungAction.countCoSoYTeMa(coSoYTeMa);
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
 
-			List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findCoSoYTeMa(coSoYTeMa, page, size);
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
+			}
+
+			CoSoYTe coSoYTe = coSoYTeAction.findByMaCoSoYTe(coSoYTeMa);
+
+			long total = 0;
+
+			List<MuiTiemChung> lstMuiTiemChung = new ArrayList<>();
+
+			if (coSoYTe != null) {
+				total = muiTiemChungAction.countByCoSoYTeId(coSoYTe.getId());
+
+				lstMuiTiemChung = muiTiemChungAction.findByCoSoYTeId(coSoYTe.getId(), page, size);
+			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstMuiTiemChung));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/add/catiemchung", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<?> updateCaTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String reqBody) {
+
+		try {
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("catiemchung.add.permission_error"));
+			}
+
+			caTiemChungAction.addCaTiemChung(reqBody);
+
+			String msg = MessageUtil.getVNMessageText("catiemchung.add.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
 
 			if (e instanceof ActionException) {
 				String msg = e.getMessage();
@@ -1236,6 +1804,117 @@ public class ApplicationControler {
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 			}
 
+		}
+	}
+
+	@RequestMapping(value = "/update/catiemchung/{id}", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateCaTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "id") long id, @RequestBody String reqBody) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("catiemchung.update.permission_error"));
+			}
+
+			caTiemChungAction.updateCaTiemChung(id, reqBody);
+
+			String msg = MessageUtil.getVNMessageText("catiemchung.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/delete/catiemchung/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<?> deleteCaTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "id") long id) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("catiem.delete.permission_error"));
+			}
+
+			boolean result = caTiemChungAction.deleteById(id);
+
+			if (result) {
+				String msg = MessageUtil.getVNMessageText("catiemchung.delete.success");
+
+				return ResponseEntity.status(HttpStatus.OK).body(msg);
+			}
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("catiemchung.delete.error");
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/get/catiemchung", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getDSCaTiemChung(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("page") int page, @RequestParam("size") int size,
+			@RequestParam(name = "lichtiemchungid", defaultValue = "-1") long lichTiemChungId,
+			@RequestParam(name = "diabancosoid", defaultValue = "-1") long diaBanCoSoId) {
+
+		try {
+
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
+			}
+
+			long total = caTiemChungAction.countCaTiemChung(lichTiemChungId, diaBanCoSoId);
+
+			List<CaTiemChung> lstMuiTiemChung = caTiemChungAction.searchCaTiemChung(lichTiemChungId, diaBanCoSoId, page,
+					size);
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstMuiTiemChung));
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
 		}
 	}
 }

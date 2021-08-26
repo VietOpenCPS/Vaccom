@@ -12,6 +12,8 @@ import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.LichTiemChungService;
 import org.vaccom.vcmgt.service.PhieuHenTiemService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.petra.string.StringPool;
@@ -28,10 +30,15 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 	@Autowired
 	private PhieuHenTiemService phieuHenTiemService;
-	
+
 	@Override
 	public long countAll() {
 		return lichTiemChungService.countAll();
+	}
+
+	@Override
+	public long countCoSoYTeId(long id) {
+		return lichTiemChungService.countCoSoYTeId(id);
 	}
 
 	@Override
@@ -42,7 +49,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
-		String tenDot = bodyData.has(EntityConstant.TENDOT) ? bodyData.get(EntityConstant.TENDOT).textValue()
+		String maDot = bodyData.has(EntityConstant.MADOT) ? bodyData.get(EntityConstant.MADOT).textValue()
 				: StringPool.BLANK;
 		String ngayBatDau = bodyData.has(EntityConstant.NGAYBATDAU)
 				? bodyData.get(EntityConstant.NGAYBATDAU).textValue()
@@ -66,13 +73,20 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		int tongSoMuiTiem = bodyData.has(EntityConstant.TONGSOMUITIEM)
 				? bodyData.get(EntityConstant.TONGSOMUITIEM).intValue()
 				: 2;
-		int tinhTrangLich = bodyData.has(EntityConstant.TINHTRANGLICH)
-				? bodyData.get(EntityConstant.TINHTRANGLICH).intValue()
+
+		String bacSiKham = bodyData.has(EntityConstant.BACSIKHAM) ? bodyData.get(EntityConstant.BACSIKHAM).textValue()
+				: StringPool.BLANK;
+
+		int soMuiMotCa = bodyData.has(EntityConstant.SOMUIMOTCA) ? bodyData.get(EntityConstant.SOMUIMOTCA).intValue()
 				: 0;
 
-		// TODO Validate fields
+		int soCaTiem = bodyData.has(EntityConstant.SOCATIEM) ? bodyData.get(EntityConstant.SOCATIEM).intValue() : 0;
 
-	
+		String soDienThoai = bodyData.has(EntityConstant.SODIENTHOAI)
+				? bodyData.get(EntityConstant.SODIENTHOAI).textValue()
+				: StringPool.BLANK;
+
+		// TODO Validate fields
 
 		LichTiemChung lichTiemChung = new LichTiemChung();
 		lichTiemChung.setCoSoYTeId(coSoYTeId);
@@ -84,9 +98,14 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setNgayKetThuc(ngayKetThuc);
 		lichTiemChung.setNoiSanXuat(noiSanXuat);
 		lichTiemChung.setSoLoThuoc(soLoThuoc);
-		lichTiemChung.setTenDot(tenDot);
-		lichTiemChung.setTinhTrangLich(tinhTrangLich);
+		lichTiemChung.setMaDot(maDot);
+		lichTiemChung.setTinhTrangLich(0);
 		lichTiemChung.setTongSoMuiTiem(tongSoMuiTiem);
+		lichTiemChung.setBacSiKham(bacSiKham);
+		lichTiemChung.setSoDienThoai(soDienThoai);
+		lichTiemChung.setSoMuiMotCa(soMuiMotCa);
+		lichTiemChung.setSoCaTiem(soCaTiem);
+		lichTiemChung.setMaQR(VaccomUtil.generateQRCode("ltc", 6));
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}
@@ -95,10 +114,11 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 	public boolean deleteById(long id) throws Exception {
 		LichTiemChung lichTiemChung = lichTiemChungService.findById(id);
 		if (lichTiemChung == null) {
-			throw new ActionException(MessageUtil.getVNMessageText("lichtiemchung.not_found"), HttpStatus.NOT_FOUND.value());
+			throw new ActionException(MessageUtil.getVNMessageText("lichtiemchung.not_found"),
+					HttpStatus.NOT_FOUND.value());
 		}
 
-		int count = phieuHenTiemService.countByLichTiemChungId(id);
+		long count = phieuHenTiemService.countByLichTiemChungId(id);
 
 		if (count > 0) {
 			throw new ActionException(MessageUtil.getVNMessageText("lichtiemchung.inuse"),
@@ -116,7 +136,6 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		return lichTiemChungService.findById(id);
 	}
 
-
 	@Override
 	public LichTiemChung updateLichTiemChung(long id, String reqBody) throws Exception {
 
@@ -133,7 +152,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
-		String tenDot = bodyData.has(EntityConstant.TENDOT) ? bodyData.get(EntityConstant.TENDOT).textValue()
+		String maDot = bodyData.has(EntityConstant.MADOT) ? bodyData.get(EntityConstant.MADOT).textValue()
 				: StringPool.BLANK;
 		String ngayBatDau = bodyData.has(EntityConstant.NGAYBATDAU)
 				? bodyData.get(EntityConstant.NGAYBATDAU).textValue()
@@ -161,6 +180,18 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 				? bodyData.get(EntityConstant.TINHTRANGLICH).intValue()
 				: 0;
 
+		String bacSiKham = bodyData.has(EntityConstant.BACSIKHAM) ? bodyData.get(EntityConstant.BACSIKHAM).textValue()
+				: StringPool.BLANK;
+
+		int soMuiMotCa = bodyData.has(EntityConstant.SOMUIMOTCA) ? bodyData.get(EntityConstant.SOMUIMOTCA).intValue()
+				: 0;
+
+		int soCaTiem = bodyData.has(EntityConstant.SOCATIEM) ? bodyData.get(EntityConstant.SOCATIEM).intValue() : 0;
+
+		String soDienThoai = bodyData.has(EntityConstant.SODIENTHOAI)
+				? bodyData.get(EntityConstant.SODIENTHOAI).textValue()
+				: StringPool.BLANK;
+
 		// TODO Validate fields
 
 		lichTiemChung.setCoSoYTeId(coSoYTeId);
@@ -172,9 +203,13 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setNgayKetThuc(ngayKetThuc);
 		lichTiemChung.setNoiSanXuat(noiSanXuat);
 		lichTiemChung.setSoLoThuoc(soLoThuoc);
-		lichTiemChung.setTenDot(tenDot);
+		lichTiemChung.setMaDot(maDot);
 		lichTiemChung.setTinhTrangLich(tinhTrangLich);
 		lichTiemChung.setTongSoMuiTiem(tongSoMuiTiem);
+		lichTiemChung.setBacSiKham(bacSiKham);
+		lichTiemChung.setSoDienThoai(soDienThoai);
+		lichTiemChung.setSoMuiMotCa(soMuiMotCa);
+		lichTiemChung.setSoCaTiem(soCaTiem);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}
@@ -185,4 +220,8 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		return lichTiemChungService.findAll(page, size);
 	}
 
+	@Override
+	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size) {
+		return lichTiemChungService.findByCoSoYTeId(id, page, size);
+	}
 }

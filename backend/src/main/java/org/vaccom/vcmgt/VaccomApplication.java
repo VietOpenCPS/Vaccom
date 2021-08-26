@@ -14,5 +14,4 @@ public class VaccomApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(VaccomApplication.class, args);
 	}
-
 }

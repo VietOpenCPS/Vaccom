@@ -18,9 +18,9 @@ import org.vaccom.vcmgt.entity.PhieuHenTiem;
 public interface PhieuHenTiemRepository extends JpaRepository<PhieuHenTiem, Long> {
 	public PhieuHenTiem findById(long id);
 
-	public PhieuHenTiem findByMaPhieuHen(String maPhieuHen);
-
-	public int countByLichTiemChungId(long id);
+	public long countByLichTiemChungId(long id);
+	
+	public PhieuHenTiem findByMaQR(String maQR);
 
 	public Page<PhieuHenTiem> findByLichTiemChungId(long id, Pageable pageable);
 

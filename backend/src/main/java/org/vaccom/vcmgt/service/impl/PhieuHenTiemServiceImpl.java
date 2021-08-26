@@ -25,7 +25,7 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 	private PhieuHenTiemRepository phieuHenTiemRepository;
 	
 	@Override
-	public int countByLichTiemChungId(long id) {
+	public long countByLichTiemChungId(long id) {
 		return phieuHenTiemRepository.countByLichTiemChungId(id);
 	}
 
@@ -36,7 +36,10 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 		return phieuHenTiemRepository.findById(id);
 	}
 	
-	
+	@Override
+	public PhieuHenTiem findByMaQR(String maQR) {
+		return phieuHenTiemRepository.findByMaQR(maQR);
+	}
 
 	@Override
 	public List<PhieuHenTiem> findAll() {
@@ -53,11 +56,6 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 	@Override
 	public void deleteById(long id) {
 		phieuHenTiemRepository.deleteById(id);
-	}
-
-	@Override
-	public PhieuHenTiem findByMaPhieuHen(String maPhieuHen) {
-		return phieuHenTiemRepository.findByMaPhieuHen(maPhieuHen);
 	}
 
 	@Override

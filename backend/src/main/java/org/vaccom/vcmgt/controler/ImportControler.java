@@ -1,5 +1,8 @@
 package org.vaccom.vcmgt.controler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.vaccom.vcmgt.action.ImportDataAction;
 
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
+
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
 
 @RestController
 @RequestMapping("/rest/v1/import")
@@ -21,18 +28,24 @@ public class ImportControler {
 	private ImportDataAction importDataAction;
 
 	@RequestMapping(value = "/exceldata", method = RequestMethod.POST)
-	public ResponseEntity<?> importQuocGia(@RequestParam("file") MultipartFile file,
-			@RequestParam("sheetAt") int sheetAt, @RequestParam("startCol") int startCol,
-			@RequestParam("endCol") int endCol, @RequestParam("startRow") int startRow,
-			@RequestParam("endRow") int endRow, @RequestParam("table") String table) {
+	public ResponseEntity<?> importQuocGia(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("file") MultipartFile file, @RequestParam("sheetAt") int sheetAt,
+			@RequestParam("startCol") int startCol, @RequestParam("endCol") int endCol,
+			@RequestParam("startRow") int startRow, @RequestParam("endRow") int endRow,
+			@RequestParam("table") String table) {
 		try {
+			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+
+			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
+			}
 			importDataAction.importData(table, file, sheetAt, startCol, endCol, startRow, endRow);
-			String msg = MessageUtil.getVNMessageText("import.data.quocgia.success");
+			String msg = MessageUtil.getVNMessageText("data.import." + table + ".success");
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 		} catch (Exception e) {
-			e.printStackTrace();
-			_log.error(e.getMessage());
+			_log.error(e);
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 

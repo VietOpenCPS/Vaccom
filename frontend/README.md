@@ -9,9 +9,9 @@
 2.	Install :
     # navigate to project frontend directory
         cd frontend
-    + Install package, plugin
+    + Install package, plugin:
         npm install
-    + Install gradle
+    + Install gradle:
         npm i gradle
 3.	Build minify resource:
     + npm run build

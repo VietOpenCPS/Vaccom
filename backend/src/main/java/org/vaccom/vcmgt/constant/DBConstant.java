@@ -10,6 +10,7 @@ public class DBConstant {
 	public static final String _COSOYTE_TABLE_NAME = "t_cosoyte";
 	public static final String _PHIEUTIEM_TABLE_NAME = "t_phieuhentiem";
 	public static final String _LICTIEMCHUNG_TABLE_NAME = "t_lichtiemchung";
+	public static final String _CATIEMCHUNG_TABLE_NAME = "t_catiemchung";
 	public static final String _MUITIEMCHUNG_TABLE_NAME = "t_muitiemchung";
 	public static final String _NGUOITIEMCHUNG_TABLE_NAME = "t_nguoitiemchung";
 	public static final String _QUOCGIA_TABLE_NAME = "t_quocgia";

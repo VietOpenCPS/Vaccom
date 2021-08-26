@@ -5,8 +5,8 @@
     :dark="barColor !== 'rgba(228, 226, 226, 1), rgba(255, 255, 255, 0.7)'"
     :expand-on-hover="expandOnHover"
     :right="$vuetify.rtl"
-    src="/vac/images/bg-draw-2.jpg"
-    mobile-break-point="960"
+    src="/images/bg-draw-2.jpg"
+    mobile-breakpoint="960"
     app
     :width="breakpointName === 'xs' || breakpointName === 'sm' ? 260 : 0"
     v-bind="$attrs"
@@ -26,7 +26,7 @@
     >
       <v-list-item class="px-0">
         <v-img
-          src="/vac/images/logo.png"
+          src="/images/logo.png"
         />
       </v-list-item>
     </v-list>

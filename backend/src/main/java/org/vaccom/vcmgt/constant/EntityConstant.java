@@ -41,6 +41,7 @@ public class EntityConstant {
 	public static final String HANSUDUNG = "HanSuDung";
 	public static final String COSOYTE_ID = "CoSoYTe_ID";
 	public static final String TENDOT = "TenDot";
+	public static final String MADOT = "MaDot";
 	public static final String NGAYBATDAU = "NgayBatDau";
 	public static final String NGAYKETTHUC = "NgayKetThuc";
 	public static final String TONGSOMUITIEM = "TongSoMuiTiem";
@@ -63,5 +64,22 @@ public class EntityConstant {
 	public static final String KHOATAIKHOAN = "KhoaTaiKhoan";
 	public static final String MATKHAUCU = "MatKhauCu";
 	public static final String MATKHAUMOI = "MatKhauMoi";
+	public static final String MADOITUONG = "MaDoiTuong";
+	public static final String KIEMTRATRUNG = "KiemTraTrung";
+	public static final String KETQUAKIEMTRA = "KetQuaKiemTra";
+	public static final String IDS = "ids";
+	public static final String STT = "STT";
+	public static final String GIODUOCTIEM = "GioDuocTiem";
+	public static final String SOMUITIEM = "SoMuiTiem";
+	public static final String SOPHIEUHEN = "SoPhieuHen";
+	public static final String CATIEMCHUNG_ID = "CaTiemChung_ID";
+	public static final String TRIEUCHUNGSAUTIEM = "TrieuChungSauTiem";
+	public static final String DIEUTRITRIEUCHUNG = "DieuTriTrieuChung";
+	public static final String THONGTINCHECKIN = "ThongTinCheckin";
+	public static final String NGAYCHECKIN = "NgayCheckin";
+
+	public static final String BACSIKHAM = "BacSiKham";
+	public static final String SOMUIMOTCA = "SoMuiMotCa";
+	public static final String SOCATIEM = "SoCaTiem";
 
 }

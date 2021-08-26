@@ -27,10 +27,15 @@ public class LichTiemChungServiceImpl implements LichTiemChungService {
 
 		return lichTiemChungRepository.findById(id);
 	}
-	
+
 	@Override
 	public long countAll() {
 		return lichTiemChungRepository.count();
+	}
+	
+	@Override
+	public long countCoSoYTeId(long id) {
+		return lichTiemChungRepository.countByCoSoYTeId(id);
 	}
 
 	@Override
@@ -58,8 +63,20 @@ public class LichTiemChungServiceImpl implements LichTiemChungService {
 	}
 
 	@Override
-	public List<LichTiemChung> findCoSoYTeId(long id) {
+	public List<LichTiemChung> findByCoSoYTeId(long id) {
 		return lichTiemChungRepository.findByCoSoYTeId(id);
+	}
+
+	@Override
+	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size) {
+		if (page < 0 || size < 0) {
+			page = 0;
+			size = 30;
+		}
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<LichTiemChung> pases = lichTiemChungRepository.findByCoSoYTeId(id, pageable);
+		return pases.getContent();
 	}
 
 }

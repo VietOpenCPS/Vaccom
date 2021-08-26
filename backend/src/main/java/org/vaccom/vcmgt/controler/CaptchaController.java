@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -95,10 +95,10 @@ public class CaptchaController {
 			}
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		} catch (Exception e) {
-			_log.error(e.getMessage());
+			_log.error(e);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
 	}
 
-	private final Logger _log = LoggerFactory.getLogger(CaptchaController.class);
+	private final Log _log = LogFactory.getLog(CaptchaController.class);
 }

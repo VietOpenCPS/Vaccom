@@ -12,6 +12,8 @@ import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.CoSoYTeService;
 import org.vaccom.vcmgt.service.DiaBanCoSoService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.petra.string.StringPool;
@@ -29,7 +31,7 @@ public class CoSoYTeActionImpl implements CoSoYTeAction {
 
 	@Autowired
 	private DiaBanCoSoService diaBanCoSoService;
-	
+
 	@Override
 	public CoSoYTe addCoSoYTe(String reqBody) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -99,7 +101,7 @@ public class CoSoYTeActionImpl implements CoSoYTeAction {
 		coSoYTe.setNguoiDaiDien(nguoiDaiDien);
 		coSoYTe.setSoDienThoai(soDienThoai);
 		coSoYTe.setDiaChiCoSo(diaChiCoSo);
-
+		coSoYTe.setMaQR(VaccomUtil.generateQRCode("csyt", 6));
 		return coSoYTeService.updateCoSoYTe(coSoYTe);
 	}
 
@@ -222,6 +224,33 @@ public class CoSoYTeActionImpl implements CoSoYTeAction {
 	public List<CoSoYTe> findAll(int page, int size) {
 
 		return coSoYTeService.findAll(page, size);
+	}
+
+	@Override
+	public CoSoYTe addCoSoYTe(String tinhThanhTen, String tinhThanhMa, String quanHuyenTen, String quanHuyenMa,
+			String phuongXaTen, String phuongXaMa, String maCoSo, String tenCoSo, String diaChiCoSo,
+			String nguoiDaiDien, String soDienThoai) throws Exception {
+		if (Validator.isNotNull(maCoSo)) {
+			CoSoYTe coSoYTe = coSoYTeService.findByMaCoSo(maCoSo);
+			if (coSoYTe == null) {
+				coSoYTe = new CoSoYTe();
+				coSoYTe.setMaCoSo(maCoSo);
+				coSoYTe.setPhuongXaMa(phuongXaMa);
+				coSoYTe.setPhuongXaTen(phuongXaTen);
+				coSoYTe.setQuanHuyenMa(quanHuyenMa);
+				coSoYTe.setQuanHuyenTen(quanHuyenTen);
+				coSoYTe.setTenCoSo(tenCoSo);
+				coSoYTe.setTinhThanhMa(tinhThanhMa);
+				coSoYTe.setTinhThanhTen(tinhThanhTen);
+				coSoYTe.setNguoiDaiDien(nguoiDaiDien);
+				coSoYTe.setSoDienThoai(soDienThoai);
+				coSoYTe.setDiaChiCoSo(diaChiCoSo);
+
+				return coSoYTeService.updateCoSoYTe(coSoYTe);
+			}
+		}
+
+		return null;
 	}
 
 }

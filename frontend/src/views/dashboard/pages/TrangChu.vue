@@ -15,6 +15,20 @@ export default {
       loading: false
     }
   },
+  created () {
+    let vm = this
+    // if (!vm.isSigned) {
+      vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+    // }
+  },
+  watch: {
+    '$route': function (newRoute, oldRoute) {
+      let vm = this
+      // if (!vm.isSigned) {
+        vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+      // }
+    }
+  },
   computed: {
 
   },
@@ -42,7 +56,7 @@ export default {
   color: #0c0078;
 }
 .wrap-page-login{
-  /* background-image: url(/vac/images/bg_active.jpg);
+  /* background-image: url(/images/bg_active.jpg);
   background-position: center; */
   /* background-color: #1ae28a;
   background: linear-gradient( -45deg, #209077 0%, #1ae28a 100%); */

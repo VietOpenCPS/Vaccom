@@ -24,11 +24,11 @@
                   md="6"
                 >
                   <v-text-field
-                    v-model="userInfo['userName']"
+                    v-model="userInfo['HoVaTen']"
                     outlined
-                    label="Tên tài khoản"
+                    label="Họ và tên"
                     prepend-inner-icon="mdi-card-account-details-outline"
-                    readonly
+                    dense
                   ></v-text-field>
                 </v-col>
 
@@ -37,11 +37,11 @@
                   md="6"
                 >
                   <v-text-field
-                    v-model="userInfo['account']"
+                    v-model="userInfo['ChucDanh']"
                     outlined
-                    label="Tên đăng nhập"
+                    label="Chức danh"
                     prepend-inner-icon="mdi-account-check-outline"
-                    readonly
+                    dense
                   ></v-text-field>
                 </v-col>
 
@@ -50,11 +50,11 @@
                   md="6"
                 >
                   <v-text-field
-                    v-model="userInfo['telNo']"
+                    v-model="userInfo['SoDienThoai']"
                     outlined
                     label="Số điện thoại"
                     prepend-inner-icon="mdi-phone-in-talk-outline"
-                    readonly
+                    dense
                   ></v-text-field>
                 </v-col>
 
@@ -63,37 +63,70 @@
                   md="6"
                 >
                   <v-text-field
-                    :value="userInfo['role'] == 'Admin' ? 'Quản trị' : 'Cán bộ cơ sở'"
+                    v-model="userInfo['Email']"
                     outlined
-                    label="Loại tài khoản"
-                    readonly
+                    label="Email"
+                    prepend-inner-icon="mdi-card-account-mail-outline"
+                    dense
                   ></v-text-field>
                 </v-col>
-
                 <v-col
                   cols="12"
+                  md="6"
                 >
-                  <v-text-field
-                    v-model="userInfo['address']"
+                  <v-autocomplete
+                      class="flex xs12 md12"
+                      hide-no-data
+                      :items="listCoSoYTe"
+                      v-model="coSoYTe"
+                      item-text="tenCoSo"
+                      item-value="id"
+                      outlined
+                      label="Cơ sở y tế quản lý"
+                      dense
+                      prepend-inner-icon="mdi-map-marker"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                >
+                  <v-autocomplete
+                    class="flex xs12 md12"
+                    hide-no-data
+                    :items="listDiaBan"
+                    v-model="userInfo['DiaBanCoSo_ID']"
+                    item-text="tenDiaBan"
+                    item-value="id"
+                    clearable
                     outlined
-                    label="Địa chỉ"
+                    label="Địa bàn cơ sở quản lý"
+                    dense
                     prepend-inner-icon="mdi-map-marker"
-                    readonly
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                >
-                  <v-btn class="mr-2" color="primary" @click="showChangePass">
-                    <v-icon left>
-                      mdi-lock-check-outline
-                    </v-icon>
-                    <span>Đổi mật khẩu đăng nhập</span>
-                  </v-btn>
+                ></v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>
           </v-form>
+          <v-row class="px-3">
+            <v-col
+              cols="12"
+            >
+              <v-btn class="mr-4" color="primary" @click="submitUpdateUser">
+                <v-icon left>
+                  mdi-content-save
+                </v-icon>
+                <span>Cập nhật thông tin</span>
+              </v-btn>
+              <v-btn class="mr-2" color="#0072bc" @click="showChangePass">
+                <v-icon left>
+                  mdi-lock-check-outline
+                </v-icon>
+                <span>Thay đổi mật khẩu</span>
+              </v-btn>
+            </v-col>
+          </v-row>
+          
         </base-material-card>
       </v-col>
     </v-row>
@@ -105,7 +138,7 @@
       <v-card>
         <v-toolbar
           dark
-          color="primary"
+          color="#0072bc"
         >
           <v-toolbar-title>Đổi mật khẩu</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -152,7 +185,7 @@
             </v-icon>
             Thoát
           </v-btn>
-          <v-btn class="mr-2" color="primary" :loading="loading" :disabled="loading" @click="submitChangePass">
+          <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitChangePass">
             <v-icon left>
               mdi-content-save
             </v-icon>
@@ -170,8 +203,21 @@
     name: name,
     data() {
       return {
+        listDiaBan: [],
+        listCoSoYTe: [],
+        coSoYTe: '',
+        diaBanCoSo: '',
         dialogChangePass: false,
-        userInfo: '',
+        userId: '',
+        userInfo: {
+          HoVaTen: '',
+          ChucDanh: '',
+          SoDienThoai: '',
+          Email: '',
+          CoSoYTe_ID: '',
+          DiaBanCoSo_ID: '',
+          QuanTriHeThong: false
+        },
         validFormChangePass: true,
         loading: false,
         currentPassWord: '',
@@ -185,25 +231,89 @@
     created () {
       let vm = this
       vm.getUserInfo()
+      vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
+    },
+    coSoYTe (val) {
+      this.userInfo.CoSoYTe_ID = val
+      this.getDiaBanCoSo(val)
     },
     computed: {},
     methods: {
       getUserInfo () {
         let vm = this
-        // async function getUid() {
-        //   let curr = await firebase.auth().currentUser
-        //   // console.log('curr', curr)
-        //   let uidad = curr.uid
-        //   let infoad = db.collection("users").doc(uidad)
-        //   infoad.get().then((querySnapshot) => {
-        //     if (querySnapshot.exists) {
-        //       vm.userInfo = querySnapshot.data()
-        //       // console.log('userInfo',vm.userInfo)
-        //     }
-        //   }).catch((error) => {
-        //   })
-        // }
-        // getUid()
+        let dataUser = JSON.parse(localStorage.getItem('user'))
+        vm.userId = dataUser['user_id']
+        let filter = {
+          user_id: dataUser['user_id']
+        }
+        vm.$store.dispatch('getUserInfo', filter).then(function(dataInfo) {
+          vm.userInfo.HoVaTen = dataInfo.hoVaTen
+          vm.userInfo.ChucDanh = dataInfo.chucDanh
+          vm.userInfo.SoDienThoai = dataInfo.soDienThoai
+          vm.userInfo.Email = dataInfo.email
+          vm.coSoYTe = dataInfo.coSoYTeId
+          vm.userInfo.DiaBanCoSo_ID = dataInfo.diaBanCoSoId
+          vm.userInfo.QuanTriHeThong = dataInfo.quanTriHeThong
+        }).catch (function () {
+        })
+      },
+      getDiaBanCoSo (val) {
+        let vm = this
+        let filter = {
+          id: -1
+        }
+        if (val) {
+          let obj = vm.listCoSoYTe.find(function (item) {
+            return item.maCoSo == val
+          })
+          filter = {
+            id: obj['id']
+          }
+        }
+        
+        vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
+        })
+      },
+      getCoSoYTe () {
+        let vm = this
+        let filter = {
+        }
+        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+          vm.listCoSoYTe = result ? result : []
+        })
+      },
+      submitUpdateUser () {
+        let vm = this
+        vm.userInfo['CoSoYTe_ID'] = vm.coSoYTe
+        let filter = {
+          id: vm.userId,
+          data: vm.userInfo
+        }
+        vm.$store.dispatch('updateNguoiDung', filter).then(function (result) {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Cập nhật thành công',
+            color: 'success',
+          })
+          let dataUser = JSON.parse(localStorage.getItem('user'))
+          let dataUpdate = Object.assign(dataUser, {
+            coSoYTeId: vm.userInfo['CoSoYTe_ID'],
+            diaBanCoSoId: vm.userInfo['DiaBanCoSo_ID'],
+            hoVaTen: vm.userInfo['HoVaTen']
+          })
+          localStorage.setItem('user', JSON.stringify(dataUpdate))
+          
+        }).catch(function () {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Cập nhật thất bại',
+            color: 'error',
+          })
+        })
       },
       showChangePass () {
         let vm = this
@@ -217,69 +327,35 @@
       submitChangePass () {
         let vm = this
         if (vm.$refs.formChangePass.validate()) {
-          async function changePass() {
-            var user = await firebase.auth().currentUser
-            var email = await user.email
-            var credentials = firebase.auth.EmailAuthProvider.credential(
-              email,
-              String(vm.currentPassWord).trim()
-            )
-            vm.loading = true
-            user.reauthenticateWithCredential(credentials).then(() => {
-              let newPassword = String(vm.newPassWord).trim()
-              user.updatePassword(newPassword).then(() => {
-                // Update successful.
-                vm.userInfo['pid'] = window.btoa(newPassword)
-                db.collection("users").doc(vm.userInfo.uid).set(vm.userInfo).then(() => {
-                  setTimeout(function () {
-                    vm.logout()
-                  }, 300)
-                }).catch(() => {
-                  setTimeout(function () {
-                    vm.logout()
-                  }, 300)
-                })
-                vm.$store.commit('SHOW_SNACKBAR', {
-                  show: true,
-                  text: 'Đổi mật khẩu thành công. Vui lòng đăng nhập lại với mật khẩu mới',
-                  color: 'success',
-                })
-                vm.dialogChangePass = false
-                vm.loading = false
-              }).catch((error) => {
-                vm.$store.commit('SHOW_SNACKBAR', {
-                  show: true,
-                  text: 'Đổi mật khẩu thất bại',
-                  color: 'error',
-                })
-                vm.loading = false
-              })
-            }).catch((error) => {
-              vm.$store.commit('SHOW_SNACKBAR', {
-                show: true,
-                text: 'Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại',
-                color: 'error',
-              })
-              vm.loading = false
-            })
-          }
-          changePass()
-        }
-      },
-      logout () {
-        this.$store.dispatch('logout').then(() => {
-          this.$router.push(
-            {
-              path: '/login'
+          let filter = {
+            id: vm.userId,
+            data: {
+              MatKhauMoi: vm.newPassWord,
+              MatKhauCu: vm.currentPassWord
             }
-          )
-        }).catch(() => {
-          this.$store.commit('SHOW_SNACKBAR', {
-            show: true,
-            text: 'Lỗi đăng xuất hệ thống',
-            color: 'error',
+          }
+          vm.$store.dispatch('changePassNguoiDung', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Cập nhật thành công. Đăng nhập với mật khẩu mới',
+              color: 'success',
+            })
+            setTimeout(function () {
+              vm.$store.commit('SET_ISSIGNED', false)
+              if (localStorage.getItem('user')) {
+                localStorage.setItem('user', null)
+              }
+              vm.$cookies.set('Token','')
+              vm.$router.push({ path: '/login' })
+            }, 500)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Cập nhật thất bại',
+              color: 'error',
+            })
           })
-        })
+        }
       },
       goBack () {
         this.$router.push({ path: '/' })

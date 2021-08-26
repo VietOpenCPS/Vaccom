@@ -60,11 +60,15 @@ export default new Router({
           path: 'pages/dashboard',
           component: () => import('@/views/dashboard/Dashboard'),
         },
-        // Pages
         {
           name: 'User Profile',
           path: 'pages/user',
           component: () => import('@/views/dashboard/pages/UserProfile'),
+        },
+        {
+          name: 'HDSD',
+          path: 'pages/huong-dan-su-dung',
+          component: () => import('@/views/dashboard/pages/HuongDanSuDung'),
         },
         // Tables
         {

@@ -1,6 +1,13 @@
 package org.vaccom.vcmgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +26,9 @@ import org.vaccom.vcmgt.service.NguoiDungService;
 @Service
 @Transactional
 public class NguoiDungServiceImpl implements NguoiDungService {
+
+	@Autowired
+	private EntityManager em;
 
 	@Autowired
 	private NguoiDungRepository nguoiDungRepository;
@@ -77,23 +87,52 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
 		return nguoiDungRepository.findByTenDangNhap(tenDangNhap);
 	}
+	/*
+	 * @Override public List<NguoiDung> findAll(int page, int size) {
+	 * 
+	 * if (page < 0 || size < 0) { page = 0; size = 30; } Sort sort =
+	 * Sort.by(Sort.Direction.ASC, "id"); Pageable pageable = PageRequest.of(page,
+	 * size, sort); Page<NguoiDung> pases = nguoiDungRepository.findAll(pageable);
+	 * return pases.getContent(); }
+	 */
 
 	@Override
 	public List<NguoiDung> findAll(int page, int size) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		Root<NguoiDung> root = cq.from(NguoiDung.class);
+		cq.multiselect(root.get("id"), root.get("tenDangNhap"), root.get("hoVaTen"), root.get("chucDanh"),
+				root.get("soDienThoai"), root.get("email"), root.get("diaBanCoSoId"), root.get("coSoYTeId"),
+				root.get("quanTriHeThong"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"))
+				.orderBy(cb.asc(root.get("id")));
 
-		if (page < 0 || size < 0) {
-			page = 0;
-			size = 30;
-		}
-		Sort sort = Sort.by(Sort.Direction.ASC, "id");
-		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<NguoiDung> pases = nguoiDungRepository.findAll(pageable);
-		return pases.getContent();
+		List<Tuple> result = em.createQuery(cq).setFirstResult(page).setMaxResults(size).getResultList();
+
+		List<NguoiDung> lstNguoiDung = new ArrayList<NguoiDung>();
+
+		result.forEach(tuple -> {
+
+			NguoiDung nguoiDung = new NguoiDung();
+			nguoiDung.setId(tuple.get(0, Long.class));
+			nguoiDung.setChucDanh(tuple.get(3, String.class));
+			nguoiDung.setCoSoYTeId(tuple.get(7, Long.class));
+			nguoiDung.setDiaBanCoSoId(tuple.get(6, Long.class));
+			nguoiDung.setEmail(tuple.get(5, String.class));
+			nguoiDung.setHoVaTen(tuple.get(2, String.class));
+			nguoiDung.setKhoaTaiKhoan(tuple.get(9, Boolean.class));
+			nguoiDung.setNguoiTiemChungId(tuple.get(10, Long.class));
+			nguoiDung.setQuanTriHeThong(tuple.get(8, Boolean.class));
+			nguoiDung.setSoDienThoai(tuple.get(4, String.class));
+			nguoiDung.setTenDangNhap(tuple.get(1, String.class));
+
+			lstNguoiDung.add(nguoiDung);
+
+		});
+		return lstNguoiDung;
 	}
 
 	@Override
 	public int countByDiaBanCoSoId(long id) {
 		return nguoiDungRepository.countByDiaBanCoSoId(id);
 	}
-
 }

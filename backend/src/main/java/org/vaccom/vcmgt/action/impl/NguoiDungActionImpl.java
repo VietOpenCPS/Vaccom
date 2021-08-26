@@ -43,7 +43,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 	@Autowired
 	KhoaTruyCapService khoaTruyCapService;
-	
+
 	@Override
 	public long countAll() {
 		return nguoiDungService.countAll();
@@ -144,9 +144,9 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 
 		JsonNode bodyData = mapper.readTree(reqBody);
 
-		boolean quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG)
-				? bodyData.get(EntityConstant.QUANTRIHETHONG).booleanValue()
-				: false;
+		// boolean quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG)
+		// ? bodyData.get(EntityConstant.QUANTRIHETHONG).booleanValue()
+		// : false;
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
 				: StringPool.BLANK;
@@ -175,9 +175,24 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setDiaBanCoSoId(coSoYTeId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		// nguoiDung.setQuanTriHeThong(quanTriHeThong);
 		nguoiDung.setSoDienThoai(soDienThoai);
 
+		return nguoiDungService.updateNguoiDung(nguoiDung);
+	}
+
+	@Override
+	public NguoiDung updateNguoiDung(long id, boolean quanTriHeThong) throws Exception {
+
+		NguoiDung nguoiDung = nguoiDungService.findByID(id);
+
+		if (nguoiDung == null) {
+			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
+					HttpStatus.NOT_FOUND.value());
+		}
+		
+		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		
 		return nguoiDungService.updateNguoiDung(nguoiDung);
 	}
 
@@ -250,7 +265,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	public NguoiDung findById(long id) {
 		return nguoiDungService.findByID(id);
 	}
-	
+
 	@Override
 	public List<NguoiDung> findAll(int page, int size) {
 		return nguoiDungService.findAll(page, size);
@@ -309,12 +324,10 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		KhoaDangKy khoaDangKy = new KhoaDangKy();
 		khoaDangKy.setKhoaBiMat(khoaBiMat);
 		khoaDangKy.setKhoaCongKhai(khoaCongKhai);
-		khoaDangKy.setPhamVi(VaccomUtil.getRoleName(isQuanTriHeThong));
+		khoaDangKy.setPhamVi(VaccomUtil.getManagerRoleName(isQuanTriHeThong));
 		khoaDangKy.setTrangThai(1);
 
 		return khoaDangKy;
 	}
-
-	
 
 }

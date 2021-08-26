@@ -30,11 +30,9 @@
             <v-data-table
               :headers="headers"
               :items="items"
-              :page.sync="page"
               :items-per-page="itemsPerPage"
               hide-default-footer
               class="elevation-1"
-              @page-count="pageCount = $event"
               no-data-text="Không có"
               :loading="loadingData"
               loading-text="Đang tải... "
@@ -42,9 +40,13 @@
             <template v-slot:item.index="{ item, index }">
               <span>{{ index + 1 }}</span>
             </template>
-            <template v-slot:item.QuanTriHeThong="{ item }">
-              <span style="color: red" v-if="item.QuanTriHeThong">Quản trị</span>
-              <span style="color: blue" v-else>Cán bộ</span>
+            <template v-slot:item.quanTriHeThong="{ item }">
+              <span style="color: red" v-if="item.quanTriHeThong">Quản trị</span>
+              <span style="color: blue" v-else>Cán bộ cơ sở</span>
+            </template>
+            <template v-slot:item.khoaTaiKhoan="{ item }">
+              <span style="color: red" v-if="item.khoaTaiKhoan">Đang khóa</span>
+              <span style="color: blue" v-else>Đang mở</span>
             </template>
             <template v-slot:item.action="{ item }">
               <v-tooltip top>
@@ -55,7 +57,7 @@
                 </template>
                 <span>Cập nhật thông tin</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['role'] === 'Member' && !item['status']">
+              <v-tooltip top v-if="!item['khoaTaiKhoan']">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="updateStatusUser('block', item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-lock-check</v-icon>
@@ -63,7 +65,7 @@
                 </template>
                 <span>Khóa tài khoản</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['role'] === 'Member' && item['status'] === 'block'">
+              <v-tooltip top v-if="item['khoaTaiKhoan']">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="updateStatusUser('open', item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-lock-open-variant-outline</v-icon>
@@ -82,12 +84,7 @@
             </template>
             
             </v-data-table>
-            <div class="text-center mt-4">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-              ></v-pagination>
-            </div>
+            <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
           </v-card-text>
       </base-material-card>
       <v-dialog
@@ -159,8 +156,6 @@
                     <v-text-field
                         class="flex xs12 md6 pl-2"
                         v-model="userInfo.ChucDanh"
-                        :rules="nameRules"
-                        required
                         outlined
                         label="Chức danh"
                         prepend-inner-icon="mdi-card-account-details-outline"
@@ -171,7 +166,6 @@
                         class="flex xs12 md6"
                         v-model="userInfo.SoDienThoai"
                         :rules="telNoRules"
-                        required
                         outlined
                         label="Số điện thoại"
                         prepend-inner-icon="mdi-phone-in-talk-outline"
@@ -192,28 +186,25 @@
                     <v-autocomplete
                         class="flex xs12 md12"
                         hide-no-data
-                        :items="listDiaBan"
-                        v-model="userInfo['DiaBanCoSo_ID']"
-                        item-text="itemName"
-                        item-value="itemCode"
-                        clearable
+                        :items="listCoSoYTe"
+                        v-model="coSoYTe"
+                        item-text="tenCoSo"
+                        item-value="id"
                         outlined
-                        label="Địa bàn cơ sở quản lý"
+                        label="Cơ sở y tế quản lý"
                         dense
                         prepend-inner-icon="mdi-map-marker"
                     ></v-autocomplete>
                     <v-autocomplete
                         class="flex xs12 md12"
                         hide-no-data
-                        :items="listCoSoYTe"
-                        v-model="userInfo['CoSoYTe_ID']"
-                        item-text="itemName"
-                        item-value="itemCode"
+                        :items="listDiaBan"
+                        v-model="userInfo['DiaBanCoSo_ID']"
+                        item-text="tenDiaBan"
+                        item-value="id"
                         clearable
-                        :rules="required"
-                        required
                         outlined
-                        label="Cơ sở y tế quản lý"
+                        label="Địa bàn cơ sở quản lý"
                         dense
                         prepend-inner-icon="mdi-map-marker"
                     ></v-autocomplete>
@@ -251,14 +242,19 @@
 </template>
 
 <script>
+  import Pagination from './Pagination'
   export default {
     name: 'Users',
-
+    components: {
+    'pagination': Pagination
+    },
     data () {
       return {
         loading: false,
         loadingData: false,
         dialogAddMember: false,
+        listDiaBan: [],
+        listCoSoYTe: [],
         userInfo: {
           TenDangNhap: '',
           HoVaTen: '',
@@ -272,17 +268,18 @@
           KhoaTaiKhoan: false
         },
         totalItem: 0,
-        page: 1,
+        page: 0,
         pageCount: 0,
-        itemsPerPage: 5,
+        itemsPerPage: 20,
         typeAction: '',
         userUpdate: '',
         items: [],
         validFormAdd: true,
         userName: '',
+        coSoYTe: '',
+        diaBanCoSo: '',
         nameRules: [
-          v => !!v || 'Tên người dùng là bắt buộc',
-          v => (v && v.length <= 100) || 'Tên không quá 100 ký tự',
+          v => !!v || 'Tên người dùng là bắt buộc'
         ],
         account: '',
         accountRules: [
@@ -297,12 +294,21 @@
         ],
         telNo: '',
         telNoRules: [
-          v => !!v || 'Số điện thoại là bắt buộc',
-          v => /^0([1-9]{1}\d{8})$/.test(v) || 'Số điện thoại gồm 10 chữ số',
+          // v => !!v || 'Số điện thoại là bắt buộc',
+          // v => /^0([1-9]{1}\d{8})$/.test(v) || 'Số điện thoại gồm 10 chữ số',
         ],
         address: '',
         addressRules: [
           v => (v && v.length <= 200) || 'Địa chỉ không quá 200 ký tự',
+        ],
+        required: [
+          (value) => {
+            if(String(value).trim()){
+                return true
+              } else {
+                return 'Thông tin bắt buộc'
+              } 
+          }
         ],
         headers: [
           {
@@ -314,31 +320,49 @@
           {
             sortable: false,
             text: 'Họ và tên',
-            align: 'center',
-            value: 'HoVaTen'
+            align: 'left',
+            value: 'hoVaTen'
           },
           {
             sortable: false,
             text: 'Tên đăng nhập',
-            value: 'TenDangNhap'
+            value: 'tenDangNhap'
           },
           {
             sortable: false,
             text: 'Số điện thoại',
             align: 'center',
-            value: 'SoDienThoai'
+            value: 'soDienThoai'
           },
           {
             sortable: false,
             text: 'Chức danh',
             align: 'center',
-            value: 'ChucDanh'
+            value: 'chucDanh'
+          },
+          {
+            sortable: false,
+            text: 'Cơ sở y tế',
+            align: 'left',
+            value: 'coSoYTeId'
+          },
+          {
+            sortable: false,
+            text: 'Địa bàn',
+            align: 'left',
+            value: 'diaBanCoSoId'
           },
           {
             sortable: false,
             text: 'Loại tài khoản',
             align: 'center',
-            value: 'QuanTriHeThong'
+            value: 'quanTriHeThong'
+          },
+          {
+            sortable: false,
+            text: 'Trạng thái tài khoản',
+            align: 'center',
+            value: 'khoaTaiKhoan'
           },
           {
             sortable: false,
@@ -352,9 +376,15 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getMembers()
-      vm.getDiaBanCoSo()
+      vm.getMembers(0)
       vm.getCoSoYTe()
+      vm.getDiaBanCoSo()
+    },
+    watch: {
+      coSoYTe (val) {
+        this.userInfo.CoSoYTe_ID = val
+        this.getDiaBanCoSo(val)
+      },
     },
     computed: {
       breakpointName () {
@@ -362,12 +392,21 @@
       }
     },
     methods: {
-      getDiaBanCoSo () {
+      getDiaBanCoSo (val) {
         let vm = this
         let filter = {
+          id: -1
         }
+        if (val) {
+          filter = {
+            id: val
+          }
+        }
+        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result.hasOwnProperty('data') ? result.data : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {
@@ -375,15 +414,15 @@
         let filter = {
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
-          vm.listCoSoYTe = result.hasOwnProperty('data') ? result.data : []
+          vm.listCoSoYTe = result ? result : []
         })
       },
-      getMembers () {
+      getMembers (pageIn) {
         let vm = this
         vm.loadingData = true
         let filter = {
-          page: 1,
-          size: 30
+          page: pageIn,
+          size: vm.itemsPerPage,
         }
         vm.$store.dispatch('getNguoiDung', filter).then(function (result) {
           vm.loadingData = false
@@ -399,7 +438,6 @@
       addMember (type, user) {
         let vm = this
         vm.typeAction = type
-        vm.userUpdate = user
         vm.dialogAddMember = true
         if (type === 'add') {
           setTimeout(function () {
@@ -408,7 +446,15 @@
           }, 200)
         } else {
           setTimeout(function () {
-            vm.userInfo = user
+            vm.userUpdate = user
+            vm.userInfo = {}
+            vm.userInfo.HoVaTen = user.hoVaTen
+            vm.userInfo.ChucDanh = user.chucDanh
+            vm.userInfo.SoDienThoai = user.soDienThoai
+            vm.userInfo.Email = user.email
+            vm.userInfo.DiaBanCoSo_ID = user.diaBanCoSoId
+            vm.coSoYTe = user.coSoYTeId
+            vm.userInfo.QuanTriHeThong = user.quanTriHeThong
             vm.$refs.formAddMember.resetValidation()
           }, 200)
         }
@@ -417,6 +463,21 @@
       updateStatusUser (type, user) {
         let vm = this
         vm.userUpdate = user
+        let filter = vm.userUpdate
+        filter['block'] = type === 'open' ? false : true
+        vm.$store.dispatch('changeBlockUser', filter).then(userCredential => {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Cập nhật thành công',
+            color: 'success',
+          })
+          vm.getMembers(0)
+        })
+      },
+      changePage (config) {
+        let vm = this
+        vm.page = config.page
+        vm.getMembers(config.page)
       },
       deleteUser (user) {
         let vm = this
@@ -435,7 +496,7 @@
                 text: 'Thêm người dùng thành công',
                 color: 'success',
               })
-              vm.getMembers()
+              vm.getMembers(0)
             })
             .catch((error) => {
               vm.loading = false
@@ -460,7 +521,7 @@
             });
           } else {
             let filter = {
-              id: '',
+              id: vm.userUpdate.id,
               data: vm.userInfo
             }
             vm.loading = true
@@ -472,8 +533,9 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getMembers()
+              vm.getMembers(0)
             }).catch(function () {
+              vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Cập nhật thất bại',

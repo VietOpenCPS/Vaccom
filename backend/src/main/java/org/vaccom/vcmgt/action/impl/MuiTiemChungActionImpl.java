@@ -26,8 +26,8 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	private MuiTiemChungService muiTiemChungService;
 
 	@Override
-	public long countCoSoYTeMa(String coSoYTeMa) {
-		return muiTiemChungService.countByCoSoYTeMa(coSoYTeMa);
+	public long countByCoSoYTeId(long id) {
+		return muiTiemChungService.countByCoSoYTeId(id);
 	}
 	
 	@Override
@@ -68,7 +68,12 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 				: StringPool.BLANK;
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
+		
+		long nguoiTiemChungId = bodyData.has(EntityConstant.NGUOITIEMCHUNG_ID) ? bodyData.get(EntityConstant.NGUOITIEMCHUNG_ID).longValue()
+				: 0;
 
+		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
+				: 0;
 		// TODO Validate fields
 
 		MuiTiemChung muiTiemChung = new MuiTiemChung();
@@ -82,10 +87,11 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setLanTiem(lanTiem);
 		muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
 		muiTiemChung.setNgaySinh(ngaySinh);
-
+		muiTiemChung.setNguoiTiemChungId(nguoiTiemChungId);
 		muiTiemChung.setNgayTiemChung(ngayTiemChung);
 		muiTiemChung.setNoiSanXuat(noiSanXuat);
 		muiTiemChung.setSoLoThuoc(soLoThuoc);
+		muiTiemChung.setCoSoYTeId(coSoYTeId);
 
 		return muiTiemChungService.updateMuiTiemChung(muiTiemChung);
 	}
@@ -182,8 +188,12 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	}
 
 	@Override
-	public List<MuiTiemChung> findCoSoYTeMa(String coSoYTeMa, int page, int size) {
-		return muiTiemChungService.findByCoSoYTeMa(coSoYTeMa, page, size);
+	public List<MuiTiemChung> findByCoSoYTeId(long id, int page, int size) {
+		return muiTiemChungService.findByCoSoYTeId(id, page, size);
 	}
 
+	@Override
+	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
+		return muiTiemChungService.findByNguoiTiemChungId(id);
+	}
 }

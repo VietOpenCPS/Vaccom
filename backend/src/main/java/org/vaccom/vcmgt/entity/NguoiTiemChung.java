@@ -34,18 +34,16 @@ public class NguoiTiemChung implements Serializable {
 	@Column(name = "HoVaTen")
 	private String hoVaTen;
 
+	@Column(name = "MaQR")
+	private String MaQR;
+
 	@Column(name = "NgaySinh")
 	private String ngaySinh;
 
 	@Column(name = "GioiTinh")
 	private int gioiTinh;
-
-	@NotBlank
 	@Column(name = "CMTCCCD")
 	private String cmtcccd;
-
-	@Column(name = "NgheNghiep")
-	private String ngheNghiep;
 
 	@Column(name = "NhomDoiTuong")
 	private int nhomDoiTuong;
@@ -58,9 +56,6 @@ public class NguoiTiemChung implements Serializable {
 
 	@Column(name = "Email")
 	private String email;
-
-	@Column(name = "MaSoBHXH")
-	private String maSoBHXH;
 
 	@Column(name = "SoTheBHYT")
 	private String soTheBHYT;
@@ -119,6 +114,12 @@ public class NguoiTiemChung implements Serializable {
 	@Column(name = "tinhTrangDangKi")
 	private int tinhTrangDangKi;
 
+	@Column(name = "KiemTraTrung")
+	private int kiemTraTrung;
+
+	@Column(name = "KetQuaKiemTra")
+	private String ketQuaKiemTra;
+
 	public long getId() {
 		return id;
 	}
@@ -159,13 +160,6 @@ public class NguoiTiemChung implements Serializable {
 		this.cmtcccd = cmtcccd;
 	}
 
-	public String getNgheNghiep() {
-		return ngheNghiep;
-	}
-
-	public void setNgheNghiep(String ngheNghiep) {
-		this.ngheNghiep = ngheNghiep;
-	}
 
 	public int getNhomDoiTuong() {
 		return nhomDoiTuong;
@@ -199,13 +193,6 @@ public class NguoiTiemChung implements Serializable {
 		this.email = email;
 	}
 
-	public String getMaSoBHXH() {
-		return maSoBHXH;
-	}
-
-	public void setMaSoBHXH(String maSoBHXH) {
-		this.maSoBHXH = maSoBHXH;
-	}
 
 	public String getSoTheBHYT() {
 		return soTheBHYT;
@@ -357,6 +344,30 @@ public class NguoiTiemChung implements Serializable {
 
 	public void setTinhTrangDangKi(int tinhTrangDangKi) {
 		this.tinhTrangDangKi = tinhTrangDangKi;
+	}
+
+	public String getMaQR() {
+		return MaQR;
+	}
+
+	public void setMaQR(String maQR) {
+		MaQR = maQR;
+	}
+
+	public int getKiemTraTrung() {
+		return kiemTraTrung;
+	}
+
+	public void setKiemTraTrung(int kiemTraTrung) {
+		this.kiemTraTrung = kiemTraTrung;
+	}
+
+	public String getKetQuaKiemTra() {
+		return ketQuaKiemTra;
+	}
+
+	public void setKetQuaKiemTra(String ketQuaKiemTra) {
+		this.ketQuaKiemTra = ketQuaKiemTra;
 	}
 
 }

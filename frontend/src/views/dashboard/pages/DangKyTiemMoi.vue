@@ -178,10 +178,10 @@
                     dense
                     hide-details="auto"
                     id="sdt"
-                    @keyup.enter="nextFocus('sdtzalo')"
+                    @keyup.enter="nextFocus('email')"
                   ></v-text-field>
                 </v-col>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="3"
                   class="pb-0"
@@ -197,10 +197,10 @@
                     id="sdtzalo"
                     @keyup.enter="nextFocus('email')"
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <v-col
                   cols="12"
-                  md="3"
+                  md="6"
                   class="pb-0"
                 >
                   <div class="mb-2">Email</div>
@@ -211,24 +211,9 @@
                     dense
                     id="email"
                     hide-details="auto"
-                    @keyup.enter="nextFocus('tinhthanh')"
+                    @keyup.enter="nextFocus('noio')"
                   ></v-text-field>
                 </v-col>
-                <!-- <v-col
-                  cols="12"
-                  md="3"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Mã số BHXH</div>
-                  <v-text-field
-                    v-model="applicantInfo['MaSoBHXH']"
-                    outlined
-                    placeholder="Mã số bảo hiểm xã hội"
-                    dense
-                    
-                    hide-details="auto"
-                  ></v-text-field>
-                </v-col> -->
                 
               </v-row>
               <!-- row 3 -->
@@ -313,13 +298,13 @@
                     dense
                     id="noio"
                     hide-details="auto"
-                    @keyup.enter="nextFocus('nghenghiep')"
+                    @keyup.enter="nextFocus('nhomdoituong')"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <!-- row 4 -->
               <v-row>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="6"
                   class="pb-0"
@@ -334,6 +319,35 @@
                     hide-details="auto"
                     @keyup.enter="nextFocus('donvicongtac')"
                   ></v-text-field>
+                </v-col> -->
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
+                  <v-autocomplete
+                      :items="listDoiTuong"
+                      placeholder="Nhóm đối tượng"
+                      v-model="applicantInfo['NhomDoiTuong']"
+                      item-text="doiTuongMoTa"
+                      item-value="id"
+                      hide-no-data
+                      :rules="required"
+                      required
+                      outlined
+                      dense
+                      hide-details="auto"    
+                      id="nhomdoituong"
+                      @keyup.enter="nextFocus('donvicongtac')"          
+                  >
+                  <template v-slot:selection="data">
+                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                    </template>
+                    <template v-slot:item="data">
+                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                    </template>
+                  </v-autocomplete>
                 </v-col>
                 <v-col
                   cols="12"
@@ -348,45 +362,10 @@
                     dense
                     id="donvicongtac"
                     hide-details="auto"
-                    @keyup.enter="nextFocus('nhomdoituong')"
+                    @keyup.enter="nextFocus('cosoyte')"
                   ></v-text-field>
                 </v-col>
-                <v-col
-                  cols="12"
-                  md="12"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
-                  <v-autocomplete
-                      :items="listDoiTuong"
-                      placeholder="Nhóm đối tượng"
-                      v-model="applicantInfo['NhomDoiTuong']"
-                      item-text="name"
-                      item-value="value"
-                      hide-no-data
-                      :rules="required"
-                      required
-                      outlined
-                      dense
-                      hide-details="auto"    
-                      id="nhomdoituong"
-                      @keyup.enter="nextFocus('diabancoso')"          
-                  ></v-autocomplete>
-                </v-col>
-                <!-- <v-col
-                  cols="12"
-                  md="6"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Ghi chú đối tượng</div>
-                  <v-text-field
-                    v-model="applicantInfo['GhiChuNhomDoiTuong']"
-                    outlined
-                    placeholder="Bổ sung thông tin đối tượng tiêm"
-                    dense
-                    hide-details="auto"
-                  ></v-text-field>
-                </v-col> -->
+                
               </v-row>
               <!-- row 5 -->
               <v-row>
@@ -395,21 +374,22 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Địa bàn cơ sở <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Cơ sở y tế <span style="color:red">(*)</span></div>
                   <v-autocomplete
                       hide-no-data
-                      :items="listDiaBan"
-                      v-model="applicantInfo['DiaBanCoSo_ID']"
-                      item-text="TenDiaBan"
-                      item-value="ID"
+                      :items="listCoSoYTe"
+                      v-model="coSoYTe"
                       :rules="required"
                       required
+                      item-text="tenCoSo"
+                      item-value="maCoSo"
                       outlined
-                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+                      placeholder="Cơ sở y tế"
                       dense
                       hide-details="auto"
-                      id="diabancoso"
-                      @keyup.enter="nextFocus('cosoyte')"
+                      id="cosoyte"
+                      @keyup.enter="nextFocus('diabancoso')"
+                      clearable
                   ></v-autocomplete>
                 </v-col>
                 <v-col
@@ -417,21 +397,22 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Cơ sở y tế</div>
+                  <div class="mb-2">Địa bàn cơ sở </div>
                   <v-autocomplete
                       hide-no-data
-                      :items="listCoSoYTe"
-                      v-model="coSoYTe"
-                      item-text="itemName"
-                      item-value="itemCode"
+                      :items="listDiaBan"
+                      v-model="applicantInfo['DiaBanCoSo_ID']"
+                      item-text="tenDiaBan"
+                      item-value="id"
                       outlined
-                      placeholder="Cơ sở y tế"
+                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
                       dense
                       hide-details="auto"
-                      id="cosoyte"
-                      @keyup.enter="nextFocus('dantoc')"
+                      id="diabancoso"
+                      @keyup.enter="nextFocus('tsdiung')"
                   ></v-autocomplete>
                 </v-col>
+                
                 <v-col
                   cols="12"
                   md="6"
@@ -602,6 +583,12 @@
               cols="12"
               class="text-center"
             >
+              <v-btn class="mr-4" v-if="String(uid) === '0'" color="red" @click="huyDangKy">
+                <v-icon left>
+                  mdi-close
+                </v-icon>
+                <span>HỦY</span>
+              </v-btn>
               <v-btn v-if="String(uid) === '0'" class="mr-3" color="#0072bc" @click="submitForm" :loading="processingAction" :disabled="processingAction">
                 <v-icon left>
                   mdi-content-save-outline
@@ -613,12 +600,6 @@
                   mdi-content-save-outline
                 </v-icon>
                 <span>CẬP NHẬT THÔNG TIN</span>
-              </v-btn>
-              <v-btn class="mr-0" v-if="String(uid) === '0'" color="red" @click="huyDangKy">
-                <v-icon left>
-                  mdi-close
-                </v-icon>
-                <span>HỦY</span>
               </v-btn>
             </v-col>
           </v-row>
@@ -674,30 +655,14 @@
           TinhTrangDangKi: 0
         },
         listGioiTinh: [{name: 'Nam', value: 0},{name: 'Nữ', value: 1},{name: 'Không xác định', value: 2}],
-        listDoiTuong: [
-          {
-            "id" : 1,
-            "value" : 1,
-            "name" : "1. Người làm việc trong các cơ sở y tế, ngành y tế (công lập và tư nhân)",
-          }, {
-            "id" : 2,
-            "value" : 2,
-            "name" : "2. Người tham gia phòng chống dịch (Thành viên Ban chỉ đạo phòng, chống dịch các cấp, người làm việc ở các khu cách ly, làm nhiệm vụ truy vết, điều tra dịch tễ, tổ Covid dựa vào cộng đồng, tình nguyện viên, phóng viên...)",
-          }, {
-            "id" : 3,
-            "value" : 3,
-            "name" : "3. Lực lượng Quân đội",
-          },
-        ],
+        listDoiTuong: [],
         listTinhThanh: [],
-        tinhThanh: '',
+        tinhThanh: '01',
         listQuanHuyen: [],
-        quanHuyen: '',
+        quanHuyen: '004',
         listXaPhuong: [],
-        xaPhuong: '',
+        xaPhuong: '00148',
         listDiaBan: [
-          {ID: 1, TenDiaBan: 'Tổ dân phố số 6'},
-          {ID: 2, TenDiaBan: 'Tổ dân phố số 7'}
         ],
         listCoSoYTe: [],
         coSoYTe: '',
@@ -732,7 +697,7 @@
         ],
         requiredCredit: [
           (value) => {
-            if (value.length === 9) {
+            if (value && value.length === 9) {
               const pattern = /^(([0-9]{9,9}))$/
               return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
             } else {
@@ -754,7 +719,7 @@
             if (value) {
               return pattern.test(value) || 'Số điện thoại gồm 10 số'
             } else {
-              return []
+              return true
             }
           },
           (value) => {
@@ -770,7 +735,7 @@
           if (value) {
             return pattern.test(value) || 'Số điện thoại gồm 10 số'
           } else {
-            return []
+            return true
           }
         },
         require: (value) => {
@@ -814,7 +779,8 @@
         this.applicantInfo.PhuongXa_Ma = val 
       },
       coSoYTe (val) {
-        this.applicantInfo.CoSoYTe_Ma = val 
+        this.applicantInfo.CoSoYTe_Ma = val
+        this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -859,7 +825,13 @@
         vm.typeAction = 'update'
         vm.bindDataUpdate()
       }
-      let current = vm.$router.history.current.query
+      try {
+        let data = localStorage.getItem('user')
+        if (data && JSON.parse(data)) {
+          vm.applicantInfo['DiaBanCoSo_ID'] = JSON.parse(data)['diaBanCoSoId']
+        }
+      } catch (error) {
+      }
     },
     methods: {
       submitForm () {
@@ -868,21 +840,22 @@
           return
         }
         vm.processingAction = true
-        let validateTuoi = vm.ngayDuKienFormatted ? vm.checkTuoi() : true
+        // let validateTuoi = vm.ngayDuKienFormatted ? vm.checkTuoi() : true
+        let validateTuoi = true
         if (vm.$refs.formDangKy.validate()) {
-          if (vm.typeAction === 'add') {
-            try {
-              localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
-              vm.dataHistory = vm.applicantInfo ? vm.applicantInfo : ''
-            } catch (error) {
-            }
-          }
           if (validateTuoi) {
             vm.formatDataInput()
             let filter = {
               data: vm.applicantInfo
             }
             // thực hiện thêm mới
+            if (vm.typeAction === 'add') {
+              try {
+                localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
+                vm.dataHistory = vm.applicantInfo ? vm.applicantInfo : ''
+              } catch (error) {
+              }
+            }
             if (vm.typeAction === 'add') {
               vm.$store.dispatch('createRegistration', filter).then(function (result) {
                 vm.$store.commit('SHOW_SNACKBAR', {
@@ -893,6 +866,9 @@
                 vm.processingAction = false
                 vm.$refs.formDangKy.reset()
                 vm.$refs.formDangKy.resetValidation()
+                vm.tinhThanh = '01'
+                vm.quanHuyen = '004'
+                vm.xaPhuong = '00148'
                 vm.applicantInfo['DanToc_Ma'] = '01'
                 vm.applicantInfo['QuocTich_Ma'] = 'VN'
                 $('html, body').animate({
@@ -949,7 +925,7 @@
         vm.quanHuyen = vm.dataHistory['QuanHuyen_Ma']
         vm.xaPhuong = vm.dataHistory['PhuongXa_Ma']
         vm.applicantInfo['DiaBanCoSo_ID'] = vm.dataHistory['DiaBanCoSo_ID']
-        vm.applicantInfo['CoSoYTe_Ma'] = vm.dataHistory['CoSoYTe_Ma']
+        vm.coSoYTe = vm.dataHistory['CoSoYTe_Ma']
         vm.applicantInfo['DanToc_Ma'] = vm.dataHistory['DanToc_Ma']
         vm.applicantInfo['QuocTich_Ma'] = vm.dataHistory['QuocTich_Ma']
       },
@@ -965,7 +941,7 @@
         vm.applicantInfo.CacBenhLyDangMac = vm.registrationUpdate.cacBenhLyDangMac
         vm.applicantInfo.CacThuocDangDung = vm.registrationUpdate.cacThuocDangDung
         vm.applicantInfo['CMTCCCD'] = vm.registrationUpdate.cmtcccd
-        vm.applicantInfo.coSoYTe = vm.registrationUpdate.coSoYTeMa
+        vm.coSoYTe = vm.registrationUpdate.coSoYTeMa
         vm.applicantInfo.DanToc_Ma = vm.registrationUpdate.danTocMa
         vm.applicantInfo.DiaBanCoSo_ID = vm.registrationUpdate.diaBanCoSoID
         vm.applicantInfo.DiaChiNoiO = vm.registrationUpdate.diaChiNoiO
@@ -975,8 +951,10 @@
         vm.applicantInfo.GioiTinh = vm.registrationUpdate.gioiTinh
         vm.applicantInfo.HoVaTen = vm.registrationUpdate.hoVaTen
         vm.applicantInfo.MaSoBHXH = vm.registrationUpdate.maSoBHXH
-        vm.ngayDuKienFormatted = vm.convertDate(vm.registrationUpdate.ngayDangKi)
-        vm.applicantDateFormatted = vm.convertDate(vm.registrationUpdate.ngaySinh)
+        // vm.ngayDuKienFormatted = vm.convertDate(vm.registrationUpdate.ngayDangKi)
+        // vm.applicantDateFormatted = vm.convertDate(vm.registrationUpdate.ngaySinh)
+        vm.ngayDuKienFormatted = vm.registrationUpdate.ngayDangKi
+        vm.applicantDateFormatted = vm.registrationUpdate.ngaySinh
         vm.applicantInfo.NgheNghiep = vm.registrationUpdate.ngheNghiep
         vm.applicantInfo.NhomDoiTuong = vm.registrationUpdate.nhomDoiTuong
         vm.tinhThanh = vm.registrationUpdate.tinhThanhMa
@@ -1019,15 +997,17 @@
             vm.applicantInfo.CoSoYTe_Ma = vm.coSoYTe
             vm.applicantInfo.CoSoYTe_Ten = obj ? obj['TenCoSo'] : ''
           }
-          let splitNgayDangKy = String(vm.ngayDuKienFormatted).split('/')
-          vm.applicantInfo.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
-          let lengthDate = String(vm.applicantDateFormatted).trim().length
-          let splitDate = String(vm.applicantDateFormatted).split('/')
-          if (lengthDate && lengthDate == 4) {
-            vm.applicantInfo.NgaySinh = vm.applicantDateFormatted + '0000'
-          } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
-            vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
-          }
+          vm.applicantInfo.NgaySinh = vm.applicantDateFormatted
+          vm.applicantInfo.NgayDangKi = vm.ngayDuKienFormatted
+          // let splitNgayDangKy = String(vm.ngayDuKienFormatted).split('/')
+          // vm.applicantInfo.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
+          // let lengthDate = String(vm.applicantDateFormatted).trim().length
+          // let splitDate = String(vm.applicantDateFormatted).split('/')
+          // if (lengthDate && lengthDate == 4) {
+          //   vm.applicantInfo.NgaySinh = vm.applicantDateFormatted + '0000'
+          // } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
+          //   vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
+          // }
           console.log('applicantInfo', vm.applicantInfo)
         } catch (error) {
           vm.processingAction = false
@@ -1052,21 +1032,29 @@
           return false
         }
       },
-      getDiaBanCoSo () {
+      getDiaBanCoSo (val) {
         let vm = this
         let filter = {
-          page: 1,
-          size: 30
+          id: -1
         }
+        if (val) {
+          let obj = vm.listCoSoYTe.find(function (item) {
+            return item.maCoSo == val
+          })
+          filter = {
+            id: obj['id']
+          }
+        }
+        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.listDiaBan = result ? result : []
+          if (result.hasOwnProperty('data') && result.data.length) {
+            vm.listDiaBan = result.data
+          }
         })
       },
       getCoSoYTe () {
         let vm = this
         let filter = {
-          page: 1,
-          size: 30
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
           vm.listCoSoYTe = result ? result : []

@@ -28,6 +28,12 @@ public class MuiTiemChung implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
+	@Column(name = "NguoiTiemChungID")
+	private long nguoiTiemChungId;
+
+	@Column(name = "CoSoYTeID")
+	private long coSoYTeId;
+
 	@Column(name = "HoVaTen")
 	private String hoVaTen;
 
@@ -177,6 +183,22 @@ public class MuiTiemChung implements Serializable {
 
 	public void setHanSuDung(String hanSuDung) {
 		this.hanSuDung = hanSuDung;
+	}
+
+	public long getNguoiTiemChungId() {
+		return nguoiTiemChungId;
+	}
+
+	public void setNguoiTiemChungId(long nguoiTiemChungId) {
+		this.nguoiTiemChungId = nguoiTiemChungId;
+	}
+
+	public long getCoSoYTeId() {
+		return coSoYTeId;
+	}
+
+	public void setCoSoYTeId(long coSoYTeId) {
+		this.coSoYTeId = coSoYTeId;
 	}
 
 }
