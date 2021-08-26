@@ -851,8 +851,8 @@
             // thực hiện thêm mới
             if (vm.typeAction === 'add') {
               try {
-                localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
                 vm.dataHistory = vm.applicantInfo ? vm.applicantInfo : ''
+                localStorage.setItem('dataHistory', JSON.stringify(vm.applicantInfo))
               } catch (error) {
               }
             }
@@ -919,6 +919,11 @@
       },
       copyContent () {
         let vm = this
+        try {
+          let data = localStorage.getItem('dataHistory')
+          vm.dataHistory = data ? JSON.parse(data) : ''
+        } catch (error) {
+        }
         vm.applicantInfo['NhomDoiTuong'] = vm.dataHistory['NhomDoiTuong']
         vm.applicantInfo['DiaChiNoiO'] = vm.dataHistory['DiaChiNoiO']
         vm.tinhThanh = vm.dataHistory['TinhThanh_Ma']

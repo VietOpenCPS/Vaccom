@@ -67,7 +67,7 @@
                 <p class="mb-2" v-if="item.tinhTrangLich == 2"> Đã đóng kết thúc</p>
             </template>
             <template v-slot:item.action="{ item }">
-              <div style="width: 70px">
+              <div style="width: 100px">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editLichTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
@@ -78,7 +78,7 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="viewCaTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                    <v-btn @click="viewCaTiem(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-collapse-all-outline</v-icon>
                     </v-btn>
                   </template>
@@ -437,8 +437,9 @@
         vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
         vm.dialogAddMember = true
       },
-      viewCaTiem () {
+      viewCaTiem (item) {
         let vm = this
+        vm.$router.push({ path: '/pages/lich-tiem-chung/' + item.id})
       },
       formatStartDate () {
         let vm = this
