@@ -28,15 +28,15 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: Colors.transparent,
                     elevation: 0.0,
                     title: Text(
-                      "Taxi App",
+                      "Vaccom - VFFOSSA",
                       style: TextStyle(color: Colors.black),
                     ),
                     leading: FlatButton(
                         onPressed: () {
                           print("click menu");
                         },
-                        child: Image.asset("ic_menu.png")),
-                    actions: <Widget>[Image.asset("ic_notify.png")],
+                        child: Image.asset("assets/images/ic_menu.png")),
+                    actions: <Widget>[Image.asset("assets/images/ic_notify.png")],
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 20, right: 20),
