@@ -1,3 +1,8 @@
+import 'package:vaccom/src/app.dart';
+import 'package:vaccom/src/Dialog/loading_dialog.dart';
+import 'package:vaccom/src/Dialog/msg_dilog.dart';
+import 'package:vaccom/src/Screen/home_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -6,6 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,5 +110,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginClick() {
+    String email = _emailController.text;
+    String pass = _passController.text;
+    var authBloc = MyApp.of(context).authBloc;
+    LoadingDialog.showLoadingDialog(context, "Loading...");
+    authBloc.signIn(email, pass, () {
+      LoadingDialog.hideLoadingDialog(context);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => HomePage()));
+    }, (msg) {
+      LoadingDialog.hideLoadingDialog(context);
+      MsgDialog.showMsgDialog(context, "Sign-In", msg);
+    });
   }
 }
