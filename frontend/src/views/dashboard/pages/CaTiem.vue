@@ -158,12 +158,20 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="deleteCaTiem(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa ca tiêm</span>
+                </v-tooltip>
+                <!-- <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="viewCaTiem(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-collapse-all-outline</v-icon>
                     </v-btn>
                   </template>
                   <span>Xem ca tiêm</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </div>
             </template>
           </v-data-table>
@@ -228,6 +236,7 @@
                       class="flex xs12 md6"
                       v-model="thongTinCaTiem['GioHenTiem']"
                       placeholder="mm:ss"
+                      v-mask="'##:##'"
                       dense
                       outlined
                     ></v-text-field>
@@ -449,21 +458,15 @@
       editCaTiem (item) {
         let vm = this
         vm.typeAction = 'update'
-        // vm.lichTiemUpdate = item
-        // vm.thongTinCaTiem.MaDot = item.maDot
-        // vm.startDateFormatted = item.ngayBatDau
-        // vm.endDateFormatted = item.ngayKetThuc
-        // vm.thongTinCaTiem.DiaDiemTiemChung = item.diaDiemTiemChung
-        // vm.thongTinCaTiem.LoaiThuocTiem = item.loaiThuocTiem
-        // vm.thongTinCaTiem.NoiSanXuat = item.noiSanXuat
-        // vm.thongTinCaTiem.SoLoThuoc = item.soLoThuoc
-        // vm.expDateFormatted = item.hanSuDung
-        // vm.thongTinCaTiem.SoCaTiem = item.soCaTiem
-        // vm.thongTinCaTiem.SoMuiMotCa = item.soMuiMotCa
-        // vm.thongTinCaTiem.TongSoMuiTiem = item.tongSoMuiTiem
-        // vm.thongTinCaTiem.TinhTrangLich = item.tinhTrangLich
-        // vm.thongTinCaTiem.BacSiKham = item.bacSiKham
-        // vm.thongTinCaTiem.SoDienThoai = item.soDienThoai
+        vm.caTiemUpdate = item
+        vm.thongTinCaTiem = {
+          LichTiemChung_ID: item.lichTiemChung_ID,
+          STT: item.stt,
+          NgayHenTiem: item.ngayHenTiem,
+          GioHenTiem: item.gioHenTiem,
+          SoMuiTiem: item.SoMuiTiem,
+          DiaBanCoSo_ID: item.diaBanCoSo_ID
+        },
         vm.dialogAddMember = true
       },
       getCaTiem (pageIn, idLich) {
@@ -564,6 +567,7 @@
               vm.dialogAddMember = false
               vm.getCaTiem(0, vm.uid)
             }).catch(function () {
+              vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Cập nhật thất bại',
@@ -572,6 +576,27 @@
             })
           }
           
+        }
+      },
+      deleteCaTiem (item) {
+        let vm = this
+        let textConfirm = 'Bạn có chắc chắn muốn xóa ca tiêm này'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('deleteCaTiem', item).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            vm.getCaTiem(0, vm.uid)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
         }
       },
       cancelAddMember () {

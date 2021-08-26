@@ -78,6 +78,14 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="deleteLichTiem(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa lịch tiêm</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="viewCaTiem(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-collapse-all-outline</v-icon>
                     </v-btn>
@@ -585,6 +593,27 @@
             })
           }
           
+        }
+      },
+      deleteLichTiem (item) {
+        let vm = this
+        let textConfirm = 'Bạn có chắc chắn muốn xóa lịch tiêm này'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('deleteLichTiem', item).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            vm.getCaTiem(0, vm.uid)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
         }
       },
       cancelAddMember () {

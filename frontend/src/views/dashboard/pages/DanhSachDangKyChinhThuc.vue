@@ -55,6 +55,19 @@
             :loading="loadingData"
             loading-text="Đang tải... "
           >
+            <template v-slot:header.muiTiemChung="{ header }">
+              <div>
+                <div class="py-2" style="border-bottom: 1px solid #dedede;">Thông tin mũi tiêm</div>
+                <v-layout wrap>
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
+                    <p class="py-2 mb-0">Mũi 1</p>
+                  </v-flex>
+                  <v-flex class="xs12 md6">
+                    <p class="py-2 mb-0">Mũi 2</p>
+                  </v-flex>
+                </v-layout>
+              </div>
+            </template>
             <template v-slot:item.index="{ item, index }">
               <span>{{ (page+1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
@@ -64,11 +77,23 @@
                 <p class="mb-2" style="color: blue">Ngày sinh: {{ item.ngaySinh }}</p>
               </div>
             </template>
+            <template v-slot:item.nhomDoiTuong="{ item, index }">
+                <div class="mb-2">{{ item.nhomDoiTuong}}</div>
+            </template>
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
-            <template v-slot:item.ngayDangKi="{ item, index }">
-                <p class="mb-2">{{item.ngayDangKi}}</p>
+            <template v-slot:item.muiTiemChung="{ item, index }">
+              <div style="width: 250px;height: 100%;">
+                <v-layout wrap style="height: 100%;">
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
+                    <p class="py-2 mb-0"></p>
+                  </v-flex>
+                  <v-flex class="xs12 md6">
+                    <p class="py-2 mb-0"></p>
+                  </v-flex>
+                </v-layout>
+              </div>
             </template>
             <template v-slot:item.action="{ item }">
               <div style="width: 100px">
@@ -88,6 +113,14 @@
                   </template>
                   <span>Rút đăng ký</span>
                 </v-tooltip>
+                <!-- <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="viewDetail(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-account-details-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Thông tin chi tiết</span>
+                </v-tooltip> -->
               </div>
               
             </template>
@@ -95,40 +128,134 @@
           <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
         </v-card-text>
       </base-material-card>
+
       <v-dialog
-        max-width="600"
-        v-model="dialog"
+        max-width="1000"
+        v-model="dialogDetail"
       >
         <v-card>
-          <v-toolbar
-            dark
-            color="primary"
-          >
-            <v-toolbar-title>Thông tin chi tiết</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-              <v-btn
-                icon
-                dark
-                @click="dialog = false"
-              >
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
-          <v-card-text class="mt-5">
-            
-          </v-card-text>
-          <v-card-actions class="justify-end">
-            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialog = false">
-              <v-icon left>
-                mdi-close
-              </v-icon>
-              Thoát
-            </v-btn>
-          </v-card-actions>
+          <v-card-text class="pt-0">
+            <div class="my-3">
+                <v-icon color="#0072bc" class="mr-3" >
+                    mdi-calendar-month
+                </v-icon>
+                <span style="color: #0072bc">THÔNG TIN NGƯỜI TIÊM</span>
+            </div>
+            <v-layout wrap>
+              <v-text-field
+                  class="flex xs12 md3"
+                  v-model="detaiInfo.hoVaTen"
+                  outlined
+                  label="Họ tên"
+                  placeholder="Họ tên"
+                  dense
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Giới tính"
+                  placeholder="Giới tính"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.gioiTinh"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Ngày sinh"
+                  placeholder="Ngày sinh"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.ngaySinh"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Số CMND/ CCCD"
+                  placeholder="Số CMND/ CCCD"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.cmtcccd"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Số thẻ BHYT"
+                  placeholder="Số thẻ BHYT"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.soTheBHYT"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Số điện thoại"
+                  placeholder="Số điện thoại"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.soDienThoai"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Email"
+                  placeholder="Email"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  v-model="detaiInfo.email"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Địa chỉ"
+                  placeholder="Địa chỉ"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  :value="detaiInfo.diaChiNoiO"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Nhóm đối tượng"
+                  placeholder="Nhóm đối tượng"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  :value="detaiInfo.nhomDoiTuong"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Đơn vị công tác"
+                  placeholder="Đơn vị công tác"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  :value="detaiInfo.donViCongTac"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+              <v-text-field
+                  label="Ngày đăng ký tiêm"
+                  placeholder="Ngày đăng ký tiêm"
+                  class="flex xs12 md3 pl-2 mb-2"
+                  :value="detaiInfo.ngayDangKi"
+                  dense
+                  outlined
+                  hide-details="auto"
+                  readonly
+              ></v-text-field>
+            </v-layout>
+        </v-card-text>
         </v-card>
       </v-dialog>
+      
     </v-container>
     
   </div>
@@ -159,6 +286,7 @@
         pageCount: 0,
         itemsPerPage: 50,
         items: [],
+        detaiInfo: '',
         advanceSearchData: {
           codeNumber: '',
           customerTelNo: '',
@@ -206,9 +334,10 @@
           },
           {
             sortable: false,
-            text: 'Ngày đăng ký tiêm',
+            text: 'Thông tin mũi tiêm',
             align: 'center',
-            value: 'ngayDangKi'
+            value: 'muiTiemChung',
+            class: 'px-0'
           },
           {
             sortable: false,
@@ -357,6 +486,11 @@
             })
           })
         }
+      },
+      viewDetail (item) {
+        let vm = this
+        vm.detaiInfo = item
+        vm.dialogDetail = true
       },
       changePage (config) {
         let vm = this
