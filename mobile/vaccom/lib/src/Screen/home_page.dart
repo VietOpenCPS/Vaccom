@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: Colors.transparent,
                     elevation: 0.0,
                     title: Text(
-                      "Vaccom - VFFOSSA",
+                      "Vaccom - VFOSSA",
                       style: TextStyle(color: Colors.black),
                     ),
                     leading: FlatButton(
