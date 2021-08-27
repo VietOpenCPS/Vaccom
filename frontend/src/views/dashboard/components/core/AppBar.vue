@@ -143,7 +143,7 @@
               <v-icon left size="24" class="mx-2">
                 mdi-account-circle-outline
               </v-icon>
-              {{userLogin['role_name']}}
+              {{userLogin['hoVaTen'] ? userLogin['hoVaTen'] : userLogin['role_name']}}
               <v-icon class="ml-2" v-if="!showMenu" size="20" color="white" >mdi-chevron-up</v-icon>
               <v-icon class="ml-2" v-else size="20" color="white">mdi-chevron-down</v-icon>
             </v-chip>
