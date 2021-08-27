@@ -916,9 +916,6 @@ export default new Vuex.Store({
         }
         let dataPost = {}
         axios.post('/rest/v1/export/nguoitiemchung', dataPost, param).then(function (response) {
-          // let fileNames = response.headers['content-disposition']
-          // let fileName = fileNames.split('filename=')[1] || 'danhsach'
-          // fileName = fileName.split('"').join('')
           let a = document.createElement('a')
           document.body.appendChild(a)
           a.style = 'display: none'
@@ -928,6 +925,34 @@ export default new Vuex.Store({
           a.click()
           window.URL.revokeObjectURL(url)
           resolve(response.data)
+        }).catch(xhr => {
+          reject(xhr)
+        })
+      })
+    },
+    importDanhSach ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {}
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = new FormData()
+        dataPost.append('file', filter.file)
+        dataPost.append('sheetAt', 0)
+        dataPost.append('startCol', 0)
+        dataPost.append('endCol', 16)
+        dataPost.append('startRow', 8)
+        dataPost.append('endRow', 1000)
+        dataPost.append('table', 'nguoitiemchung')
+        axios.post('/rest/v1/import/exceldata', dataPost, param).then(function (response) {
+          resolve(response)
         }).catch(xhr => {
           reject(xhr)
         })

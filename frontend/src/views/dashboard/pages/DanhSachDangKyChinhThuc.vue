@@ -113,14 +113,14 @@
                   </template>
                   <span>Rút đăng ký</span>
                 </v-tooltip>
-                <!-- <v-tooltip top>
+                <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="viewDetail(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-account-details-outline</v-icon>
                     </v-btn>
                   </template>
                   <span>Thông tin chi tiết</span>
-                </v-tooltip> -->
+                </v-tooltip>
               </div>
               
             </template>
@@ -132,14 +132,31 @@
       <v-dialog
         max-width="1000"
         v-model="dialogDetail"
+        fullscreen
       >
         <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title>Thông tin người đăng ký tiêm</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogDetail = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
           <v-card-text class="pt-0">
             <div class="my-3">
-                <v-icon color="#0072bc" class="mr-3" >
-                    mdi-calendar-month
+                <v-icon size=22 color="#0072bc" class="mr-3" >
+                    mdi-account-check-outline
                 </v-icon>
-                <span style="color: #0072bc">THÔNG TIN NGƯỜI TIÊM</span>
+                <span style="color: #0072bc;font-weight: bold">THÔNG TIN NGƯỜI TIÊM</span>
             </div>
             <v-layout wrap>
               <v-text-field
@@ -150,6 +167,7 @@
                   placeholder="Họ tên"
                   dense
                   readonly
+                  hide-details="auto"
               ></v-text-field>
               <v-text-field
                   label="Giới tính"
@@ -175,7 +193,7 @@
                   label="Số CMND/ CCCD"
                   placeholder="Số CMND/ CCCD"
                   class="flex xs12 md3 pl-2 mb-2"
-                  v-model="detaiInfo.cmtcccd"
+                  :value="detaiInfo.cmtcccd ? detaiInfo.cmtcccd : ' '"
                   dense
                   outlined
                   hide-details="auto"
@@ -184,8 +202,8 @@
               <v-text-field
                   label="Số thẻ BHYT"
                   placeholder="Số thẻ BHYT"
-                  class="flex xs12 md3 pl-2 mb-2"
-                  v-model="detaiInfo.soTheBHYT"
+                  class="flex xs12 md3 mb-2"
+                  :value="detaiInfo.soTheBHYT ? detaiInfo.soTheBHYT : ' '"
                   dense
                   outlined
                   hide-details="auto"
@@ -195,7 +213,7 @@
                   label="Số điện thoại"
                   placeholder="Số điện thoại"
                   class="flex xs12 md3 pl-2 mb-2"
-                  v-model="detaiInfo.soDienThoai"
+                  :value="detaiInfo.soDienThoai ? detaiInfo.soDienThoai : ' '"
                   dense
                   outlined
                   hide-details="auto"
@@ -205,7 +223,7 @@
                   label="Email"
                   placeholder="Email"
                   class="flex xs12 md3 pl-2 mb-2"
-                  v-model="detaiInfo.email"
+                  :value="detaiInfo.email ? detaiInfo.email : ' '"
                   dense
                   outlined
                   hide-details="auto"
@@ -224,7 +242,7 @@
               <v-text-field
                   label="Nhóm đối tượng"
                   placeholder="Nhóm đối tượng"
-                  class="flex xs12 md3 pl-2 mb-2"
+                  class="flex xs12 md3 mb-2"
                   :value="detaiInfo.nhomDoiTuong"
                   dense
                   outlined
@@ -235,7 +253,7 @@
                   label="Đơn vị công tác"
                   placeholder="Đơn vị công tác"
                   class="flex xs12 md3 pl-2 mb-2"
-                  :value="detaiInfo.donViCongTac"
+                  :value="detaiInfo.donViCongTac ? detaiInfo.donViCongTac : ' '"
                   dense
                   outlined
                   hide-details="auto"
@@ -245,14 +263,61 @@
                   label="Ngày đăng ký tiêm"
                   placeholder="Ngày đăng ký tiêm"
                   class="flex xs12 md3 pl-2 mb-2"
-                  :value="detaiInfo.ngayDangKi"
+                  :value="detaiInfo.ngayDangKi ? detaiInfo.ngayDangKi : ' '"
                   dense
                   outlined
                   hide-details="auto"
                   readonly
               ></v-text-field>
             </v-layout>
-        </v-card-text>
+            <div class="my-3">
+                <v-icon size=22 color="#0072bc" class="mr-3" >
+                    mdi-history
+                </v-icon>
+                <span style="color: #0072bc;font-weight: bold">LỊCH SỬ TIÊM</span>
+            </div>
+            <v-layout wrap v-if="detaiInfo['muiTiemChung'] && detaiInfo['muiTiemChung'].length">
+              <v-card  outlined class="pa-2 mr-2" max-width="450" min-width="350" v-for="(item, index) in detaiInfo['muiTiemChung']" v-bind:key="index">
+                <div class="mb-2">
+                  <v-icon size=22 color="green" class="mr-3" >
+                      mdi-checkbox-marked-circle-outline
+                  </v-icon>
+                  <span style="font-weight: bold">MŨI {{index + 1}}</span> - 
+                  <span style="">Đã tiêm</span>
+                </div>
+                <p class="mb-2">Tên vắc xin: </p>
+                <p class="mb-2">Lô vắc xin: </p>
+                <p class="mb-2">Ngày tiêm: </p>
+                <p class="mb-2">Địa điểm tiêm: </p>
+              </v-card>
+              <!-- <v-card class="pa-2 ml-2" outlined max-width="450" min-width="350">
+                <div class="mb-2">
+                  <v-icon size=22 color="red" class="mr-3" >
+                      mdi-cancel
+                  </v-icon>
+                  <span style="font-weight: bold">MŨI 2</span> - 
+                  <span style="">Chưa tiêm</span>
+                </div>
+                <p class="mb-2">Tên vắc xin: </p>
+                <p class="mb-2">Lô vắc xin: </p>
+                <p class="mb-2">Ngày tiêm: </p>
+                <p class="mb-2">Địa điểm tiêm: </p>
+              </v-card> -->
+            </v-layout>
+            <p v-else>Chưa có lịch sử tiêm chủng</p>
+            <div class="my-3">
+                <v-icon size=22 color="#0072bc" class="mr-3" >
+                    mdi-history
+                </v-icon>
+                <span style="color: #0072bc;font-weight: bold">THÔNG TIN LỊCH HẸN</span>
+            </div>
+            <v-layout wrap v-if="detaiInfo['phieuHenTiem'] && detaiInfo['phieuHenTiem'].length">
+              <v-card  outlined class="pa-2 mr-2" max-width="450" min-width="350" v-for="(item, index) in detaiInfo['phieuHenTiem']" v-bind:key="index">
+                
+              </v-card>
+            </v-layout>
+            <p v-else>Chưa có thông tin hẹn tiêm</p>
+          </v-card-text>
         </v-card>
       </v-dialog>
       
@@ -295,6 +360,7 @@
         showAdvanceSearch: false,
         selected: [],
         dataInputSearch: '',
+        dialogDetail: '',
         headers: [
           {
             sortable: false,
@@ -362,9 +428,6 @@
       breakpointName () {
         return this.$store.getters.getBreakpointName
       },
-      userLogin () {
-        return this.$store.getters.getPermistion
-      }
     },
     methods: {
       searchDangKyTiem (data) {

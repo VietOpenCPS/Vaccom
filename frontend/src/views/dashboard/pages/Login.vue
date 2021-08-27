@@ -76,7 +76,7 @@ export default {
   },
   created () {
     let vm = this
-    vm.getUserInfo()
+    // vm.getUserInfo()
   },
   computed: {},
   methods: {

@@ -29,6 +29,13 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
+
+            <v-btn v-if="userLogin['coSoYTeId']" color="orange" small class="mx-0 mr-4" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-import
+              </v-icon>
+              Import danh sách
+            </v-btn>
             <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
@@ -46,7 +53,8 @@
                 mdi-transfer
               </v-icon>
               Chuyển đăng ký chính thức
-            </v-btn>            
+            </v-btn>
+            <input v-if="userLogin['coSoYTeId']" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
           
           <v-data-table
@@ -159,6 +167,7 @@
 </template>
 
 <script>
+  import $ from 'jquery'
   import Search from './FormTimKiem.vue'
   import Pagination from './Pagination'
   export default {
@@ -256,9 +265,6 @@
       breakpointName () {
         return this.$store.getters.getBreakpointName
       },
-      userLogin () {
-        return this.$store.getters.getPermistion
-      }
     },
     methods: {
       searchDangKyTiem (data) {
@@ -380,6 +386,40 @@
             })
           })
         }
+      },
+      pickFileImport () {
+        document.getElementById('fileImport').value = ''
+        document.getElementById('fileImport').click()
+      },
+      uploadFileImport () {
+        let vm = this
+        let files = $('#fileImport')[0].files
+        let file = files[0]
+        vm.processingAction = true
+        let filter = {
+          file: file,
+          sheetAt:0,
+          startCol:0,
+          endCol:16,
+          startRow:8,
+          endRow:1000,
+          table:'nguoitiemchung'
+        }
+        vm.$store.dispatch('importDanhSach', filter).then(function(result) {
+          vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Import danh sách thành công',
+            color: 'success',
+          })
+        }).catch(function () {
+          vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Import thất bại',
+            color: 'error',
+          })
+        })
       },
       exportDanhSach () {
         let vm = this

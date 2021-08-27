@@ -371,6 +371,7 @@
                 >
                   <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
                   <v-autocomplete
+                      ref="chondoituong"
                       :items="listDoiTuong"
                       placeholder="Nhóm đối tượng"
                       v-model="applicantInfo['NhomDoiTuong']"
@@ -383,13 +384,13 @@
                       dense
                       hide-details="auto"    
                       id="nhomdoituong"
-                      @keyup.enter="nextFocus('donvicongtac')"          
+                      @keyup.enter="nextFocus('donvicongtac')"
                   >
                   <template v-slot:selection="data">
-                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                      <span>{{ data.item.doiTuongMoTa }}</span>
                     </template>
                     <template v-slot:item="data">
-                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                      <span>{{ data.item.doiTuongMoTa }}</span>
                     </template>
                   </v-autocomplete>
                 </v-col>
@@ -836,6 +837,14 @@
 
     },
     methods: {
+      autoBind() {
+        let vm = this
+        console.log('add', $('#nhomdoituong').val())
+        if ($('#nhomdoituong').val() && Number.isInteger(Number($('#nhomdoituong').val())) && $('#nhomdoituong').val().length <= 2) {
+          vm.applicantInfo['NhomDoiTuong'] = Number($('#nhomdoituong').val()) - 1
+        }
+        vm.$refs.chondoituong.isMenuActive = false
+      },
       getUserInfo () {
         let vm = this
         try {
@@ -1118,7 +1127,18 @@
         let filter = {
         }
         vm.$store.dispatch('getNhomDoiTuong', filter).then(function (result) {
-          vm.listDoiTuong = result ? result : []
+          let data = []
+          if (result && result.length) {
+            for (var i = 0; i < result.length; i++) {
+              let item = {
+                id: result[i]['id'],
+                doiTuongMoTa: result[i]['doiTuongMa'] + ' ' + result[i]['doiTuongMoTa']
+              }
+              data.push(item)
+            }
+          }
+          // vm.listDoiTuong = result ? result : []
+          vm.listDoiTuong = data
         })
       },
       getQuocGia () {
