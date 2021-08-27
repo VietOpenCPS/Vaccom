@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface JwtTokenProvider {
 
 	public String generateToken(Authentication authentication, int exprireIn);
