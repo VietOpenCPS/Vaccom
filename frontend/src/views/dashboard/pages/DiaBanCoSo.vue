@@ -59,20 +59,20 @@
             <template v-slot:item.action="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                  <v-btn @click.stop="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-pencil</v-icon>
                   </v-btn>
                 </template>
                 <span>Sửa</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['role'] === 'Member'">
+              <!-- <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="deleteUser(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-delete</v-icon>
                   </v-btn>
                 </template>
                 <span>Xóa</span>
-              </v-tooltip>
+              </v-tooltip> -->
             </template>
             
             </v-data-table>
@@ -250,7 +250,7 @@
               } 
           }
         ],
-        diaBanUpDate: '',
+        diaBanUpdate: '',
         headers: [
           {
             sortable: false,
@@ -298,19 +298,6 @@
       vm.getTinhThanh()
     },
     watch: {
-      coSoYTe (val) {
-        let obj = this.listCoSoYTe.find(function (item) {
-          return item.id == val
-        })
-        this.tinhThanh = obj.tinhThanhMa
-        this.quanHuyen = obj.quanHuyenMa
-        this.xaPhuong = obj.phuongXaMa
-      },
-      coSoYTeSearch (val) {
-        if (val) {
-          this.getDiaBanCoSo(0, val)
-        }
-      },
       tinhThanh (val) {
         this.thongTinDiaBan.TinhThanh_Ma = val
         this.getQuanHuyen(val)
@@ -403,7 +390,6 @@
       addMember (type, user) {
         let vm = this
         vm.typeAction = type
-        vm.userUpdate = user
         vm.dialogAddMember = true
         if (type === 'add') {
           setTimeout(function () {
@@ -411,14 +397,16 @@
             vm.$refs.formAddMember.resetValidation()
             if (vm.coSoYTeSearch) {
               vm.coSoYTe = vm.coSoYTeSearch
+              // vm.tinhThanh = '01'
+              // vm.quanHuyen = '004'
+              // vm.xaPhuong = '00148'
             }
           }, 200)
         } else {
+          vm.diaBanUpdate = user
           setTimeout(function () {
-            vm.thongTinDiaBan.MaCoSo = vm.diaBanUpdate.maCoSo
-            vm.thongTinDiaBan.TenCoSo = vm.diaBanUpdate.tenCoSo
-            vm.thongTinDiaBan.DiaChiCoSo = vm.diaBanUpdate.diaChiCoSo
-            vm.thongTinDiaBan.NguoiDaiDien = vm.diaBanUpdate.nguoiDaiDien
+            vm.coSoYTe = vm.diaBanUpdate.coSoYTeId
+            vm.thongTinDiaBan.TenDiaBan = vm.diaBanUpdate.tenDiaBan
             vm.tinhThanh = vm.diaBanUpdate.tinhThanhMa
             vm.quanHuyen = vm.diaBanUpdate.quanHuyenMa
             vm.xaPhuong = vm.diaBanUpdate.phuongXaMa
@@ -427,10 +415,7 @@
         }
         
       },
-      updateStatusUser (type, user) {
-        let vm = this
-        vm.userUpdate = user
-      },
+
       deleteUser (user) {
         let vm = this
       },
@@ -493,8 +478,9 @@
               // ..
             });
           } else {
+            
             let filter = {
-              id: vm.diaBanUpDate['id'],
+              id: vm.diaBanUpdate['id'],
               data: vm.thongTinDiaBan
             }
             vm.loading = true

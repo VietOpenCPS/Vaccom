@@ -56,6 +56,12 @@ export default new Router({
           component: () => import('@/views/dashboard/pages/DanhSachLichTiem'),
         },
         {
+          name: 'CaTiem',
+          path: '/pages/lich-tiem-chung/:uid',
+          component: () => import('@/views/dashboard/pages/CaTiem'),
+          props: true,
+        },
+        {
           name: 'Dashboard',
           path: 'pages/dashboard',
           component: () => import('@/views/dashboard/Dashboard'),
