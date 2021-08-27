@@ -15,7 +15,7 @@ class RemoteAPI implements API {
         username: username,
         password: password,
       );
-      return VacToken.initFromJson(res);
+      return VacToken.fromJson(res);
     } catch (e) {
       throw e;
     }
@@ -26,7 +26,7 @@ class RemoteAPI implements API {
     final Map<String, String> param = {};
     try {
       var res = await ApiMethod.getData(apiPath, param);
-      return User.initFromJson(res);
+      return User.fromJson(res);
     } catch (e) {
       throw e;
     }

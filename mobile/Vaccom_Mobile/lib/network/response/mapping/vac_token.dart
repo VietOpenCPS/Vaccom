@@ -20,6 +20,4 @@ class VacToken {
     tokenType: json["token_type"],
     userId: json["user_id"],
   );
-
-  static VacToken initFromJson(dynamic data) => VacToken.fromJson(data);
 }

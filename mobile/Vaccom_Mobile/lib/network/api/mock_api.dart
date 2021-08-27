@@ -14,11 +14,11 @@ class MockAPI implements API {
 
   Future<VacToken> securityToken({String username, String password}) async {
     var data = json.decode(mockToken);
-    return VacToken.initFromJson(data);
+    return VacToken.fromJson(data);
   }
 
   Future<User> getUser({int userId}) async {
     var data = json.decode(mockUser);
-    return User.initFromJson(data);
+    return User.fromJson(data);
   }
 }

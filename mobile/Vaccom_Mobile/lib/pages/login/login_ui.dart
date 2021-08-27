@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaccom_mobile/commons/color.dart';
@@ -8,6 +9,7 @@ import 'package:vaccom_mobile/commons/utils.dart';
 import 'package:vaccom_mobile/components/custom_text_field.dart';
 import 'package:get/get.dart';
 import 'package:vaccom_mobile/components/password_input.dart';
+import 'package:vaccom_mobile/model/server_info.dart';
 import 'package:vaccom_mobile/network/global.dart';
 import 'package:vaccom_mobile/pages/login/login_vm.dart';
 import 'package:vaccom_mobile/router/router.dart';
@@ -23,6 +25,9 @@ class _LoginPage extends State<LoginPage> {
   final viewModel = LoginViewModel();
 
   final FocusNode _focusNode = FocusNode();
+
+  ServerInfo serverInfo = ServerInfo.vaccom;
+  final vaccomBanner = Image.asset('assets/images/logo_banner.png');
 
   @override
   void dispose() {
@@ -57,6 +62,63 @@ class _LoginPage extends State<LoginPage> {
 
   void onRegister() {
     Toast.show(text: 'register'.tr);
+  }
+
+  Future<List<ServerInfo>> getServerList() async {
+    Toast.showLoading();
+    await Future.delayed(Duration(seconds: 1));
+    Toast.dismiss();
+    return [ServerInfo.vaccom];
+  }
+
+  void selectServerInfo() async {
+    final list = await getServerList();
+
+    final server = await showDialog<ServerInfo>(
+      context: context,
+      builder: (ctx) {
+        return SimpleDialog(
+          title: Text(
+            r'Chọn máy chủ',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.merriweather(
+              fontSize: 16,
+              color: AppColor.main,
+            ),
+          ),
+          children: list.map((item) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(ctx, item),
+                child: Container(
+                  margin: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: '${item.title ?? ''}',
+                      style: GoogleFonts.nunitoSans(
+                        color: AppColor.nearlyBlack,
+                      ),
+                      children: <TextSpan>[],
+                    ),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey.shade200,
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+
+    if (server != null && server.title != serverInfo.title) {
+      setState(() => serverInfo = server);
+      Global.shared.setBaseUrl(server.baseUrl);
+    }
   }
 
   @override
@@ -143,12 +205,15 @@ class _LoginPage extends State<LoginPage> {
                 padding: EdgeInsets.symmetric(
                   horizontal: 36,
                 ),
-                child: Image.asset('assets/images/logo_banner.png'),
+                child: CachedNetworkImage(
+                  imageUrl: serverInfo.logoBanner,
+                  errorWidget: (_, e, o) => vaccomBanner,
+                ),
               ),
               Container(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  'HỆ THỐNG QUẢN LÝ &\nTỔ CHỨC ĐIỂM TIÊM CHỦNG',
+                  serverInfo.desc,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.merriweather(
                       color: AppColor.nearlyWhite,
@@ -162,6 +227,43 @@ class _LoginPage extends State<LoginPage> {
         )
       ],
     );
+
+    Widget serverInfoWidget() {
+      return Container(
+        margin: EdgeInsets.only(
+          left: padding,
+          right: padding,
+        ),
+        child: GestureDetector(
+          onTap: selectServerInfo,
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10, 8, 8, 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      serverInfo.title,
+                      style: GoogleFonts.roboto(
+                        color: AppColor.main,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColor.main,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -246,6 +348,15 @@ class _LoginPage extends State<LoginPage> {
                     ],
                   ),
                 ),
+              ),
+              Positioned(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: serverInfoWidget(),
+                ),
+                left: 0,
+                right: 0,
+                bottom: 0,
               ),
             ],
           ),

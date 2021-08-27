@@ -41,6 +41,4 @@ class User {
     quanTriHeThong: json["quanTriHeThong"],
     khoaTaiKhoan: json["khoaTaiKhoan"],
   );
-
-  static User initFromJson(dynamic data) => User.fromJson(data);
 }
