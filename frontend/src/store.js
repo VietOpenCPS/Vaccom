@@ -899,6 +899,27 @@ export default new Vuex.Store({
         })
       })
     },
+    assignAdmin  ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {}
+        axios.put('/rest/v1/app/update/nguoidung/' + filter.id + '/quantri/true', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
     exportDanhSach ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -944,13 +965,9 @@ export default new Vuex.Store({
         } catch (error) {
         }
         let dataPost = new FormData()
-        dataPost.append('file', filter.file)
-        dataPost.append('sheetAt', 0)
-        dataPost.append('startCol', 0)
-        dataPost.append('endCol', 16)
-        dataPost.append('startRow', 8)
-        dataPost.append('endRow', 1000)
-        dataPost.append('table', 'nguoitiemchung')
+        for (let key in filter) {
+          dataPost.append(key, filter[key])
+        }
         axios.post('/rest/v1/import/exceldata', dataPost, param).then(function (response) {
           resolve(response)
         }).catch(xhr => {

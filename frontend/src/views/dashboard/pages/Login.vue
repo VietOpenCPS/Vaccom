@@ -93,23 +93,35 @@ export default {
           localStorage.setItem('user', JSON.stringify(dataUser))
           vm.$store.commit('SET_ISSIGNED', true)
           vm.$store.dispatch('getUserInfo', result).then(function(dataInfo) {
-            dataUser['hoVaTen'] = dataInfo.hoVaTen
-            dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
-            dataUser['coSoYTeId'] = dataInfo.coSoYTeId
-            dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
-            localStorage.setItem('user', JSON.stringify(dataUser))
-            let redirect = vm.$route.query.redirect
-            let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
-            vm.$router.push(route)
             vm.loading = false
+            if (dataInfo) {
+              dataUser['hoVaTen'] = dataInfo.hoVaTen
+              dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
+              dataUser['coSoYTeId'] = dataInfo.coSoYTeId
+              dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
+              localStorage.setItem('user', JSON.stringify(dataUser))
+              let redirect = vm.$route.query.redirect
+              let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+              vm.$router.push(route)
+            } else {
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Không lấy được thông tin tài khoản',
+                color: 'error',
+              })
+            }
           }).catch(function (error) {
-            console.log('error', error)
-            let redirect = vm.$route.query.redirect
-            let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
-            vm.$router.push(route)
+            // let redirect = vm.$route.query.redirect
+            // let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+            // vm.$router.push(route)
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Không lấy được thông tin tài khoản',
+              color: 'error',
+            })
             vm.loading = false
           })
-        }).catch(() => {
+        }).catch((error) => {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,
             text: 'Tên đăng nhập hoặc mật khẩu không chính xác',
@@ -130,8 +142,11 @@ export default {
           user_id: dataUser['user_id']
         }
         vm.$store.dispatch('getUserInfo', filter).then(function(dataInfo) {
-          vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
-        }).catch (function () {
+          if (dataInfo) {
+            vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+          }
+        }).catch (function (error) {
+          console.log('error', error.status)
         })
       } catch (error) {
         

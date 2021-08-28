@@ -1163,11 +1163,13 @@
         }
         vm.$store.dispatch('getDanhMucTinhThanh', filter).then(function (result) {
           vm.listTinhThanh = result ? result : []
-          if (vm.tinhThanh) {
+          if (vm.tinhThanh && vm.listTinhThanh.length) {
             vm.getQuanHuyen(vm.tinhThanh)
           }
-        }).catch(function(){
-          vm.$router.push({ path: '/login' })
+        }).catch(function(error){
+          if (error && error.response && error.response.status == 401) {
+            vm.$router.push({ path: '/login' })
+          }
         })
       },
       getQuanHuyen (code) {

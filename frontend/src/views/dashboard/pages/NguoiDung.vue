@@ -73,13 +73,13 @@
                 </template>
                 <span>Mở khóa tài khoản</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['role'] === 'Member'">
+              <v-tooltip top v-if="!item.quanTriHeThong">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="deleteUser(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
-                    <v-icon size="22">mdi-delete</v-icon>
+                  <v-btn @click="assignAdmin(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                    <v-icon size="22">mdi-account-cog-outline</v-icon>
                   </v-btn>
                 </template>
-                <span>Xóa người dùng</span>
+                <span>Cấp quyền quản trị</span>
               </v-tooltip>
             </template>
             
@@ -473,6 +473,27 @@
           })
           vm.getMembers(0)
         })
+      },
+      assignAdmin (item) {
+        let vm = this
+        let x = confirm('Bạn có chắc chắn cấp quyền Admin cho tài khoản này?')
+        if (x) {
+          let filter = item
+          vm.$store.dispatch('assignAdmin', filter).then(userCredential => {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Cấp quyền thành công',
+              color: 'success',
+            })
+            vm.getMembers(0)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Cấp quyền thất bại',
+              color: 'error',
+            })
+          })
+        }
       },
       changePage (config) {
         let vm = this

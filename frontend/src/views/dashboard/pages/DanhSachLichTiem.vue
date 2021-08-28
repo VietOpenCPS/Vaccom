@@ -62,12 +62,11 @@
                 <p class="mb-2">{{ item.soDienThoai}} </p>
             </template>
             <template v-slot:item.tinhTrangLich="{ item, index }">
-                <p class="mb-2" v-if="item.tinhTrangLich == 0"> Chưa mở danh sách</p>
-                <p class="mb-2" v-if="item.tinhTrangLich == 1"> Đang mở danh sách</p>
-                <p class="mb-2" v-if="item.tinhTrangLich == 2"> Đã đóng kết thúc</p>
+                <p class="mb-2" v-if="item.tinhTrangLich == 0" style="color: blue"> Đang mở</p>
+                <p class="mb-2" v-if="item.tinhTrangLich == 1" style="color: red"> Đã đóng</p>
             </template>
             <template v-slot:item.action="{ item }">
-              <div style="width: 100px">
+              <div style="width: 130px">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editLichTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
@@ -76,13 +75,21 @@
                   </template>
                   <span>Sửa thông tin</span>
                 </v-tooltip>
-                <v-tooltip top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="deleteLichTiem(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-delete</v-icon>
                     </v-btn>
                   </template>
                   <span>Xóa lịch tiêm</span>
+                </v-tooltip> -->
+                <v-tooltip top v-if="item.tinhTrangLich == 0">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="closeLichTiem(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-close-octagon</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Đóng kết thúc</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -307,9 +314,8 @@
         endDateFormatted: '',
         expDateFormatted: '',
         tinhTrangList: [
-          {name: 'Chưa mở danh sách', value: 0},
-          {name: 'Đang mở danh sách', value: 1},
-          {name: 'Đã đóng kết thúc', value: 2}
+          {name: 'Đang mở', value: 0},
+          {name: 'Đã đóng', value: 1}
         ],
         thongTinLichTiem: {
           CoSoYTe_ID: '',
@@ -324,7 +330,7 @@
           SoCaTiem: '',
           SoMuiMotCa: '',
           TongSoMuiTiem: '',
-          TinhTrangLich: '',
+          TinhTrangLich: 0,
           BacSiKham: '',
           SoDienThoai: ''
         },
@@ -402,7 +408,7 @@
           {
             sortable: false,
             text: 'Thao tác',
-            align: 'left',
+            align: 'center',
             value: 'action'
           }
         ],
@@ -444,6 +450,45 @@
         vm.thongTinLichTiem.BacSiKham = item.bacSiKham
         vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
         vm.dialogAddMember = true
+      },
+      closeLichTiem (item) {
+        let vm = this
+        vm.thongTinLichTiem.CoSoYTe_ID  = item.coSoYTe_ID
+        vm.thongTinLichTiem.MaDot = item.maDot
+        vm.thongTinLichTiem.NgayBatDau = item.ngayBatDau
+        vm.thongTinLichTiem.NgayKetThuc = item.ngayKetThuc
+        vm.thongTinLichTiem.DiaDiemTiemChung = item.diaDiemTiemChung
+        vm.thongTinLichTiem.LoaiThuocTiem = item.loaiThuocTiem
+        vm.thongTinLichTiem.NoiSanXuat = item.noiSanXuat
+        vm.thongTinLichTiem.SoLoThuoc = item.soLoThuoc
+        vm.thongTinLichTiem.HanSuDung = item.hanSuDung
+        vm.thongTinLichTiem.SoCaTiem = item.soCaTiem
+        vm.thongTinLichTiem.SoMuiMotCa = item.soMuiMotCa
+        vm.thongTinLichTiem.TongSoMuiTiem = item.tongSoMuiTiem
+        vm.thongTinLichTiem.TinhTrangLich = 1
+        vm.thongTinLichTiem.BacSiKham = item.bacSiKham
+        vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
+        let filter = {
+          id: item['id'],
+          data: vm.thongTinLichTiem
+        }
+        vm.loading = true
+        vm.$store.dispatch('updateLichTiem', filter).then(function () {
+          vm.loading = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Đóng lịch tiêm thành công',
+            color: 'success',
+          })
+          vm.dialogAddMember = false
+          vm.getLichTiem(0)
+        }).catch(function () {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Đóng lịch tiêm thất bại',
+            color: 'error',
+          })
+        })
       },
       viewCaTiem (item) {
         let vm = this

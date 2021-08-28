@@ -401,7 +401,7 @@
           {
             sortable: false,
             text: 'Thao tác',
-            align: 'left',
+            align: 'center',
             value: 'action'
           }
         ],

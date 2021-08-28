@@ -258,6 +258,12 @@
                 title: 'Đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
                 id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký đã rút',
+                to: '/pages/danh-sach-dang-ky-da-rut',
+                id: 'search',
               }
             ]
           },
@@ -314,6 +320,12 @@
                 title: 'Người dùng',
                 to: '/pages/nguoi-dung',
                 id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Dữ liệu danh mục',
+                to: '/pages/du-lieu-danh-muc',
+                id: 'search',
               }
             ]
           },
@@ -348,6 +360,12 @@
                 icon: 'mdi-shield-plus-outline',
                 title: 'Đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký đã rút',
+                to: '/pages/danh-sach-dang-ky-da-rut',
                 id: 'search',
               }
             ]
