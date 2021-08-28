@@ -28,3 +28,5 @@ RUN ln -s -f /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
 ENV LANGUAGE=en_US.UTF-8
 
 ENV LC_ALL=en_US.UTF-8
+
+CMD ["/bin/bash", "/opt/vaccom/start.sh", "-d"]

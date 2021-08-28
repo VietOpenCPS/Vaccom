@@ -16,6 +16,8 @@
 
 FROM nginx
 
+RUN apt-get update -y && apt-get install cron openssh-server sshpass -y
+
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 COPY templates/default.conf /opt/
