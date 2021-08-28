@@ -2,7 +2,7 @@ export 'mapping/cosoyte.dart';
 export 'mapping/dantoc.dart';
 export 'mapping/diabancoso.dart';
 export 'mapping/doituong.dart';
-export 'mapping/nguoi_dang_ky.dart';
+export 'mapping/nguoitiemchung.dart';
 export 'mapping/quanhuyen.dart';
 export 'mapping/quocgia.dart';
 export 'mapping/tinhthanh.dart';

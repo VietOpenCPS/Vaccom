@@ -31,4 +31,15 @@ class RemoteAPI implements API {
       throw e;
     }
   }
+
+  Future<InjectorPaging> getListNguoiTiemChung({
+    Map<String, dynamic> params,
+  }) async {
+    try {
+      var data = await ApiMethod.getData(ApiPath.getListNguoiTiemChung, params);
+      return InjectorPaging.fromJson(data);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

@@ -1,7 +1,5 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:vaccom_mobile/network/api/api.dart';
-import 'package:vaccom_mobile/network/api/mock_api.dart';
-import 'package:vaccom_mobile/network/api/remote_api.dart';
 import 'package:vaccom_mobile/network/response/base.dart';
 
 abstract class BaseViewModel {

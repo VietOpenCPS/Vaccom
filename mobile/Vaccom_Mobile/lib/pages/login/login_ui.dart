@@ -295,8 +295,8 @@ class _LoginPage extends State<LoginPage> {
                             margin: EdgeInsets.only(
                                 left: padding,
                                 right: padding,
-                                top: 72,
-                                bottom: 10),
+                                top: 80,
+                                bottom: 80),
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Color(0xFFFEFEFE),
@@ -351,7 +351,9 @@ class _LoginPage extends State<LoginPage> {
               ),
               Positioned(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 100),
+                  padding: EdgeInsets.only(
+                    bottom: 16 + MediaQuery.of(context).padding.bottom,
+                  ),
                   child: serverInfoWidget(),
                 ),
                 left: 0,

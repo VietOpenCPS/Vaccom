@@ -21,4 +21,12 @@ class MockAPI implements API {
     var data = json.decode(mockUser);
     return User.fromJson(data);
   }
+
+  Future<InjectorPaging> getListNguoiTiemChung({
+    Map<String, dynamic> params,
+  }) async {
+    await Future.delayed(Duration(seconds: 1));
+    var data = json.decode(mockNguoiTiemChung);
+    return InjectorPaging.fromJson(data);
+  }
 }
