@@ -16,7 +16,7 @@
 
 FROM nginx
 
-RUN apt-get update -y && apt-get install wget cron -y
+RUN apt-get update -y && apt-get install wget cron openssh-server sshpass -y
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 

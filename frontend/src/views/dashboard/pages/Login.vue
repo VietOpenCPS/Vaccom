@@ -74,6 +74,10 @@ export default {
       }
     }
   },
+  created () {
+    let vm = this
+    vm.getUserInfo()
+  },
   computed: {},
   methods: {
     handleLogin() {
@@ -98,7 +102,8 @@ export default {
             let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
             vm.$router.push(route)
             vm.loading = false
-          }).catch (function () {
+          }).catch(function (error) {
+            console.log('error', error)
             let redirect = vm.$route.query.redirect
             let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
             vm.$router.push(route)
@@ -113,6 +118,25 @@ export default {
           vm.loading = false
         })
       }
+    },
+    getUserInfo () {
+      let vm = this
+      try {
+        let dataUser = JSON.parse(localStorage.getItem('user'))
+        if (!dataUser['user_id']) {
+          return
+        }
+        let filter = {
+          user_id: dataUser['user_id']
+        }
+        vm.$store.dispatch('getUserInfo', filter).then(function(dataInfo) {
+          vm.$router.push({ path: '/pages/dang-ky-tiem-moi/0' })
+        }).catch (function () {
+        })
+      } catch (error) {
+        
+      }
+      
     },
     goBack () {
       this.$router.push({ path: '/' })

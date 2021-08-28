@@ -67,7 +67,7 @@
                 <p class="mb-2" v-if="item.tinhTrangLich == 2"> Đã đóng kết thúc</p>
             </template>
             <template v-slot:item.action="{ item }">
-              <div style="width: 70px">
+              <div style="width: 100px">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editLichTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
@@ -78,7 +78,15 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="viewCaTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                    <v-btn @click="deleteLichTiem(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa lịch tiêm</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="viewCaTiem(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-collapse-all-outline</v-icon>
                     </v-btn>
                   </template>
@@ -437,8 +445,9 @@
         vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
         vm.dialogAddMember = true
       },
-      viewCaTiem () {
+      viewCaTiem (item) {
         let vm = this
+        vm.$router.push({ path: '/pages/lich-tiem-chung/' + item.id})
       },
       formatStartDate () {
         let vm = this
@@ -584,6 +593,27 @@
             })
           }
           
+        }
+      },
+      deleteLichTiem (item) {
+        let vm = this
+        let textConfirm = 'Bạn có chắc chắn muốn xóa lịch tiêm này'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('deleteLichTiem', item).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            vm.getCaTiem(0, vm.uid)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
         }
       },
       cancelAddMember () {
