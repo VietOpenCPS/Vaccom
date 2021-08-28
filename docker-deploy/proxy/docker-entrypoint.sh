@@ -38,6 +38,7 @@ mkdir /run/sshd
 /usr/sbin/sshd -D &
 /usr/sbin/cron -n &
 sleep 100m
+sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no root@vaccom-frontend
 else
 /usr/sbin/sshd -D &
 /usr/sbin/cron -n &

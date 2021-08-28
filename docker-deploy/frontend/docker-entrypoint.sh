@@ -59,13 +59,13 @@ sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
 sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no root@vaccom-proxy
 # Sync certificate SSL to vaccom-proxy
-/usr/bin/scp /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
+scp /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
 scp /etc/letsencrypt/archive/$DOMAIN/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
+mkdir /run/sshd
+/usr/sbin/sshd -D &
 ssh root@vaccom-proxy 'pkill sleep'
 
 # Start services
-mkdir /run/sshd
-/usr/sbin/sshd -D &
 /usr/sbin/cron -n &
 else
 /usr/sbin/sshd -D &
