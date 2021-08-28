@@ -183,6 +183,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!--For documentation API-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
