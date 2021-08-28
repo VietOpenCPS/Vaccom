@@ -19,8 +19,6 @@ sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd
 
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
 
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no root@vaccom-frontend
-
 # Create month cron to update ssl
 cat > /etc/cron.monthly/update_ssl <<EOF
 #!/bin/bash
