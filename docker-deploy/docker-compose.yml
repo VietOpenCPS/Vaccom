@@ -41,6 +41,8 @@ services:
       dockerfile: Dockerfile
     hostname: vaccom-backend
     restart: always
+    depends_on:
+      - vaccom-mariadb
     volumes:
       - "./backend/vaccom-backend:/opt/vaccom"
     tty: true
@@ -56,6 +58,8 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
+    depends_on:
+      - vaccom-backend
     environment:
       - CONTAINER_ROOT_PASSWORD=$CONTAINER_ROOT_PASSWORD
       - CERTBOT_EMAIL=$CERTBOT_EMAIL
