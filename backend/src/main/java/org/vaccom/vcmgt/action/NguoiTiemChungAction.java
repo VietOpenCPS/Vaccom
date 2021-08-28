@@ -35,6 +35,12 @@ public interface NguoiTiemChungAction {
 
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung);
+	
+	public void duyetDangKyMoi(String reqBody);
+	
+	public void huyDangKyChinhThuc(String reqBody);
+	
+	public void khoiPhucDangKy(String reqBody);
 
 	public void updateTrangThaiDangKy(String reqBody);
 }

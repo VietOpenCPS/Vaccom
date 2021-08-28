@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 import io.jsonwebtoken.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ import com.liferay.petra.string.StringPool;
 @Service
 public class JwtTokenProviderFactory implements JwtTokenProvider {
 
-	private final Logger _log = LoggerFactory.getLogger(JwtTokenProvider.class);
+	private final Log _log = LogFactory.getLog(JwtTokenProvider.class);
 
 	@Autowired
 	NguoiDungService nguoiDungService;
@@ -126,7 +126,7 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 	}
 
 	@Override
-	public String getRoleFromToken(String token, String secret) {
+	public String getRoleNameFromToken(String token, String secret) {
 
 		String tenDangNhap = getUsernameFromToken(token, secret);
 
@@ -136,9 +136,21 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 			return StringPool.BLANK;
 		}
 
-		KhoaDangKy khoaDangKy = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
+		return VaccomUtil.VaiTro.getEnum(nguoiDung.getVaiTro()).getName();
+	}
+	
+	@Override
+	public int getRoleValueFromToken(String token, String secret) {
 
-		return khoaDangKy != null ? khoaDangKy.getPhamVi() : StringPool.BLANK;
+		String tenDangNhap = getUsernameFromToken(token, secret);
+
+		NguoiDung nguoiDung = nguoiDungService.findByTenDanNhap(tenDangNhap);
+
+		if (nguoiDung == null) {
+			return 0;
+		}
+
+		return nguoiDung.getVaiTro();
 	}
 
 	@Override

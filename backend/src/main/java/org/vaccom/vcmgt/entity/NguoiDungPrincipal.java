@@ -13,7 +13,9 @@ public class NguoiDungPrincipal implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private long id;
+	
 	private String tenDangNhap;
+	
 	private String hoVaTen;
 	@JsonIgnore
 	private String chucDanh;
@@ -28,15 +30,17 @@ public class NguoiDungPrincipal implements UserDetails {
 	@JsonIgnore
 	private long coSoYTeId;
 	@JsonIgnore
-	private boolean quanTriHeThong;
+	private int vaiTro;
 	@JsonIgnore
 	private boolean khoaTaiKhoan;
+	@JsonIgnore
+	private long nguoiTiemChungId;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public NguoiDungPrincipal(long id, String tenDangNhap, String hoVaTen, String chucDanh, String soDienThoai,
-			String email, String matKhau, long diaBanCoSoId, long coSoYTeId, boolean quanTriHeThong,
-			boolean khoaTaiKhoan) {
+			String email, String matKhau, long diaBanCoSoId, long coSoYTeId, int vaiTro,
+			boolean khoaTaiKhoan, long nguoiTiemChungId) {
 		this.id = id;
 		this.tenDangNhap = tenDangNhap;
 		this.hoVaTen = hoVaTen;
@@ -46,16 +50,17 @@ public class NguoiDungPrincipal implements UserDetails {
 		this.matKhau = matKhau;
 		this.diaBanCoSoId = diaBanCoSoId;
 		this.coSoYTeId = coSoYTeId;
-		this.quanTriHeThong = quanTriHeThong;
 		this.khoaTaiKhoan = khoaTaiKhoan;
+		this.vaiTro = vaiTro;
+		this.nguoiTiemChungId = nguoiTiemChungId;
 	}
 
 	public static NguoiDungPrincipal create(NguoiDung nguoiDung) {
 
 		return new NguoiDungPrincipal(nguoiDung.getId(), nguoiDung.getTenDangNhap(), nguoiDung.getHoVaTen(),
 				nguoiDung.getChucDanh(), nguoiDung.getSoDienThoai(), nguoiDung.getEmail(), nguoiDung.getMatKhau(),
-				nguoiDung.getDiaBanCoSoId(), nguoiDung.getCoSoYTeId(), nguoiDung.isQuanTriHeThong(),
-				nguoiDung.isKhoaTaiKhoan());
+				nguoiDung.getDiaBanCoSoId(), nguoiDung.getCoSoYTeId(), nguoiDung.getVaiTro(),
+				nguoiDung.isKhoaTaiKhoan(), nguoiDung.getNguoiTiemChungId());
 	}
 
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -185,14 +190,6 @@ public class NguoiDungPrincipal implements UserDetails {
 		this.coSoYTeId = coSoYTeId;
 	}
 
-	public boolean isQuanTriHeThong() {
-		return quanTriHeThong;
-	}
-
-	public void setQuanTriHeThong(boolean quanTriHeThong) {
-		this.quanTriHeThong = quanTriHeThong;
-	}
-
 	public boolean isKhoaTaiKhoan() {
 		return khoaTaiKhoan;
 	}
@@ -201,4 +198,21 @@ public class NguoiDungPrincipal implements UserDetails {
 		this.khoaTaiKhoan = khoaTaiKhoan;
 	}
 
+	public int getVaiTro() {
+		return vaiTro;
+	}
+
+	public void setVaiTro(int vaiTro) {
+		this.vaiTro = vaiTro;
+	}
+
+	public long getNguoiTiemChungId() {
+		return nguoiTiemChungId;
+	}
+
+	public void setNguoiTiemChungId(long nguoiTiemChungId) {
+		this.nguoiTiemChungId = nguoiTiemChungId;
+	}
+
+	
 }

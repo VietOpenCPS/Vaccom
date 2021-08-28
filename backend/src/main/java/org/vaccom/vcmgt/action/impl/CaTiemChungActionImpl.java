@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.CaTiemChungAction;
+import org.vaccom.vcmgt.action.LichTiemChungAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.CaTiemChung;
+import org.vaccom.vcmgt.entity.LichTiemChung;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.CaTiemChungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -26,6 +28,9 @@ public class CaTiemChungActionImpl implements CaTiemChungAction {
 	@Autowired
 	private CaTiemChungService caTiemChungService;
 
+	@Autowired
+	private LichTiemChungAction lichTiemChungAction;
+
 	@Override
 	public CaTiemChung addCaTiemChung(String reqBody) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -34,6 +39,13 @@ public class CaTiemChungActionImpl implements CaTiemChungAction {
 		long lichTiemChungId = bodyData.has(EntityConstant.LICHTIEMCHUNG_ID)
 				? bodyData.get(EntityConstant.LICHTIEMCHUNG_ID).longValue()
 				: 0;
+
+		LichTiemChung lichTiemChung = lichTiemChungAction.findById(lichTiemChungId);
+
+		if (lichTiemChung == null) {
+			throw new ActionException(MessageUtil.getVNMessageText("catiemchung.lichtiem.not_found"),
+					HttpStatus.NOT_FOUND.value());
+		}
 
 		int stt = bodyData.has(EntityConstant.STT) ? bodyData.get(EntityConstant.STT).intValue() : 1;
 
@@ -59,7 +71,7 @@ public class CaTiemChungActionImpl implements CaTiemChungAction {
 		caTiemChung.setLichTiemChungId(lichTiemChungId);
 		caTiemChung.setNgayHenTiem(ngayHenTiem);
 		caTiemChung.setSoMuiTiem(soMuiTiem);
-		//caTiemChung.setSoPhieuHen(soPhieuHen);
+		// caTiemChung.setSoPhieuHen(soPhieuHen);
 		caTiemChung.setStt(stt);
 
 		return caTiemChungService.updateCaTiemChung(caTiemChung);
@@ -104,11 +116,19 @@ public class CaTiemChungActionImpl implements CaTiemChungAction {
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
+
 		JsonNode bodyData = mapper.readTree(reqBody);
 
 		long lichTiemChungId = bodyData.has(EntityConstant.LICHTIEMCHUNG_ID)
 				? bodyData.get(EntityConstant.LICHTIEMCHUNG_ID).longValue()
 				: 0;
+
+		LichTiemChung lichTiemChung = lichTiemChungAction.findById(lichTiemChungId);
+
+		if (lichTiemChung == null) {
+			throw new ActionException(MessageUtil.getVNMessageText("catiemchung.lichtiem.not_found"),
+					HttpStatus.NOT_FOUND.value());
+		}
 
 		int stt = bodyData.has(EntityConstant.STT) ? bodyData.get(EntityConstant.STT).intValue() : 1;
 
@@ -133,7 +153,7 @@ public class CaTiemChungActionImpl implements CaTiemChungAction {
 		caTiemChung.setLichTiemChungId(lichTiemChungId);
 		caTiemChung.setNgayHenTiem(ngayHenTiem);
 		caTiemChung.setSoMuiTiem(soMuiTiem);
-		//caTiemChung.setSoPhieuHen(soPhieuHen);
+		// caTiemChung.setSoPhieuHen(soPhieuHen);
 		caTiemChung.setStt(stt);
 
 		return caTiemChungService.updateCaTiemChung(caTiemChung);

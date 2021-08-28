@@ -26,6 +26,6 @@ public interface NguoiDungAction {
 	
 	public NguoiDung updateNguoiDung(long id, String reqBody) throws Exception;
 	
-	public NguoiDung updateNguoiDung(long id, boolean quanTriHeThong) throws Exception;
+	public NguoiDung updateNguoiDung(long id, int vaiTro) throws Exception;
 
 }

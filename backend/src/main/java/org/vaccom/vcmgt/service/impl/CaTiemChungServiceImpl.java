@@ -66,6 +66,16 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 			predicates.add(cb.equal(caTiemChungRoot.get("diaBanCoSoId"), diaBanCoSoId));
 		}
 		
+		if (!predicates.isEmpty()) {
+			Predicate[] pdc = new Predicate[predicates.size()];
+			int count = 0;
+			for (Predicate predicate : predicates) {
+				pdc[count] = predicate;
+				count++;
+			}
+			cq.where(pdc);
+		}
+		
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
 		
 		em.close();

@@ -26,6 +26,8 @@ public interface LichTiemChungAction {
 	public List<LichTiemChung> findAll(int page, int size);
 	
 	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size);
+	
+	public LichTiemChung dongLichTiemChung(long id) throws Exception;
 
 	public LichTiemChung updateLichTiemChung(long id, String reqBody) throws Exception;
 }
