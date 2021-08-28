@@ -56,11 +56,12 @@ passwd < /opt/change_root_password.txt
 rm -f /opt/change_root_password.txt
 # Permit root login
 sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd_config
-
+ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
+sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no root@vaccom-proxy
 # Sync certificate SSL to vaccom-proxy
-sshpass -p "$CONTAINER_ROOT_PASSWORD" scp /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
-sshpass -p "$CONTAINER_ROOT_PASSWORD" scp /etc/letsencrypt/archive/$DOMAIN/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh root@vaccom-proxy 'pkill sleep'
+/usr/bin/scp /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
+scp /etc/letsencrypt/archive/$DOMAIN/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
+ssh root@vaccom-proxy 'pkill sleep'
 
 # Start services
 mkdir /run/sshd

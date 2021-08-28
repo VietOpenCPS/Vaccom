@@ -10,19 +10,23 @@ cat > /opt/change_root_password.txt <<EOF
 $CONTAINER_ROOT_PASSWORD
 $CONTAINER_ROOT_PASSWORD
 EOF
-# Change password root
+#Change password root
 passwd < /opt/change_root_password.txt
 rm -f /opt/change_root_password.txt
 
 # Permit root login
 sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd_config
 
+ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
+
+sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no root@vaccom-frontend
+
 # Create month cron to update ssl
 cat > /etc/cron.monthly/update_ssl <<EOF
 #!/bin/bash
 # sync certificate from container vaccom-frontend.
-sshpass -p "$CONTAINER_ROOT_PASSWORD" scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/fullchain1.pem /etc/nginx/ssl/fullchain.pem
-sshpass -p "$CONTAINER_ROOT_PASSWORD" scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/privkey1.pem /etc/nginx/ssl/privkey.pem
+scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/fullchain1.pem /etc/nginx/ssl/fullchain.pem
+scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/privkey1.pem /etc/nginx/ssl/privkey.pem
 
 #reload nginx.
 nginx -s reload
