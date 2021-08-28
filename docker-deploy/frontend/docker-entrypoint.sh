@@ -5,9 +5,6 @@ FILE=/usr/sbin/certbot-auto
 
 if [ ! -f "$FILE" ]; then
 
-mkdir /run/sshd
-/usr/sbin/sshd -D &
-
 wget https://raw.githubusercontent.com/certbot/certbot/7f0fa18c570942238a7de73ed99945c3710408b4/letsencrypt-auto-source/letsencrypt-auto -O /usr/sbin/certbot-auto
 chmod +x /usr/sbin/certbot-auto
 /usr/sbin/certbot-auto certonly --nginx --agree-tos -m "$CERTBOT_EMAIL" -n -d $DOMAIN_LIST
@@ -59,16 +56,15 @@ passwd < /opt/change_root_password.txt
 rm -f /opt/change_root_password.txt
 # Permit root login
 sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd_config
-ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
-#source of key(s) to be installed: "/root/.ssh/id_rsa.pub"
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id root@vaccom-proxy
-#copy key to vaccom-proxy
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id root@vaccom-proxy
+
 # Sync certificate SSL to vaccom-proxy
-rsync -av /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
-rsync -av /etc/letsencrypt/archive/$DOMAIN/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
+sshpass -p "$CONTAINER_ROOT_PASSWORD" scp /etc/letsencrypt/archive/$DOMAIN/fullchain1.pem root@vaccom-proxy:/etc/nginx/ssl/fullchain.pem
+sshpass -p "$CONTAINER_ROOT_PASSWORD" scp /etc/letsencrypt/archive/$DOMAIN/privkey1.pem root@vaccom-proxy:/etc/nginx/ssl/privkey.pem
+sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh root@vaccom-proxy 'pkill sleep'
 
-
+# Start services
+mkdir /run/sshd
+/usr/sbin/sshd -D &
 /usr/sbin/cron -n &
 else
 /usr/sbin/sshd -D &

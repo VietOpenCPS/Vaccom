@@ -10,31 +10,30 @@ cat > /opt/change_root_password.txt <<EOF
 $CONTAINER_ROOT_PASSWORD
 $CONTAINER_ROOT_PASSWORD
 EOF
-#Change password root
+# Change password root
 passwd < /opt/change_root_password.txt
 rm -f /opt/change_root_password.txt
 
-#permit root login
+# Permit root login
 sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|" /etc/ssh/sshd_config
-ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
-# create month cron to update ssl
+
+# Create month cron to update ssl
 cat > /etc/cron.monthly/update_ssl <<EOF
 #!/bin/bash
 # sync certificate from container vaccom-frontend.
-rsync -av root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/fullchain1.pem /etc/nginx/ssl/fullchain.pem
-rsync -av root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/privkey1.pem /etc/nginx/ssl/privkey.pem
+sshpass -p "$CONTAINER_ROOT_PASSWORD" scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/fullchain1.pem /etc/nginx/ssl/fullchain.pem
+sshpass -p "$CONTAINER_ROOT_PASSWORD" scp root@vaccom-frontend:/etc/letsencrypt/archive/$DOMAIN/privkey1.pem /etc/nginx/ssl/privkey.pem
 
 #reload nginx.
 nginx -s reload
 EOF
+
+# Start services
+mkdir /etc/nginx/ssl
 mkdir /run/sshd
 /usr/sbin/sshd -D &
 /usr/sbin/cron -n &
-ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""
-#source of key(s) to be installed: "/root/.ssh/id_rsa.pub"
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id root@vaccom-frontend
-#copy key to vaccom-frontend
-sshpass -p "$CONTAINER_ROOT_PASSWORD" ssh-copy-id root@vaccom-frontend
+sleep 100m
 else
 /usr/sbin/sshd -D &
 /usr/sbin/cron -n &
