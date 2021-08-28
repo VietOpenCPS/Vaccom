@@ -5,17 +5,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.vaccom.vcmgt.entity.CoSoYTe;
 
-import java.util.Optional;
-
 /**
  * @author vaccom
+ *
  */
 @Repository
 @Transactional
 public interface CoSoYTeRepository extends JpaRepository<CoSoYTe, Long> {
-    public CoSoYTe findById(long id);
+	public CoSoYTe findById(long id);
 
-    public CoSoYTe findByMaCoSo(String maCoSo);
-
-    Optional<CoSoYTe> findByMaQR(String qrCode);
+	public CoSoYTe findByMaCoSo(String maCoSo);
 }

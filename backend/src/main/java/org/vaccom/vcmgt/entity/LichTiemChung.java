@@ -8,18 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import lombok.ToString;
 import org.vaccom.vcmgt.constant.DBConstant;
 
 @Entity
 @Table(name = DBConstant._LICTIEMCHUNG_TABLE_NAME)
-@ToString
 public class LichTiemChung implements Serializable {
 
-
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -216,8 +212,4 @@ public class LichTiemChung implements Serializable {
 		this.soDienThoai = soDienThoai;
 	}
 
-	public boolean isValidPlan() {
-		// TODO: Implement to return a valid plan here
-		return true;
-	}
 }

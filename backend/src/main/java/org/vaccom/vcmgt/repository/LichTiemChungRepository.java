@@ -1,7 +1,6 @@
 package org.vaccom.vcmgt.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +24,5 @@ public interface LichTiemChungRepository extends JpaRepository<LichTiemChung, Lo
 	public List<LichTiemChung> findByCoSoYTeId(long id);
 	
 	public Page<LichTiemChung> findByCoSoYTeId(long id, Pageable pageable);
-
-	Optional<LichTiemChung>	findByMaQR(String qrCode);
+	
 }

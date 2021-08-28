@@ -1,7 +1,6 @@
 package org.vaccom.vcmgt.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,4 @@ public interface LichTiemChungService {
 	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size);
 
 	public List<LichTiemChung> findAll(int page, int size);
-
-	Optional<LichTiemChung> findByQRCode(String qrCode);
 }
