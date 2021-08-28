@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.vaccom.vcmgt.constant.AppConstant;
 import org.vaccom.vcmgt.exception.AuthException;
+import org.vaccom.vcmgt.exception.NotFoundException;
 import org.vaccom.vcmgt.exception.response.BaseExceptionResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,5 +31,12 @@ public class MyAppExceptionHandler {
         log.error(request.getRequestURI(), e);
         final String localMessage = messageSource.getMessage("nguoidung.not_exist_or_locked", null, AppConstant.DEFAULT_LOCALE);
         return new BaseExceptionResponse(localMessage);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public BaseExceptionResponse handleNotFoundException(HttpServletRequest request, NotFoundException e) {
+        log.error(request.getRequestURI(), e);
+        return BaseExceptionResponse.EMPTY;
     }
 }

@@ -16,4 +16,12 @@ public class AppConstant {
     public enum AuthorizationType {
         BEARER
     }
+
+    public enum AuthorityType {
+        ADMIN, // Nguoi quan tri
+        OFFICER_REGION, // Can bo dia ban
+        OFFICER_CARE, // Can bo y te
+        USER, // Nguoi tiem chung
+        VISITOR // Khach vang lai
+    }
 }

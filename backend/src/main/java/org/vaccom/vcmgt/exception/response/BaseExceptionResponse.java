@@ -1,5 +1,6 @@
 package org.vaccom.vcmgt.exception.response;
 
+import com.liferay.petra.string.StringPool;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +14,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BaseExceptionResponse {
     private String message;
+    public static final BaseExceptionResponse EMPTY = new BaseExceptionResponse(StringPool.BLANK);
 }
