@@ -1,0 +1,10 @@
+jre8-latest.rpm
+org.vaccom.vcmgt-*
+exports
+uploads
+nohup.out
+config
+logs
+vaccom-frontend
+databases
+conf.d

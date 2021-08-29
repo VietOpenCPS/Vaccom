@@ -1,7 +1,7 @@
 package org.vaccom.vcmgt.filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+	private static final Log _log = LogFactory.getLog(JwtAuthenticationFilter.class);
 
 	@Autowired
 	private CustomUserDetailsServiceImpl customUserDetailsService;
@@ -84,9 +84,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 						// boolean hasPermission = true;
 
-						String rolename = tokenProvider.getRoleFromToken(token, khoaDangKy.getKhoaBiMat());
+						int vaiTro = tokenProvider.getRoleValueFromToken(token, khoaDangKy.getKhoaBiMat());
 
-						request.setAttribute("_VAI_TRO", rolename);
+						request.setAttribute("_VAI_TRO", vaiTro);
 
 						request.setAttribute("_TEN_DANG_NHAP", nguoiDung.getTenDangNhap());
 
@@ -108,7 +108,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				}
 
 			} catch (Exception ex) {
-				logger.error("Could not set user authentication in security context", ex);
+				_log.error("Could not set user authentication in security context", ex);
 			}
 
 		filterChain.doFilter(request, response);

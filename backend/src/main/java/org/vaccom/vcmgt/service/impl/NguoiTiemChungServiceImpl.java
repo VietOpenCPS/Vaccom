@@ -35,6 +35,41 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	public long countByCmtcccd(String cmtcccd) {
 		return nguoiTiemChungRepository.countByCmtcccd(cmtcccd);
 	}
+	
+	@Override
+	public long countByCmtcccd(String cmtcccd, int tinhTrangDangKy) {
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+
+		Root<NguoiTiemChung> nguoiTiemChungRoot = cq.from(NguoiTiemChung.class);
+
+		cq.select(cb.count(nguoiTiemChungRoot));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(cb.equal(nguoiTiemChungRoot.get("cmtcccd"), cmtcccd));
+		
+		predicates.add(cb.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), tinhTrangDangKy));
+		
+
+		if (!predicates.isEmpty()) {
+			Predicate[] pdc = new Predicate[predicates.size()];
+			int count = 0;
+			for (Predicate predicate : predicates) {
+				pdc[count] = predicate;
+				count++;
+			}
+			cq.where(pdc);
+		}
+
+		TypedQuery<Long> typedQuery = em.createQuery(cq);
+		
+		em.close();
+
+		return typedQuery.getSingleResult();
+	}
 
 	@Override
 	public long countByDiaBanCoSoId(long id) {

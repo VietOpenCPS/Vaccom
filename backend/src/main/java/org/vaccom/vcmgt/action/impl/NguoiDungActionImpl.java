@@ -62,9 +62,8 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		String matKhau = bodyData.has(EntityConstant.MATKHAU) ? bodyData.get(EntityConstant.MATKHAU).textValue()
 				: StringPool.BLANK;
 
-		boolean quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG)
-				? bodyData.get(EntityConstant.QUANTRIHETHONG).booleanValue()
-				: false;
+		int vaiTro = bodyData.has(EntityConstant.VAITRO) ? bodyData.get(EntityConstant.VAITRO).intValue()
+				: VaccomUtil.VaiTro.NGUOIDUNG.getValue();
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
 				: StringPool.BLANK;
@@ -121,11 +120,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
 		nguoiDung.setMatKhau(new BCryptPasswordEncoder(encodingStrength).encode(matKhau));
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		nguoiDung.setVaiTro(vaiTro);
 		nguoiDung.setSoDienThoai(soDienThoai);
 		nguoiDung.setTenDangNhap(tenDangNhap);
 
-		KhoaDangKy khoaDangKy = createKhoaDangKy(quanTriHeThong);
+		KhoaDangKy khoaDangKy = createKhoaDangKy(vaiTro);
 
 		return nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 	}
@@ -182,7 +181,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	}
 
 	@Override
-	public NguoiDung updateNguoiDung(long id, boolean quanTriHeThong) throws Exception {
+	public NguoiDung updateNguoiDung(long id, int vaiTro) throws Exception {
 
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
@@ -190,9 +189,9 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
-		
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
-		
+
+		nguoiDung.setVaiTro(vaiTro);
+
 		return nguoiDungService.updateNguoiDung(nguoiDung);
 	}
 
@@ -211,11 +210,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 			nguoiDung.setHoVaTen("Super");
 			nguoiDung.setKhoaTaiKhoan(false);
 			nguoiDung.setMatKhau(defaultPass);
-			nguoiDung.setQuanTriHeThong(true);
+			nguoiDung.setVaiTro(VaccomUtil.VaiTro.QUANTRIHETHONG.getValue());
 			nguoiDung.setSoDienThoai("");
 			nguoiDung.setTenDangNhap("admin");
 
-			KhoaDangKy khoaDangKy = createKhoaDangKy(true);
+			KhoaDangKy khoaDangKy = createKhoaDangKy(VaccomUtil.VaiTro.QUANTRIHETHONG.getValue());
 
 			nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 		}
@@ -226,7 +225,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	public boolean deleteNguoiDung(long id) throws Exception {
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
-		if (nguoiDung == null) {
+		if (nguoiDung == null || nguoiDung.getTenDangNhap().equals("admin")) {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
@@ -311,7 +310,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		return encryptor.encrypt(digest, secretKey);
 	}
 
-	private KhoaDangKy createKhoaDangKy(boolean isQuanTriHeThong) {
+	private KhoaDangKy createKhoaDangKy(int vaiTro) {
 
 		RandomString random = new RandomString(64);
 
@@ -324,7 +323,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		KhoaDangKy khoaDangKy = new KhoaDangKy();
 		khoaDangKy.setKhoaBiMat(khoaBiMat);
 		khoaDangKy.setKhoaCongKhai(khoaCongKhai);
-		khoaDangKy.setPhamVi(VaccomUtil.getManagerRoleName(isQuanTriHeThong));
+		khoaDangKy.setPhamVi(VaccomUtil.getRoleName(vaiTro));
 		khoaDangKy.setTrangThai(1);
 
 		return khoaDangKy;

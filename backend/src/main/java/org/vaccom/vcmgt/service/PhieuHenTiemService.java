@@ -15,6 +15,8 @@ public interface PhieuHenTiemService {
 	
 	public long countByLichTiemChungId(long id);
 	
+	public long countPhieuHenTiem(Long lichTiemChungId, Long caTiemChungId, int tinhTrangXacNhan);
+	
 	public void deleteById(long id);
 	
 	public PhieuHenTiem updatePhieuHenTiem(PhieuHenTiem phieuHenTiem);
@@ -28,4 +30,7 @@ public interface PhieuHenTiemService {
 	public List<PhieuHenTiem> findByLichTiemChungId(long id, int page, int size);
 	
 	public List<PhieuHenTiem> findByNguoiTiemChungId(long id);
+	
+	public List<PhieuHenTiem> searchPhieuHenTiem(Long lichTiemChungId, Long caTiemChungId, int tinhTrangXacNhan,
+			Integer page, Integer size);
 }

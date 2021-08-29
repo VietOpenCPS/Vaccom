@@ -34,9 +34,9 @@ public class ImportControler {
 			@RequestParam("startRow") int startRow, @RequestParam("endRow") int endRow,
 			@RequestParam("table") String table) {
 		try {
-			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
 			}

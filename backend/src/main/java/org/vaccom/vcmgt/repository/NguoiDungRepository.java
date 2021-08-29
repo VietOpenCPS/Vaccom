@@ -21,7 +21,4 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
 	public NguoiDung findByTenDangNhap(String tenDangNhap);
 
 	public NguoiDung findByKhoaTaiKhoan(boolean khoaTaiKhoan);
-
-	public NguoiDung findByQuanTriHeThong(String quanTriHeThong);
-
 }

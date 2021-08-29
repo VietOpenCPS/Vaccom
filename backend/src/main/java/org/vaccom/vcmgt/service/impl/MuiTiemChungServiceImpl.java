@@ -26,6 +26,11 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	public long countByCoSoYTeId(long coSoYTeId) {
 		return muiTiemChungRepository.countByCoSoYTeId(coSoYTeId);
 	}
+	
+	@Override
+	public long countByNguoiTiemChungId(long id) {
+		return muiTiemChungRepository.countByNguoiTiemChungId(id);
+	}
 
 	@Override
 	public MuiTiemChung findById(long id) {

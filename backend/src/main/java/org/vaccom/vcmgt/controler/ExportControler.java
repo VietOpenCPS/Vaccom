@@ -44,9 +44,9 @@ public class ExportControler {
 			@RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung) {
 		try {
 
-			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
-
-			if (!VaccomUtil.hasUpdatePermission(vaiTro)) {
+			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			
+			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.export.permission_error"));
 			}

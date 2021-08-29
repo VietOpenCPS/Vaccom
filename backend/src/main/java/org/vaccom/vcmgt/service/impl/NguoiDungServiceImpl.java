@@ -10,10 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
@@ -87,14 +83,6 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
 		return nguoiDungRepository.findByTenDangNhap(tenDangNhap);
 	}
-	/*
-	 * @Override public List<NguoiDung> findAll(int page, int size) {
-	 * 
-	 * if (page < 0 || size < 0) { page = 0; size = 30; } Sort sort =
-	 * Sort.by(Sort.Direction.ASC, "id"); Pageable pageable = PageRequest.of(page,
-	 * size, sort); Page<NguoiDung> pases = nguoiDungRepository.findAll(pageable);
-	 * return pases.getContent(); }
-	 */
 
 	@Override
 	public List<NguoiDung> findAll(int page, int size) {
@@ -103,7 +91,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 		Root<NguoiDung> root = cq.from(NguoiDung.class);
 		cq.multiselect(root.get("id"), root.get("tenDangNhap"), root.get("hoVaTen"), root.get("chucDanh"),
 				root.get("soDienThoai"), root.get("email"), root.get("diaBanCoSoId"), root.get("coSoYTeId"),
-				root.get("quanTriHeThong"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"))
+				root.get("vaiTro"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"))
 				.orderBy(cb.asc(root.get("id")));
 
 		List<Tuple> result = em.createQuery(cq).setFirstResult(page).setMaxResults(size).getResultList();
@@ -121,7 +109,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 			nguoiDung.setHoVaTen(tuple.get(2, String.class));
 			nguoiDung.setKhoaTaiKhoan(tuple.get(9, Boolean.class));
 			nguoiDung.setNguoiTiemChungId(tuple.get(10, Long.class));
-			nguoiDung.setQuanTriHeThong(tuple.get(8, Boolean.class));
+			nguoiDung.setVaiTro(tuple.get(8, Integer.class));
 			nguoiDung.setSoDienThoai(tuple.get(4, String.class));
 			nguoiDung.setTenDangNhap(tuple.get(1, String.class));
 
