@@ -1,7 +1,7 @@
 package org.vaccom.vcmgt.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -17,12 +17,14 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+	private static final Log _log = LogFactory.getLog(JwtAuthenticationEntryPoint.class);
 
 	@Override
 	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			AuthenticationException e) throws IOException, ServletException {
-		logger.error("Responding with unauthorized error. Message - {}", e.getMessage());
+		
+		_log.error("Responding with unauthorized error. Message - {} " + e.getMessage());
+		
 		httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 	}
 }

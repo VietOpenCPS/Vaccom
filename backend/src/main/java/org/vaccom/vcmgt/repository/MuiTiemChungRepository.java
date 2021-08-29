@@ -16,7 +16,9 @@ import org.vaccom.vcmgt.entity.MuiTiemChung;
 @Transactional
 public interface MuiTiemChungRepository extends JpaRepository<MuiTiemChung, Long> {
 	
-	public long countByCoSoYTeId(long coSoYTeId);
+	public long countByCoSoYTeId(long id);
+	
+	public long countByNguoiTiemChungId(long id);
 	
 	public MuiTiemChung findById(long id);
 

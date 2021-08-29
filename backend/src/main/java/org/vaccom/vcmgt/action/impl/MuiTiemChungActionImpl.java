@@ -29,7 +29,12 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	public long countByCoSoYTeId(long id) {
 		return muiTiemChungService.countByCoSoYTeId(id);
 	}
-	
+
+	@Override
+	public long countByNguoiTiemChungId(long id) {
+		return muiTiemChungService.countByNguoiTiemChungId(id);
+	}
+
 	@Override
 	public MuiTiemChung addMuiTiemChung(String reqBody) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -68,8 +73,9 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 				: StringPool.BLANK;
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
-		
-		long nguoiTiemChungId = bodyData.has(EntityConstant.NGUOITIEMCHUNG_ID) ? bodyData.get(EntityConstant.NGUOITIEMCHUNG_ID).longValue()
+
+		long nguoiTiemChungId = bodyData.has(EntityConstant.NGUOITIEMCHUNG_ID)
+				? bodyData.get(EntityConstant.NGUOITIEMCHUNG_ID).longValue()
 				: 0;
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()

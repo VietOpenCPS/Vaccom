@@ -31,7 +31,6 @@ import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-
 @Service
 public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
@@ -155,23 +154,25 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd);
+		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
 
 		if (countByCmtcccd > 0) {
-
-			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.findByCmtcccd(cmtcccd);
-			for (NguoiTiemChung nguoiTiemChungTmp : lstNguoiTiemChung) {
-				nguoiTiemChungTmp.setKiemTraTrung(2);
-				nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp);
-			}
-			nguoiTiemChung.setKiemTraTrung(2);
+			/*
+			 * List<NguoiTiemChung> lstNguoiTiemChung =
+			 * nguoiTiemChungService.findByCmtcccd(cmtcccd); for (NguoiTiemChung
+			 * nguoiTiemChungTmp : lstNguoiTiemChung) {
+			 * if(nguoiTiemChungTmp.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
+			 * nguoiTiemChungTmp.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+			 * nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp); }
+			 * 
+			 * }
+			 */
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
 		} else {
-			nguoiTiemChung.setKiemTraTrung(1);
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
 		}
 
 		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
-
-		
 
 		nguoiTiemChung.setCacBenhLyDangMac(cacBenhLyDangMac);
 		nguoiTiemChung.setCacThuocDangDung(cacThuocDangDung);
@@ -294,23 +295,19 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		String ngayDangKi = bodyData.has(EntityConstant.NGAYDANGKI)
 				? bodyData.get(EntityConstant.NGAYDANGKI).textValue()
 				: StringPool.BLANK;
-		int tinhTrangDangKi = bodyData.has(EntityConstant.TINHTRANGDANGKI)
-				? bodyData.get(EntityConstant.TINHTRANGDANGKI).intValue()
-				: 0;
-
+		
+		if(nguoiTiemChung.getTinhTrangDangKi() != 0) {
+			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.inuse"),
+					HttpStatus.METHOD_NOT_ALLOWED.value());
+		}
 		// TODO Validate fields
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd);
+		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, nguoiTiemChung.getTinhTrangDangKi());
 
-		if (countByCmtcccd > 0) {
-
-			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.findByCmtcccd(cmtcccd);
-			for (NguoiTiemChung nguoiTiemChungTmp : lstNguoiTiemChung) {
-				nguoiTiemChungTmp.setKiemTraTrung(2);
-				nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp);
-			}
-			nguoiTiemChung.setKiemTraTrung(2);
+		if (countByCmtcccd > 0 && !cmtcccd.equals(nguoiTiemChung.getCmtcccd())) {
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+			
 		} else {
-			nguoiTiemChung.setKiemTraTrung(1);
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
 		}
 
 		nguoiTiemChung.setCacBenhLyDangMac(cacBenhLyDangMac);
@@ -341,7 +338,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setTienSuDiUng(tienSuDiUng);
 		nguoiTiemChung.setTinhThanhMa(tinhThanhMa);
 		nguoiTiemChung.setTinhThanhTen(tinhThanhTen);
-		nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
+		//nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
 
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 	}
@@ -355,10 +352,12 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					HttpStatus.NOT_FOUND.value());
 		}
 
+		/*
 		if (nguoiTiemChung.getTinhTrangDangKi() != 0) {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.inuse"),
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
+		*/
 
 		nguoiTiemChungService.deleteNguoiTiemChung(id);
 
@@ -383,7 +382,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					long id = GetterUtil.getLong(strId, 0);
 					if (id > 0) {
 						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
-						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == 0) {
+						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
 								nguoiTiemChungService.deleteNguoiTiemChung(id);
 							} catch (Exception e) {
@@ -398,6 +397,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			_log.error(e);
 		}
 
+	}
+
+	@Override
+	public NguoiTiemChung findById(long id) {
+		return nguoiTiemChungService.findById(id);
 	}
 
 	@Override
@@ -422,6 +426,161 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	}
 
 	@Override
+	public void duyetDangKyMoi(String reqBody) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			JsonNode bodyData = mapper.readTree(reqBody);
+
+			String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
+					: StringPool.BLANK;
+
+			List<String> lstId = StringUtil.split(ids);
+
+			if (lstId != null) {
+				for (String strId : lstId) {
+					long id = GetterUtil.getLong(strId, 0);
+
+					if (id > 0) {
+						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
+
+						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
+							try {
+								nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
+								
+								long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(nguoiTiemChung.getCmtcccd(), VaccomUtil.DANGKYCHINHTHUC);
+								
+								if(countByCmtcccd > 0) {
+									nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+								}else {
+									nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+								}
+								
+								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+
+								if (Validator.isNotNull(nguoiTiemChung.getCmtcccd())) {
+									NguoiDung nguoiDung = nguoiDungService
+											.findByTenDanNhap(nguoiTiemChung.getCmtcccd());
+
+									if (nguoiDung == null) {
+										addNguoiDung(nguoiTiemChung.getCmtcccd(), nguoiTiemChung.getCmtcccd(),
+												VaccomUtil.VaiTro.NGUOIDUNG.getValue(), nguoiTiemChung.getHoVaTen(),
+												VaccomUtil.VaiTro.NGUOIDUNG.getName(), nguoiTiemChung.getSoDienThoai(),
+												nguoiTiemChung.getEmail(), nguoiTiemChung.getDiaBanCoSoId(), 0, false,
+												nguoiTiemChung.getId());
+									} else {
+										if (nguoiDung.isKhoaTaiKhoan()) {
+											nguoiDung.setKhoaTaiKhoan(false);
+											nguoiDungService.updateNguoiDung(nguoiDung);
+										}
+									}
+								}
+
+							} catch (Exception e) {
+								_log.warn(e.getMessage());
+							}
+						}
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	@Override
+	public void huyDangKyChinhThuc(String reqBody) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			JsonNode bodyData = mapper.readTree(reqBody);
+
+			String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
+					: StringPool.BLANK;
+
+			List<String> lstId = StringUtil.split(ids);
+
+			if (lstId != null) {
+				for (String strId : lstId) {
+					long id = GetterUtil.getLong(strId, 0);
+
+					if (id > 0) {
+						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
+						
+						if (nguoiTiemChung != null
+								&& nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.DANGKYCHINHTHUC) {
+							try {
+								
+								nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.XOADANGKY);
+								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+
+								if (Validator.isNotNull(nguoiTiemChung.getCmtcccd())) {
+									NguoiDung nguoiDung = nguoiDungService
+											.findByTenDanNhap(nguoiTiemChung.getCmtcccd());
+
+									if (nguoiDung != null && !nguoiDung.isKhoaTaiKhoan()) {
+										nguoiDung.setKhoaTaiKhoan(true);
+										nguoiDungService.updateNguoiDung(nguoiDung);
+									}
+								}
+
+							} catch (Exception e) {
+								_log.warn(e.getMessage());
+							}
+						}
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		}
+	}
+	
+	@Override
+	public void khoiPhucDangKy(String reqBody) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+
+			JsonNode bodyData = mapper.readTree(reqBody);
+
+			String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
+					: StringPool.BLANK;
+
+			List<String> lstId = StringUtil.split(ids);
+
+			if (lstId != null) {
+				for (String strId : lstId) {
+					long id = GetterUtil.getLong(strId, 0);
+
+					if (id > 0) {
+						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
+
+						if (nguoiTiemChung != null
+								&& nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.XOADANGKY) {
+							try {
+								long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(nguoiTiemChung.getCmtcccd(), VaccomUtil.MOIDANGKY);
+								nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.MOIDANGKY);
+								if(countByCmtcccd > 0) {
+									nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+								}
+								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+
+							} catch (Exception e) {
+								_log.warn(e.getMessage());
+							}
+						}
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	@Override
 	public void updateTrangThaiDangKy(String reqBody) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -439,7 +598,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			if (lstId != null) {
 				for (String strId : lstId) {
 					long id = GetterUtil.getLong(strId, 0);
-					
+
 					if (id > 0) {
 						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
 
@@ -453,7 +612,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 									if (tinhTrangDangKi == 1) {
 										if (nguoiDung == null) {
 											addNguoiDung(nguoiTiemChung.getCmtcccd(), nguoiTiemChung.getCmtcccd(),
-													false, nguoiTiemChung.getHoVaTen(), "citizen",
+													VaccomUtil.VaiTro.NGUOIDUNG.getValue(), nguoiTiemChung.getHoVaTen(),
+													VaccomUtil.VaiTro.NGUOIDUNG.getName(),
 													nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(),
 													nguoiTiemChung.getDiaBanCoSoId(), 0, false, nguoiTiemChung.getId());
 										} else {
@@ -537,13 +697,12 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setTinhThanhTen(tinhThanhTen);
 		nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
 		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
-		
 
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 	}
 
-	private boolean addNguoiDung(String tenDangNhap, String matKhau, boolean quanTriHeThong, String hoVaTen,
-			String chucDanh, String soDienThoai, String email, long diaBanCoSoId, long coSoYTeId, boolean khoaTaiKhoan,
+	private boolean addNguoiDung(String tenDangNhap, String matKhau, int vaiTro, String hoVaTen, String chucDanh,
+			String soDienThoai, String email, long diaBanCoSoId, long coSoYTeId, boolean khoaTaiKhoan,
 			long nguoiTiemChungId) throws Exception {
 
 		NguoiDung nguoiDung = new NguoiDung();
@@ -555,11 +714,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
 		nguoiDung.setMatKhau(new BCryptPasswordEncoder(encodingStrength).encode(matKhau));
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		nguoiDung.setVaiTro(vaiTro);
 		nguoiDung.setSoDienThoai(soDienThoai);
 		nguoiDung.setTenDangNhap(tenDangNhap);
 		nguoiDung.setNguoiTiemChungId(nguoiTiemChungId);
-		KhoaDangKy khoaDangKy = createKhoaDangKy(quanTriHeThong);
+		KhoaDangKy khoaDangKy = createKhoaDangKy(vaiTro);
 
 		nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 
@@ -586,7 +745,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		return encryptor.encrypt(digest, secretKey);
 	}
 
-	private KhoaDangKy createKhoaDangKy(boolean isQuanTriHeThong) {
+	private KhoaDangKy createKhoaDangKy(int vaiTro) {
 
 		RandomString random = new RandomString(64);
 
@@ -599,7 +758,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		KhoaDangKy khoaDangKy = new KhoaDangKy();
 		khoaDangKy.setKhoaBiMat(khoaBiMat);
 		khoaDangKy.setKhoaCongKhai(khoaCongKhai);
-		khoaDangKy.setPhamVi("default");
+		khoaDangKy.setPhamVi(VaccomUtil.getRoleName(vaiTro));
 		khoaDangKy.setTrangThai(1);
 
 		return khoaDangKy;

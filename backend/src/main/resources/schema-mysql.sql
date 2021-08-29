@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoidung` (
   `MatKhau` varchar(512) NOT NULL,
   `DiaBanCoSoID` bigint(20) DEFAULT 0,
   `CoSoYTeID` bigint(20) DEFAULT 0,
-  `QuanTriHeThong` boolean DEFAULT FALSE,
+  `VaiTro` tinyint(4) DEFAULT 5,
   `KhoaTaiKhoan` boolean DEFAULT FALSE,
   `NguoiTiemChungID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
@@ -75,10 +75,10 @@ CREATE TABLE IF NOT EXISTS `t_lichtiemchung` (
   `NoiSanXuat` varchar(64) DEFAULT NULL,
   `SoLoThuoc` varchar(64) DEFAULT NULL,
   `HanSuDung` varchar(10) DEFAULT NULL,
-  `TongSoMuiTiem` tinyint(4) NOT NULL,
+  `TongSoMuiTiem` int(8) NOT NULL,
   `TinhTrangLich` tinyint(4) DEFAULT 0,
-  `SoCaTiem` tinyint(4) NOT NULL,
-  `SoMuiMotCa` tinyint(4) NOT NULL,
+  `SoCaTiem` int(8) NOT NULL,
+  `SoMuiMotCa` int(8) NOT NULL,
   `BacSiKham` varchar(256) DEFAULT NULL,
   `SoDienThoai` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`ID`)
@@ -145,9 +145,9 @@ CREATE TABLE IF NOT EXISTS `t_catiemchung` (
   `STT` tinyint(4) NOT NULL,
   `NgayHenTiem` varchar(10) DEFAULT NULL,
   `GioHenTiem` varchar(6) DEFAULT NULL,
-  `SoMuiTiem` tinyint(4) DEFAULT NULL,
+  `SoMuiTiem` int(8) DEFAULT NULL,
   `DiaBanCoSoID` bigint(20) NOT NULL,
-  `SoPhieuHen` tinyint(4) NOT NULL,
+  `SoPhieuHen` int(8) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 

@@ -22,6 +22,8 @@ public interface MuiTiemChungAction {
 	public MuiTiemChung findById(long id);
 
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd);
+	
+	public long countByNguoiTiemChungId(long id);
 
 	public List<MuiTiemChung> findByNguoiTiemChungId(long id);
 

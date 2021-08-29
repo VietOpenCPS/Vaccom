@@ -6,196 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "[admin]Thêm mới tài khoản",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"TenDangNhap\": \"nguoidung1\",\r\n  \"HoVaTen\": \"Nguoi Dung 1\",\r\n  \"ChucDanh\": \"\",\r\n  \"SoDienThoai\": \"\",\r\n  \"Email\": \"\",\r\n  \"MatKhau\": \"123456\",\r\n  \"DiaBanCoSo_ID\": 0,\r\n  \"CoSoYTe_ID\": 0,\r\n  \"QuanTriHeThong\": false,\r\n  \"KhoaTaiKhoan\": false\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/add/nguoidung",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"add",
-						"nguoidung"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Thêm mới người tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkxMzE0MywiZXhwIjoxNjI5OTE2NzQzfQ.zVGnImK1D1SSlG2M56cFc_FtLJMHhXGl55l_8Cv69ZUK-tFy8gNhMVCW39fdpw2OeAUsOXGNu3t86DTAwqYsPA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"HoVaTen\":\"Trần Huyền Linh\",\r\n\"NgaySinh\":\"20/03/1999\",\r\n\"GioiTinh\":0,\r\n\"CMTCCCD\":\"111111116\",\r\n\"NgheNghiep\":\"Văn Phòng\",\r\n\"NhomDoiTuong\":\"1\",\r\n\"DonViCongTac\":\"BCA\",\r\n\"SoDienThoai\":\"0987654321\",\r\n\"Email\":\"linhth@vaccom.vn\",\r\n\"MaSoBHXH\":\"BHXH0001\",\r\n\"SoTheBHYT\":\"BHYT0002\",\r\n\"DiaChiNoiO\":\"Hà Nội\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"DiaBanCoSo_ID\":1,\r\n\"CoSoYTe_Ma\":\"01\",\r\n\"CoSoYTe_Ten\":\"Trạm y tế quận Ba Đình\",\r\n\"DanToc_Ma\":\"01\",\r\n\"QuocTich_Ma\":\"VN\",\r\n\"TienSuDiUng\":\"Không\",\r\n\"CacBenhLyDangMac\":\"Không\",\r\n\"CacThuocDangDung\":\"Không\",\r\n\"GhiChu\":\"Không\",\r\n\"NgayDangKi\":\"16/08/2021\",\r\n\"TinhTrangDangKi\":1\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/add/nguoitiemchung",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"add",
-						"nguoitiemchung"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Cập nhật người tiêm chung",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTQ1MjkyOCwiZXhwIjoxNjI5NDU2NTI4fQ.KMw6bndtY1NZgL4vCoudAELLzQXL1Mb-1aAEsaZGrFsuVvfsOadvau6PS1FX4qQslSH051nOD2hzkFF_FNXIqw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"HoVaTen\":\"Trần Huyền Linh\",\r\n\"NgaySinh\":\"20/03/2000\",\r\n\"GioiTinh\":0,\r\n\"CMTCCCD\":\"111111111\",\r\n\"NgheNghiep\":\"Văn Phòng\",\r\n\"NhomDoiTuong\":\"1\",\r\n\"DonViCongTac\":\"BCA\",\r\n\"SoDienThoai\":\"0987654321\",\r\n\"Email\":\"linhth@vaccom.vn\",\r\n\"MaSoBHXH\":\"BHXH0001\",\r\n\"SoTheBHYT\":\"BHYT0002\",\r\n\"DiaChiNoiO\":\"Hà Nội\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"DiaBanCoSo_ID\":1,\r\n\"CoSoYTe_Ma\":\"01\",\r\n\"CoSoYTe_Ten\":\"Trạm y tế quận Ba Đình\",\r\n\"DanToc_Ma\":\"01\",\r\n\"QuocTich_Ma\":\"VN\",\r\n\"TienSuDiUng\":\"Không\",\r\n\"CacBenhLyDangMac\":\"Không\",\r\n\"CacThuocDangDung\":\"Không\",\r\n\"GhiChu\":\"Không\",\r\n\"NgayDangKi\":\"16/08/2021\",\r\n\"TinhTrangDangKi\":1\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/nguoitiemchung/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"update",
-						"nguoitiemchung",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Xóa người tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/nguoitiemchung/6",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"delete",
-						"nguoitiemchung",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Login",
 			"request": {
 				"auth": {
@@ -244,14 +54,62 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Cập nhật tài khoản người dùng",
+			"name": "[admin]Thêm mới tài khoản - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZ3VvaWR1bmcxIiwiaWF0IjoxNjI5MzkzOTY4LCJleHAiOjE2MjkzOTc1Njh9.HzX-XMpkjNmQtrziDvIpUDiYykI7Tq3wpPrLEH7i71GUORnnWJponLYvrh0fGNToBipz8u2O260zDU98JrobCg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"TenDangNhap\": \"quantricoso\",\r\n  \"HoVaTen\": \"admin 2\",\r\n  \"ChucDanh\": \"\",\r\n  \"SoDienThoai\": \"\",\r\n  \"Email\": \"\",\r\n  \"MatKhau\": \"123456\",\r\n  \"DiaBanCoSo_ID\": 0,\r\n  \"CoSoYTe_ID\": 0,\r\n  \"VaiTro\": 2,\r\n  \"KhoaTaiKhoan\": false\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/add/nguoidung",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"add",
+						"nguoidung"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Cập nhật tài khoản người dùng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjIiLCJpYXQiOjE2MzAxNTk2MTAsImV4cCI6MTYzMDE2MzIxMH0.3vPsnnIJ6P_DOkW5ySH9aBGOhaqRKDnmLCpUZwb_fA_X83uWX282Ud7RWq6pVE3p8KseM1rcg5sUVhE3mVy8WA",
 							"type": "string"
 						}
 					]
@@ -271,7 +129,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"HoVaTen\": \"Nguoi Dung\",\r\n  \"ChucDanh\": \"Can bo\",\r\n  \"SoDienThoai\": \"123456789\",\r\n  \"Email\": \"nguoidung@vaccom.vn\",\r\n  \"DiaBanCoSo_ID\": 1,\r\n  \"CoSoYTe_ID\": 1,\r\n  \"QuanTriHeThong\": false\r\n}",
+					"raw": "{\r\n  \"HoVaTen\": \"admin\",\r\n  \"ChucDanh\": \"Can bo\",\r\n  \"SoDienThoai\": \"123456\",\r\n  \"Email\": \"nguoidung@vaccom.vn\",\r\n  \"DiaBanCoSo_ID\": 1,\r\n  \"CoSoYTe_ID\": 1,\r\n  \"VaiTro\": 3\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -279,7 +137,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/nguoidung/7",
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoidung/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -291,7 +149,147 @@
 						"app",
 						"update",
 						"nguoidung",
-						"7"
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Khóa tài khoản - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTAyMiwiZXhwIjoxNjMwMTYyNjIyfQ.-FPvgqGYb3f0sgZ-q2uNAouT_PVRAOR6SeortDlItjwZBFe6zcRSO2CvUqJR5ly10dPQXtqDGUwyfhznkePZqQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/lock/nguoidung/5/false",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"lock",
+						"nguoidung",
+						"5",
+						"false"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Cập nhật vai trò người dùng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbjIiLCJpYXQiOjE2MzAxNTk2MTAsImV4cCI6MTYzMDE2MzIxMH0.3vPsnnIJ6P_DOkW5ySH9aBGOhaqRKDnmLCpUZwb_fA_X83uWX282Ud7RWq6pVE3p8KseM1rcg5sUVhE3mVy8WA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoidung/5/vaitro/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"nguoidung",
+						"5",
+						"vaitro",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Cấp quyền admin - remove",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoidung/2/quantri/true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"nguoidung",
+						"2",
+						"quantri",
+						"true"
 					]
 				}
 			},
@@ -351,14 +349,206 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Cấp quyền admin",
+			"name": "[admin]Xóa người dùng - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/delete/nguoidung/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"delete",
+						"nguoidung",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Chi tiết người dùng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/nguoidung/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"nguoidung",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Danh sách người dùng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/nguoidung?page=0&size=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"nguoidung"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Thêm mới người tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"HoVaTen\":\"Trần Huyền Linh\",\r\n    \"NgaySinh\":\"20/03/1999\",\r\n    \"GioiTinh\":0,\r\n    \"CMTCCCD\":\"111111116\",\r\n    \"NgheNghiep\":\"Văn Phòng\",\r\n    \"NhomDoiTuong\":\"1\",\r\n    \"DonViCongTac\":\"BCA\",\r\n    \"SoDienThoai\":\"0987654321\",\r\n    \"Email\":\"linhth@vaccom.vn\",\r\n    \"MaSoBHXH\":\"BHXH0001\",\r\n    \"SoTheBHYT\":\"BHYT0002\",\r\n    \"DiaChiNoiO\":\"Hà Nội\",\r\n    \"TinhThanh_Ma\":\"01\",\r\n    \"TinhThanh_Ten\":\"Hà Nội\",\r\n    \"QuanHuyen_Ma\":\"001\",\r\n    \"QuanHuyen_Ten\":\"Ba Đình\",\r\n    \"PhuongXa_Ma\":\"00001\",\r\n    \"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n    \"DiaBanCoSo_ID\":1,\r\n    \"CoSoYTe_Ma\":\"01\",\r\n    \"CoSoYTe_Ten\":\"Trạm y tế quận Ba Đình\",\r\n    \"DanToc_Ma\":\"01\",\r\n    \"QuocTich_Ma\":\"VN\",\r\n    \"TienSuDiUng\":\"Không\",\r\n    \"CacBenhLyDangMac\":\"Không\",\r\n    \"CacThuocDangDung\":\"Không\",\r\n    \"GhiChu\":\"Không\",\r\n    \"NgayDangKi\":\"16/08/2021\",\r\n    \"TinhTrangDangKi\":0\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/add/nguoitiemchung",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"add",
+						"nguoitiemchung"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Cập nhật người tiêm chung - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
 							"type": "string"
 						}
 					]
@@ -376,8 +566,12 @@
 						"value": "application/json"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"HoVaTen\":\"Trần Huyền Linh\",\r\n    \"NgaySinh\":\"20/03/2000\",\r\n    \"GioiTinh\":0,\r\n    \"CMTCCCD\":\"111111111\",\r\n    \"NgheNghiep\":\"Văn Phòng\",\r\n    \"NhomDoiTuong\":\"1\",\r\n    \"DonViCongTac\":\"BCA\",\r\n    \"SoDienThoai\":\"0987654321\",\r\n    \"Email\":\"linhth@vaccom.vn\",\r\n    \"MaSoBHXH\":\"BHXH0001\",\r\n    \"SoTheBHYT\":\"BHYT0002\",\r\n    \"DiaChiNoiO\":\"Hà Nội\",\r\n    \"TinhThanh_Ma\":\"01\",\r\n    \"TinhThanh_Ten\":\"Hà Nội\",\r\n    \"QuanHuyen_Ma\":\"001\",\r\n    \"QuanHuyen_Ten\":\"Ba Đình\",\r\n    \"PhuongXa_Ma\":\"00001\",\r\n    \"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n    \"DiaBanCoSo_ID\":1,\r\n    \"CoSoYTe_Ma\":\"01\",\r\n    \"CoSoYTe_Ten\":\"Trạm y tế quận Ba Đình\",\r\n    \"DanToc_Ma\":\"01\",\r\n    \"QuocTich_Ma\":\"VN\",\r\n    \"TienSuDiUng\":\"Không\",\r\n    \"CacBenhLyDangMac\":\"Không\",\r\n    \"CacThuocDangDung\":\"Không\",\r\n    \"GhiChu\":\"Không\",\r\n    \"NgayDangKi\":\"16/08/2021\",\r\n    \"TinhTrangDangKi\":0\r\n}"
+				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/nguoidung/2/quantri/true",
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoitiemchung/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -388,24 +582,22 @@
 						"v1",
 						"app",
 						"update",
-						"nguoidung",
-						"2",
-						"quantri",
-						"true"
+						"nguoitiemchung",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[admin]Khóa tài khoản",
+			"name": "[quantricoso]Cập nhật người tiêm chủng - tình trạng đăng ký - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTM5NDE5MSwiZXhwIjoxNjI5Mzk3NzkxfQ.N-fUezEARqIRevepD4NZiwk5S3WWTX-LX-JjxdLiP0D__Ok98zkzlfC0lON5rPg6-_SZnU9SwRvjnaS1_yETIg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2MDgxNywiZXhwIjoxNjMwMTY0NDE3fQ.uiczHwyewQAoWxF189PpNdDHvqYmzPf5C_J-X7tmwl-KDo0Lvp-c3ghHWikUz-RK7Tiso3EQ2J6P8rUCqpktxg",
 							"type": "string"
 						}
 					]
@@ -414,17 +606,74 @@
 				"header": [
 					{
 						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					},
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":\"1\",\r\n    \"TinhTrangDangKi\":0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/lock/nguoidung/7/true",
+					"raw": "localhost:8686/rest/v1/app/update/nguoitiemchung/tinhtrangdangky",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"nguoitiemchung",
+						"tinhtrangdangky"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Duyệt đăng ký người tiêm chung - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":\"1,2\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoitiemchung/duyetdangky",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -434,10 +683,600 @@
 						"rest",
 						"v1",
 						"app",
-						"lock",
-						"nguoidung",
-						"7",
-						"true"
+						"update",
+						"nguoitiemchung",
+						"duyetdangky"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Hủy đăng ký người tiêm chung - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":\"1,2\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoitiemchung/huydangky",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"nguoitiemchung",
+						"huydangky"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Khôi phục đăng ký người tiêm chung - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":\"1,2,3,4,5\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/nguoitiemchung/khoiphucdangky",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"nguoitiemchung",
+						"khoiphucdangky"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[quantricoso]Xóa người tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/delete/nguoitiemchung/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"delete",
+						"nguoitiemchung",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Xóa nhiều người tiêm chủng mới đăng ký - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"ids\": \"7,8,9,10,11\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/delete/nguoitiemchung/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"delete",
+						"nguoitiemchung",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Lấytất cả danh sách người tiêm chủng - 0.2 - Deprecated",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung/all?page=0&size=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"nguoitiemchung",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Tìm  kiếm người tiêm chủng - 0.2 - Deprecated",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"nguoitiemchung"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "50"
+						},
+						{
+							"key": "cmtcccd",
+							"value": ""
+						},
+						{
+							"key": "nhomdoituong",
+							"value": null
+						},
+						{
+							"key": "ngaydangki",
+							"value": null
+						},
+						{
+							"key": "hovaten",
+							"value": ""
+						},
+						{
+							"key": "diabancosoid",
+							"value": null
+						},
+						{
+							"key": "cosoytema",
+							"value": null
+						},
+						{
+							"key": "tinhtrangdangky",
+							"value": null
+						},
+						{
+							"key": "kiemtratrung",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Tìm  kiếm người tiêm chủng - danh sách đk mới - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkymoi?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"danhsachdangkymoi"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "50"
+						},
+						{
+							"key": "cmtcccd",
+							"value": ""
+						},
+						{
+							"key": "nhomdoituong",
+							"value": null
+						},
+						{
+							"key": "ngaydangki",
+							"value": null
+						},
+						{
+							"key": "hovaten",
+							"value": ""
+						},
+						{
+							"key": "diabancosoid",
+							"value": null
+						},
+						{
+							"key": "cosoytema",
+							"value": null
+						},
+						{
+							"key": "tinhtrangdangky",
+							"value": null
+						},
+						{
+							"key": "kiemtratrung",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Tìm  kiếm người tiêm chủng - danh sách đk chính thức - 0.2 Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkychinhthuc?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"danhsachdangkychinhthuc"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "50"
+						},
+						{
+							"key": "cmtcccd",
+							"value": ""
+						},
+						{
+							"key": "nhomdoituong",
+							"value": null
+						},
+						{
+							"key": "ngaydangki",
+							"value": null
+						},
+						{
+							"key": "hovaten",
+							"value": ""
+						},
+						{
+							"key": "diabancosoid",
+							"value": null
+						},
+						{
+							"key": "cosoytema",
+							"value": null
+						},
+						{
+							"key": "tinhtrangdangky",
+							"value": null
+						},
+						{
+							"key": "kiemtratrung",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canbodiaban]Tìm  kiếm người tiêm chủng - danh sách đk đã hủy- 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE2Njg4MywiZXhwIjoxNjMwMTcwNDgzfQ.DBbexaIQv5Lm75m2pHC7B_pGQxzqH3POzBYw1F4B128wPjnGaHTYdryTECprwA0so8MtuurC-wkMIxHFcJQBdQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdahuy?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"danhsachdahuy"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "50"
+						},
+						{
+							"key": "cmtcccd",
+							"value": ""
+						},
+						{
+							"key": "nhomdoituong",
+							"value": null
+						},
+						{
+							"key": "ngaydangki",
+							"value": null
+						},
+						{
+							"key": "hovaten",
+							"value": ""
+						},
+						{
+							"key": "diabancosoid",
+							"value": null
+						},
+						{
+							"key": "cosoytema",
+							"value": null
+						},
+						{
+							"key": "tinhtrangdangky",
+							"value": null
+						},
+						{
+							"key": "kiemtratrung",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -510,6 +1349,48 @@
 						"v1",
 						"import",
 						"exceldata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Upgrade",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkxNTEwOCwiZXhwIjoxNjI5OTE4NzA4fQ.xM6-9XE0qeusJITBtc_323wlv9egKnhTred-a_k7PfWYjvhMEbv2az33GNtQmCTNS3UtqZXdaRBlmlpbPoTk1g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "query",
+							"value": "update t_catiemchung set SoPhieuTiem = 101 where id = 1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/upgrade/db",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"upgrade",
+						"db"
 					]
 				}
 			},
@@ -1025,8 +1906,18 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách quốc gia",
+			"name": "[nguoidung]Danh sách quốc gia - 0.2",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -1059,8 +1950,18 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách đối tượng",
+			"name": "[nguoidung]Danh sách đối tượng - 0.2",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -1087,173 +1988,6 @@
 						"app",
 						"get",
 						"doituong"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách người dùng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkxMTAwMywiZXhwIjoxNjI5OTE0NjAzfQ.8_jG_egj9tZHi1hb99ofyLVij90RjBMZjxrjwpFbWT-ifSHXN6HVTRuNErO7w6ZYyoya4WDZe9FtWXXbvMXFNA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoidung?page=0&size=30",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"nguoidung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "30"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Chi tiết người dùng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoidung/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"nguoidung",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách cơ sở y tế",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "0",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/cosoyte",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"cosoyte"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0",
-							"disabled": true
-						},
-						{
-							"key": "size",
-							"value": "30",
-							"disabled": true
-						}
 					]
 				}
 			},
@@ -1359,329 +2093,7 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách lịch tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"type": "text",
-						"value": "0",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"type": "text",
-						"value": "30",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/lichtiemchung?page=0&size=30",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"lichtiemchung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "30"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách địa bàn theo cosoyteid",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"type": "text",
-						"value": "0",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"type": "text",
-						"value": "30",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/diabancoso?cosoyteid=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"diabancoso"
-					],
-					"query": [
-						{
-							"key": "cosoyteid",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách người tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=30",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"nguoitiemchung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "30"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Tìm  kiếm người tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkxMzE0MywiZXhwIjoxNjI5OTE2NzQzfQ.zVGnImK1D1SSlG2M56cFc_FtLJMHhXGl55l_8Cv69ZUK-tFy8gNhMVCW39fdpw2OeAUsOXGNu3t86DTAwqYsPA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=30",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"nguoitiemchung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "30"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Tìm  kiếm người tiêm chủng_2",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkxMzE0MywiZXhwIjoxNjI5OTE2NzQzfQ.zVGnImK1D1SSlG2M56cFc_FtLJMHhXGl55l_8Cv69ZUK-tFy8gNhMVCW39fdpw2OeAUsOXGNu3t86DTAwqYsPA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"nguoitiemchung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "50"
-						},
-						{
-							"key": "cmtcccd",
-							"value": ""
-						},
-						{
-							"key": "nhomdoituong",
-							"value": null
-						},
-						{
-							"key": "ngaydangki",
-							"value": null
-						},
-						{
-							"key": "hovaten",
-							"value": ""
-						},
-						{
-							"key": "diabancosoid",
-							"value": null
-						},
-						{
-							"key": "cosoytema",
-							"value": null
-						},
-						{
-							"key": "tinhtrangdangky",
-							"value": null
-						},
-						{
-							"key": "kiemtratrung",
-							"value": ""
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách dân tộc",
+			"name": "[nguoidung]Danh sách dân tộc - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1725,7 +2137,7 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách tỉnh thành",
+			"name": "[nguoidung]Danh sách tỉnh thành - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1769,7 +2181,7 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách quận huyện",
+			"name": "[nguoidung]Danh sách quận huyện - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1814,7 +2226,7 @@
 			"response": []
 		},
 		{
-			"name": "Danh sách phường xã",
+			"name": "[nguoidung]Danh sách phường xã 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1853,121 +2265,6 @@
 						"get",
 						"phuongxa",
 						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Danh sách ca tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/catiemchung?page=0&size=10&lichtiemchungid&diabancosoid",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"catiemchung"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "10"
-						},
-						{
-							"key": "lichtiemchungid",
-							"value": null
-						},
-						{
-							"key": "diabancosoid",
-							"value": null
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Thêm mới cơ sở y tế",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"MaCoSo\":\"002\",\r\n\"TenCoSo\":\"TT Y Tế Quận Ba Đình\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"DiaChiCoSo\":\"Số 46 Phường Phúc Xá\",\r\n\"NguoiDaiDien\":\"\",\r\n\"SoDienThoai\":\"11111\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/add/cosoyte",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"add",
-						"cosoyte"
 					]
 				}
 			},
@@ -2081,68 +2378,14 @@
 			"response": []
 		},
 		{
-			"name": "[canbo]Câp nhật thông tin ca tiêm chủng",
+			"name": "[canboyte]Thêm ca tiêm chủng - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"LichTiemChung_ID\":1,\r\n\"STT\":1,\r\n\"NgayHenTiem\":\"21/9/2021\",\r\n\"GioHenTiem\":\"09:30\",\r\n\"SoMuiTiem\":1,\r\n\"DiaBanCoSo_ID\":1,\r\n\"SoPhieuHen\":100\r\n\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/catiemchung/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"update",
-						"catiemchung",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Thêm ca tiêm chủng",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2162,7 +2405,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"LichTiemChung_ID\":1,\r\n\"STT\":1,\r\n\"NgayHenTiem\":\"20/9/2021\",\r\n\"GioHenTiem\":\"09:30\",\r\n\"SoMuiTiem\":1,\r\n\"DiaBanCoSo_ID\":1,\r\n\"SoPhieuHen\":100\r\n\r\n}",
+					"raw": "{\r\n    \"LichTiemChung_ID\":5,\r\n    \"STT\":1,\r\n    \"NgayHenTiem\":\"20/9/2021\",\r\n    \"GioHenTiem\":\"09:30\",\r\n    \"SoMuiTiem\":400,\r\n    \"DiaBanCoSo_ID\":1,\r\n    \"SoPhieuHen\":100\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2182,6 +2425,167 @@
 						"app",
 						"add",
 						"catiemchung"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canboyte]Câp nhật thông tin ca tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"LichTiemChung_ID\":5,\r\n    \"STT\":1,\r\n    \"NgayHenTiem\":\"21/9/2021\",\r\n    \"GioHenTiem\":\"09:30\",\r\n    \"SoMuiTiem\":450,\r\n    \"DiaBanCoSo_ID\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/catiemchung/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"catiemchung",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canboyte]Xóa ca tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/delete/catiemchung/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"delete",
+						"catiemchung",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canboyte]Danh sách ca tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/catiemchung?page=0&size=10&lichtiemchungid&diabancosoid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"catiemchung"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "lichtiemchungid",
+							"value": null
+						},
+						{
+							"key": "diabancosoid",
+							"value": null
+						}
 					]
 				}
 			},
@@ -2233,59 +2637,14 @@
 			"response": []
 		},
 		{
-			"name": "[canbo]Xóa ca tiêm chủng",
+			"name": "[canboyte]Thêm mới phiếu hẹn tiêm - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/catiemchung/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"delete",
-						"catiemchung",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canbo]Thêm mới phiếu hẹn tiêm",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5NjkzNCwiZXhwIjoxNjI5NjAwNTM0fQ.1kIbQWjXyWhOskX_qLPvlru9wJ3_mI_NhhF3yr9WtWFuEcuU_Lx6TBDz77f1SFgH27j9QFRG6yx0wLbB7rqU7w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2305,7 +2664,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"LichTiemChung_ID\":1,\r\n\"NguoiTiemChung_ID\":1,\r\n\"MaPhieuHen\":\"000002\",\r\n\"NgayHenTiem\":\"15/08/2021\",\r\n\"GioHenTiem\":\"09:00\",\r\n\"TinhTrangXacNhan\":1\r\n\r\n}",
+					"raw": "{\r\n    \"LichTiemChung_ID\":5,\r\n    \"NguoiTiemChung_ID\":1,\r\n    \"CaTiemChung_ID\":3,\r\n    \"NgayHenTiem\":\"15/08/2021\",\r\n    \"GioHenTiem\":\"09:00\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2331,14 +2690,14 @@
 			"response": []
 		},
 		{
-			"name": "[canbo]Sửa thông tin phiếu hẹn tiêm",
+			"name": "[canboyte]Sửa thông tin phiếu hẹn tiêm - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5NjkzNCwiZXhwIjoxNjI5NjAwNTM0fQ.1kIbQWjXyWhOskX_qLPvlru9wJ3_mI_NhhF3yr9WtWFuEcuU_Lx6TBDz77f1SFgH27j9QFRG6yx0wLbB7rqU7w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2358,7 +2717,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"LichTiemChung_ID\":1,\r\n\"NguoiTiemChung_ID\":1,\r\n\"MaPhieuHen\":\"000001\",\r\n\"NgayHenTiem\":\"15/08/2021\",\r\n\"GioHenTiem\":\"09:00\",\r\n\"TinhTrangXacNhan\":1\r\n\r\n}",
+					"raw": "{\r\n    \"LichTiemChung_ID\":5,\r\n    \"NguoiTiemChung_ID\":1,\r\n    \"CaTiemChung_ID\":3,\r\n    \"NgayHenTiem\":\"15/08/2021\",\r\n    \"GioHenTiem\":\"09:00\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2366,7 +2725,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/phieuhentiem/1",
+					"raw": "http://localhost:8686/rest/v1/app/update/phieuhentiem/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2378,21 +2737,21 @@
 						"app",
 						"update",
 						"phieuhentiem",
-						"1"
+						"3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[canbo]Xác nhận tình trạng phiếu hẹn",
+			"name": "[canboyte]Xác nhận tình trạng phiếu hẹn - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3NTI0NCwiZXhwIjoxNjMwMTc4ODQ0fQ.K8yKU1IeKpK-mF7IYzvSGVIAsx4Z9vniHxwqEq9EsPznAA2_HpzDsEEPnrUpeTok-W8XC-xLwx75Xej-Kgk-Iw",
 							"type": "string"
 						}
 					]
@@ -2412,7 +2771,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"tinhTrangXacNhan\": 1,\r\n   \"ids\": \"1,2\"\r\n\r\n}",
+					"raw": "{\r\n   \"TinhTrangXacNhan\": 4,\r\n   \"ids\": \"3\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2439,7 +2798,7 @@
 			"response": []
 		},
 		{
-			"name": "[nguoidung]checkin",
+			"name": "[nguoidung]checkin - 0.2",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -2457,8 +2816,17 @@
 						"value": "application/json"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"app\": \"zalo\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/phieuhentiem/checkin/434394-4343",
+					"raw": "http://localhost:8686/rest/v1/app/update/phieuhentiem/checkin/pht-lmlfba-ijxovi-aifdne-ov3ia7-ttspja",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2471,21 +2839,21 @@
 						"update",
 						"phieuhentiem",
 						"checkin",
-						"434394-4343"
+						"pht-lmlfba-ijxovi-aifdne-ov3ia7-ttspja"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[canbo]Xóa phiếu hẹn tiêm",
+			"name": "[canboyte]Xóa phiếu hẹn tiêm - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5NjkzNCwiZXhwIjoxNjI5NjAwNTM0fQ.1kIbQWjXyWhOskX_qLPvlru9wJ3_mI_NhhF3yr9WtWFuEcuU_Lx6TBDz77f1SFgH27j9QFRG6yx0wLbB7rqU7w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2504,7 +2872,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/phieuhentiem/2",
+					"raw": "http://localhost:8686/rest/v1/app/delete/phieuhentiem/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2516,21 +2884,84 @@
 						"app",
 						"delete",
 						"phieuhentiem",
-						"2"
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[canbo]Thêm lịch tiêm chủng",
+			"name": "[canboyte]Danh sách phiếu hẹn tiêm -0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTkwMjkyMiwiZXhwIjoxNjI5OTA2NTIyfQ.NF3-kbN6NkWA0P1zHZXjmm-uIxLf4dEGQUr6hrDMKIjVenfJgZf3P_hRyTK5pDmKqvZMOTsl4XIxaK2vceDjTw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3NTI0NCwiZXhwIjoxNjMwMTc4ODQ0fQ.K8yKU1IeKpK-mF7IYzvSGVIAsx4Z9vniHxwqEq9EsPznAA2_HpzDsEEPnrUpeTok-W8XC-xLwx75Xej-Kgk-Iw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/phieuhentiem/4?lichtiemchungid=5&catiemchungid=3&page=0&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"phieuhentiem",
+						"4"
+					],
+					"query": [
+						{
+							"key": "lichtiemchungid",
+							"value": "5"
+						},
+						{
+							"key": "catiemchungid",
+							"value": "3"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canboyte]Thêm lịch tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2550,7 +2981,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"CoSoYTe_ID\":2,\r\n\"TenDot\":\"Dot hai\",\r\n\"NgayBatDau\":\"15/08/2021\",\r\n\"NgayKetThuc\":\"16/02/2021\",\r\n\"DiaDiemTiemChung\":\"Tổ dân phố số 7 phường Phúc Xá\",\r\n\"LoaiThuocTiem\":\"Moderna\",\r\n\"NoiSanXuat\":\"USA\",\r\n\"SoLoThuoc\":\"001\",\r\n\"HanSuDung\":\"30/08/2021\",\r\n\"TongSoMuiTiem\":\"2\",\r\n\"TinhTrangLich\":\"1\"\r\n}",
+					"raw": "{\r\n    \"CoSoYTe_ID\":1,\r\n    \"TenDot\":\"Dot hai\",\r\n    \"NgayBatDau\":\"15/08/2021\",\r\n    \"NgayKetThuc\":\"16/02/2021\",\r\n    \"DiaDiemTiemChung\":\"Tổ dân phố số 7 phường Phúc Xá\",\r\n    \"LoaiThuocTiem\":\"Moderna\",\r\n    \"NoiSanXuat\":\"USA\",\r\n    \"SoLoThuoc\":\"001\",\r\n    \"HanSuDung\":\"30/08/2021\",\r\n    \"TongSoMuiTiem\":1000,\r\n    \"TinhTrangLich\":1,\r\n    \"SoCaTiem\": 5,\r\n    \"SoMuiMotCa\": 200,\r\n    \"BacSiKham\": \"Tran Linh\",\r\n    \"SoDienThoai\": \"0987654321\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2576,14 +3007,14 @@
 			"response": []
 		},
 		{
-			"name": "[canbo]Sửa lịch tiêm chủng",
+			"name": "[canboyte]Sửa lịch tiêm chủng - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5NjkzNCwiZXhwIjoxNjI5NjAwNTM0fQ.1kIbQWjXyWhOskX_qLPvlru9wJ3_mI_NhhF3yr9WtWFuEcuU_Lx6TBDz77f1SFgH27j9QFRG6yx0wLbB7rqU7w",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2603,7 +3034,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"CoSoYTe_ID\":1,\r\n\"TenDot\":\"Dot mot\",\r\n\"NgayBatDau\":\"15/08/2021\",\r\n\"NgayKetThuc\":\"16/02/2021\",\r\n\"DiaDiemTiemChung\":\"Tổ dân phố số 7 phường Phúc Xá\",\r\n\"LoaiThuocTiem\":\"Moderna\",\r\n\"NoiSanXuat\":\"USA\",\r\n\"SoLoThuoc\":\"001\",\r\n\"HanSuDung\":\"30/08/2021\",\r\n\"TongSoMuiTiem\":2,\r\n\"TinhTrangLich\":1\r\n\r\n\r\n}",
+					"raw": "{\r\n    \"CoSoYTe_ID\":1,\r\n    \"TenDot\":\"Dot Mot\",\r\n    \"NgayBatDau\":\"15/08/2021\",\r\n    \"NgayKetThuc\":\"16/02/2021\",\r\n    \"DiaDiemTiemChung\":\"Tổ dân phố số 7 phường Phúc Xá\",\r\n    \"LoaiThuocTiem\":\"Moderna\",\r\n    \"NoiSanXuat\":\"USA\",\r\n    \"SoLoThuoc\":\"001\",\r\n    \"HanSuDung\":\"30/08/2021\",\r\n    \"TongSoMuiTiem\":2000,\r\n    \"TinhTrangLich\":1,\r\n    \"SoCaTiem\": 5,\r\n    \"SoMuiMotCa\": 400,\r\n    \"BacSiKham\": \"Tran Linh\",\r\n    \"SoDienThoai\": \"0987654321\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2611,7 +3042,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/lichtiemchung/1",
+					"raw": "http://localhost:8686/rest/v1/app/update/lichtiemchung/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2623,21 +3054,21 @@
 						"app",
 						"update",
 						"lichtiemchung",
-						"1"
+						"5"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[canbo]Cập nhật trạng thái đăng ký",
+			"name": "[canboyte]Đóng lịch tiêm - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTc0MDg4NiwiZXhwIjoxNjI5NzQ0NDg2fQ.RQfmdK_YdPE66oZ99zSDA_sEJPE9ez8HRruWuDebNZPMLyp9WQOgJZJXnGv8RYT1H929sGCIxvzTqLIETrWYAQ",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2655,17 +3086,9 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"ids\":\"1,2\",\r\n\"TinhTrangDangKi\":1\r\n\r\n\r\n\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "localhost:8686/rest/v1/app/update/nguoitiemchung/tinhtrangdangky",
+					"raw": "http://localhost:8686/rest/v1/app/update/lichtiemchung/5/donglichtiem",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -2675,22 +3098,23 @@
 						"v1",
 						"app",
 						"update",
-						"nguoitiemchung",
-						"tinhtrangdangky"
+						"lichtiemchung",
+						"5",
+						"donglichtiem"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[canbo]Xóa lịch tiêm chủng",
+			"name": "[canboyte]Xóa lịch tiêm chủng - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2709,7 +3133,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/lichtiemchung/2",
+					"raw": "http://localhost:8686/rest/v1/app/delete/lichtiemchung/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2721,21 +3145,132 @@
 						"app",
 						"delete",
 						"lichtiemchung",
-						"2"
+						"4"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "[admin]Thêm mới địa bàn cơ sở",
+			"name": "[canboyte]Danh sách lịch tiêm chủng - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "page",
+						"type": "text",
+						"value": "0",
+						"disabled": true
+					},
+					{
+						"key": "size",
+						"type": "text",
+						"value": "30",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/lichtiemchung?page=0&size=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"lichtiemchung"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[canboyte]Chi tiết lịch tiêm chủng - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/lichtiemchung/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"lichtiemchung",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Thêm mới địa bàn cơ sở - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2755,7 +3290,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"TenDiaBan\":\"Tổ dân phố số 9\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"CoSoYTe_ID\":1\r\n\r\n}",
+					"raw": "{\r\n   \"TenDiaBan\":\"Tổ dân phố số 9\",\r\n    \"TinhThanh_Ma\":\"01\",\r\n    \"TinhThanh_Ten\":\"Hà Nội\",\r\n    \"QuanHuyen_Ma\":\"001\",\r\n    \"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n    \"PhuongXa_Ma\":\"00001\",\r\n    \"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n    \"CoSoYTe_ID\":1\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2781,14 +3316,14 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Cập nhật địa bàn cơ sở",
+			"name": "[admin]Cập nhật địa bàn cơ sở - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU2ODUwMCwiZXhwIjoxNjI5NTcyMTAwfQ.CPbbTh0WSPd9bG6GU9ZyGRXZ1Y5iHa3iam9QhOjZuAAFSBjm0VkdH-1kZpQ1iJcKWJiwUGJWJGmT79ahgpxqAg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2808,7 +3343,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"TenDiaBan\":\"Tổ dân phố số 7\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"CoSoYTe_ID\":1\r\n\r\n}",
+					"raw": "{\r\n    \"TenDiaBan\":\"Tổ dân phố số 7\",\r\n    \"TinhThanh_Ma\":\"01\",\r\n    \"TinhThanh_Ten\":\"Hà Nội\",\r\n    \"QuanHuyen_Ma\":\"001\",\r\n    \"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n    \"PhuongXa_Ma\":\"00001\",\r\n    \"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n    \"CoSoYTe_ID\":1\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2835,14 +3370,14 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Xóa địa bàn cơ sở",
+			"name": "[admin]Xóa địa bàn cơ sở - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2880,14 +3415,129 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Cập nhật cơ sở y tế",
+			"name": "[nguoidung]Danh sách địa bàn theo cosoyteid - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU2ODUwMCwiZXhwIjoxNjI5NTcyMTAwfQ.CPbbTh0WSPd9bG6GU9ZyGRXZ1Y5iHa3iam9QhOjZuAAFSBjm0VkdH-1kZpQ1iJcKWJiwUGJWJGmT79ahgpxqAg",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "page",
+						"type": "text",
+						"value": "0",
+						"disabled": true
+					},
+					{
+						"key": "size",
+						"type": "text",
+						"value": "30",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/diabancoso?cosoyteid=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"diabancoso"
+					],
+					"query": [
+						{
+							"key": "cosoyteid",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Thêm mới cơ sở y tế - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"MaCoSo\":\"002\",\r\n\"TenCoSo\":\"TT Y Tế Quận Ba Đình\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"DiaChiCoSo\":\"Số 46 Phường Phúc Xá\",\r\n\"NguoiDaiDien\":\"\",\r\n\"SoDienThoai\":\"11111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/add/cosoyte",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"add",
+						"cosoyte"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Cập nhật cơ sở y tế - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2907,7 +3557,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"MaCoSo\":\"001\",\r\n\"TenCoSo\":\"TT Y Tế Quận Ba Đình\",\r\n\"TinhThanh_Ma\":\"01\",\r\n\"TinhThanh_Ten\":\"Hà Nội\",\r\n\"QuanHuyen_Ma\":\"001\",\r\n\"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n\"PhuongXa_Ma\":\"00001\",\r\n\"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n\"DiaChiCoSo\":\"Số 46 Phường Phúc Xá\",\r\n\"NguoiDaiDien\":\"\",\r\n\"SoDienThoai\":\"0000000\"\r\n}",
+					"raw": "{\r\n    \"MaCoSo\":\"001\",\r\n    \"TenCoSo\":\"TT Y Tế Quận Ba Đình\",\r\n    \"TinhThanh_Ma\":\"01\",\r\n    \"TinhThanh_Ten\":\"Hà Nội\",\r\n    \"QuanHuyen_Ma\":\"001\",\r\n    \"QuanHuyen_Ten\":\"Quận Ba Đình\",\r\n    \"PhuongXa_Ma\":\"00001\",\r\n    \"PhuongXa_Ten\":\"Phường Phúc Xá\",\r\n    \"DiaChiCoSo\":\"Số 46 Phường Phúc Xá\",\r\n    \"NguoiDaiDien\":\"\",\r\n    \"SoDienThoai\":\"0000000\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2934,14 +3584,14 @@
 			"response": []
 		},
 		{
-			"name": "[admin]Xóa cơ sở y tế",
+			"name": "[admin]Xóa cơ sở y tế - 0.2",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYyOTU5Nzk1NywiZXhwIjoxNjI5NjAxNTU3fQ.EqQihfGcU1hE0EMvuPAspeeY44RZfsjlRhZq6tdm13t8VlPuXUf39a3eZAHIPjZ6Reb037AKsMN-Vg55_1eEsA",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
 							"type": "string"
 						}
 					]
@@ -2960,7 +3610,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/cosoyte/1",
+					"raw": "http://localhost:8686/rest/v1/app/delete/cosoyte/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2972,7 +3622,75 @@
 						"app",
 						"delete",
 						"cosoyte",
-						"1"
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[nguoidung]Danh sách cơ sở y tế - 0.2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE3MDE5NiwiZXhwIjoxNjMwMTczNzk2fQ.Ba4xT8os-vFDLWmOa826y7VO8eybGZL3Js-W-VZc_r56ak_62M5afsV196LgF_nGdnG6wopfRQRqVLutfMs1wA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "page",
+						"value": "0",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "size",
+						"value": "30",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/cosoyte",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"cosoyte"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "30",
+							"disabled": true
+						}
 					]
 				}
 			},

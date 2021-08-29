@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.vaccom.vcmgt.service.DynamicQueryService;
 import org.vaccom.vcmgt.util.MessageUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
-
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 @RestController
@@ -29,7 +27,7 @@ public class UpgradeControler {
 			@RequestParam("query") String query) {
 		try {
 
-			String vaiTro = GetterUtil.getString(request.getAttribute("_VAI_TRO"), StringPool.BLANK);
+			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
 
 			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)

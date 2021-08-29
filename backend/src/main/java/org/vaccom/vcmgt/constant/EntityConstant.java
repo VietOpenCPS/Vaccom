@@ -81,5 +81,7 @@ public class EntityConstant {
 	public static final String BACSIKHAM = "BacSiKham";
 	public static final String SOMUIMOTCA = "SoMuiMotCa";
 	public static final String SOCATIEM = "SoCaTiem";
+	
+	public static final String VAITRO = "VaiTro";
 
 }

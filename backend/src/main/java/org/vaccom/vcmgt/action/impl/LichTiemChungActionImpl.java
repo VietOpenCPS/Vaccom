@@ -204,7 +204,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setNoiSanXuat(noiSanXuat);
 		lichTiemChung.setSoLoThuoc(soLoThuoc);
 		lichTiemChung.setMaDot(maDot);
-		lichTiemChung.setTinhTrangLich(tinhTrangLich);
+		//lichTiemChung.setTinhTrangLich(tinhTrangLich);
 		lichTiemChung.setTongSoMuiTiem(tongSoMuiTiem);
 		lichTiemChung.setBacSiKham(bacSiKham);
 		lichTiemChung.setSoDienThoai(soDienThoai);
@@ -212,6 +212,21 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setSoCaTiem(soCaTiem);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
+	}
+	
+	@Override
+	public LichTiemChung dongLichTiemChung(long id) throws Exception {
+		LichTiemChung lichTiemChung = lichTiemChungService.findById(id);
+
+		if (lichTiemChung == null) {
+			throw new ActionException(MessageUtil.getVNMessageText("diabancoso.tendiaban.empty"),
+					HttpStatus.NOT_FOUND.value());
+		}
+		
+		lichTiemChung.setTinhTrangLich(VaccomUtil.DADONG);
+		
+		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
+
 	}
 
 	@Override
