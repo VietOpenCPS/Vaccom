@@ -113,19 +113,6 @@ Kế hoạch thực hiện: Phần mềm được làm trong 2 tuần, đầu th
 
 - Sau khi hoàn thành đợt tiêm chủng, cần lấy dữ liệu kết xuất từ CSDL Quốc gia về tiêm chủng để cập nhật lại danh sách những người đã được tiêm chủng, phục vụ loại bỏ trùng ở bước đăng ký tiêm chủng.
 
-# Các đơn vị đóng góp cho dự án
-1. [FDS](http://fds.vn) lên ý tưởng, chủ trì phát triển.
-2. [NetNam](http://netnam.vn) hỗ trợ hạ tầng triển khai
-3. [iWay](https://www.iwayvietnam.com/) hỗ trợ quản trị kho mã nguồn trên github, cung cấp dịch vụ email thông báo, đóng gói docker
-4. [ePacific Telecom](https://epacific.com.vn/) hỗ trợ dịch vụ Tổng đài, SMS
-5. [VINADES](http://vinades.vn/) hỗ trợ truyền thông
-7. ... Và các cá nhân khác được ghi nhận ở kho code Github
-
-# Các đầu mối liên lạc của dự án
-1. Chủ nhiệm dự án: anh [Trần Kiêm Dũng](http://m.me/trantn1) - CEO FDS
-2. Phụ trách truyền thông: anh [Nguyễn Thế Hùng](http://m.me/hungnuke) - CEO VINADES
-3. Phụ trách công nghệ: anh [Tạ Tuấn Anh](http://m.me/tanhtanhvn) - CTO FDS
-
 # Các địa chỉ mạng xã hội
 - Group Facebook: https://www.facebook.com/groups/vaccom.vn
 - Fanpage: https://www.facebook.com/vaccom.vn
