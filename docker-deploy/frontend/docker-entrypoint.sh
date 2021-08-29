@@ -16,36 +16,8 @@ cat > /etc/cron.daily/letsencrypt-renew <<EOF
 /usr/sbin/certbot-auto renew --nginx
 EOF
 
-cat > /etc/nginx/conf.d/default.conf <<EOF
-server {
-	listen 80;
-	server_name $DOMAIN;
-	#enforce https
-	return 301 https://$server_name$request_uri;
-}
-
-server {
-	listen 443 ssl;
-    server_name $DOMAIN;
-    location / {
-        root   /usr/share/nginx/html;
-        index  index.html index.htm;
-    }
-
-    #error_page  404              /404.html;
-
-    # redirect server error pages to the static page /50x.html
-    #
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
-	ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
-	access_log /var/log/nginx/$DOMAIN-access.log;
-	error_log /var/log/nginx/$DOMAIN-error.log;
-}
-EOF
+mv /opt/default.conf /etc/nginx/conf.d/default.conf
+sed -i "s|DOMAIN|$DOMAIN|g" /etc/nginx/conf.d/default.conf
 
 cat > /opt/change_root_password.txt <<EOF
 $CONTAINER_ROOT_PASSWORD
