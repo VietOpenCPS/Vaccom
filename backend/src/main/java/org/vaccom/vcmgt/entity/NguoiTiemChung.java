@@ -84,6 +84,9 @@ public class NguoiTiemChung implements Serializable {
 	@Column(name = "DiaBanCoSoID")
 	private long diaBanCoSoId;
 
+	@Column(name = "CoSoYTeID")
+	private long CoSoYTeId;
+
 	@Column(name = "CoSoYTeMa")
 	private String coSoYTeMa;
 
@@ -160,7 +163,6 @@ public class NguoiTiemChung implements Serializable {
 		this.cmtcccd = cmtcccd;
 	}
 
-
 	public int getNhomDoiTuong() {
 		return nhomDoiTuong;
 	}
@@ -192,7 +194,6 @@ public class NguoiTiemChung implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	public String getSoTheBHYT() {
 		return soTheBHYT;
@@ -368,6 +369,14 @@ public class NguoiTiemChung implements Serializable {
 
 	public void setKetQuaKiemTra(String ketQuaKiemTra) {
 		this.ketQuaKiemTra = ketQuaKiemTra;
+	}
+
+	public long getCoSoYTeId() {
+		return CoSoYTeId;
+	}
+
+	public void setCoSoYTeId(long coSoYTeId) {
+		CoSoYTeId = coSoYTeId;
 	}
 
 }

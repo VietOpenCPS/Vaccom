@@ -19,6 +19,7 @@ import org.vaccom.vcmgt.service.KhoaDangKyService;
 import org.vaccom.vcmgt.service.KhoaTruyCapService;
 import org.vaccom.vcmgt.service.NguoiDungService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.RoleUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,7 +64,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 				: StringPool.BLANK;
 
 		int vaiTro = bodyData.has(EntityConstant.VAITRO) ? bodyData.get(EntityConstant.VAITRO).intValue()
-				: VaccomUtil.VaiTro.NGUOIDUNG.getValue();
+				: RoleUtil.REGULAR;
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
 				: StringPool.BLANK;
@@ -120,11 +121,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
 		nguoiDung.setMatKhau(new BCryptPasswordEncoder(encodingStrength).encode(matKhau));
-		nguoiDung.setVaiTro(vaiTro);
+		nguoiDung.setQuanTriHeThong(vaiTro);
 		nguoiDung.setSoDienThoai(soDienThoai);
 		nguoiDung.setTenDangNhap(tenDangNhap);
 
-		KhoaDangKy khoaDangKy = createKhoaDangKy(vaiTro);
+		KhoaDangKy khoaDangKy = createKhoaDangKy(RoleUtil.getTenVaiTro(nguoiDung));
 
 		return nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 	}
@@ -181,7 +182,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 	}
 
 	@Override
-	public NguoiDung updateNguoiDung(long id, int vaiTro) throws Exception {
+	public NguoiDung updateNguoiDung(long id, int quanTriHeThong) throws Exception {
 
 		NguoiDung nguoiDung = nguoiDungService.findByID(id);
 
@@ -189,10 +190,18 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoidung.not_exist"),
 					HttpStatus.NOT_FOUND.value());
 		}
+		
+		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		
+		KhoaDangKy khoaDangKy = khoaDangKyService.findByNguoiDungID(nguoiDung.getId());
+		
+		if(khoaDangKy == null) {
+			khoaDangKy = createKhoaDangKy(RoleUtil.getTenVaiTro(nguoiDung));
+		}else {
+			khoaDangKy.setPhamVi(RoleUtil.getTenVaiTro(nguoiDung));
+		}
 
-		nguoiDung.setVaiTro(vaiTro);
-
-		return nguoiDungService.updateNguoiDung(nguoiDung);
+		return nguoiDungService.updateNguoiDung(nguoiDung, khoaDangKy);
 	}
 
 	@Override
@@ -210,11 +219,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 			nguoiDung.setHoVaTen("Super");
 			nguoiDung.setKhoaTaiKhoan(false);
 			nguoiDung.setMatKhau(defaultPass);
-			nguoiDung.setVaiTro(VaccomUtil.VaiTro.QUANTRIHETHONG.getValue());
+			nguoiDung.setQuanTriHeThong(RoleUtil.SUPER_ADMIN);
 			nguoiDung.setSoDienThoai("");
 			nguoiDung.setTenDangNhap("admin");
 
-			KhoaDangKy khoaDangKy = createKhoaDangKy(VaccomUtil.VaiTro.QUANTRIHETHONG.getValue());
+			KhoaDangKy khoaDangKy = createKhoaDangKy(RoleUtil.getTenVaiTro(nguoiDung));
 
 			nguoiDungService.addNguoiDung(nguoiDung, khoaDangKy);
 		}
@@ -310,7 +319,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		return encryptor.encrypt(digest, secretKey);
 	}
 
-	private KhoaDangKy createKhoaDangKy(int vaiTro) {
+	private KhoaDangKy createKhoaDangKy(String tenVaiTro) {
 
 		RandomString random = new RandomString(64);
 
@@ -323,7 +332,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		KhoaDangKy khoaDangKy = new KhoaDangKy();
 		khoaDangKy.setKhoaBiMat(khoaBiMat);
 		khoaDangKy.setKhoaCongKhai(khoaCongKhai);
-		khoaDangKy.setPhamVi(VaccomUtil.getRoleName(vaiTro));
+		khoaDangKy.setPhamVi(tenVaiTro);
 		khoaDangKy.setTrangThai(1);
 
 		return khoaDangKy;

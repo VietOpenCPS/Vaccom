@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.service.DynamicQueryService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.RoleUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
@@ -27,9 +29,10 @@ public class UpgradeControler {
 			@RequestParam("query") String query) {
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check
+			
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("upgrade.permission_error"));
 			}

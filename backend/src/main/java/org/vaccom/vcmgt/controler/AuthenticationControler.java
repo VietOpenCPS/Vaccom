@@ -27,6 +27,7 @@ import org.vaccom.vcmgt.service.KhoaDangKyService;
 import org.vaccom.vcmgt.service.KhoaTruyCapService;
 import org.vaccom.vcmgt.service.NguoiDungService;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.RoleUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +79,7 @@ public class AuthenticationControler {
 
 		String matKhau = StringPool.BLANK;
 
-		String vaiTro = StringPool.BLANK;
+		String tenVaiTro = StringPool.BLANK;
 
 		String token = StringPool.BLANK;
 
@@ -140,7 +141,7 @@ public class AuthenticationControler {
 
 				}
 
-				vaiTro = khoaDangKy != null ? khoaDangKy.getPhamVi() : StringPool.BLANK;
+				tenVaiTro = RoleUtil.getTenVaiTro(nguoiDung);
 
 			} else {
 				String msg = MessageUtil.getVNMessageText("nguoidung.not_exist_or_locked");
@@ -152,7 +153,7 @@ public class AuthenticationControler {
 
 			result.put("expires_in", expireIn);
 
-			result.put("role_name", vaiTro);
+			result.put("role_name", tenVaiTro);
 
 			result.put("expires_in", expireIn);
 

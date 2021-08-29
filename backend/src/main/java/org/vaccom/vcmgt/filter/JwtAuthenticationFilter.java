@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.KhoaTruyCap;
 import org.vaccom.vcmgt.entity.NguoiDung;
+import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.security.JwtTokenProvider;
 import org.vaccom.vcmgt.service.KhoaDangKyService;
 import org.vaccom.vcmgt.service.KhoaTruyCapService;
@@ -82,9 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 							return;
 						}
 
-						// boolean hasPermission = true;
-
-						int vaiTro = tokenProvider.getRoleValueFromToken(token, khoaDangKy.getKhoaBiMat());
+						VaiTro vaiTro = tokenProvider.getVaiTroFromToken(token, khoaDangKy.getKhoaBiMat());
 
 						request.setAttribute("_VAI_TRO", vaiTro);
 
