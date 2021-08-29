@@ -88,3 +88,10 @@ mobile/Vaccom_Mobile/android/.gradle/5.6.2/fileHashes/fileHashes.bin
 mobile/Vaccom_Mobile/android/.gradle/5.6.2/fileHashes/fileHashes.lock
 mobile/Vaccom_Mobile/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock
 mobile/Vaccom_Mobile/android/.gradle/buildOutputCleanup/outputFiles.bin
+mobile/Vaccom_Mobile/.packages
+mobile/Vaccom_Mobile/.idea/libraries/Dart_Packages.xml
+mobile/Vaccom_Mobile/.flutter-plugins-dependencies
+mobile/Vaccom_Mobile/.dart_tool/package_config_subset
+mobile/Vaccom_Mobile/.dart_tool/package_config.json
+*.xml
+*.json
