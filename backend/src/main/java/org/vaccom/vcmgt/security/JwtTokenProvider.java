@@ -8,7 +8,9 @@ import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.vaccom.vcmgt.entity.VaiTro;
 
+@Service
 public interface JwtTokenProvider {
 
 	public String generateToken(Authentication authentication, int exprireIn);
@@ -40,10 +42,8 @@ public interface JwtTokenProvider {
 	public String getUsernameFromToken(String token, String secret);
 	
 	// retrieve username from jwt token
-	public String getRoleNameFromToken(String token, String secret);
+	public VaiTro getVaiTroFromToken(String token, String secret);
 	
-	public int getRoleValueFromToken(String token, String secret);
-
 	// check if the token has expired
 	public Boolean isTokenExpired(String token, String secret);
 

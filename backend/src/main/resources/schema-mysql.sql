@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `PhuongXaMa` varchar(5) DEFAULT NULL,
   `PhuongXaTen` varchar(64) DEFAULT NULL,
   `DiaBanCoSoID` bigint(20) DEFAULT 0,
+  `CoSoYTeID` bigint(20) DEFAULT 0,
   `CoSoYTeMa` varchar(64) DEFAULT NULL,
   `CoSoYTeTen` varchar(256) DEFAULT NULL,
   `DanTocMa` varchar(2) DEFAULT NULL,
