@@ -170,8 +170,33 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-console</artifactId>
-		</dependency>	
+		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<!-- TODO: Check the homepage to install lombok with your IDE -->
+		<!-- https://projectlombok.org/setup/overview -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
+
+        <!--For String operation-->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <!--For QR Code-->
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.1</version>
+        </dependency>
 	</dependencies>
 
 	<build>
