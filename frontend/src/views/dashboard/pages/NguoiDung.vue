@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userLogin['role_name'] === 'admin'">
+  <div v-if="userLogin['role_name'] === 'QuanTriHeThong' || userLogin['role_name'] === 'QuanTriCoSo'">
     <v-container
       id="users"
       fluid
@@ -38,11 +38,13 @@
               loading-text="Đang tải... "
             >
             <template v-slot:item.index="{ item, index }">
-              <span>{{ index + 1 }}</span>
+              <!-- <span>{{ index + 1 }}</span> -->
+              <span>{{ (page+1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
             <template v-slot:item.quanTriHeThong="{ item }">
-              <span style="color: red" v-if="item.quanTriHeThong">Quản trị</span>
-              <span style="color: blue" v-else>Cán bộ cơ sở</span>
+              <span style="color: blue" v-if="item.quanTriHeThong == 0">Người dùng</span>
+              <span style="color: red" v-if="item.quanTriHeThong == 1">Quản trị hệ thống</span>
+              <span style="color: orange" v-if="item.quanTriHeThong == 2">Quản trị địa bàn</span>
             </template>
             <template v-slot:item.khoaTaiKhoan="{ item }">
               <span style="color: red" v-if="item.khoaTaiKhoan">Đang khóa</span>
@@ -57,7 +59,7 @@
                 </template>
                 <span>Cập nhật thông tin</span>
               </v-tooltip>
-              <v-tooltip top v-if="!item['khoaTaiKhoan']">
+              <v-tooltip top v-if="!item['khoaTaiKhoan'] && userLogin['role_name'] === 'QuanTriHeThong'">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="updateStatusUser('block', item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-lock-check</v-icon>
@@ -65,7 +67,7 @@
                 </template>
                 <span>Khóa tài khoản</span>
               </v-tooltip>
-              <v-tooltip top v-if="item['khoaTaiKhoan']">
+              <v-tooltip top v-if="item['khoaTaiKhoan'] && userLogin['role_name'] === 'QuanTriHeThong'">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn @click="updateStatusUser('open', item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-lock-open-variant-outline</v-icon>
@@ -73,13 +75,13 @@
                 </template>
                 <span>Mở khóa tài khoản</span>
               </v-tooltip>
-              <v-tooltip top v-if="!item.quanTriHeThong">
+              <v-tooltip top v-if="userLogin['role_name'] === 'QuanTriHeThong'">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="assignAdmin(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                  <v-btn @click="showPhanQuyen(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
                     <v-icon size="22">mdi-account-cog-outline</v-icon>
                   </v-btn>
                 </template>
-                <span>Cấp quyền quản trị</span>
+                <span>Phân quyền</span>
               </v-tooltip>
             </template>
             
@@ -120,7 +122,7 @@
                         class="flex xs12 md6"
                         v-if="typeAction === 'add'"
                         v-model="userInfo.TenDangNhap"
-                        :rules="accountRules"
+                        :rules="required"
                         required
                         outlined
                         label="Tên đăng nhập"
@@ -193,6 +195,7 @@
                         outlined
                         label="Cơ sở y tế quản lý"
                         dense
+                        clearable
                         prepend-inner-icon="mdi-map-marker"
                     ></v-autocomplete>
                     <v-autocomplete
@@ -208,12 +211,21 @@
                         dense
                         prepend-inner-icon="mdi-map-marker"
                     ></v-autocomplete>
-                    <v-checkbox
+                    <v-autocomplete
+                        :rules="required"
+                        required
+                        v-if="typeAction === 'add' && userLogin['role_name'] === 'QuanTriHeThong'"
+                        class="flex xs12 md12"
+                        hide-no-data
+                        :items="listVaiTro"
                         v-model="userInfo['QuanTriHeThong']"
-                        label="QUẢN TRỊ HỆ THỐNG"
-                        color="indigo darken-3"
-                        hide-details
-                        ></v-checkbox>
+                        item-text="name"
+                        item-value="value"
+                        clearable
+                        outlined
+                        label="Loại tài khoản"
+                        dense
+                    ></v-autocomplete>
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -231,6 +243,68 @@
               </v-icon>
               <span v-if="typeAction === 'add'">Thêm mới</span>
               <span v-else>Cập nhật</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        max-width="700"
+        v-model="dialogAssign"
+      >
+        <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title>Phân quyền vai trò</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogAssign = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text class="mt-5">
+            <v-form
+              ref="formAssign"
+              v-model="validFormAssign"
+              lazy-validation
+            >
+                <v-layout wrap>
+                  <v-autocomplete
+                      class="flex xs12 md12"
+                      hide-no-data
+                      :items="listVaiTro"
+                      v-model="vaiTro"
+                      item-text="name"
+                      item-value="value"
+                      clearable
+                      outlined
+                      label="Loại tài khoản"
+                      dense
+                      :rules="required"
+                      required
+                  ></v-autocomplete>
+                </v-layout>
+            </v-form>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialogAssign = false">
+              <v-icon left>
+                mdi-close
+              </v-icon>
+              Thoát
+            </v-btn>
+            <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="assignRole">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span>Cập nhật</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -255,6 +329,13 @@
         dialogAddMember: false,
         listDiaBan: [],
         listCoSoYTe: [],
+        vaiTro: 0,
+        dialogAssign: false,
+        listVaiTro: [
+          {name: 'Người dùng', value: 0},
+          {name: 'Quản trị hệ thống', value: 1},
+          {name: 'Quản trị địa bàn', value: 2}
+        ],
         userInfo: {
           TenDangNhap: '',
           HoVaTen: '',
@@ -264,17 +345,18 @@
           MatKhau: '',
           DiaBanCoSo_ID: '',
           CoSoYTe_ID: '',
-          QuanTriHeThong: false,
+          QuanTriHeThong: 0,
           KhoaTaiKhoan: false
         },
         totalItem: 0,
         page: 0,
         pageCount: 0,
-        itemsPerPage: 20,
+        itemsPerPage: 30,
         typeAction: '',
         userUpdate: '',
         items: [],
         validFormAdd: true,
+        validFormAssign: true,
         userName: '',
         coSoYTe: '',
         diaBanCoSo: '',
@@ -302,13 +384,7 @@
           v => (v && v.length <= 200) || 'Địa chỉ không quá 200 ký tự',
         ],
         required: [
-          (value) => {
-            if(String(value).trim()){
-                return true
-              } else {
-                return 'Thông tin bắt buộc'
-              } 
-          }
+          v => (!!v || v==0) || 'Thông tin bắt buộc'
         ],
         headers: [
           {
@@ -376,6 +452,11 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
+      if (vm.userLogin['role_name'] === 'QuanTriCoSo') {
+        vm.listVaiTro = [
+          {name: 'Người dùng', value: 0}
+        ]
+      }
       vm.getMembers(0)
       vm.getCoSoYTe()
       vm.getDiaBanCoSo()
@@ -428,11 +509,18 @@
           vm.loadingData = false
           if (result) {
             vm.items = result.hasOwnProperty('data') ? result.data : []
-            vm.totalItem = result.hasOwnProperty('total') ? result.total : []
+            vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
             vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
           } else {
             vm.items = []
+            vm.totalItem = 0
+            vm.pageCount = 0
           }
+        }).catch(function () {
+          vm.items = []
+          vm.totalItem = 0
+          vm.pageCount = 0
+          vm.loadingData = false
         })
       },
       addMember (type, user) {
@@ -473,6 +561,33 @@
           })
           vm.getMembers(0)
         })
+      },
+      showPhanQuyen (item) {
+        let vm = this
+        vm.userUpdate = item
+        vm.vaiTro = item.quanTriHeThong
+        vm.dialogAssign = true
+      },
+      assignRole () {
+        let vm = this
+        if (vm.$refs.formAssign.validate()) {
+          let filter = Object.assign(vm.userUpdate, {QuanTriHeThong: vm.vaiTro})
+          vm.$store.dispatch('assignRole', filter).then(userCredential => {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Phân quyền thành công',
+              color: 'success',
+            })
+            vm.dialogAssign = false
+            vm.getMembers(0)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Phân quyền thất bại',
+              color: 'error',
+            })
+          })
+        }
       },
       assignAdmin (item) {
         let vm = this
@@ -521,15 +636,12 @@
             })
             .catch((error) => {
               vm.loading = false
+              console.log()
               let errorCode = error.code;
               let errorMessage = error.message;
               let mess = ''
-              if (errorCode == 'auth/email-already-in-use') {
+              if (error.response && error.response.data == 'tendangnhap.exist') {
                 mess = 'Tên đăng nhập đã được sử dụng. Vui lòng sử dụng tên đăng nhập khác.'
-              } else if (errorCode == 'auth/weak-password') {
-                mess = 'Mật khẩu quá yếu'
-              } else if (errorCode == 'auth/invalid-email') {
-                mess = 'Tên đăng nhập không hợp lệ'
               } else {
                 mess = errorMessage
               }

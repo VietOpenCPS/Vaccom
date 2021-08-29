@@ -42,6 +42,12 @@ export default new Router({
           props: true,
         },
         {
+          path: '/pages/danh-sach-mui-tiem-chung',
+          name: 'DanhSachMuiTiemChung',
+          component: () => import('@/views/dashboard/pages/DanhSachMuiTiem'),
+          props: true,
+        },
+        {
           name: 'DuLieuDanhMuc',
           path: '/pages/du-lieu-danh-muc',
           component: () => import('@/views/dashboard/pages/DuLieuDanhMuc'),

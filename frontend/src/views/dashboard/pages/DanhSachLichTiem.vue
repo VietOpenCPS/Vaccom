@@ -28,7 +28,7 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span>
             </span>
-            <v-btn v-if="userLogin['coSoYTeId']" color="#0072bc" class="mx-0" @click.stop="addMember('add')">
+            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="#0072bc" class="mx-0" @click.stop="addMember('add')">
                 <v-icon left size="22">
                   mdi-plus
                 </v-icon>
@@ -240,7 +240,7 @@
                       dense
                       outlined
                     ></v-text-field>
-                    <v-autocomplete
+                    <!-- <v-autocomplete
                         class="flex xs12 md6"
                         hide-no-data
                         :items="tinhTrangList"
@@ -253,7 +253,7 @@
                         outlined
                         label="Tình trạng lịch tiêm"
                         dense
-                    ></v-autocomplete>
+                    ></v-autocomplete> -->
                     
                 </v-layout>
             </v-form>
@@ -473,7 +473,7 @@
           data: vm.thongTinLichTiem
         }
         vm.loading = true
-        vm.$store.dispatch('updateLichTiem', filter).then(function () {
+        vm.$store.dispatch('closeLichTiem', filter).then(function () {
           vm.loading = false
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,

@@ -35,9 +35,9 @@
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+            <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
-                mdi-backup-restore
+                mdi-file-restore-outline
               </v-icon>
               Khôi phục đăng ký
             </v-btn>  
@@ -99,8 +99,8 @@
               <div style="width: 100px">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="translateStatus(item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
-                      <v-icon size="22">mdi-backup-restore</v-icon>
+                    <v-btn @click="translateStatus(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-file-restore-outline</v-icon>
                     </v-btn>
                   </template>
                   <span>Khôi phục đăng ký</span>
@@ -442,9 +442,10 @@
           nhomdoituong: dataSearch && dataSearch['NhomDoiTuong'] ? dataSearch['NhomDoiTuong'] : '',
           ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
           hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
-          diabancosoid: dataSearch && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
+          diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
           cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : '',
-          kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : ''
+          kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : '',
+          typeSearch: 'danhsachdahuy'
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false
@@ -473,7 +474,7 @@
             nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
             ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
             hovaten: vm.dataInputSearch && vm.dataInputSearch['HoVaTen'] ? vm.dataInputSearch['HoVaTen'] : '',
-            diabancosoid: vm.dataInputSearch && vm.dataInputSearch['DiaBanCoSo_ID'] ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
+            diabancosoid: vm.dataInputSearch && vm.dataInputSearch.hasOwnProperty('DiaBanCoSo_ID') ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
             cosoytema: vm.dataInputSearch && vm.dataInputSearch['CoSoYTe_Ma'] ? vm.dataInputSearch['CoSoYTe_Ma'] : '',
             kiemtratrung: vm.dataInputSearch && vm.dataInputSearch['KiemTraTrung'] ? vm.dataInputSearch['KiemTraTrung'] : -1
           }
@@ -504,7 +505,7 @@
         let filter = {
           data: {
             ids: item === 'multiple' ? arrIds : String(item.id),
-            TinhTrangDangKi: 1
+            TinhTrangDangKi: 3
           }
         }
         if (!filter['data']['ids']) {

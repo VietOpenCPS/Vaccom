@@ -54,7 +54,7 @@
           >
             <v-autocomplete
               :items="listDoiTuong"
-              placeholder="Nhóm đối tượng"
+              label="Nhóm đối tượng"
               v-model="dataSearch['NhomDoiTuong']"
               item-text="doiTuongMoTa"
               item-value="id"
@@ -63,7 +63,14 @@
               dense
               hide-details="auto"
               clearable
-            ></v-autocomplete>
+            >
+            <template v-slot:selection="data">
+              <span>{{data.item.id + 1}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            <template v-slot:item="data">
+              <span>{{data.item.id + 1}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            </v-autocomplete>
           </v-col>
           <v-col
             cols="12"
@@ -77,7 +84,7 @@
               item-text="tenCoSo"
               item-value="maCoSo"
               outlined
-              placeholder="Cơ sở y tế"
+              label="Cơ sở y tế"
               dense
               hide-details="auto"
               clearable
@@ -95,7 +102,7 @@
               item-text="tenDiaBan"
               item-value="id"
               outlined
-              placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+              label="Tổ dân phố, khóm ấp, thôn bản…"
               dense
               hide-details="auto"
               clearable
@@ -113,7 +120,7 @@
               item-text="name"
               item-value="value"
               outlined
-              placeholder="Kiểm tra trùng lặp"
+              label="Kiểm tra trùng lặp"
               dense
               hide-details="auto"
               clearable
@@ -221,7 +228,7 @@
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           if (result.hasOwnProperty('data') && result.data.length) {
-            vm.listDiaBan = result.data
+            vm.listDiaBan = [{tenDiaBan: "Chưa gán địa bàn", id: 0}].concat(result.data)
           }
         })
       },

@@ -133,7 +133,7 @@
         <v-menu v-if="isSigned && breakpointName !== 'xs' && breakpointName !== 'sm'" offset-y origin="center center" transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <v-chip
-              style="height: 36px;position: absolute;top: 15px;right:5px;z-index: 2"
+              style="height: 36px;position: absolute;top: 15px;right:5px;z-index: 2;max-width: 170px;"
               v-bind="attrs"
               v-on="on"
               class="ma-2"
@@ -233,7 +233,7 @@
     }),
     created () {
       let vm = this
-      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'admin') {
+      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'QuanTriHeThong') {
         vm.items = [
           {
             icon: 'mdi-home',
@@ -263,6 +263,12 @@
                 icon: 'mdi-shield-plus-outline',
                 title: 'Đăng ký đã rút',
                 to: '/pages/danh-sach-dang-ky-da-rut',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách mũi tiêm chủng',
+                to: '/pages/danh-sach-mui-tiem-chung',
                 id: 'search',
               }
             ]
@@ -336,7 +342,7 @@
             id: 'hdsd',
           },
         ]
-      } else {
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'QuanTriCoSo') {
         vm.items = [
           {
             icon: 'mdi-home',
@@ -366,6 +372,12 @@
                 icon: 'mdi-shield-plus-outline',
                 title: 'Đăng ký đã rút',
                 to: '/pages/danh-sach-dang-ky-da-rut',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách mũi tiêm chủng',
+                to: '/pages/danh-sach-mui-tiem-chung',
                 id: 'search',
               }
             ]
@@ -399,6 +411,192 @@
                 to: '/pages/danh-sach-tiem-chung',
                 id: 'search',
               },
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Quản trị',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Người dùng',
+                to: '/pages/nguoi-dung',
+                id: 'search',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
+        ]
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoYTe') {
+        vm.items = [
+          {
+            icon: 'mdi-home',
+            title: 'Trang chủ',
+            to: '/',
+            class: 'home-tab',
+            id: 'home-vacc'
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Đăng ký tiêm',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-tiem-moi/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký chính thức',
+                to: '/pages/danh-sach-dang-ky-chinh-thuc',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký đã rút',
+                to: '/pages/danh-sach-dang-ky-da-rut',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách mũi tiêm chủng',
+                to: '/pages/danh-sach-mui-tiem-chung',
+                id: 'search',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Kế hoạch tiêm',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch tiêm chủng',
+                to: '/pages/lich-tiem-chung',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch hẹn chờ xác nhận',
+                to: '/pages/lich-hen-cho-xac-nhan',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch hẹn đã xác nhận',
+                to: '/pages/lich-hen-da-xac-nhan',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách tiêm chủng',
+                to: '/pages/danh-sach-tiem-chung',
+                id: 'search',
+              },
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
+        ]
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoDiaBan') {
+        vm.items = [
+          {
+            icon: 'mdi-home',
+            title: 'Trang chủ',
+            to: '/',
+            class: 'home-tab',
+            id: 'home-vacc'
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Đăng ký tiêm',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-tiem-moi/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký chính thức',
+                to: '/pages/danh-sach-dang-ky-chinh-thuc',
+                id: 'search',
+              },
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Kế hoạch tiêm',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch tiêm chủng',
+                to: '/pages/lich-tiem-chung',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch hẹn chờ xác nhận',
+                to: '/pages/lich-hen-cho-xac-nhan',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Lịch hẹn đã xác nhận',
+                to: '/pages/lich-hen-da-xac-nhan',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách tiêm chủng',
+                to: '/pages/danh-sach-tiem-chung',
+                id: 'search',
+              },
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
+        ]
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'NguoiDung') {
+        vm.items = [
+          {
+            icon: 'mdi-home',
+            title: 'Trang chủ',
+            to: '/',
+            class: 'home-tab',
+            id: 'home-vacc'
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Đăng ký tiêm',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-tiem-moi/0',
+                id: 'search',
+              }
             ]
           },
           {

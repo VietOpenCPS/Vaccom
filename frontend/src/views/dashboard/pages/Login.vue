@@ -92,35 +92,38 @@ export default {
           }
           localStorage.setItem('user', JSON.stringify(dataUser))
           vm.$store.commit('SET_ISSIGNED', true)
-          vm.$store.dispatch('getUserInfo', result).then(function(dataInfo) {
-            vm.loading = false
-            if (dataInfo) {
-              dataUser['hoVaTen'] = dataInfo.hoVaTen
-              dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
-              dataUser['coSoYTeId'] = dataInfo.coSoYTeId
-              dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
-              localStorage.setItem('user', JSON.stringify(dataUser))
+          setTimeout(function () {
+            vm.$store.dispatch('getUserInfo', result).then(function(dataInfo) {
+              vm.loading = false
+              if (dataInfo) {
+                dataUser['hoVaTen'] = dataInfo.hoVaTen
+                dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
+                dataUser['coSoYTeId'] = dataInfo.coSoYTeId
+                dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
+                localStorage.setItem('user', JSON.stringify(dataUser))
+                let redirect = vm.$route.query.redirect
+                let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+                vm.$router.push(route)
+              } else {
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Không lấy được thông tin tài khoản',
+                  color: 'error',
+                })
+              }
+            }).catch(function (error) {
               let redirect = vm.$route.query.redirect
               let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
               vm.$router.push(route)
-            } else {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Không lấy được thông tin tài khoản',
                 color: 'error',
               })
-            }
-          }).catch(function (error) {
-            // let redirect = vm.$route.query.redirect
-            // let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
-            // vm.$router.push(route)
-            vm.$store.commit('SHOW_SNACKBAR', {
-              show: true,
-              text: 'Không lấy được thông tin tài khoản',
-              color: 'error',
+              vm.loading = false
             })
-            vm.loading = false
-          })
+          }, 300)
+          
         }).catch((error) => {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,
