@@ -27,5 +27,7 @@ public interface NguoiDungService {
 	public List<NguoiDung> findAll(int page, int size);
 	
 	public NguoiDung updateNguoiDung(NguoiDung nguoiDung);
+	
+	public NguoiDung updateNguoiDung(NguoiDung nguoiDung, KhoaDangKy khoaDangKy);
 
 }
