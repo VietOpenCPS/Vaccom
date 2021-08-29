@@ -4,7 +4,7 @@ import 'response/mapping/user.dart';
 
 class Global {
   static String _schema = 'https://';
-  static String _baseUrl = r'thachban.vaccom.vn:8080/rest/v1/';
+  static String _baseUrl = r'mobile.vaccom.vn:8080/rest/v1/';
 
   Global._();
 

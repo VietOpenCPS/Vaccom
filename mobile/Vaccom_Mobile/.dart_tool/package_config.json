@@ -261,9 +261,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/petitparser-4.2.0",
+      "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/petitparser-4.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.13"
+      "languageVersion": "2.12"
     },
     {
       "name": "platform",
@@ -280,6 +280,12 @@
     {
       "name": "process",
       "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/process-4.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pull_to_refresh",
+      "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/pull_to_refresh-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -483,9 +489,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/xml-5.2.0",
+      "rootUri": "file:///C:/Users/nvholding/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/xml-5.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.13"
+      "languageVersion": "2.12"
     },
     {
       "name": "vaccom_mobile",
@@ -494,7 +500,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-08-27T06:39:26.870123Z",
+  "generated": "2021-08-28T09:28:50.075653Z",
   "generator": "pub",
   "generatorVersion": "2.15.0-53.0.dev"
 }

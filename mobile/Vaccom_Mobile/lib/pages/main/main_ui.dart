@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaccom_mobile/commons/color.dart';
+import 'package:vaccom_mobile/commons/constants.dart';
 import 'package:vaccom_mobile/commons/styles.dart';
 import 'package:vaccom_mobile/commons/toast.dart';
 import 'package:vaccom_mobile/commons/utils.dart';
+import 'package:vaccom_mobile/components/gradient_view.dart';
 import 'package:vaccom_mobile/model/menu_item.dart';
 import 'package:get/get.dart';
 import 'package:vaccom_mobile/network/global.dart';
@@ -50,9 +52,24 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
   buildMenuList() {
     return [
-      MenuItem(title: 'Menu 1', icon: Icons.book, index: MenuIndex.menu1),
-      MenuItem(title: 'Menu 2', icon: Icons.extension, index: MenuIndex.menu2),
-      MenuItem(title: 'Menu 3', icon: Icons.link, index: MenuIndex.menu3),
+      MenuItem(
+          title: r'Đối tượng đăng ký tiêm',
+          icon:
+              r'https://tiemchungcovid19.gov.vn/assets/portal/img/ic_register_people.svg',
+          unit: r'lượt',
+          value: r'5,795,421'),
+      MenuItem(
+          title: r'Số mũi tiêm hôm qua',
+          icon:
+              r'https://tiemchungcovid19.gov.vn/assets/portal/img/ic_injection.svg',
+          unit: r'mũi',
+          value: r'280,333'),
+      MenuItem(
+          title: r'Số mũi đã tiêm toàn quốc',
+          icon:
+              r'https://tiemchungcovid19.gov.vn/assets/portal/img/ic_injected_people.svg',
+          unit: r'mũi',
+          value: r'19,223,460'),
     ];
   }
 
@@ -76,8 +93,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
       child: Column(
         children: [
           SizedBox(
-            height: 111,
-            child: Utils.gradientAppBar(
+            height: AppBar().preferredSize.height * 2.2,
+            child: GradientView(
               child: DrawerHeader(
                 margin: EdgeInsets.zero,
                 child: Row(
@@ -98,30 +115,23 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
-                              child: Text(
-                                '${user.hoVaTen}',
-                                style: GoogleFonts.merriweather(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                                maxLines: 2,
+                            Text(
+                              '${user.hoVaTen}',
+                              style: GoogleFonts.merriweather(
+                                color: Colors.white,
+                                fontSize: 16,
                               ),
+                              maxLines: 1,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 4),
-                              child: RichText(
-                                text: TextSpan(
-                                  text: '${user.tenDangNhap}',
-                                  style: GoogleFonts.openSans(
-                                    color: AppColor.nearlyWhite,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                  children: <TextSpan>[],
+                            RichText(
+                              text: TextSpan(
+                                text: '${user.tenDangNhap}',
+                                style: GoogleFonts.openSans(
+                                  color: AppColor.nearlyWhite,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
                                 ),
+                                children: <TextSpan>[],
                               ),
                             ),
                           ],
@@ -130,7 +140,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-              )
+              ),
             ),
           ),
           Expanded(
@@ -140,7 +150,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                   context: context,
                   tiles: List.generate(
                     drawerData.length,
-                        (int index) {
+                    (int index) {
                       return ListTile(
                         title: Text(
                           drawerData[index].title,
@@ -149,8 +159,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                         onTap: () => tapOnDrawerItem(drawerData[index].item),
                       );
                     },
-                  )
-              ).toList(),
+                  )).toList(),
             ),
           ),
         ],
@@ -208,7 +217,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
               );
               animationController.forward();
               return MainItemView(
-                menuItem: menuList[index],
+                item: menuList[index],
                 index: index,
                 animation: animation,
                 animationController: animationController,
@@ -217,21 +226,21 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             },
           ),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 24.0,
+            crossAxisCount: 1,
+            mainAxisSpacing: 16.0,
             crossAxisSpacing: 24.0,
-            childAspectRatio: 1,
+            childAspectRatio: 5,
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: r'Checkin y tế',
+              label: r'Checkin',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
-              label: r'Lịch sử tiêm chủng',
+              label: r'Lịch sử tiêm',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code),
@@ -246,6 +255,21 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
           unselectedItemColor: Colors.grey,
           selectedItemColor: AppColor.main,
           onTap: _onItemTapped,
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Container(
+            width: 60,
+            height: 60,
+            child: Icon(
+              Icons.add,
+              size: 30,
+            ),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(colors: AppConstant.gradientColor),
+            ),
+          ),
+          onPressed: () => Get.toNamed(GetRouter.newInjector),
         ),
       ),
     );

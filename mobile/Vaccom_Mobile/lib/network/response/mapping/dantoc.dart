@@ -1,18 +1,21 @@
-class DanToc {
+import 'package:vaccom_mobile/model/base_item.dart';
+
+class DanToc implements BaseItem {
   DanToc({
     this.id,
-    this.danTocMa,
-    this.danTocTen,
+    this.code,
+    this.name,
+    this.parentID = -1,
   });
 
-  int id;
-  String danTocMa;
-  String danTocTen;
+  int id, parentID;
+  String code;
+  String name;
 
   factory DanToc.fromJson(Map<String, dynamic> json) => DanToc(
         id: json["id"],
-        danTocMa: json["danTocMa"],
-        danTocTen: json["danTocTen"],
+        code: json["danTocMa"],
+        name: json["danTocTen"],
       );
 
   static List<DanToc> listFromJson(dynamic data) =>

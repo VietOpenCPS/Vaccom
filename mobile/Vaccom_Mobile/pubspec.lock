@@ -302,7 +302,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.0"
+    version: "4.1.0"
   platform:
     dependency: transitive
     description:
@@ -324,6 +324,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.3"
+  pull_to_refresh:
+    dependency: "direct main"
+    description:
+      name: pull_to_refresh
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   rxdart:
     dependency: "direct main"
     description:
@@ -559,7 +566,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.1.2"
 sdks:
   dart: ">=2.13.0 <3.0.0"
   flutter: ">=2.0.0"

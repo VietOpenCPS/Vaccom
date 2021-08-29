@@ -1,16 +1,12 @@
-import 'package:flutter/cupertino.dart';
-
-enum MenuIndex { menu1, menu2, menu3 }
-
 class MenuItem {
-  String title, desc;
-  IconData icon;
-  MenuIndex index;
+  String title, desc, icon;
+  String value, unit;
 
   MenuItem({
     this.title,
     this.desc = '',
-    this.icon,
-    this.index,
+    this.icon = '',
+    this.value,
+    this.unit,
   });
 }

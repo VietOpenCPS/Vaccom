@@ -1,18 +1,21 @@
-class TinhThanh {
+import 'package:vaccom_mobile/model/base_item.dart';
+
+class TinhThanh implements BaseItem {
   TinhThanh({
     this.id,
-    this.tinhThanhMa,
-    this.tinhThanhTen,
+    this.code,
+    this.name,
+    this.parentID = -1,
   });
 
-  int id;
-  String tinhThanhMa;
-  String tinhThanhTen;
+  int id, parentID;
+  String code;
+  String name;
 
   factory TinhThanh.fromJson(Map<String, dynamic> json) => TinhThanh(
     id: json["id"],
-    tinhThanhMa: json["tinhThanhMa"],
-    tinhThanhTen: json["tinhThanhTen"],
+    code: json["tinhThanhMa"],
+    name: json["tinhThanhTen"],
   );
 
   static List<TinhThanh> listFromJson(dynamic data) =>

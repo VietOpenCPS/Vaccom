@@ -1,18 +1,21 @@
-class QuocGia {
+import 'package:vaccom_mobile/model/base_item.dart';
+
+class QuocGia implements BaseItem {
   QuocGia({
     this.id,
-    this.quocGiaMa,
-    this.quocGiaTen,
+    this.code,
+    this.name,
+    this.parentID = -1,
   });
 
-  int id;
-  String quocGiaMa;
-  String quocGiaTen;
+  int id, parentID;
+  String code;
+  String name;
 
   factory QuocGia.fromJson(Map<String, dynamic> json) => QuocGia(
     id: json["id"],
-    quocGiaMa: json["quocGiaMa"],
-    quocGiaTen: json["quocGiaTen"],
+    code: json["quocGiaMa"],
+    name: json["quocGiaTen"],
   );
 
   static List<QuocGia> listFromJson(dynamic data) =>

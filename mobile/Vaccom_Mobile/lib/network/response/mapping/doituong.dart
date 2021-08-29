@@ -1,18 +1,21 @@
-class DoiTuong {
+import 'package:vaccom_mobile/model/base_item.dart';
+
+class DoiTuong implements BaseItem {
   DoiTuong({
     this.id,
-    this.doiTuongMa,
-    this.doiTuongMoTa,
+    this.code,
+    this.name,
+    this.parentID = -1,
   });
 
-  int id;
-  String doiTuongMa;
-  String doiTuongMoTa;
+  int id, parentID;
+  String code;
+  String name;
 
   factory DoiTuong.fromJson(Map<String, dynamic> json) => DoiTuong(
     id: json["id"],
-    doiTuongMa: json["doiTuongMa"],
-    doiTuongMoTa: json["doiTuongMoTa"],
+    code: json["doiTuongMa"],
+    name: json["doiTuongMoTa"],
   );
 
   static List<DoiTuong> listFromJson(dynamic data) =>

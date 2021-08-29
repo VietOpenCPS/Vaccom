@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:vaccom_mobile/commons/constants.dart';
+import 'package:vaccom_mobile/components/gradient_view.dart';
 import 'package:vaccom_mobile/network/response/mapping/vac_token.dart';
 import 'package:vaccom_mobile/router/router.dart';
 
@@ -24,20 +25,7 @@ class Utils {
   static PreferredSize gradientAppBar({Widget child, double height}) {
     return PreferredSize(
       preferredSize: Size.fromHeight(height ?? AppBar().preferredSize.height),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF171cc2), Color(0xFFff5200)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-            ),
-          ),
-          child,
-        ],
-      ),
+      child: GradientView(child: child),
     );
   }
 

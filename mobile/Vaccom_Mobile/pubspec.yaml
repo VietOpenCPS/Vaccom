@@ -43,6 +43,7 @@ dependencies:
   share:
   uuid:
   shared_preferences:
+  pull_to_refresh:
 
   # Cloud Message Firebase
 #  firebase_core: "^0.7.0"

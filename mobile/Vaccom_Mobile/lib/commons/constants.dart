@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/material.dart';
+
 class AppConstant {
   AppConstant._();
 
@@ -11,4 +13,6 @@ class AppConstant {
   static String userId = 'user_id';
 
   static const int REQUEST_TIME_OUT = 60;
+
+  static List<Color> gradientColor = [Color(0xFF171cc2), Color(0xFFff5200)];
 }
