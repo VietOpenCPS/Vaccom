@@ -73,7 +73,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     });
   }
 
-  void onChanged(text) {
+  void onChanged(String text) {
     bool noText = true;
     if (text.length > 0) {
       noText = false;
@@ -81,6 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     setState(() {
       showClearBtn = !noText;
     });
+    if (widget.onChanged != null)
     widget.onChanged(text);
   }
 

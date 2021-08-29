@@ -32,6 +32,17 @@ class RemoteAPI implements API {
     }
   }
 
+  Future<List<TinhThanh>> getCity() async {
+    var apiPath = ApiPath.getCity;
+    final Map<String, String> param = {};
+    try {
+      var res = await ApiMethod.getData(apiPath, param);
+      return TinhThanh.listFromJson(res);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<InjectorPaging> getListNguoiTiemChung({
     Map<String, dynamic> params,
   }) async {
@@ -42,4 +53,26 @@ class RemoteAPI implements API {
       throw e;
     }
   }
+
+  Future<List<QuanHuyen>> getDistrict({int cityId}) async {
+    final apiPath = ApiPath.getDistrict(cityId);
+    final Map<String, String> param = {};
+    try {
+      var res = await ApiMethod.getData(apiPath, param);
+      return QuanHuyen.listFromJson(res);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  // Future<PhuongXa> getPhuongXa({int districtId}) async {
+  //   final apiPath = ApiPath.getPhuongXa(districtId);
+  //   final Map<String, String> param = {};
+  //   try {
+  //     var res = await ApiMethod.getData(apiPath, param);
+  //     return QuanHuyen.fromJson(res);
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 }

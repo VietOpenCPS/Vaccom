@@ -1,5 +1,6 @@
 library api;
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -25,6 +26,10 @@ abstract class API {
   Future<VacToken> securityToken({String username, String password});
 
   Future<User> getUser({int userId});
+
+  Future<List<TinhThanh>> getCity();
+
+  Future<List<QuanHuyen>> getDistrict({int cityId});
 
   Future<InjectorPaging> getListNguoiTiemChung({
     Map<String, dynamic> params,

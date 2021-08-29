@@ -70,7 +70,7 @@ class _PasswordInputState extends State<PasswordInput> {
     });
   }
 
-  void onChanged(text) {
+  void onChanged(String text) {
     bool noText = true;
     if (text.length > 0) {
       noText = false;
@@ -78,6 +78,7 @@ class _PasswordInputState extends State<PasswordInput> {
     setState(() {
       showHideSecure = !noText;
     });
+    if (widget.onChanged != null)
     widget.onChanged(text);
   }
 

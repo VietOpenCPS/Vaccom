@@ -22,11 +22,20 @@ class MockAPI implements API {
     return User.fromJson(data);
   }
 
-  Future<InjectorPaging> getListNguoiTiemChung({
-    Map<String, dynamic> params,
-  }) async {
+  Future<List<TinhThanh>> getCity() async {
+    var data = json.decode(mockTinhThanh);
+    return TinhThanh.listFromJson(data);
+  }
+
+  Future<List<QuanHuyen>> getDistrict({int cityId}) async {
+    var data = json.decode(mockQuanHuyen);
+    return QuanHuyen.listFromJson(data);
+  }
+
+  Future<InjectorPaging> getListNguoiTiemChung({Map<String, dynamic> params}) async{
     await Future.delayed(Duration(seconds: 1));
     var data = json.decode(mockNguoiTiemChung);
     return InjectorPaging.fromJson(data);
   }
 }
+  

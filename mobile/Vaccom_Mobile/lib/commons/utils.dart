@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:vaccom_mobile/commons/constants.dart';
@@ -153,5 +154,18 @@ class Utils {
       )
     ],
   );
+}
+
+extension DateUtil on Utils {
+  static DateTime convertStringToDateTime({String dateInString, String format}) {
+    DateFormat dateFormat = DateFormat(format);
+    try {
+      final date = dateFormat.parse(dateInString);
+      return date;
+    } catch (e) {
+      logger.info(e.toString());
+      return null;
+    }
+  }
 }
 

@@ -1,5 +1,5 @@
 import 'package:vaccom_mobile/model/base_item.dart';
-
+import 'package:vaccom_mobile/components/custom_picker_input/custom_picker_input_controller.dart';
 class TinhThanh implements BaseItem {
   TinhThanh({
     this.id,
@@ -20,4 +20,11 @@ class TinhThanh implements BaseItem {
 
   static List<TinhThanh> listFromJson(dynamic data) =>
       List<TinhThanh>.from(data.map((x) => TinhThanh.fromJson(x)));
+
+  static List<PickerItem> parsePicker(List<TinhThanh> data) =>
+      List<PickerItem>.from(
+        data.map(
+          (x) => PickerItem(title: x.name, value: x.code),
+        ),
+      );
 }

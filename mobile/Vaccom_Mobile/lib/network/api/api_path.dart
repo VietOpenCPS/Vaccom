@@ -19,4 +19,19 @@ class ApiPath {
     name: r'Danh sách người tiêm chủng',
     path: r'app/get/search/nguoitiemchung'
   );
+
+  static ApiPath getCity = ApiPath(
+    name: r'Danh sách tỉnh thành',
+    path: r'app/get/tinhthanh',
+  );
+
+  static ApiPath getDistrict(int id) => ApiPath(
+    name: r'Danh sách quận huyện',
+    path: r'app/get/quanhuyen/'+ '$id',
+  );
+
+  static ApiPath getPhuongXa(int id) => ApiPath(
+    name: r'Danh sách phường xã',
+    path: r'app/get/phuongxa/'+ '$id',
+  );
 }

@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
   get:
+  tiengviet:
   loading_indicator:
   google_fonts:
   intl:

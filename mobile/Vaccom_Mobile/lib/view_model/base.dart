@@ -9,8 +9,8 @@ abstract class BaseViewModel {
 
   Function(dynamic) get errorChanged => _error.sink.add;
 
-  final API api = MockAPI.shared;
-  // final API api = RemoteAPI.shared;
+  // final API api = MockAPI.shared;
+  final API api = RemoteAPI.shared;
 
   void dispose() {
     _error.close();
