@@ -79,6 +79,22 @@ export default new Router({
           props: true,
         },
         {
+          path: '/pages/dang-ky-di-duong/:uid',
+          name: 'DangKyDiDuong',
+          component: () => import('@/views/dashboard/pages/DangKyDiDuong'),
+          props: true,
+        },
+        {
+          path: '/pages/danh-sach-di-duong-yeu-cau',
+          name: 'DanhSachDiDuongYeuCau',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongYeuCau')
+        },
+        {
+          path: '/pages/danh-sach-di-duong-da-cap',
+          name: 'DanhSachDiDuongDaCap',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongDaCap')
+        },
+        {
           name: 'Dashboard',
           path: 'pages/dashboard',
           component: () => import('@/views/dashboard/Dashboard'),
