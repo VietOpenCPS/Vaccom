@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.vaccom.vcmgt.config.EmailConfig;
 import org.vaccom.vcmgt.constant.AppConstant;
@@ -32,6 +33,7 @@ public class VaccomEventListener {
     private final MailService mailService;
     private final NguoiTiemChungService tiemChungService;
 
+    @Async
     @EventListener(NewAccountCreatedEvent.class)
     public void handleNewAccountCreated(NewAccountCreatedEvent event) {
         NguoiTiemChung nguoiTiemChung = tiemChungService.findById(event.getUserId());

@@ -25,7 +25,6 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendMail(SimpleMail mail) {
-        System.err.println(mail);
         final MimeMessage message = sender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
         try {
