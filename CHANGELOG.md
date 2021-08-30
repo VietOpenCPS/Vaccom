@@ -1,3 +1,11 @@
+### Release v0.3.1
+#### Hotfix:
+* Frontend: Không tạo được tài khoản 
+* Backend: Tài khoản mới tạo ko đăng nhập được
+#### Bugfix:
+* Phân trang các list dài
+* Validate trường CMTND/CCCD/Passport đúng chuẩn.
+
 ### Release v0.3
 #### New Features:
 * Danh sách đăng ký đã rút
