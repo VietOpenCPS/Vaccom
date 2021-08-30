@@ -571,7 +571,7 @@
       assignRole () {
         let vm = this
         if (vm.$refs.formAssign.validate()) {
-          let filter = Object.assign(vm.userUpdate, {QuanTriHeThong: vm.vaiTro})
+          let filter = Object.assign(vm.userUpdate, {vaiTro: vm.vaiTro})
           vm.$store.dispatch('assignRole', filter).then(userCredential => {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
