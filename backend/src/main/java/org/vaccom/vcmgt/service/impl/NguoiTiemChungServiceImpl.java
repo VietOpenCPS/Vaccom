@@ -280,8 +280,10 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		cq.orderBy(orderList);
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(cq);
+		
+		int offset = page * size;
 
-		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		
 		em.close();
 
