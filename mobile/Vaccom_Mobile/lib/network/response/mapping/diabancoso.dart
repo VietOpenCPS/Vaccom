@@ -1,8 +1,10 @@
-class DiaBanCoSo {
+import 'package:vaccom_mobile/model/base_item.dart';
+
+class DiaBanCoSo implements BaseItem {
   DiaBanCoSo({
     this.id,
-    this.tenDiaBan,
-    this.tinhThanhMa,
+    this.name,
+    this.code,
     this.tinhThanhTen,
     this.quanHuyenMa,
     this.quanHuyenTen,
@@ -11,9 +13,9 @@ class DiaBanCoSo {
     this.coSoYTeId,
   });
 
-  int id;
-  String tenDiaBan;
-  String tinhThanhMa;
+  int id, parentID;
+  String name;
+  String code;
   String tinhThanhTen;
   String quanHuyenMa;
   String quanHuyenTen;
@@ -23,8 +25,8 @@ class DiaBanCoSo {
 
   factory DiaBanCoSo.fromJson(Map<String, dynamic> json) => DiaBanCoSo(
         id: json["id"],
-        tenDiaBan: json["tenDiaBan"],
-        tinhThanhMa: json["tinhThanhMa"],
+        name: json["tenDiaBan"],
+        code: json["tinhThanhMa"],
         tinhThanhTen: json["tinhThanhTen"],
         quanHuyenMa: json["quanHuyenMa"],
         quanHuyenTen: json["quanHuyenTen"],

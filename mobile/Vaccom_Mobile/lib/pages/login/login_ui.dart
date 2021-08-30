@@ -56,6 +56,7 @@ class _LoginPage extends State<LoginPage> {
   void getUser(int id) {
     viewModel.getUser(id).then((value) {
       Toast.dismiss();
+      value.matKhau = viewModel.passwordCtrl.text;
       Global.shared.saveUser(value);
       Get.offAndToNamed(GetRouter.main);
     }).catchError((e) => Toast.show(text: e.toString()));

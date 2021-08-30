@@ -313,7 +313,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
               gradient: LinearGradient(colors: AppConstant.gradientColor),
             ),
           ),
-          onPressed: () => Get.toNamed(GetRouter.newInjector),
+          // onPressed: () => Get.toNamed(GetRouter.newInjector),
+          onPressed: () => Get.toNamed(GetRouter.register_injection),
         ),
       ),
     );

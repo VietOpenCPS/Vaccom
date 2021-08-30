@@ -4,6 +4,7 @@ export 'mapping/diabancoso.dart';
 export 'mapping/doituong.dart';
 export 'mapping/nguoitiemchung.dart';
 export 'mapping/quanhuyen.dart';
+export 'mapping/phuongxa.dart';
 export 'mapping/quocgia.dart';
 export 'mapping/tinhthanh.dart';
 export 'mapping/user.dart';

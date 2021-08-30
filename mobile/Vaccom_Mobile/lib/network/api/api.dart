@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:vaccom_mobile/commons/utils.dart';
 import 'package:vaccom_mobile/network/exception.dart';
 import 'package:vaccom_mobile/network/global.dart';
+import 'package:vaccom_mobile/network/response/mapping/phuongxa.dart';
 import 'package:vaccom_mobile/network/response/mapping/user.dart';
 import 'package:vaccom_mobile/network/response/response.dart';
 
@@ -30,6 +31,18 @@ abstract class API {
   Future<List<TinhThanh>> getCity();
 
   Future<List<QuanHuyen>> getDistrict({int cityId});
+
+  Future<List<PhuongXa>> getPhuongXa({int districtId});
+
+  Future<List<CoSoYTe>> getCSYT();
+
+  Future<List<DiaBanCoSo>> getDiaBanCoSo(int cosoyteId);
+
+  Future<List<DanToc>> getDanToc();
+
+  Future<List<DoiTuong>> getDoiTuong();
+
+  Future<List<QuocGia>> getQuocGia();
 
   Future<InjectorPaging> getListNguoiTiemChung({
     Map<String, dynamic> params,

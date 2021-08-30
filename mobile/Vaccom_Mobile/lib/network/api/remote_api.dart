@@ -1,4 +1,5 @@
 import 'package:vaccom_mobile/network/api/api.dart';
+import 'package:vaccom_mobile/network/response/mapping/phuongxa.dart';
 import 'package:vaccom_mobile/network/response/response.dart';
 
 class RemoteAPI implements API {
@@ -65,14 +66,69 @@ class RemoteAPI implements API {
     }
   }
 
-  // Future<PhuongXa> getPhuongXa({int districtId}) async {
-  //   final apiPath = ApiPath.getPhuongXa(districtId);
-  //   final Map<String, String> param = {};
-  //   try {
-  //     var res = await ApiMethod.getData(apiPath, param);
-  //     return QuanHuyen.fromJson(res);
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
+  Future<List<PhuongXa>> getPhuongXa({int districtId}) async {
+    final apiPath = ApiPath.getPhuongXa(districtId);
+    final Map<String, String> param = {};
+    try {
+      var res = await ApiMethod.getData(apiPath, param);
+      return PhuongXa.listFromJson(res);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<CoSoYTe>> getCSYT() async {
+    final apiPath = ApiPath.getCSTY;
+    final Map<String, String> param = {};
+    try {
+      var data = await ApiMethod.getData(apiPath, param);
+      return CoSoYTe.listFromJson(data);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<DiaBanCoSo>> getDiaBanCoSo(int cosoyteId) async {
+    final apiPath = ApiPath.getDiaBanCoSo(cosoyteId);
+    final Map<String, dynamic> param = {};
+    try {
+      var data = await ApiMethod.getData(apiPath, param);
+      return DiaBanCoSo.listFromJson(data['data']);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<DanToc>> getDanToc() async {
+    final apiPath = ApiPath.getDanToc;
+    final Map<String, String> param = {};
+    try {
+      var data = await ApiMethod.getData(apiPath, param);
+      return DanToc.listFromJson(data);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<DoiTuong>> getDoiTuong() async {
+    final apiPath = ApiPath.getSubject;
+    final Map<String, String> param = {};
+    try {
+      var data = await ApiMethod.getData(apiPath, param);
+      return DoiTuong.listFromJson(data);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<QuocGia>> getQuocGia() async {
+    final apiPath = ApiPath.getCountry;
+    final Map<String, String> param = {};
+    try {
+      var data = await ApiMethod.getData(apiPath, param);
+      return QuocGia.listFromJson(data);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

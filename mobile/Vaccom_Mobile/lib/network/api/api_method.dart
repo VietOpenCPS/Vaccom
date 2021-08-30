@@ -108,6 +108,31 @@ extension ApiMethod on API {
     }
   }
 
+  /// Renew TOKEN
+  static Future<void> renewToken() async {
+    final user = Global.shared.currentUser;
+    final u = user.tenDangNhap;
+    final p = user.matKhau;
+
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$u:$p'));
+    logger.info(basicAuth);
+
+    try {
+      logger.info(Uri.parse(Global.shared.endpoint(ApiPath.login.path)));
+      var response = await http.post(
+        Uri.parse(Global.shared.endpoint(ApiPath.login.path)),
+        headers: {'authorization': basicAuth},
+      );
+
+      var utf8Decode = utf8.decode(response.bodyBytes);
+      var responseJson = json.decode(utf8Decode);
+      final token = VacToken.fromJson(responseJson);
+      Utils.saveToken(token);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   ///
   static dynamic processResponse(http.Response response) {
     switch (response.statusCode) {
@@ -117,13 +142,18 @@ extension ApiMethod on API {
         logger.info(responseJson);
         return responseJson;
         break;
+
+      case 401:
+        renewToken();
+        break;
+
       default:
         throw FetchDataException('Lỗi kết nối: ${response.statusCode}');
     }
   }
 }
 
-extension Covid19Vaccine on API {
+extension VacNetwork on API {
   /// GET
   static Future<dynamic> getData({String uri}) async {
     final isOnline = await ApiMethod.hasNetwork();
@@ -147,7 +177,6 @@ extension Covid19Vaccine on API {
       }
 
       return json.decode(reply);
-
     } catch (e) {
       logger.info(e.toString());
       throw FetchDataException('Lỗi kết nối');

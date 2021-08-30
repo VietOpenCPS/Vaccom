@@ -12,33 +12,31 @@ class User {
     this.nguoiTiemChungId,
     this.quanTriHeThong,
     this.khoaTaiKhoan,
+    this.uyBanNhanDanId,
   });
 
   int id;
-  String tenDangNhap;
-  String hoVaTen;
-  String chucDanh;
-  String soDienThoai;
-  String email;
-  String matKhau;
-  int diaBanCoSoId;
-  int coSoYTeId;
-  int nguoiTiemChungId;
-  bool quanTriHeThong;
+  String tenDangNhap, hoVaTen;
+  String chucDanh, soDienThoai;
+  String email, matKhau;
+  int diaBanCoSoId, uyBanNhanDanId;
+  int coSoYTeId, nguoiTiemChungId;
+  int quanTriHeThong;
   bool khoaTaiKhoan;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    tenDangNhap: json["tenDangNhap"],
-    hoVaTen: json["hoVaTen"],
-    chucDanh: json["chucDanh"],
-    soDienThoai: json["soDienThoai"],
-    email: json["email"],
-    matKhau: json["matKhau"],
-    diaBanCoSoId: json["diaBanCoSoId"],
-    coSoYTeId: json["coSoYTeId"],
-    nguoiTiemChungId: json["nguoiTiemChungId"],
-    quanTriHeThong: json["quanTriHeThong"],
-    khoaTaiKhoan: json["khoaTaiKhoan"],
-  );
+        id: json["id"],
+        tenDangNhap: json["tenDangNhap"],
+        hoVaTen: json["hoVaTen"],
+        chucDanh: json["chucDanh"],
+        soDienThoai: json["soDienThoai"],
+        email: json["email"],
+        matKhau: json["matKhau"],
+        diaBanCoSoId: json["diaBanCoSoId"],
+        coSoYTeId: json["coSoYTeId"],
+        nguoiTiemChungId: json["nguoiTiemChungId"],
+        quanTriHeThong: json["quanTriHeThong"],
+        khoaTaiKhoan: json["khoaTaiKhoan"],
+        uyBanNhanDanId: json['uyBanNhanDanId'],
+      );
 }

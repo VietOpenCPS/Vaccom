@@ -1,3 +1,5 @@
+import 'package:vaccom_mobile/components/custom_picker_input/custom_picker_input_controller.dart';
+
 class CoSoYTe {
   CoSoYTe({
     this.id,
@@ -63,4 +65,7 @@ class CoSoYTe {
 
   static List<CoSoYTe> listFromJson(dynamic data) =>
       List<CoSoYTe>.from(data.map((x) => CoSoYTe.fromJson(x)));
+
+  static List<PickerItem> parsePicker(List<CoSoYTe> data) =>
+      data.map((x) => PickerItem(title: x.tenCoSo, value: x.id)).toList();
 }
