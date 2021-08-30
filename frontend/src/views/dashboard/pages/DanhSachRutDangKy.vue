@@ -9,7 +9,7 @@
       <base-material-card
         style="margin-top: 20px"
         icon="mdi-clipboard-text"
-        title="DANH SÁCH ĐĂNG KÝ TIÊM CHÍNH THỨC"
+        title="DANH SÁCH ĐĂNG KÝ ĐÃ RÚT"
         class="px-5 py-3"
       >
         <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
@@ -35,11 +35,11 @@
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+            <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
-                mdi-backup-restore
+                mdi-file-restore-outline
               </v-icon>
-              Rút đăng ký
+              Khôi phục đăng ký
             </v-btn>  
           </div>
           
@@ -97,21 +97,13 @@
             </template>
             <template v-slot:item.action="{ item }">
               <div style="width: 100px">
-                <!-- <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="editRegistration(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
-                      <v-icon size="22">mdi-pencil</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Sửa thông tin</span>
-                </v-tooltip> -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="translateStatus(item)" color="orange" text icon class="" v-bind="attrs" v-on="on">
-                      <v-icon size="22">mdi-backup-restore</v-icon>
+                    <v-btn @click="translateStatus(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-file-restore-outline</v-icon>
                     </v-btn>
                   </template>
-                  <span>Rút đăng ký</span>
+                  <span>Khôi phục đăng ký</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -290,19 +282,6 @@
                 <p class="mb-2">Ngày tiêm: </p>
                 <p class="mb-2">Địa điểm tiêm: </p>
               </v-card>
-              <!-- <v-card class="pa-2 ml-2" outlined max-width="450" min-width="350">
-                <div class="mb-2">
-                  <v-icon size=22 color="red" class="mr-3" >
-                      mdi-cancel
-                  </v-icon>
-                  <span style="font-weight: bold">MŨI 2</span> - 
-                  <span style="">Chưa tiêm</span>
-                </div>
-                <p class="mb-2">Tên vắc xin: </p>
-                <p class="mb-2">Lô vắc xin: </p>
-                <p class="mb-2">Ngày tiêm: </p>
-                <p class="mb-2">Địa điểm tiêm: </p>
-              </v-card> -->
             </v-layout>
             <p v-else>Chưa có lịch sử tiêm chủng</p>
             <div class="my-3">
@@ -422,7 +401,7 @@
         vm.$router.push({ path: '/login?redirect=/pages/danh-sach-dang-ky-tiem-moi' })
         return
       }
-      vm.getDanhSachDangKyChinhThuc(0)
+      vm.getDanhSachDangKyDaHuy(0)
     },
     computed: {
       breakpointName () {
@@ -437,7 +416,7 @@
         vm.page = 0
         vm.totalItem = 0
         vm.pageCount = 0
-        vm.getDanhSachDangKyChinhThuc(0, data)
+        vm.getDanhSachDangKyDaHuy(0, data)
       },
       cancelSearchDangKyTiem (data) {
         let vm = this
@@ -446,19 +425,19 @@
         vm.page = 0
         vm.totalItem = 0
         vm.pageCount = 0
-        vm.getDanhSachDangKyChinhThuc(0, data)
+        vm.getDanhSachDangKyDaHuy(0, data)
       },
       showTimKiem () {
         let vm = this
         vm.showAdvanceSearch = true
       },
-      getDanhSachDangKyChinhThuc (pageIn, dataSearch) {
+      getDanhSachDangKyDaHuy (pageIn, dataSearch) {
         let vm = this
         vm.loadingData = true
         let filter = {
           page: pageIn,
           size: vm.itemsPerPage,
-          tinhtrangdangky: 1,
+          tinhtrangdangky: 2,
           cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
           nhomdoituong: dataSearch && dataSearch['NhomDoiTuong'] ? dataSearch['NhomDoiTuong'] : '',
           ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
@@ -466,7 +445,7 @@
           diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
           cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : '',
           kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : '',
-          typeSearch: 'danhsachdangkychinhthuc'
+          typeSearch: 'danhsachdahuy'
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false
@@ -479,8 +458,6 @@
             vm.totalItem = 0
           }
         }).catch(function () {
-          vm.items = []
-          vm.totalItem = 0
           vm.loadingData = false
         })
       },
@@ -492,7 +469,7 @@
           data: {
             page: -1,
             size: -1,
-            tinhtrangdangky: 1,
+            tinhtrangdangky: 2,
             cmtcccd: vm.dataInputSearch && vm.dataInputSearch['CMTCCCD'] ? vm.dataInputSearch['CMTCCCD'] : '',
             nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
             ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
@@ -528,7 +505,7 @@
         let filter = {
           data: {
             ids: item === 'multiple' ? arrIds : String(item.id),
-            TinhTrangDangKi: 2
+            TinhTrangDangKi: 3
           }
         }
         if (!filter['data']['ids']) {
@@ -539,15 +516,15 @@
           vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Rút đăng ký thành công',
+              text: 'Khôi phục thành công',
               color: 'success',
             })
-            vm.getDanhSachDangKyChinhThuc(0)
+            vm.getDanhSachDangKyDaHuy(0)
             vm.selected = []
           }).catch(function () {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Rút đăng ký thất bại',
+              text: 'Khôi phục thất bại',
               color: 'error',
             })
           })
@@ -561,7 +538,7 @@
       changePage (config) {
         let vm = this
         vm.page = config.page
-        vm.getDanhSachDangKyChinhThuc(config.page, vm.dataInputSearch)
+        vm.getDanhSachDangKyDaHuy(config.page, vm.dataInputSearch)
       },
       editRegistration (item) {
         let vm = this
@@ -588,4 +565,3 @@
     display: none !important;
   }
 </style>
-

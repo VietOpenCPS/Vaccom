@@ -282,14 +282,36 @@
                       placeholder="Phường/ Xã"
                       dense
                       hide-details="auto"
-                      @keyup.enter="nextFocus('noio')"
+                      @keyup.enter="nextFocus('diabancoso')"
                   ></v-autocomplete>
                 </v-col>
                 <v-col
                   cols="12"
+                  md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Địa chỉ nơi ở <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Tổ dân phố/thôn/ấp <span style="color:red">(*)</span></div>
+                  <v-autocomplete
+                      hide-no-data
+                      :items="listDiaBan"
+                      :rules="required"
+                      required
+                      v-model="applicantInfo['DiaBanCoSo_ID']"
+                      item-text="tenDiaBan"
+                      item-value="id"
+                      outlined
+                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+                      dense
+                      hide-details="auto"
+                      id="diabancoso"
+                      @keyup.enter="nextFocus('noio')"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col
+                  cols="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Địa chỉ chi tiết <span style="color:red">(*)</span></div>
                   <v-text-field
                     v-model="applicantInfo['DiaChiNoiO']"
                     :rules="required"
@@ -304,7 +326,7 @@
                 </v-col>
                 <v-col
                   cols="12"
-                  md="6"
+                  md="12"
                   class="pb-0"
                 >
                   <div class="mb-2">Cơ sở y tế <span style="color:red">(*)</span></div>
@@ -325,26 +347,7 @@
                       clearable
                   ></v-autocomplete>
                 </v-col>
-                <v-col
-                  cols="12"
-                  md="6"
-                  class="pb-0"
-                >
-                  <div class="mb-2">Địa bàn cơ sở </div>
-                  <v-autocomplete
-                      hide-no-data
-                      :items="listDiaBan"
-                      v-model="applicantInfo['DiaBanCoSo_ID']"
-                      item-text="tenDiaBan"
-                      item-value="id"
-                      outlined
-                      placeholder="Tổ dân phố, khóm ấp, thôn bản…"
-                      dense
-                      hide-details="auto"
-                      id="diabancoso"
-                      @keyup.enter="nextFocus('nhomdoituong')"
-                  ></v-autocomplete>
-                </v-col>
+                
               </v-row>
               <!-- row 4 -->
               <v-row>
@@ -371,6 +374,7 @@
                 >
                   <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
                   <v-autocomplete
+                      ref="chondoituong"
                       :items="listDoiTuong"
                       placeholder="Nhóm đối tượng"
                       v-model="applicantInfo['NhomDoiTuong']"
@@ -383,13 +387,13 @@
                       dense
                       hide-details="auto"    
                       id="nhomdoituong"
-                      @keyup.enter="nextFocus('donvicongtac')"          
+                      @keyup.enter="nextFocus('donvicongtac')"
                   >
                   <template v-slot:selection="data">
-                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                      <span>{{ data.item.doiTuongMoTa }}</span>
                     </template>
                     <template v-slot:item="data">
-                      <span>{{ data.item.doiTuongMa }}. {{ data.item.doiTuongMoTa }}</span>
+                      <span>{{ data.item.doiTuongMoTa }}</span>
                     </template>
                   </v-autocomplete>
                 </v-col>
@@ -661,7 +665,7 @@
         listQuanHuyen: [],
         quanHuyen: '004',
         listXaPhuong: [],
-        xaPhuong: '00148',
+        xaPhuong: '',
         listDiaBan: [
         ],
         listCoSoYTe: [],
@@ -678,13 +682,7 @@
         dataHistory: '',
 
         required: [
-          (value) => {
-            if(String(value).trim()){
-                return true
-              } else {
-                return 'Thông tin bắt buộc'
-              } 
-          }
+          v => !!v || 'Thông tin bắt buộc'
         ],
         requiredSex: [
           (value) => {
@@ -780,7 +778,7 @@
       },
       coSoYTe (val) {
         this.applicantInfo.CoSoYTe_Ma = val
-        this.getDiaBanCoSo(val)
+        // this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -833,9 +831,16 @@
         }
       } catch (error) {
       }
-
     },
     methods: {
+      autoBind() {
+        let vm = this
+        console.log('add', $('#nhomdoituong').val())
+        if ($('#nhomdoituong').val() && Number.isInteger(Number($('#nhomdoituong').val())) && $('#nhomdoituong').val().length <= 2) {
+          vm.applicantInfo['NhomDoiTuong'] = Number($('#nhomdoituong').val()) - 1
+        }
+        vm.$refs.chondoituong.isMenuActive = false
+      },
       getUserInfo () {
         let vm = this
         try {
@@ -887,7 +892,7 @@
                 
                 vm.tinhThanh = '01'
                 vm.quanHuyen = '004'
-                vm.xaPhuong = '00148'
+                // vm.xaPhuong = '00148'
                 vm.applicantInfo['DanToc_Ma'] = '01'
                 vm.applicantInfo['QuocTich_Ma'] = 'VN'
                 vm.applicantInfo['HoVaTen'] = ''
@@ -935,13 +940,24 @@
           } else {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Thời điểm tiêm người đăng ký chưa đủ 18 tuổi',
+              text: 'Người đăng ký chưa đủ 18 tuổi',
               color: 'error',
             })
             vm.processingAction = false
           }
         } else {
           vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Vui lòng nhập đầy đủ các thông tin bắt buộc',
+            color: 'error',
+          })
+          $('html, body').animate({
+              scrollTop: $('#xemdanhsach').offset().top,
+            },
+            500,
+            'linear'
+          )
         }
       },
       copyContent () {
@@ -1031,10 +1047,10 @@
           }
           if (vm.coSoYTe) {
             let obj = vm.listCoSoYTe.find(function (item) {
-              return item.itemCode == vm.coSoYTe
+              return item.maCoSo == vm.coSoYTe
             })
             vm.applicantInfo.CoSoYTe_Ma = vm.coSoYTe
-            vm.applicantInfo.CoSoYTe_Ten = obj ? obj['TenCoSo'] : ''
+            vm.applicantInfo.CoSoYTe_Ten = obj ? obj['tenCoSo'] : ''
           }
           vm.applicantInfo.NgaySinh = vm.applicantDateFormatted
           vm.applicantInfo.NgayDangKi = vm.ngayDuKienFormatted
@@ -1059,16 +1075,17 @@
         let lengthDate = String(vm.applicantDateFormatted).trim().length
         let splitDate = String(vm.applicantDateFormatted).split('/')
         let namTiem = (new Date()).getFullYear()
-        if (vm.ngayDuKienFormatted) {
-          namTiem = String(vm.ngayDuKienFormatted).split('/')[2]
-        }
+        // if (vm.ngayDuKienFormatted) {
+        //   namTiem = String(vm.ngayDuKienFormatted).split('/')[2]
+        // }
         if (lengthDate && lengthDate == 4) {
           year = Number(vm.applicantDateFormatted)
+          tuoi = Number(namTiem) - year
         } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
-          year = Number(splitDate[2])
+          let isoDate = vm.parseDate(vm.applicantDateFormatted)
+          tuoi = Math.floor((new Date() - new Date(isoDate).getTime()) / 3.15576e+10)
         }
-        tuoi = Number(namTiem) - year
-        if (tuoi > 18) {
+        if (tuoi >= 18) {
           return true
         } else {
           return false
@@ -1111,6 +1128,17 @@
         }
         vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
           vm.listCoSoYTe = result ? result : []
+          // bind co so y te
+          try {
+            let data = localStorage.getItem('user')
+            if (data && JSON.parse(data) && JSON.parse(data)['coSoYTeId']) {
+              let obj = vm.listCoSoYTe.find(function (item) {
+                return item.id == JSON.parse(data)['coSoYTeId']
+              })
+              vm.coSoYTe = obj['maCoSo']
+            }
+          } catch (error) {
+          }
         })
       },
       getNhomDoiTuong () {
@@ -1118,7 +1146,18 @@
         let filter = {
         }
         vm.$store.dispatch('getNhomDoiTuong', filter).then(function (result) {
-          vm.listDoiTuong = result ? result : []
+          let data = []
+          if (result && result.length) {
+            for (var i = 0; i < result.length; i++) {
+              let item = {
+                id: result[i]['id'],
+                doiTuongMoTa: result[i]['doiTuongMa'] + ' ' + result[i]['doiTuongMoTa']
+              }
+              data.push(item)
+            }
+          }
+          // vm.listDoiTuong = result ? result : []
+          vm.listDoiTuong = data
         })
       },
       getQuocGia () {
@@ -1143,11 +1182,13 @@
         }
         vm.$store.dispatch('getDanhMucTinhThanh', filter).then(function (result) {
           vm.listTinhThanh = result ? result : []
-          if (vm.tinhThanh) {
+          if (vm.tinhThanh && vm.listTinhThanh.length) {
             vm.getQuanHuyen(vm.tinhThanh)
           }
-        }).catch(function(){
-          vm.$router.push({ path: '/login' })
+        }).catch(function(error){
+          if (error && error.response && error.response.status == 401) {
+            vm.$router.push({ path: '/login' })
+          }
         })
       },
       getQuanHuyen (code) {
@@ -1236,7 +1277,8 @@
           if (lengthDate === 4) {
             tuoi = currentYear - Number(vm.applicantDateFormatted)
           } else {
-            tuoi = currentYear - Number(String(vm.applicantDateFormatted).split('/')[2])
+            let isoDate = vm.parseDate(vm.applicantDateFormatted)
+            tuoi = Math.floor((new Date() - new Date(isoDate).getTime()) / 3.15576e+10)
           }
           if (tuoi < 18) {
             vm.$store.commit('SHOW_SNACKBAR', {
