@@ -218,7 +218,7 @@
                         class="flex xs12 md12"
                         hide-no-data
                         :items="listVaiTro"
-                        v-model="userInfo['QuanTriHeThong']"
+                        v-model="userInfo['VaiTro']"
                         item-text="name"
                         item-value="value"
                         clearable

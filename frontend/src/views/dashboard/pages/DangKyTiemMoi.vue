@@ -343,7 +343,7 @@
                       dense
                       hide-details="auto"
                       id="cosoyte"
-                      @keyup.enter="nextFocus('diabancoso')"
+                      @keyup.enter="nextFocus('nhomdoituong')"
                       clearable
                   ></v-autocomplete>
                 </v-col>
@@ -778,7 +778,7 @@
       },
       coSoYTe (val) {
         this.applicantInfo.CoSoYTe_Ma = val
-        this.getDiaBanCoSo(val)
+        // this.getDiaBanCoSo(val)
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
