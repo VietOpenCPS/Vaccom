@@ -694,17 +694,17 @@
           }
         ],
         requiredCredit: [
+          // (value) => {
+          //   if (value && value.length === 9) {
+          //     const pattern = /^(([0-9]{9,9}))$/
+          //     return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
+          //   } else {
+          //     const pattern = /^(([0-9]{12,12}))$/
+          //     return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
+          //   }
+          // },
           (value) => {
-            if (value && value.length === 9) {
-              const pattern = /^(([0-9]{9,9}))$/
-              return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
-            } else {
-              const pattern = /^(([0-9]{12,12}))$/
-              return pattern.test(value) || 'Số CMND gồm 9 hoặc 12 ký tự 0-9'
-            }
-          },
-          (value) => {
-            if(value || value == 0){
+            if(String(value).trim()){
               return true
             } else {
               return 'Thông tin bắt buộc'
