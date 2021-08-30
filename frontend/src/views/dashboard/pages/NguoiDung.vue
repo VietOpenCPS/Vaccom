@@ -345,7 +345,7 @@
           MatKhau: '',
           DiaBanCoSo_ID: '',
           CoSoYTe_ID: '',
-          QuanTriHeThong: 0,
+          VaiTro: 0,
           KhoaTaiKhoan: false
         },
         totalItem: 0,
@@ -542,7 +542,7 @@
             vm.userInfo.Email = user.email
             vm.userInfo.DiaBanCoSo_ID = user.diaBanCoSoId
             vm.coSoYTe = user.coSoYTeId
-            vm.userInfo.QuanTriHeThong = user.quanTriHeThong
+            vm.userInfo.VaiTro = user.quanTriHeThong
             vm.$refs.formAddMember.resetValidation()
           }, 200)
         }
