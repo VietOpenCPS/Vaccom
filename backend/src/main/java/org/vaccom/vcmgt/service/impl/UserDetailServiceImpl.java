@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.repository.NguoiDungRepository;
 import org.vaccom.vcmgt.service.UserDetailService;
+import org.vaccom.vcmgt.util.RoleUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 
 /**
@@ -36,7 +37,7 @@ public class UserDetailServiceImpl implements UserDetailService {
 
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-		grantedAuthorities.add(new SimpleGrantedAuthority(VaccomUtil.getRoleName(nguoiDung.getVaiTro())));
+		grantedAuthorities.add(new SimpleGrantedAuthority(RoleUtil.getTenVaiTro(nguoiDung)));
 
 		return new org.springframework.security.core.userdetails.User(nguoiDung.getTenDangNhap(), nguoiDung.getMatKhau(),
 				grantedAuthorities);

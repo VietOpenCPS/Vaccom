@@ -126,8 +126,10 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 		cq.orderBy(orderList);
 
 		TypedQuery<CaTiemChung> typedQuery = em.createQuery(cq);
+		
+		int offset = page * size;
 
-		List<CaTiemChung> lstCaTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		List<CaTiemChung> lstCaTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		
 		em.close();
 

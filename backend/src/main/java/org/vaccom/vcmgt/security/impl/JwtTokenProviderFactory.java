@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.NguoiDung;
+import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.security.JwtTokenProvider;
 import org.vaccom.vcmgt.service.KhoaDangKyService;
 import org.vaccom.vcmgt.service.NguoiDungService;
@@ -124,33 +125,15 @@ public class JwtTokenProviderFactory implements JwtTokenProvider {
 	public String getUsernameFromToken(String token, String secret) {
 		return getClaimFromToken(token, Claims::getSubject, secret);
 	}
-
-	@Override
-	public String getRoleNameFromToken(String token, String secret) {
-
-		String tenDangNhap = getUsernameFromToken(token, secret);
-
-		NguoiDung nguoiDung = nguoiDungService.findByTenDanNhap(tenDangNhap);
-
-		if (nguoiDung == null) {
-			return StringPool.BLANK;
-		}
-
-		return VaccomUtil.VaiTro.getEnum(nguoiDung.getVaiTro()).getName();
-	}
 	
 	@Override
-	public int getRoleValueFromToken(String token, String secret) {
-
+	public VaiTro getVaiTroFromToken(String token, String secret) {
+		
 		String tenDangNhap = getUsernameFromToken(token, secret);
 
 		NguoiDung nguoiDung = nguoiDungService.findByTenDanNhap(tenDangNhap);
-
-		if (nguoiDung == null) {
-			return 0;
-		}
-
-		return nguoiDung.getVaiTro();
+		
+		return new VaiTro(nguoiDung);
 	}
 
 	@Override

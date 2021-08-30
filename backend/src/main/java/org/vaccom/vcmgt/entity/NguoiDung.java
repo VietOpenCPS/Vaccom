@@ -59,11 +59,14 @@ public class NguoiDung implements Serializable {
 	@Column(name = "NguoiTiemChungID ")
 	private long nguoiTiemChungId;
 
-	@Column(name = "VaiTro")
-	private int vaiTro;
+	@Column(name = "QuanTriHeThong")
+	private int quanTriHeThong;
 
 	@Column(name = "KhoaTaiKhoan")
 	private boolean khoaTaiKhoan;
+
+	@Column(name = "UyBanNhanDanID ")
+	private long uyBanNhanDanId;
 
 	public long getId() {
 		return id;
@@ -137,14 +140,6 @@ public class NguoiDung implements Serializable {
 		this.coSoYTeId = coSoYTeId;
 	}
 
-	public int getVaiTro() {
-		return vaiTro;
-	}
-
-	public void setVaiTro(int vaiTro) {
-		this.vaiTro = vaiTro;
-	}
-
 	public boolean isKhoaTaiKhoan() {
 		return khoaTaiKhoan;
 	}
@@ -159,6 +154,22 @@ public class NguoiDung implements Serializable {
 
 	public void setNguoiTiemChungId(long nguoiTiemChungId) {
 		this.nguoiTiemChungId = nguoiTiemChungId;
+	}
+
+	public int getQuanTriHeThong() {
+		return quanTriHeThong;
+	}
+
+	public void setQuanTriHeThong(int quanTriHeThong) {
+		this.quanTriHeThong = quanTriHeThong;
+	}
+
+	public long getUyBanNhanDanId() {
+		return uyBanNhanDanId;
+	}
+
+	public void setUyBanNhanDanId(long uyBanNhanDanId) {
+		this.uyBanNhanDanId = uyBanNhanDanId;
 	}
 
 }

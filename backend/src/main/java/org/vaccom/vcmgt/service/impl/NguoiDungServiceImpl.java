@@ -48,6 +48,13 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 		khoaDangKyRepository.save(khoaDangKy);
 		return nguoiDung;
 	}
+	
+	@Override
+	@Transactional
+	public NguoiDung updateNguoiDung(NguoiDung nguoiDung, KhoaDangKy khoaDangKy) {
+		khoaDangKyRepository.save(khoaDangKy);
+		return nguoiDungRepository.save(nguoiDung);
+	}
 
 	@Override
 	@Transactional
@@ -91,10 +98,12 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 		Root<NguoiDung> root = cq.from(NguoiDung.class);
 		cq.multiselect(root.get("id"), root.get("tenDangNhap"), root.get("hoVaTen"), root.get("chucDanh"),
 				root.get("soDienThoai"), root.get("email"), root.get("diaBanCoSoId"), root.get("coSoYTeId"),
-				root.get("vaiTro"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"))
+				root.get("quanTriHeThong"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"), root.get("uyBanNhanDanId"))
 				.orderBy(cb.asc(root.get("id")));
+		
+		int offset = page * size;
 
-		List<Tuple> result = em.createQuery(cq).setFirstResult(page).setMaxResults(size).getResultList();
+		List<Tuple> result = em.createQuery(cq).setFirstResult(offset).setMaxResults(size).getResultList();
 
 		List<NguoiDung> lstNguoiDung = new ArrayList<NguoiDung>();
 
@@ -109,9 +118,10 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 			nguoiDung.setHoVaTen(tuple.get(2, String.class));
 			nguoiDung.setKhoaTaiKhoan(tuple.get(9, Boolean.class));
 			nguoiDung.setNguoiTiemChungId(tuple.get(10, Long.class));
-			nguoiDung.setVaiTro(tuple.get(8, Integer.class));
+			nguoiDung.setQuanTriHeThong(tuple.get(8, Integer.class));
 			nguoiDung.setSoDienThoai(tuple.get(4, String.class));
 			nguoiDung.setTenDangNhap(tuple.get(1, String.class));
+			nguoiDung.setUyBanNhanDanId(tuple.get(11, Long.class));
 
 			lstNguoiDung.add(nguoiDung);
 

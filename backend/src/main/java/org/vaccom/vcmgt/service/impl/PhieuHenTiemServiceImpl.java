@@ -172,8 +172,10 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 		cq.orderBy(orderList);
 
 		TypedQuery<PhieuHenTiem> typedQuery = em.createQuery(cq);
+		
+		int offset = page * size;
 
-		List<PhieuHenTiem> lstPhieuHenTiem = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		List<PhieuHenTiem> lstPhieuHenTiem = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		
 		em.close();
 

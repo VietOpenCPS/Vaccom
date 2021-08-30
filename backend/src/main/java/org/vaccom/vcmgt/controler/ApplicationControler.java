@@ -50,9 +50,12 @@ import org.vaccom.vcmgt.entity.PhuongXa;
 import org.vaccom.vcmgt.entity.QuanHuyen;
 import org.vaccom.vcmgt.entity.QuocGia;
 import org.vaccom.vcmgt.entity.TinhThanh;
+import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.response.DataResponeBody;
 import org.vaccom.vcmgt.util.MessageUtil;
+import org.vaccom.vcmgt.util.PermissionUtil;
+import org.vaccom.vcmgt.util.RoleUtil;
 import org.vaccom.vcmgt.util.VaccomUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -118,9 +121,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!PermissionUtil.hasAddNguoiDung(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
@@ -153,9 +156,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!PermissionUtil.hasDeleteNguoiDung(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.delete.permission_error"));
 			}
@@ -192,9 +195,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.lock.permission_error"));
 			}
@@ -227,7 +230,7 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
 			String tenDangNhap = GetterUtil.getString(request.getAttribute("_TEN_DANG_NHAP"), StringPool.BLANK);
 
@@ -245,7 +248,7 @@ public class ApplicationControler {
 					? bodyData.get(EntityConstant.MATKHAUCU).textValue()
 					: StringPool.BLANK;
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 
 				if (reqId > 0 && reqId != id) {
 					nguoiDungAction.changeMatKhau(id, matKhauMoi);
@@ -302,14 +305,28 @@ public class ApplicationControler {
 
 		try {
 
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			if (reqId <= 0 || reqId != id) {
+			NguoiDung nguoiDung = nguoiDungAction.findById(id);
+
+			if (nguoiDung == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("nguoidung.not_found"));
+			}
+
+			if (vaiTro == null || reqId <= 0
+					|| ((RoleUtil.isCanBoDiaBan(vaiTro) || RoleUtil.isCanBoYTe(vaiTro) || RoleUtil.isCanBoUBND(vaiTro)
+							|| RoleUtil.isNguoiDung(vaiTro)) && reqId != id)
+					|| (RoleUtil.isQuanTriCoSo(vaiTro) && RoleUtil.isQuanTriHeThong(RoleUtil.getVaiTro(nguoiDung))
+							|| (RoleUtil.isQuanTriCoSo(vaiTro)
+									&& !RoleUtil.hasUpdateObjectPermission(vaiTro, nguoiDung)))) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
 			}
 
-			nguoiDungAction.updateNguoiDung(reqId, reqBody);
+			nguoiDungAction.updateNguoiDung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoidung.update.success");
 
@@ -336,9 +353,9 @@ public class ApplicationControler {
 
 		try {
 
-			int tmp = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro reqVaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(tmp)) {
+			if (!RoleUtil.isQuanTriHeThong(reqVaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
 			}
@@ -370,16 +387,19 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.danhsach.permission_error"));
 			}
 
-			long total = nguoiDungAction.countAll();
+			long total = 0;
 
-			List<NguoiDung> lstNguoiDung = nguoiDungAction.findAll(page, size);
+			List<NguoiDung> lstNguoiDung = new ArrayList<NguoiDung>();
+			//TODO check
+			total = nguoiDungAction.countAll();
+			lstNguoiDung = nguoiDungAction.findAll(page, size);
 
 			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstNguoiDung));
 
@@ -404,9 +424,16 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
+
+			if (vaiTro == null || reqId <= 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoidung.chitiet.permission_error"));
+			}
+
+			if (reqId != id && !RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.chitiet.permission_error"));
 			}
@@ -436,9 +463,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("doituong.danhsach.permission_error"));
 			}
@@ -468,9 +495,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("quocgia.danhsach.permission_error"));
 			}
@@ -500,9 +527,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("dantoc.danhsach.permission_error"));
 			}
@@ -532,9 +559,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("tinhthanh.danhsach.permission_error"));
 			}
@@ -565,9 +592,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("quanhuyen.danhsach.permission_error"));
 			}
@@ -598,9 +625,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phuongxa.danhsach.permission_error"));
 			}
@@ -636,13 +663,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.add.permission_error"));
 			}
-
+			*/
 			nguoiTiemChungAction.addNguoiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.success");
@@ -671,12 +699,16 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.update.permission_error"));
 			}
+			
+			*/
 
 			nguoiTiemChungAction.updateNguoiTiemChung(id, reqBody);
 
@@ -706,12 +738,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasQuanTriCoSoPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasQuanTriCoSoPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
+			*/
 
 			boolean result = nguoiTiemChungAction.deleteNguoiTiemChung(id);
 
@@ -746,13 +780,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasQuanTriCoSoPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasQuanTriCoSoPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.update.permission_error"));
 			}
-
+			 */
 			nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
@@ -781,12 +816,15 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
 			}
+			
+			*/
 
 			nguoiTiemChungAction.duyetDangKyMoi(reqBody);
 
@@ -814,14 +852,15 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
-
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.khoiphucdangky.permission_error"));
 			}
-
+			*/
 			nguoiTiemChungAction.khoiPhucDangKy(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.khoiphucdangky.success");
@@ -849,13 +888,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.huydangky.permission_error"));
 			}
-
+			*/
 			nguoiTiemChungAction.huyDangKyChinhThuc(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.huydangky.success");
@@ -883,13 +923,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
-
+			*/
 			nguoiTiemChungAction.deleteNguoiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
@@ -925,13 +966,14 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasQuanTriHeThongPermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasQuanTriHeThongPermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = nguoiTiemChungAction.countAll();
 
 			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(page, size);
@@ -995,18 +1037,19 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = 0;
 
 			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
 						diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
 
@@ -1094,18 +1137,19 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = 0;
 
 			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
 						diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung);
 
@@ -1192,18 +1236,19 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoDiaBanPermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = 0;
 
 			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
 						diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung);
 
@@ -1290,18 +1335,19 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.danhsach.permission_error"));
 			}
-
+			 */
 			long total = 0;
 
 			List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
 						diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung);
 
@@ -1375,9 +1421,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("diabancoso.add.permission_error"));
 			}
@@ -1409,9 +1455,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("diabancoso.update.permission_error"));
 			}
@@ -1443,9 +1489,9 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id) {
 
 		try {
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("diabancoso.delete.permission_error"));
 			}
@@ -1482,9 +1528,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("diabancoso.danhsach.permission_error"));
 			}
@@ -1524,9 +1570,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("cosoyte.add.permission_error"));
 			}
@@ -1559,9 +1605,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("cosoyte.update.permission_error"));
 			}
@@ -1594,9 +1640,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("cosoyte.delete.permission_error"));
 			}
@@ -1632,9 +1678,9 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (vaiTro <= 0) {
+			if (vaiTro == null) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("cosoyte.danhsach.permission_error"));
 			}
@@ -1665,13 +1711,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phieuhentiem.add.permission_error"));
 			}
-
+			*/
 			phieuHenTiemAction.addPhieuHenTiem(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
@@ -1699,14 +1746,15 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id, @RequestBody String reqBody) {
 
 		try {
-
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phieuhentiem.update.permission_error"));
 			}
-
+			*/
 			phieuHenTiemAction.updatePhieuHenTiem(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.update.success");
@@ -1735,13 +1783,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phieuhentiem.update.permission_error"));
 			}
-
+			*/
 			phieuHenTiemAction.updateTinhTrangXacNhan(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.update.success");
@@ -1769,9 +1818,9 @@ public class ApplicationControler {
 
 		try {
 			/*
-			 * int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
+			 * VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 			 * 
-			 * if (vaiTro <= 0) { return ResponseEntity.status(HttpStatus.FORBIDDEN)
+			 * if (vaiTro == null) { return ResponseEntity.status(HttpStatus.FORBIDDEN)
 			 * .body(MessageUtil.getVNMessageText("phieuhentiem.checkin.permission_error"));
 			 * }
 			 */
@@ -1812,13 +1861,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phieuhentiem.danhsach.permission_error"));
 			}
-
+			*/
 			long total = phieuHenTiemAction.countPhieuHenTiem(lichTiemChungId, caTiemChungId, tinhTrangXacNhan);
 
 			List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.searchPhieuHenTiem(lichTiemChungId, caTiemChungId,
@@ -1847,13 +1897,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("phieuhentiem.delete.permission_error"));
 			}
-
+			*/
 			boolean result = phieuHenTiemAction.deleteById(id);
 
 			if (result) {
@@ -1886,13 +1937,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.add.permission_error"));
 			}
-
+			*/
 			lichTiemChungAction.addLichTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("lichtiemchung.add.success");
@@ -1921,13 +1973,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.update.permission_error"));
 			}
-
+			*/
 			lichTiemChungAction.updateLichTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("lichtiemchung.update.success");
@@ -1956,13 +2009,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.update.permission_error"));
 			}
-
+			*/
 			lichTiemChungAction.dongLichTiemChung(id);
 
 			String msg = MessageUtil.getVNMessageText("lichtiemchung.donglichtiem.success");
@@ -1991,13 +2045,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.delete.permission_error"));
 			}
-
+			*/
 			boolean result = lichTiemChungAction.deleteById(id);
 
 			if (result) {
@@ -2032,14 +2087,15 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.danhsach.permission_error"));
 			}
-
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			*/
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				long total = lichTiemChungAction.countAll();
 
 				List<LichTiemChung> lstLichTiemChung = lichTiemChungAction.findAll(page, size);
@@ -2086,13 +2142,14 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro) || reqId <= 0) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.permission_error"));
 			}
-
+			*/
 			LichTiemChung lichTiemChung = lichTiemChungAction.findById(id);
 
 			if (lichTiemChung == null) {
@@ -2107,7 +2164,7 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.error"));
 			}
 
-			if (VaccomUtil.isQuanTriHeThong(vaiTro)) {
+			if (RoleUtil.isQuanTriHeThong(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.OK).body(lichTiemChung);
 			} else {
 				if (lichTiemChung.getCoSoYTeId() == nguoiDung.getCoSoYTeId()) {
@@ -2139,13 +2196,14 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.add.permission_error"));
 			}
-
+			*/
 			muiTiemChungAction.addMuiTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("muitiemchung.add.success");
@@ -2173,14 +2231,15 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id, @RequestBody String reqBody) {
 
 		try {
-
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.update.permission_error"));
 			}
-
+			*/
 			muiTiemChungAction.updateMuiTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("muitiemchung.update.success");
@@ -2209,13 +2268,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.delete.permission_error"));
 			}
-
+			*/
 			boolean result = muiTiemChungAction.deleteById(id);
 
 			if (result) {
@@ -2249,13 +2309,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasNguoiDungPermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasNguoiDungPermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = muiTiemChungAction.countByNguoiTiemChungId(id);
 
 			List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(id);
@@ -2287,13 +2348,14 @@ public class ApplicationControler {
 
 			long reqId = GetterUtil.getLong(request.getAttribute("_ID"), 0);
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasNguoiDungPermission(vaiTro) || reqId != nguoitiemchungid) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasNguoiDungPermission(vaiTro) || reqId != nguoitiemchungid) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			MuiTiemChung muiTiemChung = muiTiemChungAction.findById(muitiemchungid);
 
 			return ResponseEntity.status(HttpStatus.OK).body(muiTiemChung);
@@ -2320,13 +2382,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			CoSoYTe coSoYTe = coSoYTeAction.findByMaCoSoYTe(coSoYTeMa);
 
 			long total = 0;
@@ -2361,13 +2424,13 @@ public class ApplicationControler {
 			@RequestBody String reqBody) {
 
 		try {
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("catiemchung.add.permission_error"));
 			}
-
+			*/
 			caTiemChungAction.addCaTiemChung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("catiemchung.add.success");
@@ -2396,13 +2459,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("catiemchung.update.permission_error"));
 			}
-
+			*/
 			caTiemChungAction.updateCaTiemChung(id, reqBody);
 
 			String msg = MessageUtil.getVNMessageText("catiemchung.update.success");
@@ -2431,13 +2495,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("catiem.delete.permission_error"));
 			}
-
+			*/
 			boolean result = caTiemChungAction.deleteById(id);
 
 			if (result) {
@@ -2472,13 +2537,14 @@ public class ApplicationControler {
 
 		try {
 
-			int vaiTro = GetterUtil.getInteger(request.getAttribute("_VAI_TRO"), 0);
-
-			if (!VaccomUtil.hasCanBoYTePermission(vaiTro)) {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+			//TODO check permission
+			/*
+			if (!RoleUtil.hasCanBoYTePermission(vaiTro)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("catiemchung.danhsach.permission_error"));
 			}
-
+			*/
 			long total = caTiemChungAction.countCaTiemChung(lichTiemChungId, diaBanCoSoId);
 
 			List<CaTiemChung> lstMuiTiemChung = caTiemChungAction.searchCaTiemChung(lichTiemChungId, diaBanCoSoId, page,
