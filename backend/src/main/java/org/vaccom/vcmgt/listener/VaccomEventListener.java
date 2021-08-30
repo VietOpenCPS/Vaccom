@@ -37,8 +37,10 @@ public class VaccomEventListener {
     @EventListener(NewAccountCreatedEvent.class)
     public void handleNewAccountCreated(NewAccountCreatedEvent event) {
         NguoiTiemChung nguoiTiemChung = tiemChungService.findById(event.getUserId());
-        if (nguoiTiemChung == null || StringUtils.isEmpty(nguoiTiemChung.getMaQR())) {
-            log.warn("Can not lookup user {}", event.getUserId());
+        if (nguoiTiemChung == null
+                || StringUtils.isEmpty(nguoiTiemChung.getMaQR())
+                || StringUtils.isEmpty(nguoiTiemChung.getEmail())) {
+            log.warn("User either not found or invalid info {}", event.getUserId());
             return;
         }
         final EmailConfig.EmailMeta meta = mailConfig.getCreateAccount();
