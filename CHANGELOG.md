@@ -21,4 +21,11 @@
 * Xác thực tất cả các đầu API
 * Phân quyền cho truy cập API
 
-
+### Release v0.3
+#### New Features:
+* Danh sách đăng ký đã rút
+* Khôi phục danh sách đăng ký
+* Xem thông tin lịch sử tiêm, lịch hẹn tiêm
+* Kiểm tra trùng khi đưa vào danh sách chính thức
+#### Fix bugs:
+* Fix lỗi đánh dấu trạng thái trùng không chính xác
