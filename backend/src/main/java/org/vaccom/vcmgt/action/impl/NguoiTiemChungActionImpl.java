@@ -665,18 +665,13 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			String ghiChu, String ngayDangKi, int tinhTrangDangKi) {
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd);
+		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
 
 		if (countByCmtcccd > 0) {
-
-			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.findByCmtcccd(cmtcccd);
-			for (NguoiTiemChung nguoiTiemChungTmp : lstNguoiTiemChung) {
-				nguoiTiemChungTmp.setKiemTraTrung(2);
-				nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp);
-			}
-			nguoiTiemChung.setKiemTraTrung(2);
+			
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
 		} else {
-			nguoiTiemChung.setKiemTraTrung(1);
+			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
 		}
 		
 		//TODO validate
