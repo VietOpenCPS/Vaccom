@@ -73,9 +73,7 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 				pdc[count] = predicate;
 				count++;
 			}
-			Predicate allPredicate = cb.and(pdc);
-			//cq.where(pdc);
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 		
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -118,10 +116,7 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 				pdc[count] = predicate;
 				count++;
 			}
-			
-			Predicate allPredicate = cb.and(pdc);
-			//cq.where(pdc);
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
@@ -131,10 +126,8 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 		cq.orderBy(orderList);
 
 		TypedQuery<CaTiemChung> typedQuery = em.createQuery(cq);
-		
-		int offset = page * size;
 
-		List<CaTiemChung> lstCaTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
+		List<CaTiemChung> lstCaTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
 		
 		em.close();
 

@@ -6,9 +6,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,40 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.vaccom.vcmgt.action.CaTiemChungAction;
-import org.vaccom.vcmgt.action.CoSoYTeAction;
-import org.vaccom.vcmgt.action.DanTocAction;
-import org.vaccom.vcmgt.action.DiaBanCoSoAction;
-import org.vaccom.vcmgt.action.DoiTuongAction;
-import org.vaccom.vcmgt.action.DonViHanhChinhAction;
-import org.vaccom.vcmgt.action.LichTiemChungAction;
-import org.vaccom.vcmgt.action.MuiTiemChungAction;
-import org.vaccom.vcmgt.action.NguoiDungAction;
-import org.vaccom.vcmgt.action.NguoiTiemChungAction;
-import org.vaccom.vcmgt.action.PhieuHenTiemAction;
-import org.vaccom.vcmgt.action.QuocGiaAction;
+import org.vaccom.vcmgt.action.*;
 import org.vaccom.vcmgt.constant.EntityConstant;
-import org.vaccom.vcmgt.entity.PhieuHenTiem;
-import org.vaccom.vcmgt.entity.CaTiemChung;
-import org.vaccom.vcmgt.entity.CoSoYTe;
-import org.vaccom.vcmgt.entity.DanToc;
-import org.vaccom.vcmgt.entity.DiaBanCoSo;
-import org.vaccom.vcmgt.entity.DoiTuong;
-import org.vaccom.vcmgt.entity.LichTiemChung;
-import org.vaccom.vcmgt.entity.MuiTiemChung;
-import org.vaccom.vcmgt.entity.NguoiDung;
-import org.vaccom.vcmgt.entity.NguoiTiemChung;
-import org.vaccom.vcmgt.entity.PhuongXa;
-import org.vaccom.vcmgt.entity.QuanHuyen;
-import org.vaccom.vcmgt.entity.QuocGia;
-import org.vaccom.vcmgt.entity.TinhThanh;
-import org.vaccom.vcmgt.entity.VaiTro;
+import org.vaccom.vcmgt.constant.ZaloConstant;
+import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.response.DataResponeBody;
-import org.vaccom.vcmgt.util.MessageUtil;
-import org.vaccom.vcmgt.util.PermissionUtil;
-import org.vaccom.vcmgt.util.RoleUtil;
-import org.vaccom.vcmgt.util.VaccomUtil;
+import org.vaccom.vcmgt.util.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -107,6 +82,9 @@ public class ApplicationControler {
 	private QuocGiaAction quocGiaAction;
 
 	@Autowired
+	private HangChoThongBaoAction hangChoThongBaoAction;
+
+	@Autowired
 	private DanTocAction danTocAction;
 
 	@Autowired
@@ -114,6 +92,7 @@ public class ApplicationControler {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
 
 	@RequestMapping(value = "/add/nguoidung", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<?> addNguoiDung(HttpServletRequest request, HttpServletResponse response,
@@ -128,9 +107,24 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
 
-			nguoiDungAction.addNguoiDung(reqBody);
+			NguoiDung nguoiDung = nguoiDungAction.addNguoiDung(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoidung.add.success");
+
+			if(nguoiDung != null){
+
+				//zalo notification
+				ObjectMapper mapper = new ObjectMapper();
+				JsonNode bodyData = mapper.readTree(reqBody);
+				String matKhau = bodyData.get(EntityConstant.MATKHAU).textValue();
+				JSONObject template_data = new JSONObject();
+				template_data.put(ZaloConstant.HoVaTen, nguoiDung.getHoVaTen());
+				template_data.put(ZaloConstant.TenDangNhap, nguoiDung.getTenDangNhap());
+				template_data.put(ZaloConstant.MatKhau, matKhau);
+
+
+				hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiDung, false, ZaloConstant.Loai_XacNhan_NguoiTiemChung);
+			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
@@ -788,9 +782,11 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.update.permission_error"));
 			}
 			 */
-			nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
+			NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
+
+			hangChoThongBaoAction.updateReadyForHangCho(ZaloConstant.Loai_XacNhan_NguoiTiemChung, false, true);
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
@@ -1719,9 +1715,35 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("phieuhentiem.add.permission_error"));
 			}
 			*/
-			phieuHenTiemAction.addPhieuHenTiem(reqBody);
+			PhieuHenTiem phieuHenTiem= phieuHenTiemAction.addPhieuHenTiem(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
+
+//			if(Validator.isNotNull(phieuHenTiem)){
+//				NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+//				LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+//
+//				//zalo notification
+//				String phoneNumber = ZaloNotificationUtil.convertPhoneNumber(nguoiTiemChung.getSoDienThoai());
+//				String template_id = ZaloConstant.template_id_add_LichHenTiem;
+//				JSONObject template_data = JSONFactoryUtil.createJSONObject();
+//				template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+//				template_data.put(ZaloConstant.NgayHenTiem, phieuHenTiem.getNgayHenTiem());
+//				template_data.put(ZaloConstant.GioHenTiem, phieuHenTiem.getGioHenTiem());
+//				template_data.put(ZaloConstant.DiaDiemTiemChung, lichTiemChung.getDiaDiemTiemChung());
+//				template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+//				template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+//
+//				String tracking_id = "tracking_id";
+//				JSONObject body = JSONFactoryUtil.createJSONObject();
+//				body.put(ZaloConstant.phone, phoneNumber);
+//				body.put(ZaloConstant.template_id, template_id);
+//				body.put(ZaloConstant.template_template, template_data);
+//				body.put(ZaloConstant.tracking_id, tracking_id);
+
+//				ZaloNotificationUtil.sendNotification(body);
+
+//			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 

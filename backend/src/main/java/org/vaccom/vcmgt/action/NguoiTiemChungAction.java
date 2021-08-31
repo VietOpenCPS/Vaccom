@@ -42,5 +42,5 @@ public interface NguoiTiemChungAction {
 	
 	public void khoiPhucDangKy(String reqBody);
 
-	public void updateTrangThaiDangKy(String reqBody);
+	public NguoiTiemChung updateTrangThaiDangKy(String reqBody);
 }

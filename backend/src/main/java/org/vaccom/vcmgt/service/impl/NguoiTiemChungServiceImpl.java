@@ -35,10 +35,10 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	public long countByCmtcccd(String cmtcccd) {
 		return nguoiTiemChungRepository.countByCmtcccd(cmtcccd);
 	}
-
+	
 	@Override
 	public long countByCmtcccd(String cmtcccd, int tinhTrangDangKy) {
-
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -50,8 +50,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(cb.equal(nguoiTiemChungRoot.get("cmtcccd"), cmtcccd));
-
+		
 		predicates.add(cb.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), tinhTrangDangKy));
+		
 
 		if (!predicates.isEmpty()) {
 			Predicate[] pdc = new Predicate[predicates.size()];
@@ -64,7 +65,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
-
+		
 		em.close();
 
 		return typedQuery.getSingleResult();
@@ -184,25 +185,17 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		}
 
 		if (!predicates.isEmpty()) {
-
 			Predicate[] pdc = new Predicate[predicates.size()];
-
 			int count = 0;
-			
 			for (Predicate predicate : predicates) {
 				pdc[count] = predicate;
 				count++;
 			}
-			//cq.where(pdc);
-			
-			Predicate allPredicate = cb.and(pdc);
-			
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 
-
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
-
+		
 		em.close();
 
 		return typedQuery.getSingleResult();
@@ -270,20 +263,13 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		}
 
 		if (!predicates.isEmpty()) {
-
 			Predicate[] pdc = new Predicate[predicates.size()];
-
 			int count = 0;
-			
 			for (Predicate predicate : predicates) {
 				pdc[count] = predicate;
 				count++;
 			}
-			//cq.where(pdc);
-			
-			Predicate allPredicate = cb.and(pdc);
-	
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
@@ -295,10 +281,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(cq);
 
-		int offset = page * size;
-
-		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
-
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		
 		em.close();
 
 		return lstNguoiTiemChung;

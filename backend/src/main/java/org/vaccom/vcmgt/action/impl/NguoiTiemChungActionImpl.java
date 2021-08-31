@@ -593,7 +593,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	}
 
 	@Override
-	public void updateTrangThaiDangKy(String reqBody) {
+	public NguoiTiemChung updateTrangThaiDangKy(String reqBody) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -641,7 +641,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 										}
 									}
 								}
-
+								return nguoiTiemChung;
 							} catch (Exception e) {
 								_log.warn(e.getMessage());
 							}
@@ -653,6 +653,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		} catch (Exception e) {
 			_log.error(e);
 		}
+		return null;
 
 	}
 
@@ -665,13 +666,18 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			String ghiChu, String ngayDangKi, int tinhTrangDangKi) {
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
+		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd);
 
 		if (countByCmtcccd > 0) {
-			
-			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+
+			List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.findByCmtcccd(cmtcccd);
+			for (NguoiTiemChung nguoiTiemChungTmp : lstNguoiTiemChung) {
+				nguoiTiemChungTmp.setKiemTraTrung(2);
+				nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp);
+			}
+			nguoiTiemChung.setKiemTraTrung(2);
 		} else {
-			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+			nguoiTiemChung.setKiemTraTrung(1);
 		}
 		
 		//TODO validate
