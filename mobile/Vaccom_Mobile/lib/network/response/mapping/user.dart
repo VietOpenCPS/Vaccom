@@ -21,22 +21,27 @@ class User {
   String email, matKhau;
   int diaBanCoSoId, uyBanNhanDanId;
   int coSoYTeId, nguoiTiemChungId;
-  int quanTriHeThong;
+  bool quanTriHeThong;
   bool khoaTaiKhoan;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        tenDangNhap: json["tenDangNhap"],
-        hoVaTen: json["hoVaTen"],
-        chucDanh: json["chucDanh"],
-        soDienThoai: json["soDienThoai"],
-        email: json["email"],
-        matKhau: json["matKhau"],
-        diaBanCoSoId: json["diaBanCoSoId"],
-        coSoYTeId: json["coSoYTeId"],
-        nguoiTiemChungId: json["nguoiTiemChungId"],
-        quanTriHeThong: json["quanTriHeThong"],
-        khoaTaiKhoan: json["khoaTaiKhoan"],
-        uyBanNhanDanId: json['uyBanNhanDanId'],
-      );
+  factory User.fromJson(Map<String, dynamic> json) {
+    String qtht = json["quanTriHeThong"].toString().toLowerCase();
+    bool isQuantri = qtht == '1' || qtht == 'true';
+
+    return User(
+      id: json["id"],
+      tenDangNhap: json["tenDangNhap"],
+      hoVaTen: json["hoVaTen"],
+      chucDanh: json["chucDanh"],
+      soDienThoai: json["soDienThoai"],
+      email: json["email"],
+      matKhau: json["matKhau"],
+      diaBanCoSoId: json["diaBanCoSoId"],
+      coSoYTeId: json["coSoYTeId"],
+      nguoiTiemChungId: json["nguoiTiemChungId"],
+      quanTriHeThong: isQuantri,
+      khoaTaiKhoan: json["khoaTaiKhoan"],
+      uyBanNhanDanId: json['uyBanNhanDanId'],
+    );
+  }
 }

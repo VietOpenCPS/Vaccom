@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:vaccom_mobile/commons/constants.dart';
-import 'package:vaccom_mobile/components/custom_picker_input/custom_picker_input_controller.dart';
-import 'package:vaccom_mobile/components/custom_picker_input/custom_picker_input_ui.dart';
 import 'package:vaccom_mobile/components/gradient_view.dart';
 import 'package:vaccom_mobile/network/response/mapping/vac_token.dart';
 import 'package:vaccom_mobile/router/router.dart';
@@ -36,6 +34,8 @@ class Utils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(AppConstant.accessToken);
     prefs.remove(AppConstant.userId);
+    prefs.remove(AppConstant.username);
+    prefs.remove(AppConstant.password);
   }
 
   static Future<String> getAppToken() async {
@@ -53,6 +53,23 @@ class Utils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(AppConstant.accessToken, token.accessToken);
     prefs.setInt(AppConstant.userId, token.userId);
+  }
+
+  static Future<void> saveString(String value, String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value);
+  }
+
+  static Future<String> getLoginParam() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final u = prefs.getString(AppConstant.username);
+    final p = prefs.getString(AppConstant.password);
+    return '$u:$p';
+  }
+
+  static Future<String> getString(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
   }
 
   static void logout() {

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaccom_mobile/commons/color.dart';
+import 'package:vaccom_mobile/commons/constants.dart';
 import 'package:vaccom_mobile/commons/toast.dart';
 import 'package:vaccom_mobile/commons/utils.dart';
 import 'package:vaccom_mobile/components/custom_text_field.dart';
@@ -56,8 +57,9 @@ class _LoginPage extends State<LoginPage> {
   void getUser(int id) {
     viewModel.getUser(id).then((value) {
       Toast.dismiss();
-      value.matKhau = viewModel.passwordCtrl.text;
       Global.shared.saveUser(value);
+      Utils.saveString(viewModel.username, AppConstant.username);
+      Utils.saveString(viewModel.password, AppConstant.password);
       Get.offAndToNamed(GetRouter.main);
     }).catchError((e) => Toast.show(text: e.toString()));
   }
