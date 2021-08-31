@@ -21,7 +21,8 @@ export default new Vuex.Store({
     breakpointName: 'lg',
     indexTab: 0,
     isSigned:  false,
-    registrationUpdate: ''
+    registrationUpdate: '',
+    giaydiduongUpdate: ''
   },
   getters: {
     getIsSigned: (state) => {
@@ -38,7 +39,8 @@ export default new Vuex.Store({
     getUserProfile: (state) => state.userProfile,
     getBreakpointName: (state) => state.breakpointName,
     getIndexTab: (state) => state.indexTab,
-    getRegistrationUpdate: (state) => state.registrationUpdate
+    getRegistrationUpdate: (state) => state.registrationUpdate,
+    getGiayDiDuongUpdate: (state) => state.giaydiduongUpdate
   },
   mutations: {
     SET_ISSIGNED (state, payload) {
@@ -86,6 +88,9 @@ export default new Vuex.Store({
     },
     SET_RegistrationUpdate(state, data) {
       state.registrationUpdate = data
+    },
+    SET_GiayDiDuongUpdate(state, data) {
+      state.giaydiduongUpdate = data
     }
   },
   actions: {
