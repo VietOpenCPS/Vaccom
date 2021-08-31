@@ -336,6 +336,12 @@
             childItems: [
               {
                 icon: 'mdi-shield-plus-outline',
+                title: 'Ủy ban nhân dân',
+                to: '/pages/uy-ban-nha-dan',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
                 title: 'Cơ sở y tế',
                 to: '/pages/co-so-y-te',
                 id: 'search',
