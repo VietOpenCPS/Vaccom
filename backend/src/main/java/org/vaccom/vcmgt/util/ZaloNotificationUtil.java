@@ -54,6 +54,9 @@ public class ZaloNotificationUtil {
 
 
     public static String convertPhoneNumber(String phoneNumber){
+        if(phoneNumber == null || phoneNumber.isEmpty()){
+            return null;
+        }
         phoneNumber = phoneNumber.trim();
         if (phoneNumber.startsWith("0")){
             StringBuilder build = new StringBuilder(phoneNumber);

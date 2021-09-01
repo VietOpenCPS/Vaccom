@@ -26,7 +26,21 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setToEmail(nguoiDung.getEmail());
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(nguoiDung.getSoDienThoai()));
         hangChoThongBao.setReady(isReady);
-        hangChoThongBao.setNguoiTiemChungId(nguoiDung.getNguoiTiemChungId());
+
+        return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
+    }
+
+    @Override
+    public HangChoThongBao addHangChoThongBao(String jsonObject, String SoDienThoai, String Email, boolean isReady, String loaiThongBao) throws Exception {
+
+        HangChoThongBao hangChoThongBao = new HangChoThongBao();
+        hangChoThongBao.setLoaiThongBao(loaiThongBao);
+        hangChoThongBao.setSent(false);
+        hangChoThongBao.setPayload(jsonObject);
+        hangChoThongBao.setToEmail(Email);
+        hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(SoDienThoai));
+        hangChoThongBao.setReady(isReady);
+
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
 

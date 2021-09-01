@@ -22,12 +22,27 @@ public class ZaloConstant {
 //    public final static String HoVaTen = "HoVaTen";
     public final static String NgayHenTiem = "NgayHenTiem";
     public final static String GioHenTiem = "GioHenTiem";
-    public final static String DiaDiemTiemChung = "DiaDiemTiemChung";
+    public final static String DiaDiem = "DiaDiem";
     public final static String LanTiem = "LanTiem";
     public final static String LoaiThuocTiem = "LoaiThuocTiem";
-    public final static String LinkQRHen = "LinkQRHen";
+    public final static String DonViTiem = "DonViTiem";
+
+
 
 
     public final static String Loai_XacNhan_NguoiTiemChung = "AUTH_ACC";
+    public final static String Loai_Giay_Di_Duong = "GIAY_DI_DUONG";
     public final static String Loai_Hen_TiemChung = "HEN_TIEM_CHUNG";
+
+
+    // Notification chứng nhận tiêm chủng
+    public final static String CoSoYTe = "CoSoYTe";
+    public final static String SoLo = "SoLo";
+    public final static String NgayTiemChung = "NgayTiemChung";
+    public final static String GioTiemChung = "GioTiemChung";
+    public final static String QrCodeID = "QrCodeID";
+
+    // Notifcation Giay di đường
+    public final static String DonViCap = "DonViCap";
+
 }

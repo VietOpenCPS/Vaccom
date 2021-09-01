@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `t_uybannhandan` (
 
 CREATE TABLE IF NOT EXISTS `t_cosoyte` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `MaQR` varchar(128) NOT NULL,
   `MaCoSo` varchar(10) NOT NULL,
   `TenCoSo` varchar(256) NOT NULL,
   `TinhThanhMa` varchar(5) DEFAULT NULL,
@@ -275,10 +276,9 @@ create table IF NOT EXISTS t_hangchothongbao (
     `LoaiThongBao` varchar(255),
     `isSent` bit,
     `isReady` bit,
-    `payload` varchar(255),
+    `payload` varchar(1024),
     `toEmail` varchar(255),
     `toTelNo` varchar(255),
-    `NguoiTiemChungID` bigint(20) DEFAULT 0,
     primary key (ID)
 );
 create table IF NOT EXISTS t_mauthongbao (

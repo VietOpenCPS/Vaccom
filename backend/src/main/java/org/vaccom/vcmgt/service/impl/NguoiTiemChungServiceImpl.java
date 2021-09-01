@@ -94,6 +94,11 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	}
 
 	@Override
+	public NguoiTiemChung findByMaQR(String MaQR) {
+		return nguoiTiemChungRepository.findByMaQR(MaQR);
+	}
+
+	@Override
 	public NguoiTiemChung updateNguoiTiemChung(NguoiTiemChung nguoiTiemChung) {
 		return nguoiTiemChungRepository.save(nguoiTiemChung);
 	}

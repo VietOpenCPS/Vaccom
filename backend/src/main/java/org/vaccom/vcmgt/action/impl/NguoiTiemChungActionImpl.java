@@ -658,6 +658,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	}
 
 	@Override
+	public NguoiTiemChung findByMaQR(String MaQR) {
+		return nguoiTiemChungService.findByMaQR(MaQR);
+	}
+
+	@Override
 	public NguoiTiemChung addNguoiTiemChung(String hoVaTen, String ngaySinh, int gioiTinh, String cmtcccd,
 			int nhomDoiTuong, String donViCongTac, String soDienThoai, String email, String soTheBHYT,
 			String diaChiNoiO, String tinhThanhMa, String tinhThanhTen, String quanHuyenMa, String quanHuyenTen,
