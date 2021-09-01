@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -102,12 +103,18 @@ public class ApplicationControler {
 
 		try {
 
-			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+//			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+//
+//			if (!PermissionUtil.hasAddNguoiDung(vaiTro)) {
+//				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
+//			}
 
 			if (!PermissionUtil.canAccessNguoiDung(vaiTro, null, reqBody, MethodConstant.CREATE)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
+
 
 			nguoiDungAction.addNguoiDung(reqBody);
 
@@ -796,6 +803,15 @@ public class ApplicationControler {
 			nguoiTiemChungAction.updateTrangThaiDangKy(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("nguoitiemchung.update.success");
+
+			if(nguoiTiemChung.getTinhTrangDangKi() == 1){
+				HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByPhone_LoaiThongBao(ZaloNotificationUtil.convertPhoneNumber(nguoiTiemChung.getSoDienThoai()), ZaloConstant.Loai_XacNhan_NguoiTiemChung);
+				_log.info("hangChoThongBao : " + hangChoThongBao);
+				if(Validator.isNotNull(hangChoThongBao)){
+					hangChoThongBao.setReady(true);
+					hangChoThongBaoAction.update(hangChoThongBao);
+				}
+			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 
@@ -1727,6 +1743,25 @@ public class ApplicationControler {
 			phieuHenTiemAction.addPhieuHenTiem(reqBody);
 
 			String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
+			LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+			NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+			CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+
+
+
+			//Value
+			String HoVaTen = nguoiTiemChung.getHoVaTen();
+			String CoSoYTe = coSoYTe.getTenCoSo();
+			String NgayTiemChung = phieuHenTiem.getNgayHenTiem();
+			String GioTiemChung = phieuHenTiem.getGioHenTiem();
+			String DonViTiem = CoSoYTe;
+			String DiaDiem = coSoYTe.getDiaChiCoSo();
+			String LoaiThuocTiem = lichTiemChung.getLoaiThuocTiem();
+			String LinkLichHenTiem = null;
+
+
+
+
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);
 

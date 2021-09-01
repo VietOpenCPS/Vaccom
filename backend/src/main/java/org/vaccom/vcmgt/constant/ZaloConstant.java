@@ -29,4 +29,5 @@ public class ZaloConstant {
 
 
     public final static String Loai_XacNhan_NguoiTiemChung = "AUTH_ACC";
+    public final static String Loai_Hen_TiemChung = "HEN_TIEM_CHUNG";
 }

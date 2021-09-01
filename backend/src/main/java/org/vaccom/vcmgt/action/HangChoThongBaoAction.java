@@ -18,4 +18,6 @@ public interface HangChoThongBaoAction {
 
     public List<HangChoThongBao> findByIsSentIsReady(boolean isSent, boolean isReady);
 
+    public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String LoaiThongBao);
+
 }

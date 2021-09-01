@@ -51,57 +51,9 @@ public class ZaloNotificationUtil {
             return connection.getResponseCode();
         }
     }
-    public static String sendNotification(String jsonObject) throws IOException {
-        String jsonObjectParams = jsonObject.toString();
 
-        URL url = new URL(urlPattern);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Charset", "utf-8");
-        connection.setRequestProperty("access_token", oaid_access_token);
-        connection.setReadTimeout(60 * 1000);
-
-        OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-        wr.write(jsonObjectParams);
-        wr.flush();
-
-        //display what returns the POST request
-
-        StringBuilder sb = new StringBuilder();
-        int HttpResult = connection.getResponseCode();
-        if (HttpResult == HttpURLConnection.HTTP_OK) {
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), "utf-8"));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            br.close();
-            return sb.toString();
-        } else {
-            return connection.getResponseMessage();
-        }
-    }
 
     public static String convertPhoneNumber(String phoneNumber){
-//        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-//        Phonenumber.PhoneNumber swissNumberProto = null;
-//        try {
-//            swissNumberProto = phoneUtil.parse(phoneNumber, "VI");
-//        } catch (NumberParseException e) {
-//            System.err.println("NumberParseException was thrown: " + e.toString());
-//        }
-//        if(swissNumberProto != null ){
-//            String phoneInternational = phoneUtil.format(swissNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
-////            phoneInternational = phoneInternational.replace("+" , StringPool.BLANK);
-//            System.out.println("phoneInternational : "  +phoneInternational);
-//            return phoneInternational;
-//        } else {
-//            return phoneNumber;
-//        }
         phoneNumber = phoneNumber.trim();
         if (phoneNumber.startsWith("0")){
             StringBuilder build = new StringBuilder(phoneNumber);
