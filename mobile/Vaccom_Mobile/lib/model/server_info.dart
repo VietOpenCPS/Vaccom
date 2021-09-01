@@ -9,7 +9,7 @@ class ServerInfo {
     this.protocol
   });
 
-  static List<ServerInfo> all = [vaccom, thachban, mobile];
+  static List<ServerInfo> all = [vaccom, thachban, mobile, webvang];
 
   static ServerInfo vaccom = ServerInfo(
       title: r'Máy chủ Vaccom',
@@ -27,6 +27,12 @@ class ServerInfo {
       title: r'Máy chủ Mobile',
       desc: r'HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG',
       baseUrl: r'mobile.vaccom.vn:8080/rest/v1/',
+      protocol: 'https',
+      logoBanner: r'https://vaccom.vn/images/logo_banner.png');
+  static ServerInfo webvang = ServerInfo(
+      title: r'Máy chủ Webvang',
+      desc: r'HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG',
+      baseUrl: r'mobile.webvang.vn:8080/rest/v1/',
       protocol: 'https',
       logoBanner: r'https://vaccom.vn/images/logo_banner.png');
 }
