@@ -38,6 +38,9 @@ public class HangChoThongBao implements Serializable {
     @Column(name = "isSent")
     private boolean isSent;
 
+    @Column(name = "NguoiTiemChungId")
+    private long NguoiTiemChungId;
+
     public long getId() {
         return id;
     }
@@ -93,5 +96,13 @@ public class HangChoThongBao implements Serializable {
 
     public void setReady(boolean ready) {
         isReady = ready;
+    }
+
+    public long getNguoiTiemChungId() {
+        return NguoiTiemChungId;
+    }
+
+    public void setNguoiTiemChungId(long nguoiTiemChungId) {
+        NguoiTiemChungId = nguoiTiemChungId;
     }
 }

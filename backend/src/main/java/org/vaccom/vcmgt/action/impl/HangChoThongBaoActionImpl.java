@@ -20,11 +20,13 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     @Override
     public HangChoThongBao addHangChoThongBao(String jsonObject, NguoiDung nguoiDung, boolean isReady, String loaiThongBao) throws Exception {
         HangChoThongBao hangChoThongBao = new HangChoThongBao();
+        hangChoThongBao.setLoaiThongBao(loaiThongBao);
         hangChoThongBao.setSent(false);
         hangChoThongBao.setPayload(jsonObject);
         hangChoThongBao.setToEmail(nguoiDung.getEmail());
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(nguoiDung.getSoDienThoai()));
         hangChoThongBao.setReady(isReady);
+        hangChoThongBao.setNguoiTiemChungId(nguoiDung.getNguoiTiemChungId());
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
 
@@ -48,6 +50,11 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     @Override
     public List<HangChoThongBao> findByIsSentIsReady(boolean isSent, boolean isReady) {
         return hangChoThongBaoService.findByIsSentIsReady(isSent, isReady);
+    }
+
+    @Override
+    public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String LoaiThongBao) {
+        return hangChoThongBaoService.findByPhone_LoaiThongBao(toTelNo, LoaiThongBao);
     }
 
 
