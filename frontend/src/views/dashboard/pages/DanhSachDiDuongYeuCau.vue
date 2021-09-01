@@ -103,7 +103,7 @@
                 <p class="mb-2">{{ item.soDienThoai }}</p>
             </template>
             <template v-slot:item.noiODiaChi="{ item, index }">
-                <p class="mb-2">{{ item.noiODiaChi}} - {{item.noiOPhuongXaTen}} - {{item.noiOQuanHuyenTen}} - {{item.noiOTinhThanhTen}}</p>
+                <p class="mb-2">{{ item.noiODiaChi}}, {{item.noiOPhuongXaTen}} - {{item.noiOQuanHuyenTen}} - {{item.noiOTinhThanhTen}}</p>
             </template>
             <template v-slot:item.noiCtDiaChi="{ item, index }">
                 <p class="mb-2">{{ item.noiCtDiaChi }}, {{item.noiCtPhuongXaTen}} - {{item.noiCtQuanHuyenTen}} - {{item.noiCtTinhThanhTen}}</p>
@@ -115,18 +115,18 @@
               <div style="width: 100%;min-width: 250px;height: 100%;">
                 <v-layout wrap style="height: 100%;">
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
-                    <p class="py-2 mb-0 pr-2" style="color:green;font-weight: bold">{{translateLichNgay(item.lichLamViec)}}</p>
+                    <p class="py-2 mb-0 pr-2" style="color:green;">{{translateLichNgay(item.lichLamViec)}}</p>
                   </v-flex>
                   <v-flex class="xs12 md6">
-                    <p class="py-2 mb-0">Từ: <span style="color:green;font-weight: bold">{{translateLichGio(item.lichLamViec, 'start')}}</span></p>
-                    <p class="py-0 mb-0">Đến: <span style="color:blue;font-weight: bold">{{translateLichGio(item.lichLamViec, 'end')}}</span></p>
+                    <p class="py-2 mb-0">Từ: <span style="color:green;">{{translateLichGio(item.lichLamViec, 'start')}}</span></p>
+                    <p class="py-0 mb-0">Đến: <span style="color:blue;">{{translateLichGio(item.lichLamViec, 'end')}}</span></p>
                   </v-flex>
                 </v-layout>
               </div>
             </template>
             <template v-slot:item.thoiHan="{ item, index }">
-                <p class="mb-2">Từ ngày: <span style="color:green;font-weight: bold">{{ item.ngayCap }}</span></p>
-                <p class="mb-2">Đến ngày: <span style="color:blue;font-weight: bold">{{ item.thoiHan }}</span></p>
+                <p class="mb-2">Từ ngày: <span style="color:green;">{{ item.ngayCap }}</span></p>
+                <p class="mb-2">Đến ngày: <span style="color:blue;">{{ item.thoiHan }}</span></p>
             </template>
             <template v-slot:item.action="{ item }">
               <div style="width: 130px">
@@ -321,13 +321,25 @@
         try {
           let input = JSON.parse(data)
           let ngayTuan = input['ngayTuan']
-          let ngayTuanString = ''
-          ngayTuan.forEach(element => {
-            let day = 'Thứ ' + element + ', '
-            ngayTuanString += day
-          })
-          ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
-          return ngayTuanString
+          let ngayThang = input['ngayThang']
+          if (ngayTuan && ngayTuan.length) {
+            let ngayTuanString = ''
+            ngayTuan.forEach(element => {
+              let day = ''
+              if (element == 0) {
+                day = 'Chủ nhật, '
+              } else {
+                day = 'Thứ ' + element + ', '
+              }
+              ngayTuanString += day
+            })
+            ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
+            return ngayTuanString
+          }
+          if (ngayThang && ngayThang.length) {
+            return ngayThang.toString().replace(/,/g, "; ")
+          }
+          
         } catch (error) {
           return ''
         }
@@ -440,7 +452,7 @@
         }
         arrIds = vm.selected.map(function(item) {
           return item['id']
-        }).toString()
+        })
           
         let filter = {
           data: {
@@ -449,7 +461,7 @@
           }
         }
         console.log('filter', filter)
-        if (!filter['data']['ids']) {
+        if (!filter['data']['ids'] || filter['data']['ids'].length == 0) {
           return
         }
         let textConfirm = 'Bạn có chắc chắn thực hiện thao tác này?'
@@ -512,7 +524,7 @@
           }
           arrIds = vm.selected.map(function(item) {
             return item['id']
-          }).toString()
+          })
           
         }
         let filter = {
@@ -520,7 +532,7 @@
             ids: item === 'multiple' ? arrIds : String(item.id)
           }
         }
-        if (!filter['data']['ids']) {
+        if (!filter['data']['ids'] || filter['data']['ids'].length == 0) {
           return
         }
         let textConfirm = 'Bạn có chắc chắn muốn xóa đăng ký'
@@ -554,10 +566,10 @@
         vm.processingAction = true
         let filter = {
           file: file,
-          sheetAt:0,
+          sheetAt:15,
           startCol:0,
-          endCol:16,
-          startRow:8,
+          endCol:11,
+          startRow:4,
           endRow:1000,
           table:'giaydiduong'
         }
@@ -568,6 +580,7 @@
             text: 'Import danh sách thành công',
             color: 'success',
           })
+          vm.getDanhSachDangKyMoi(0)
         }).catch(function () {
           vm.processingAction = false
           vm.$store.commit('SHOW_SNACKBAR', {
