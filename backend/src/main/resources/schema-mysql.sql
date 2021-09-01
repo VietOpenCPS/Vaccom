@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS `t_cosoyte` (
   `DiaChiCoSo` varchar(512) DEFAULT NULL,
   `NguoiDaiDien` varchar(128) DEFAULT NULL,
   `SoDienThoai` varchar(20) DEFAULT NULL,
-  `CoSoYTeChaId` bigint(20) DEFAULT NULL,
-  `UyBanNhanDanID` bigint(20) DEFAULT NULL,
+  `CoSoYTeChaId` bigint(20) DEFAULT 0,
+  `UyBanNhanDanID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 
