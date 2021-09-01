@@ -26,7 +26,7 @@ public class ZaloConstant {
     public final static String LanTiem = "LanTiem";
     public final static String LoaiThuocTiem = "LoaiThuocTiem";
     public final static String DonViTiem = "DonViTiem";
-
+    public final static String SoDonViCap = "sodonvicap";
 
 
 
@@ -40,9 +40,9 @@ public class ZaloConstant {
     public final static String SoLo = "SoLo";
     public final static String NgayTiemChung = "NgayTiemChung";
     public final static String GioTiemChung = "GioTiemChung";
-    public final static String QrCodeID = "QrCodeID";
+    public final static String QrCodeID = "QRCodeId";
 
     // Notifcation Giay di đường
-    public final static String DonViCap = "DonViCap";
+    public final static String DonViCap = "Donvicap";
 
 }

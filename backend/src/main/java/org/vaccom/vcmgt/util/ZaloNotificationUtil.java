@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class ZaloNotificationUtil {
     public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
-    public static final String oaid_access_token = "FIzhTjkT76exBsTytPOMO3uaP7B6va0jA5ffEB6SHdHAS302vjSxVqTjJ0p5e651LcL2NDYkL1DjQ5D-rhH64szGTmAFlNjUQGHRJCkzK2yfSaX9khD50IaCO7F6nn4QGImPSy394cvk2pyixTGURN9hQoQNgtrvScv56CQmSrHOJK94oxPn9IeELrBEi6qGANjdT8gY764hJYiXYeSxSJXdC6UWXaGlFLHqUQRfJWaIAKj-gUynBZaE1cMBrIyG9pGaVwFfFXv53p1QyBOd9q5t4478hJOHref29TYB7sC";
+    public static final String oaid_access_token = "hWLvBguZS4sh1dOgg2D_Iw05U2k-HYWhwYjH1kfH0cJt0avY_Yv5RuaE2KBNK1fPa7DEPzHV50MS9aiHoXv3Vir3JMY77WDKvaDaKxSK2LpaLL1Sh0fVPlLk0dMa4WvJuZO3IlzmS4AA90HM_NfkEFubVHsR0dOmpd01D8uTNW7RMrSrsdOW9D8iQaQO20jtpojCHgSEEMEYV5DHvnuWRk1RR5gyOnnkt3vsSgX-BKtsM7XWzJnmHeHO22dzFtmX_7fsFxf2VWp2PGmjeabJBjni9YwbFY4sDp0LFbUjFd5E";
 
     public static int sendNotification(JSONObject jsonObject) throws IOException {
         String jsonObjectParams = jsonObject.toString();

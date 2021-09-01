@@ -1796,12 +1796,13 @@ public class ApplicationControler {
                 JSONObject template_data = new JSONObject();
                 template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
                 template_data.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
-                template_data.put(ZaloConstant.NgayHenTiem, phieuHenTiem.getNgayHenTiem());
-                template_data.put(ZaloConstant.GioHenTiem, phieuHenTiem.getGioHenTiem());
+                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
+                template_data.put(ZaloConstant.DonViCap, coSoYTe.getTenCoSo());
                 template_data.put(ZaloConstant.DonViTiem, coSoYTe.getTenCoSo());
                 template_data.put(ZaloConstant.DiaDiem, coSoYTe.getDiaChiCoSo());
                 template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
                 template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
+                template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
 
                 hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung);
             }
@@ -2670,21 +2671,6 @@ public class ApplicationControler {
 
             String msg = MessageUtil.getVNMessageText("giaydiduong.add.success");
 
-            if(Validator.isNotNull(giayDiDuong) && Validator.isNotNull(giayDiDuong.getSoDienThoai()) && Validator.isNotNull(giayDiDuong.getEmail())){
-
-                UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuong.getUyBanNhanDanID());
-
-                if(Validator.isNotNull(uyBanNhanDan)){
-                    JSONObject template_data = new JSONObject();
-
-                    template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
-                    template_data.put(ZaloConstant.HoVaTen, giayDiDuong.getHoVaTen());
-                    template_data.put(ZaloConstant.QrCodeID, giayDiDuong.getMaQR());
-
-                    hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuong.getSoDienThoai()), giayDiDuong.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
-
-                }
-            }
 
             return ResponseEntity.status(HttpStatus.OK).body(msg);
 
@@ -2906,7 +2892,7 @@ public class ApplicationControler {
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
             GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
-
+            int statusOld = giayDiDuong.getStatus();
             if (giayDiDuong == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
@@ -2916,8 +2902,27 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(MessageUtil.getVNMessageText("giaydiduong.update.permission_error"));
             }
+            GiayDiDuong giayDiDuongNew = giayDiDuongAction.update(giayDiDuong, giayDiDuongDto);
 
-            giayDiDuongAction.update(giayDiDuong, giayDiDuongDto);
+            if(Validator.isNotNull(giayDiDuong) && Validator.isNotNull(giayDiDuongNew)){
+                if(statusOld != VaccomUtil.HENDAXACNHAN && giayDiDuongNew.getStatus() == VaccomUtil.HENDAXACNHAN){
+                    UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
+
+                    if(Validator.isNotNull(uyBanNhanDan)){
+                        JSONObject template_data = new JSONObject();
+
+                        template_data.put(ZaloConstant.SoDonViCap,uyBanNhanDan.getSoDienThoai() );
+                        template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                        template_data.put("HovaTen", giayDiDuong.getHoVaTen());
+                        template_data.put(ZaloConstant.QrCodeID, giayDiDuong.getMaQR());
+
+                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuong.getSoDienThoai()), giayDiDuong.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
+
+                    }
+                }
+
+            }
+
 
             String msg = MessageUtil.getVNMessageText("giaydiduong.update.success");
 

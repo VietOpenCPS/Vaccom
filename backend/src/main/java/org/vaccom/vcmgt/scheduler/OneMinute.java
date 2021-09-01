@@ -1,5 +1,6 @@
 package org.vaccom.vcmgt.scheduler;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class OneMinute {
         for (HangChoThongBao hangChoThongBao : ThongBaoChuaGui) {
             String loaiThongBao = hangChoThongBao.getLoaiThongBao();
             MauThongBao mauThongBao = mauThongBaoAction.findByLoaiThongBao(loaiThongBao);
-            if(mauThongBao.isSendZalo()){
+            if(mauThongBao.isSendZalo() && Validator.isNotNull(mauThongBao.getZaloTemplateId())){
                 String template_id = mauThongBao.getZaloTemplateId();
                 String phone = hangChoThongBao.getToTelNo();
                 String tracking_id = "tracking_id";
