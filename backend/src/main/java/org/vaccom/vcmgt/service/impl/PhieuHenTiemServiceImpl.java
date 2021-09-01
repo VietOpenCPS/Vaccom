@@ -120,7 +120,9 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -162,7 +164,9 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
