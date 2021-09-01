@@ -21,7 +21,8 @@ export default new Vuex.Store({
     breakpointName: 'lg',
     indexTab: 0,
     isSigned:  false,
-    registrationUpdate: ''
+    registrationUpdate: '',
+    giaydiduongUpdate: ''
   },
   getters: {
     getIsSigned: (state) => {
@@ -38,7 +39,8 @@ export default new Vuex.Store({
     getUserProfile: (state) => state.userProfile,
     getBreakpointName: (state) => state.breakpointName,
     getIndexTab: (state) => state.indexTab,
-    getRegistrationUpdate: (state) => state.registrationUpdate
+    getRegistrationUpdate: (state) => state.registrationUpdate,
+    getGiayDiDuongUpdate: (state) => state.giaydiduongUpdate
   },
   mutations: {
     SET_ISSIGNED (state, payload) {
@@ -86,6 +88,9 @@ export default new Vuex.Store({
     },
     SET_RegistrationUpdate(state, data) {
       state.registrationUpdate = data
+    },
+    SET_GiayDiDuongUpdate(state, data) {
+      state.giaydiduongUpdate = data
     }
   },
   actions: {
@@ -228,6 +233,72 @@ export default new Vuex.Store({
         })
       })
     },
+    addUyBanNhanDan ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/add/uybannhandan', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    updateUyBanNhanDan ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/uybannhandan/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    deleteUyBanNhanDan ({commit, state}, filter) {
+      let param = {
+        headers: {
+        },
+        params: {
+        }
+      }
+      try {
+        if (Vue.$cookies.get('Token')) {
+          param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+        }
+      } catch (error) {
+      }
+      axios.delete('/rest/v1/app/delete/uybannhandan/' + filter.id, param).then(function (response) {
+        let serializable = response
+        resolve(serializable)
+      }).catch(function (error) {
+        reject(error)
+      })
+    },
     addCoSoYTe ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -292,6 +363,32 @@ export default new Vuex.Store({
         resolve(serializable)
       }).catch(function (error) {
         reject(error)
+      })
+    },
+    getUyBanNhanDan ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        axios.get('/rest/v1/app/get/uybannhandan', param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
+        })
       })
     },
     getCoSoYTe ({commit, state}, filter) {

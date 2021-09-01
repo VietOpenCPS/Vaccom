@@ -59,6 +59,11 @@ export default new Router({
         },
         {
           name: 'DiaBanCoSo',
+          path: '/pages/uy-ban-nha-dan',
+          component: () => import('@/views/dashboard/pages/UyBanNhanDan'),
+        },
+        {
+          name: 'DiaBanCoSo',
           path: '/pages/dia-ban-co-so',
           component: () => import('@/views/dashboard/pages/DiaBanCoSo'),
         },
@@ -77,6 +82,22 @@ export default new Router({
           path: '/pages/lich-tiem-chung/:uid',
           component: () => import('@/views/dashboard/pages/CaTiem'),
           props: true,
+        },
+        {
+          path: '/pages/dang-ky-di-duong/:uid',
+          name: 'DangKyDiDuong',
+          component: () => import('@/views/dashboard/pages/DangKyDiDuong'),
+          props: true,
+        },
+        {
+          path: '/pages/danh-sach-di-duong-yeu-cau',
+          name: 'DanhSachDiDuongYeuCau',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongYeuCau')
+        },
+        {
+          path: '/pages/danh-sach-di-duong-da-cap',
+          name: 'DanhSachDiDuongDaCap',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongDaCap')
         },
         {
           name: 'Dashboard',

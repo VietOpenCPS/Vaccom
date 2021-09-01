@@ -133,7 +133,7 @@
         <v-menu v-if="isSigned && breakpointName !== 'xs' && breakpointName !== 'sm'" offset-y origin="center center" transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <v-chip
-              style="height: 36px;position: absolute;top: 15px;right:5px;z-index: 2;max-width: 170px;"
+              style="height: 36px;position: absolute;top: 15px;right:5px;z-index: 2;"
               v-bind="attrs"
               v-on="on"
               class="ma-2"
@@ -143,7 +143,7 @@
               <v-icon left size="24" class="mx-2">
                 mdi-account-circle-outline
               </v-icon>
-              {{userLogin['hoVaTen'] ? userLogin['hoVaTen'] : userLogin['role_name']}}
+              <span style="max-width: 65px;overflow: hidden;">{{userLogin['hoVaTen'] ? userLogin['hoVaTen'] : userLogin['role_name']}}</span>
               <v-icon class="ml-2" v-if="!showMenu" size="20" color="white" >mdi-chevron-up</v-icon>
               <v-icon class="ml-2" v-else size="20" color="white">mdi-chevron-down</v-icon>
             </v-chip>
@@ -304,11 +304,42 @@
               },
             ]
           },
+          // {
+          //   icon: 'mdi-shield-plus-outline',
+          //   title: 'Giấy đi đường',
+          //   id: 'search',
+          //   childItems: [
+          //     {
+          //       icon: 'mdi-shield-plus-outline',
+          //       title: 'Đăng ký mới',
+          //       to: '/pages/dang-ky-di-duong/0',
+          //       id: 'search',
+          //     },
+          //     {
+          //       icon: 'mdi-shield-plus-outline',
+          //       title: 'Danh sách đăng ký mới',
+          //       to: '/pages/danh-sach-di-duong-yeu-cau',
+          //       id: 'search',
+          //     },
+          //     {
+          //       icon: 'mdi-shield-plus-outline',
+          //       title: 'Giấy đi đường đã cấp',
+          //       to: '/pages/danh-sach-di-duong-da-cap',
+          //       id: 'search',
+          //     }
+          //   ]
+          // },
           {
             icon: 'mdi-shield-plus-outline',
             title: 'Quản trị',
             id: 'search',
             childItems: [
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Ủy ban nhân dân',
+              //   to: '/pages/uy-ban-nha-dan',
+              //   id: 'search',
+              // },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Cơ sở y tế',
@@ -706,7 +737,7 @@
       text-transform: uppercase;
       text-decoration: none;
       color: #fff;
-      font-size: 16px;
+      font-size: 14px;
   }
   #header-desktop #navigation li:hover a:before, #header-desktop #navigation li.selected a:before {
       content: "";

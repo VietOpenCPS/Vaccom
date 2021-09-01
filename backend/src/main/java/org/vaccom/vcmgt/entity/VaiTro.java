@@ -71,7 +71,7 @@ public class VaiTro {
 		} else if (isNguoiDung) {
 			return "NguoiDung";
 		} else {
-			return StringPool.BLANK;
+			return "KhongXacDinh";
 		}
 	}
 
