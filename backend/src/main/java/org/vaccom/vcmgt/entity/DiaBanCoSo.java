@@ -52,12 +52,23 @@ public class DiaBanCoSo implements Serializable {
 	@Column(name = "CoSoYTeId")
 	private long coSoYTeId;
 
+	@Column(name = "UyBanNhanDanID")
+	private int uyBanNhanDanID;
+
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public int getUyBanNhanDanID() {
+		return uyBanNhanDanID;
+	}
+
+	public void setUyBanNhanDanID(int uyBanNhanDanID) {
+		this.uyBanNhanDanID = uyBanNhanDanID;
 	}
 
 	public String getTenDiaBan() {

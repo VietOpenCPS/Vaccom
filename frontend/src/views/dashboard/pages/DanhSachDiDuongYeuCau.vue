@@ -9,7 +9,7 @@
       <base-material-card
         style="margin-top: 20px"
         icon="mdi-clipboard-text"
-        title="DANH SÁCH ĐĂNG KÝ TIÊM MỚI"
+        title="DANH SÁCH YÊU CẦU CẤP GIẤY ĐI ĐƯỜNG"
         class="px-5 py-3"
       >
         <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
+          <tim-kiem ref="timkiem" v-on:trigger-search="searchGiayDiDuong" v-on:trigger-cancel="cancelSearchGiayDiDuong"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -30,13 +30,13 @@
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
 
-            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="orange" small class="mx-0 mr-4" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'CanBoUyBan'" color="orange" small class="mx-0 mr-4" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-import
               </v-icon>
               Import danh sách
             </v-btn>
-            <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
+            <!-- <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
@@ -47,14 +47,14 @@
                 mdi-delete
               </v-icon>
               Xóa đăng ký
-            </v-btn>  
+            </v-btn>   -->
             <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
-                mdi-transfer
+                mdi-text-box-check-outline
               </v-icon>
-              Chuyển đăng ký chính thức
+              Cấp giấy đi đường
             </v-btn>
-            <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
+            <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'CanBoUyBan'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
           
           <v-data-table
@@ -69,29 +69,60 @@
             :loading="loadingData"
             loading-text="Đang tải... "
           >
+            <template v-slot:header.lichLamViec="{ header }">
+              <div>
+                <div class="py-2 px-2" style="border-bottom: 1px solid #dedede;">Thời gian làm việc</div>
+                <v-layout wrap>
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
+                    <p class="py-2 mb-0 px-2">Các ngày</p>
+                  </v-flex>
+                  <v-flex class="xs12 md6">
+                    <p class="py-2 mb-0 px-2">Thời gian</p>
+                  </v-flex>
+                </v-layout>
+              </div>
+            </template>
             <template v-slot:item.index="{ item, index }">
               <div>{{ (page+1) * itemsPerPage - itemsPerPage + index + 1 }}</div>
             </template>
             <template v-slot:item.hoVaTen="{ item, index }">
-              <div :style="item.kiemTraTrung == 2 ? 'background: yellow' : ''" :title="item.kiemTraTrung == 2 ? 'Đăng ký trùng lặp' : ''">
+              <div>
                 <p class="mb-0" style="font-weight: 500;">{{ item.hoVaTen}}</p>
-                <p class="mb-2" style="color: blue">Ngày sinh: {{ item.ngaySinh }}</p>
               </div>
             </template>
             <template v-slot:item.cmtcccd="{ item, index }">
                 <p class="mb-2">{{ item.cmtcccd }}</p>
             </template>
-            <template v-slot:item.nhomDoiTuong="{ item, index }">
-                <p class="mb-2">{{ item.nhomDoiTuong }}</p>
-            </template>
             <template v-slot:item.soDienThoai="{ item, index }">
                 <p class="mb-2">{{ item.soDienThoai }}</p>
             </template>
-            <template v-slot:item.diaChiNoiO="{ item, index }">
-                <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
+            <template v-slot:item.noiO_DiaChi="{ item, index }">
+                <p class="mb-2">{{ item.noiO_DiaChi}} - {{item.noiO_PhuongXa_Ten}} - {{item.noiO_QuanHuyen_Ten}} - {{item.noiO_TinhThanh_Ten}}</p>
             </template>
-            <template v-slot:item.ngayDangKi="{ item, index }">
-                <p class="mb-2">{{ item.ngayDangKi }}</p>
+            <template v-slot:item.noiCT_DiaChi="{ item, index }">
+                <p class="mb-2">{{ item.noiCT_DiaChi }}, {{item.noiCT_PhuongXa_Ten}} - {{item.noiCT_QuanHuyen_Ten}} - {{item.noiCT_TinhThanh_Ten}}</p>
+            </template>
+            <template v-slot:item.noiCT_TenCoQuan="{ item, index }">
+                <p class="mb-2">{{ item.noiCT_TenCoQuan }}</p>
+            </template>
+            <template v-slot:item.lichLamViec="{ item, index }">
+                <p class="mb-2">{{ item.lichLamViec }}</p>
+            </template>
+            <template v-slot:item.lichLamViec="{ item, index }">
+              <div style="width: 250px;height: 100%;">
+                <v-layout wrap style="height: 100%;">
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
+                    <p class="py-2 mb-0"></p>
+                  </v-flex>
+                  <v-flex class="xs12 md6">
+                    <p class="py-2 mb-0"></p>
+                  </v-flex>
+                </v-layout>
+              </div>
+            </template>
+            <template v-slot:item.thoiHan="{ item, index }">
+                <p class="mb-2">Từ ngày: {{ item.ngayCap }}</p>
+                <p class="mb-2">Đến ngày: {{ item.thoiHan }}</p>
             </template>
             <template v-slot:item.action="{ item }">
               <div style="width: 150px">
@@ -114,10 +145,10 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="translateStatus(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
-                      <v-icon size="22">mdi-transfer</v-icon>
+                      <v-icon size="22">mdi-text-box-check-outline</v-icon>
                     </v-btn>
                   </template>
-                  <span>Chuyển chính thức</span>
+                  <span>Cấp giấy đi đường</span>
                 </v-tooltip>
               </div>
               
@@ -220,27 +251,46 @@
           },
           {
             sortable: false,
-            text: 'Mã nhóm đối tượng',
-            align: 'left',
-            value: 'nhomDoiTuong'
-          },
-          {
-            sortable: false,
             text: 'Số điện thoại',
             align: 'left',
             value: 'soDienThoai'
           },
           {
             sortable: false,
-            text: 'Địa chỉ',
+            text: 'Địa chỉ nơi ở/ cư trú',
             align: 'left',
-            value: 'diaChiNoiO'
+            value: 'noiO_DiaChi'
           },
           {
             sortable: false,
-            text: 'Ngày đăng ký tiêm',
+            text: 'Địa điểm làm việc',
+            align: 'left',
+            value: 'noiCT_DiaChi'
+          },
+          {
+            sortable: false,
+            text: 'Đơn vị/ công ty làm việc',
+            align: 'left',
+            value: 'noiCT_TenCoQuan'
+          },
+          {
+            sortable: false,
+            text: 'Lịch làm việc',
             align: 'center',
-            value: 'ngayDangKi'
+            value: 'lichLamViec',
+            class: 'px-0'
+          },
+          {
+            sortable: false,
+            text: 'Thời hạn sử dụng',
+            align: 'center',
+            value: 'thoiHan'
+          },
+          {
+            sortable: false,
+            text: 'Ghi chú',
+            align: 'center',
+            value: 'ghiChu'
           },
           {
             sortable: false,
@@ -267,7 +317,7 @@
       },
     },
     methods: {
-      searchDangKyTiem (data) {
+      searchGiayDiDuong (data) {
         let vm = this
         console.log('dataSearch', data)
         vm.dataInputSearch = data
@@ -276,7 +326,7 @@
         vm.pageCount = 0
         vm.getDanhSachDangKyMoi(0, data)
       },
-      cancelSearchDangKyTiem (data) {
+      cancelSearchGiayDiDuong (data) {
         let vm = this
         vm.showAdvanceSearch = false
         vm.dataInputSearch = data
@@ -328,7 +378,7 @@
           if (vm.selected.length === 0) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Vui lòng chọn người đăng ký muốn chuyển',
+              text: 'Vui lòng chọn người muốn cấp giấy đi đường',
               color: 'success',
             })
             return
@@ -429,7 +479,7 @@
           endCol:16,
           startRow:8,
           endRow:1000,
-          table:'nguoitiemchung'
+          table:'giaydiduong'
         }
         vm.$store.dispatch('importDanhSach', filter).then(function(result) {
           vm.processingAction = false
