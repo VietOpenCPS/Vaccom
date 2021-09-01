@@ -31,7 +31,8 @@ public class GiayDiDuongActionImpl implements GiayDiDuongAction {
     public GiayDiDuong create(GiayDiDuongDto giayDiDuongDto) throws Exception {
 
         if(giayDiDuongDto.hoVaTen == null || giayDiDuongDto.hoVaTen.isEmpty()) {
-            throw new ActionException(MessageUtil.getVNMessageText("hovaten.empty"), HttpStatus.NOT_ACCEPTABLE.value());
+            _log.warn("hoVaTen is null");
+            return null;
         }
 
         String checkSum = transformService.base64(giayDiDuongDto);

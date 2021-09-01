@@ -2690,6 +2690,26 @@ public class ApplicationControler {
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
+			if(id == 0 && giayDiDuongDto.listIdUpdate!= null && giayDiDuongDto.listIdUpdate.size() > 0) {
+				List<Integer> listIdUpdate = giayDiDuongDto.listIdUpdate;
+				for(Integer idUpdate : listIdUpdate) {
+					try {
+						GiayDiDuong giayDiDuongUpdate = giayDiDuongAction.findById(idUpdate);
+						if (giayDiDuongUpdate != null) {
+							if(giayDiDuongUpdate.getUyBanNhanDanID() != (int)vaiTro.getUyBanNhanDanId()) {
+								continue;
+							}
+							giayDiDuongAction.update(giayDiDuongUpdate, giayDiDuongDto);
+						}
+					} catch (Exception e) {
+						_log.error("Error update with id: " + idUpdate);
+						e.printStackTrace();
+					}
+				}
+
+				return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("giaydiduong.update.success"));
+			}
+
 			GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
 
 			if (giayDiDuong == null) {
@@ -2730,6 +2750,26 @@ public class ApplicationControler {
 		try {
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			if(id == 0 && giayDiDuongDto.listIdDelete!= null && giayDiDuongDto.listIdDelete.size() > 0) {
+				List<Integer> listIdDelete = giayDiDuongDto.listIdDelete;
+				for(Integer idDelete : listIdDelete) {
+					try {
+						GiayDiDuong giayDiDuongDelete = giayDiDuongAction.findById(idDelete);
+						if (giayDiDuongDelete != null) {
+							if(giayDiDuongDelete.getUyBanNhanDanID() != (int)vaiTro.getUyBanNhanDanId()) {
+								continue;
+							}
+							giayDiDuongAction.delete(giayDiDuongDelete);
+						}
+					} catch (Exception e) {
+						_log.error("Error delete with id: " + idDelete);
+						e.printStackTrace();
+					}
+				}
+
+				return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("giaydiduong.delete.success"));
+			}
 
 			GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
 

@@ -56,4 +56,7 @@ public class GiayDiDuongDto {
 
     public int status;
 
+    public List<Integer> listIdUpdate;
+    public List<Integer> listIdDelete;
+
 }
