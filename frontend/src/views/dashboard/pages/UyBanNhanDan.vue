@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="userLogin['role_name'] === 'QuanTriHeThong'">
     <v-container
       id="users"
       fluid
@@ -9,40 +9,24 @@
       <base-material-card
         style="margin-top: 20px"
         icon="mdi-clipboard-text"
-        title="Danh sách địa bàn cơ sở"
+        title="Danh sách Ủy ban nhân dân"
         class="px-5 py-3"
       >
-          <v-flex class="mx-4 mt-3">
-            <div class="mb-3">Chọn cơ sở y tế</div>
-            <v-autocomplete
-              class="flex xs12 md12"
-              hide-no-data
-              :items="listCoSoYTe"
-              v-model="coSoYTeSearch"
-              item-text="tenCoSo"
-              item-value="id"
-              outlined
-              dense
-              hide-details="auto"
-              clearable
-            ></v-autocomplete>
-          </v-flex>
           <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : ''">
             <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex mb-3'">
               <div class="mr-auto pt-2 mb-3" v-if="breakpointName === 'xs'">
-                Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> địa bàn
+                Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> Ủy ban nhân dân
               </div>
               <span class="mr-auto pt-2" v-else>
-                Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> địa bàn
+                Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> Ủy ban nhân dân
               </span>
               <v-btn color="#0072bc" class="mx-0" @click.stop="addMember('add')">
                 <v-icon left size="22">
                   mdi-plus
                 </v-icon>
-                Thêm địa bàn
+                Thêm Ủy ban nhân dân
               </v-btn>
             </div>
-            
             <v-data-table
               :headers="headers"
               :items="items"
@@ -53,28 +37,27 @@
               loading-text="Đang tải... "
               :items-per-page="itemsPerPage"
             >
-            <template v-slot:item.index="{ item, index }">
-              <span>{{ index + 1 }}</span>
-            </template>
-            <template v-slot:item.action="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
-                    <v-icon size="22">mdi-pencil</v-icon>
-                  </v-btn>
-                </template>
-                <span>Sửa</span>
-              </v-tooltip>
-              <!-- <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click="deleteUser(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
-                    <v-icon size="22">mdi-delete</v-icon>
-                  </v-btn>
-                </template>
-                <span>Xóa</span>
-              </v-tooltip> -->
-            </template>
-            
+              <template v-slot:item.index="{ item, index }">
+                <span>{{ index + 1 }}</span>
+              </template>
+              <template v-slot:item.action="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="addMember('update', item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Sửa</span>
+                </v-tooltip>
+                <v-tooltip top >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="deleteCoSo(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa</span>
+                </v-tooltip>
+              </template>
             </v-data-table>
             <pagination v-if="pageCount" :pageInput="page" :pageCount="pageCount" @tiny:change-page="changePage"></pagination>
           </v-card-text>
@@ -88,7 +71,7 @@
             dark
             color="#0072bc"
           >
-            <v-toolbar-title v-if="typeAction === 'add'">Thêm địa bàn cơ sở</v-toolbar-title>
+            <v-toolbar-title v-if="typeAction === 'add'">Thêm Ủy ban nhân dân</v-toolbar-title>
             <v-toolbar-title v-else>Cập nhật thông tin</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -109,28 +92,32 @@
             >
                 <v-layout wrap>
                     <v-text-field
-                        class="flex xs12 md12"
-                        v-model="thongTinDiaBan.TenDiaBan"
+                        class="flex xs12 md6"
+                        v-model="thongTinUbnd.TenCoQuan"
                         outlined
-                        :rules="required"
-                        required
-                        label="Tên địa bàn"
+                        label="Tên cơ quan"
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
                     ></v-text-field>
-                    <v-autocomplete
-                        class="flex xs12 md12"
-                        hide-no-data
-                        :items="listCoSoYTe"
-                        v-model="coSoYTe"
-                        item-text="tenCoSo"
-                        item-value="id"
-                        clearable
+                    <v-text-field
+                        class="flex xs12 md6 pl-2"
+                        v-model="thongTinUbnd.MaDinhDanh"
                         outlined
-                        label="Cơ sở y tế"
+                        label="Mã cơ quan"
+                        prepend-inner-icon="mdi-account-check-outline"
                         dense
-                    ></v-autocomplete>
+                        clearable
+                    ></v-text-field>
+                    <v-text-field
+                        class="flex xs12 md12"
+                        v-model="thongTinUbnd.DiaChiHoatDong"
+                        outlined
+                        label="Địa chỉ"
+                        prepend-inner-icon="mdi-account-check-outline"
+                        dense
+                        clearable
+                    ></v-text-field>
                     <v-autocomplete
                         class="flex xs12 md4"
                         hide-no-data
@@ -158,7 +145,6 @@
                         outlined
                         label="Quận/ Huyện"
                         dense
-                        hide-details="auto"
                     ></v-autocomplete>
                     <v-autocomplete
                         class="flex xs12 md4 pl-2"
@@ -173,8 +159,25 @@
                         outlined
                         label="Phường/ Xã"
                         dense
-                        hide-details="auto"
                     ></v-autocomplete>
+                    <v-text-field
+                        class="flex xs12 md6"
+                        v-model="thongTinUbnd.NguoiDaiDien"
+                        outlined
+                        label="Người đại diện"
+                        prepend-inner-icon="mdi-account-check-outline"
+                        dense
+                        clearable
+                    ></v-text-field>
+                    <v-text-field
+                        class="flex xs12 md6 pl-2"
+                        v-model="thongTinUbnd.SoDienThoai"
+                        outlined
+                        label="Số điện thoại"
+                        prepend-inner-icon="mdi-account-check-outline"
+                        dense
+                        clearable
+                    ></v-text-field>
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -214,19 +217,20 @@
         loading: false,
         loadingData: false,
         dialogAddMember: false,
-        coSoYTeSearch: '',
-        coSoYTe: '',
-        thongTinDiaBan: {
-            TenDiaBan: '',
-            TinhThanh_Ma: '',
-            TinhThanh_Ten: '',
-            QuanHuyen_Ma: '',
-            QuanHuyen_Ten: '',
-            PhuongXa_Ma: '',
-            PhuongXa_Ten: '',
-            CoSoYTe_ID: ''
+        thongTinUbnd: {
+          UyBanNhanDanCha_ID: 0,
+          MaDinhDanh: '',
+          TenCoQuan: '',
+          TinhThanh_Ma: '',
+          TinhThanh_Ten: '',
+          QuanHuyen_Ma: '',
+          QuanHuyen_Ten: '',
+          PhuongXa_Ma: '',
+          PhuongXa_Ten: '',
+          DiaChiHoatDong: '',
+          NguoiDaiDien: '',
+          SoDienThoai: ''
         },
-        listCoSoYTe: [],
         listTinhThanh: [],
         tinhThanh: '',
         listQuanHuyen: [],
@@ -236,9 +240,9 @@
         totalItem: 0,
         page: 0,
         pageCount: 0,
-        itemsPerPage: 30,
+        itemsPerPage: 100,
         typeAction: '',
-        userUpdate: '',
+        coSoUpdate: '',
         items: [],
         validFormAdd: true,
         required: [
@@ -250,7 +254,6 @@
               } 
           }
         ],
-        diaBanUpdate: '',
         headers: [
           {
             sortable: false,
@@ -260,9 +263,21 @@
           },
           {
             sortable: false,
-            text: 'Tên địa bàn',
+            text: 'Mã cơ quan',
             align: 'center',
-            value: 'tenDiaBan'
+            value: 'maCoQuan'
+          },
+          {
+            sortable: false,
+            text: 'Tên cơ quan',
+            align: 'center',
+            value: 'tenCoQuan'
+          },
+          {
+            sortable: false,
+            text: 'Địa chỉ',
+            align: 'center',
+            value: 'diaChiHoatDong'
           },
           {
             sortable: false,
@@ -283,6 +298,18 @@
           },
           {
             sortable: false,
+            text: 'Người đại diện',
+            align: 'center',
+            value: 'nguoiDaiDien'
+          },
+          {
+            sortable: false,
+            text: 'Số điện thoại',
+            align: 'center',
+            value: 'soDienThoai'
+          },
+          {
+            sortable: false,
             text: 'Thao tác',
             align: 'center',
             value: 'action'
@@ -293,21 +320,20 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 3)
-      vm.getCoSoYTe()
-      vm.getDiaBanCoSo()
+      vm.getUyBanNhanDan(0)
       vm.getTinhThanh()
     },
     watch: {
       tinhThanh (val) {
-        this.thongTinDiaBan.TinhThanh_Ma = val
+        this.thongTinUbnd.TinhThanh_Ma = val
         this.getQuanHuyen(val)
       },
       quanHuyen (val) {
-        this.thongTinDiaBan.QuanHuyen_Ma = val
+        this.thongTinUbnd.QuanHuyen_Ma = val
         this.getXaPhuong(val)
       },
       xaPhuong (val) {
-        this.thongTinDiaBan.PhuongXa_Ma = val 
+        this.thongTinUbnd.PhuongXa_Ma = val 
       },
     },
     computed: {
@@ -316,28 +342,18 @@
       }
     },
     methods: {
-       getDiaBanCoSo (pageIn, idCoSo) {
+       getUyBanNhanDan (pageIn) {
         let vm = this
         let filter = {
-          id: idCoSo ? idCoSo : -1,
           page: pageIn,
           size: vm.itemsPerPage
         }
-        vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
-          vm.items = result.hasOwnProperty('data') ? result.data : []
-          vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
-          vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-        })
-      },
-      getCoSoYTe () {
-        let vm = this
-        let filter = {
-        }
-        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
-          vm.listCoSoYTe = result ? result : []
-          // if (vm.listCoSoYTe.length) {
-          //   vm.coSoYTeSearch = vm.listCoSoYTe[0]['id']
-          // }
+        vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
+          // vm.items = result.hasOwnProperty('data') ? result.data : []
+          // vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+          // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+          vm.items = result ? result : []
+          vm.totalItem = result.length
         })
       },
       getTinhThanh () {
@@ -390,34 +406,28 @@
       addMember (type, user) {
         let vm = this
         vm.typeAction = type
+        vm.coSoUpdate = user
         vm.dialogAddMember = true
         if (type === 'add') {
           setTimeout(function () {
             vm.$refs.formAddMember.reset()
             vm.$refs.formAddMember.resetValidation()
-            if (vm.coSoYTeSearch) {
-              vm.coSoYTe = vm.coSoYTeSearch
-              // vm.tinhThanh = '01'
-              // vm.quanHuyen = '004'
-              // vm.xaPhuong = '00148'
-            }
           }, 200)
         } else {
-          vm.diaBanUpdate = user
           setTimeout(function () {
-            vm.coSoYTe = vm.diaBanUpdate.coSoYTeId
-            vm.thongTinDiaBan.TenDiaBan = vm.diaBanUpdate.tenDiaBan
-            vm.tinhThanh = vm.diaBanUpdate.tinhThanhMa
-            vm.quanHuyen = vm.diaBanUpdate.quanHuyenMa
-            vm.xaPhuong = vm.diaBanUpdate.phuongXaMa
+            vm.thongTinUbnd.MaCoQuan = vm.coSoUpdate.maCoQuan
+            vm.thongTinUbnd.TenCoQuan = vm.coSoUpdate.tenCoQuan
+            vm.thongTinUbnd.DiaChiHoatDong = vm.coSoUpdate.diaChiHoatDong
+            vm.thongTinUbnd.NguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
+            vm.tinhThanh = vm.coSoUpdate.tinhThanhMa
+            vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
+            vm.xaPhuong = vm.coSoUpdate.phuongXaMa
+            vm.thongTinUbnd.SoDienThoai = vm.coSoUpdate.soDienThoai
+
             vm.$refs.formAddMember.resetValidation()
           }, 200)
         }
         
-      },
-
-      deleteUser (user) {
-        let vm = this
       },
       formatDataInput () {
         let vm = this
@@ -426,28 +436,54 @@
             let obj = vm.listTinhThanh.find(function (item) {
               return item.tinhThanhMa == vm.tinhThanh
             })
-            vm.thongTinDiaBan.TinhThanh_Ma = vm.tinhThanh
-            vm.thongTinDiaBan.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
+            vm.thongTinUbnd.TinhThanh_Ma = vm.tinhThanh
+            vm.thongTinUbnd.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
           }
           if (vm.quanHuyen) {
             let obj = vm.listQuanHuyen.find(function (item) {
               return item.quanHuyenMa == vm.quanHuyen
             })
-            vm.thongTinDiaBan.QuanHuyen_Ma = vm.quanHuyen
-            vm.thongTinDiaBan.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
+            vm.thongTinUbnd.QuanHuyen_Ma = vm.quanHuyen
+            vm.thongTinUbnd.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
           }
           if (vm.xaPhuong) {
             let obj = vm.listXaPhuong.find(function (item) {
               return item.phuongXaMa == vm.xaPhuong
             })
-            vm.thongTinDiaBan.PhuongXa_Ma = vm.xaPhuong
-            vm.thongTinDiaBan.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
+            vm.thongTinUbnd.PhuongXa_Ma = vm.xaPhuong
+            vm.thongTinUbnd.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
           }
-          vm.thongTinDiaBan.CoSoYTe_ID = vm.coSoYTe
-          console.log('thongTinDiaBan', vm.thongTinDiaBan)
+          console.log('thongTinUbnd', vm.thongTinUbnd)
         } catch (error) {
           vm.processingAction = false
         }
+      },
+      deleteCoSo (user) {
+        let vm = this
+        let x = confirm('Bạn có chắc chắn xóa cơ sở y tế này?')
+        if (x) {
+          let filter = {
+            id: user['id']
+          }
+          vm.loading = true
+          vm.$store.dispatch('deleteUyBanNhanDan', filter).then(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            setTimeout(function () {
+              vm.getUyBanNhanDan(0)
+            }, 500)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thất bại',
+              color: 'error',
+            })
+          })
+        }
+        
       },
       submitAddMember () {
         let vm = this
@@ -455,36 +491,35 @@
           vm.formatDataInput()
           if (vm.typeAction === 'add') {
             let filter = {
-              data: vm.thongTinDiaBan
+              data: vm.thongTinUbnd
             }
             vm.loading = true
-            vm.$store.dispatch('addDiaBanCoSo', filter).then(userCredential => {
+            vm.$store.dispatch('addUyBanNhanDan', filter).then(userCredential => {
               vm.loading = false
               vm.dialogAddMember = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
-                text: 'Thêm địa bàn thành công',
+                text: 'Thêm cơ sở thành công',
                 color: 'success',
               })
-              vm.getDiaBanCoSo(0, vm.coSoYTeSearch)
+              vm.getUyBanNhanDan(0)
             })
             .catch((error) => {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
-                text: 'Thêm địa bàn y tế không thành công',
+                text: 'Thêm cơ sở y tế không thành công',
                 color: 'error',
               })
               // ..
             });
           } else {
-            
             let filter = {
-              id: vm.diaBanUpdate['id'],
-              data: vm.thongTinDiaBan
+              id: vm.coSoUpdate['id'],
+              data: vm.thongTinUbnd
             }
             vm.loading = true
-            vm.$store.dispatch('updateDiaBanCoSo', filter).then(function () {
+            vm.$store.dispatch('updateUyBanNhanDan', filter).then(function () {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -492,7 +527,7 @@
                 color: 'success',
               })
               vm.dialogAddMember = false
-              vm.getDiaBanCoSo(0, vm.coSoYTeSearch)
+              vm.getUyBanNhanDan(0)
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -507,7 +542,7 @@
       changePage (config) {
         let vm = this
         vm.page = config.page
-        vm.getDiaBanCoSo(config.page, vm.coSoYTeSearch)
+        vm.getUyBanNhanDan(config.page)
       },
       cancelAddMember () {
         let vm = this
