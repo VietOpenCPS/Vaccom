@@ -40,7 +40,12 @@ public class ImportControler {
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 			//TODO check
 			
-			if (!RoleUtil.isCanBoDiaBan(vaiTro) && !RoleUtil.isCanBoYTe(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro) && !RoleUtil.isQuanTriHeThong(vaiTro)) {
+			if (!RoleUtil.isCanBoDiaBan(vaiTro)
+					&& !RoleUtil.isCanBoYTe(vaiTro)
+					&& !RoleUtil.isQuanTriCoSo(vaiTro)
+					&& !RoleUtil.isQuanTriHeThong(vaiTro)
+					&& !RoleUtil.isCanBoUBND(vaiTro)
+			) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
 			}

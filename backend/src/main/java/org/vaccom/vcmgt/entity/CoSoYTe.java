@@ -64,12 +64,34 @@ public class CoSoYTe implements Serializable {
 	@Column(name = "MaQR")
 	private String maQR;
 
+	@Column(name = "CoSoYTeChaId")
+	private long coSoYTeChaId;
+
+	@Column(name = "UyBanNhanDanID")
+	private long uyBanNhanDanID;
+
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getCoSoYTeChaId() {
+		return coSoYTeChaId;
+	}
+
+	public void setCoSoYTeChaId(long coSoYTeChaId) {
+		this.coSoYTeChaId = coSoYTeChaId;
+	}
+
+	public long getUyBanNhanDanId() {
+		return uyBanNhanDanID;
+	}
+
+	public void setUyBanNhanDanId(long uyBanNhanDanID) {
+		this.uyBanNhanDanID = uyBanNhanDanID;
 	}
 
 	public String getMaCoSo() {
