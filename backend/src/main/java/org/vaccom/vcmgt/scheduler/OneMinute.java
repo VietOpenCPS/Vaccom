@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.vaccom.vcmgt.action.HangChoThongBaoAction;
-import org.vaccom.vcmgt.action.MauThongBaoAction;
+import org.vaccom.vcmgt.config.ZaloConfig;
 import org.vaccom.vcmgt.constant.ZaloConstant;
 import org.vaccom.vcmgt.entity.HangChoThongBao;
-import org.vaccom.vcmgt.entity.MauThongBao;
 import org.vaccom.vcmgt.util.ZaloNotificationUtil;
 
 import java.io.IOException;
@@ -24,10 +23,10 @@ import java.util.List;
 public class OneMinute {
 
     @Autowired
-    private HangChoThongBaoAction hangChoThongBaoAction;
+    private ZaloConfig zaloConfig;
 
     @Autowired
-    private MauThongBaoAction mauThongBaoAction;
+    private HangChoThongBaoAction hangChoThongBaoAction;
 
     private static final Logger log = LoggerFactory.getLogger(OneMinute.class);
 
@@ -35,14 +34,21 @@ public class OneMinute {
 
     @Scheduled(fixedRate = 60000)
     public void doAction() throws IOException {
+        String oaid_access_token = zaloConfig.getAccessToken();
+
         log.info("The time is now {}", dateFormat.format(new Date()));
 
         List<HangChoThongBao> ThongBaoChuaGui = hangChoThongBaoAction.findByIsSentIsReady(false, true);
         for (HangChoThongBao hangChoThongBao : ThongBaoChuaGui) {
             String loaiThongBao = hangChoThongBao.getLoaiThongBao();
-            MauThongBao mauThongBao = mauThongBaoAction.findByLoaiThongBao(loaiThongBao);
-            if(mauThongBao.isSendZalo() && Validator.isNotNull(mauThongBao.getZaloTemplateId())){
-                String template_id = mauThongBao.getZaloTemplateId();
+            String template_id = null;
+            if (loaiThongBao.equals(ZaloConstant.Loai_Hen_TiemChung)){
+                template_id = zaloConfig.getHenTiemChung();
+            } else if(loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)){
+                template_id = zaloConfig.getGiayDiDuong();
+            }
+
+            if(Validator.isNotNull(template_id)){
                 String phone = hangChoThongBao.getToTelNo();
                 String tracking_id = "tracking_id";
                 String payload = hangChoThongBao.getPayload();
@@ -56,7 +62,7 @@ public class OneMinute {
                 log.info(jsonObject.toString());
                 Integer code = null;
                 try {
-                    code = ZaloNotificationUtil.sendNotification(jsonObject);
+                    code = ZaloNotificationUtil.sendNotification(jsonObject, oaid_access_token);
                 } catch (Exception ex){
                     log.error(ex.getMessage());
                 }

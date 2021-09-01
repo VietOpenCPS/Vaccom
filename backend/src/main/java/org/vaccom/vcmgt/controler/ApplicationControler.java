@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.vaccom.vcmgt.action.*;
+import org.vaccom.vcmgt.config.ZaloConfig;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.constant.MethodConstant;
 import org.vaccom.vcmgt.constant.ZaloConstant;
@@ -55,6 +57,11 @@ import com.liferay.portal.kernel.util.GetterUtil;
 public class ApplicationControler {
 
     private final Log _log = LogFactory.getLog(ApplicationControler.class);
+
+    @Value( "${server.domain.url}" )
+    private String domainUrl;
+
+
 
     @Autowired
     private NguoiDungAction nguoiDungAction;
@@ -2821,6 +2828,7 @@ public class ApplicationControler {
     @RequestMapping(value = "/get/giaydiduong-maqr", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getGiayDiDuongMaQr(@RequestParam("maQr") String maQr) {
 
+
         try {
             GiayDiDuong giayDiDuong = giayDiDuongAction.findByMaQr(maQr);
             UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuong.getUyBanNhanDanID());
@@ -2839,6 +2847,7 @@ public class ApplicationControler {
             String json = mapper.writeValueAsString(giayDiDuong);
             JSONObject response = (JSONObject) new JSONParser().parse(json);
             response.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+            response.put(ZaloConstant.LinkQrCode, domainUrl+ "/#/pages/giay-di-duong/"+giayDiDuong.getMaQR());
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
@@ -2905,7 +2914,7 @@ public class ApplicationControler {
             GiayDiDuong giayDiDuongNew = giayDiDuongAction.update(giayDiDuong, giayDiDuongDto);
 
             if(Validator.isNotNull(giayDiDuong) && Validator.isNotNull(giayDiDuongNew)){
-                if(statusOld != VaccomUtil.HENDAXACNHAN && giayDiDuongNew.getStatus() == VaccomUtil.HENDAXACNHAN){
+                if(statusOld != VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET){
                     UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
 
                     if(Validator.isNotNull(uyBanNhanDan)){

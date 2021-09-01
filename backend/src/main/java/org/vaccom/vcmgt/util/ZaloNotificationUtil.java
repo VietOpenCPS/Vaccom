@@ -3,6 +3,8 @@ package org.vaccom.vcmgt.util;
 
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaccom.vcmgt.config.ZaloConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +16,14 @@ import java.net.URL;
 import java.util.Locale;
 
 public class ZaloNotificationUtil {
-    public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
-    public static final String oaid_access_token = "hWLvBguZS4sh1dOgg2D_Iw05U2k-HYWhwYjH1kfH0cJt0avY_Yv5RuaE2KBNK1fPa7DEPzHV50MS9aiHoXv3Vir3JMY77WDKvaDaKxSK2LpaLL1Sh0fVPlLk0dMa4WvJuZO3IlzmS4AA90HM_NfkEFubVHsR0dOmpd01D8uTNW7RMrSrsdOW9D8iQaQO20jtpojCHgSEEMEYV5DHvnuWRk1RR5gyOnnkt3vsSgX-BKtsM7XWzJnmHeHO22dzFtmX_7fsFxf2VWp2PGmjeabJBjni9YwbFY4sDp0LFbUjFd5E";
 
-    public static int sendNotification(JSONObject jsonObject) throws IOException {
+    @Autowired
+    private ZaloConfig zaloConfig;
+
+    public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
+
+
+    public static int sendNotification(JSONObject jsonObject, String oaid_access_token) throws IOException {
         String jsonObjectParams = jsonObject.toString();
 
         URL url = new URL(urlPattern);

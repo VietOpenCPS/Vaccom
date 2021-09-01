@@ -45,4 +45,6 @@ public class ZaloConstant {
     // Notifcation Giay di đường
     public final static String DonViCap = "Donvicap";
 
+    public final static String LinkQrCode = "LinkQrCode";
+
 }

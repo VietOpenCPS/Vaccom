@@ -2,7 +2,6 @@ package org.vaccom.vcmgt.service;
 
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.entity.HangChoThongBao;
-import org.vaccom.vcmgt.entity.MauThongBao;
 
 import java.util.List;
 
