@@ -9,7 +9,7 @@
       <base-material-card
         style="margin-top: 20px"
         icon="mdi-clipboard-text"
-        title="DANH SÁCH MŨI TIÊM CHỦNG"
+        title="DANH SÁCH CHỨNG NHẬN TIÊM CHỦNG"
         class="px-5 py-3"
       >
         <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
@@ -24,10 +24,10 @@
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
             <div class="mr-auto pt-2 mb-3" v-if="breakpointName === 'xs'">
-              Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> mũi tiêm
+              Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </div>
             <span class="mr-auto pt-2" v-else>
-              Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> mũi tiêm
+              Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
 
             <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="orange" small class="mx-0" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
@@ -90,7 +90,7 @@
                       <v-icon size="22">mdi-delete</v-icon>
                     </v-btn>
                   </template>
-                  <span>Xóa mũi tiêm</span>
+                  <span>Xóa</span>
                 </v-tooltip>
                 <v-tooltip top v-if="!item.nguoiTiemChung_ID">
                   <template v-slot:activator="{ on, attrs }">

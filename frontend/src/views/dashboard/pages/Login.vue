@@ -97,12 +97,16 @@ export default {
               vm.loading = false
               if (dataInfo) {
                 dataUser['hoVaTen'] = dataInfo.hoVaTen
+                dataUser['uyBanNhanDanId'] = dataInfo.hasOwnProperty('uyBanNhanDanId') ? dataInfo.uyBanNhanDanId : ''
                 dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
                 dataUser['coSoYTeId'] = dataInfo.coSoYTeId
                 dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
                 localStorage.setItem('user', JSON.stringify(dataUser))
                 let redirect = vm.$route.query.redirect
                 let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+                if (result.role_name === 'CanBoUBND') {
+                  route = redirect ? { path: redirect } : { path: '/pages/danh-sach-di-duong-yeu-cau' }
+                }
                 vm.$router.push(route)
               } else {
                 vm.$store.commit('SHOW_SNACKBAR', {
