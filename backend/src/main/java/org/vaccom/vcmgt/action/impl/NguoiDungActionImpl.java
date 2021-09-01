@@ -171,11 +171,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		}
 
 		nguoiDung.setChucDanh(chucDanh);
-		nguoiDung.setCoSoYTeId(diaBanCoSoId);
-		nguoiDung.setDiaBanCoSoId(coSoYTeId);
+		nguoiDung.setCoSoYTeId(coSoYTeId);
+		nguoiDung.setDiaBanCoSoId(diaBanCoSoId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
-		// nguoiDung.setQuanTriHeThong(quanTriHeThong);
+//		 nguoiDung.setQuanTriHeThong(quanTriHeThong);
 		nguoiDung.setSoDienThoai(soDienThoai);
 
 		return nguoiDungService.updateNguoiDung(nguoiDung);
