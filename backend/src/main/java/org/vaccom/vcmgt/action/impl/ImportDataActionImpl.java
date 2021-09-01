@@ -2,7 +2,10 @@ package org.vaccom.vcmgt.action.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,19 +17,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.vaccom.vcmgt.action.CoSoYTeAction;
-import org.vaccom.vcmgt.action.DanTocAction;
-import org.vaccom.vcmgt.action.DiaBanCoSoAction;
-import org.vaccom.vcmgt.action.DoiTuongAction;
-import org.vaccom.vcmgt.action.DonViHanhChinhAction;
-import org.vaccom.vcmgt.action.FileStorageAction;
-import org.vaccom.vcmgt.action.ImportDataAction;
-import org.vaccom.vcmgt.action.NguoiTiemChungAction;
-import org.vaccom.vcmgt.action.QuocGiaAction;
+import org.vaccom.vcmgt.action.*;
 
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
+import org.vaccom.vcmgt.dto.GiayDiDuongDto;
+import org.vaccom.vcmgt.dto.LichLamViecDto;
 
 @Service
 public class ImportDataActionImpl implements ImportDataAction {
@@ -53,6 +50,9 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 	@Autowired
 	private DonViHanhChinhAction donViHanhChinhAction;
+
+	@Autowired
+	private GiayDiDuongAction giayDiDuongAction;
 
 	@Override
 	public void importData(String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
@@ -158,6 +158,73 @@ public class ImportDataActionImpl implements ImportDataAction {
 							StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
 							StringPool.BLANK, StringPool.BLANK, 0);
 					break;
+
+
+				case "giaydiduong":
+					GiayDiDuongDto giayDiDuongDto = new GiayDiDuongDto();
+					giayDiDuongDto.hoVaTen     = rowData[1] != null ? rowData[1] : "";
+					giayDiDuongDto.soDienThoai = rowData[2] != null ? rowData[2] : "";
+					giayDiDuongDto.noiODiaChi  =  rowData[3] != null ? rowData[3] : "";
+					giayDiDuongDto.noiCtDiaChi =  rowData[4] != null ? rowData[4] : "";
+					giayDiDuongDto.cmtcccd     =  rowData[5] != null ? rowData[5] : "";
+					giayDiDuongDto.noiCtTenCoQuan =  rowData[6] != null ? rowData[6] : "";
+
+					LichLamViecDto lichLamViecDto = new LichLamViecDto();
+
+					List<Integer> listDayInWeek = null;
+					List<String> listDayMonth = null ;
+					String[] listHour;
+					String fromHour = null;
+					String toHour = null;
+
+					if(rowData[7] != null && !rowData[7].isEmpty()) {
+						try {
+							listDayInWeek = Arrays.stream(rowData[7].replaceAll(" ", "").split(","))
+									.map(Integer::parseInt)
+									.collect(Collectors.toList());
+
+						} catch (Exception e) {
+							listDayInWeek = null;
+							System.out.print("Error with: " + rowData[7]);
+						}
+					}
+
+					if(rowData[8] != null && !rowData[8].isEmpty()) {
+						try {
+							listDayMonth = Arrays.stream(rowData[8].replaceAll(" ", "").split(","))
+									.collect(Collectors.toList());
+						} catch (Exception e) {
+							listDayMonth = null;
+							System.out.print("Error with: " + rowData[8]);
+						}
+					}
+
+					if(rowData[9] != null && !rowData[9].isEmpty()) {
+						try {
+							listHour = rowData[9].replaceAll(" ", "").split("-");
+							if(listHour == null || listHour.length != 2) {
+								fromHour = null;
+								toHour = null;
+							} else {
+								fromHour = listHour[0];
+								toHour   = listHour[1];
+							}
+						} catch (Exception e) {
+							fromHour = null;
+							toHour = null;
+							System.out.print("Error with: " + rowData[9]);
+						}
+					}
+
+					lichLamViecDto.ngayTuan = listDayInWeek;
+					lichLamViecDto.ngayThang = listDayMonth;
+					lichLamViecDto.tuGio = fromHour;
+					lichLamViecDto.denGio = toHour;
+
+					giayDiDuongDto.thoiHan  = rowData[10] != null ? rowData[10] : "";
+					giayDiDuongDto.ghiChu   = rowData[11] != null ? rowData[11] : "";
+
+					giayDiDuongAction.create(giayDiDuongDto);
 				default:
 					break;
 				}

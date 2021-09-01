@@ -6,6 +6,8 @@ package org.vaccom.vcmgt.constant;
  */
 public class DBConstant {
 	public static final String _NGUOIDUNG_TABLE_NAME = "t_nguoidung";
+	public static final String _GIAYDIDUONG_TABLE_NAME = "t_giaydiduong";
+	public static final String _UYBANNHANDAN_TABLE_NAME = "t_uybannhandan";
 	public static final String _DIABANCOSO_TABLE_NAME = "t_diabancoso";
 	public static final String _COSOYTE_TABLE_NAME = "t_cosoyte";
 	public static final String _PHIEUTIEM_TABLE_NAME = "t_phieuhentiem";

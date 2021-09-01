@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,34 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.vaccom.vcmgt.action.CaTiemChungAction;
-import org.vaccom.vcmgt.action.CoSoYTeAction;
-import org.vaccom.vcmgt.action.DanTocAction;
-import org.vaccom.vcmgt.action.DiaBanCoSoAction;
-import org.vaccom.vcmgt.action.DoiTuongAction;
-import org.vaccom.vcmgt.action.DonViHanhChinhAction;
-import org.vaccom.vcmgt.action.LichTiemChungAction;
-import org.vaccom.vcmgt.action.MuiTiemChungAction;
-import org.vaccom.vcmgt.action.NguoiDungAction;
-import org.vaccom.vcmgt.action.NguoiTiemChungAction;
-import org.vaccom.vcmgt.action.PhieuHenTiemAction;
-import org.vaccom.vcmgt.action.QuocGiaAction;
+import org.vaccom.vcmgt.action.*;
 import org.vaccom.vcmgt.constant.EntityConstant;
-import org.vaccom.vcmgt.entity.PhieuHenTiem;
-import org.vaccom.vcmgt.entity.CaTiemChung;
-import org.vaccom.vcmgt.entity.CoSoYTe;
-import org.vaccom.vcmgt.entity.DanToc;
-import org.vaccom.vcmgt.entity.DiaBanCoSo;
-import org.vaccom.vcmgt.entity.DoiTuong;
-import org.vaccom.vcmgt.entity.LichTiemChung;
-import org.vaccom.vcmgt.entity.MuiTiemChung;
-import org.vaccom.vcmgt.entity.NguoiDung;
-import org.vaccom.vcmgt.entity.NguoiTiemChung;
-import org.vaccom.vcmgt.entity.PhuongXa;
-import org.vaccom.vcmgt.entity.QuanHuyen;
-import org.vaccom.vcmgt.entity.QuocGia;
-import org.vaccom.vcmgt.entity.TinhThanh;
-import org.vaccom.vcmgt.entity.VaiTro;
+import org.vaccom.vcmgt.constant.MethodConstant;
+import org.vaccom.vcmgt.dto.GiayDiDuongDto;
+import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.response.DataResponeBody;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -115,6 +93,9 @@ public class ApplicationControler {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
+	private GiayDiDuongAction giayDiDuongAction;
+
 	@RequestMapping(value = "/add/nguoidung", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<?> addNguoiDung(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String reqBody) {
@@ -123,7 +104,7 @@ public class ApplicationControler {
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!PermissionUtil.hasAddNguoiDung(vaiTro)) {
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro, null, reqBody, MethodConstant.CREATE)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
 			}
@@ -155,10 +136,16 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id) {
 
 		try {
+			NguoiDung nguoiDung = nguoiDungAction.findById(id);
+
+			if (nguoiDung == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("nguoidung.not_found"));
+			}
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!PermissionUtil.hasDeleteNguoiDung(vaiTro)) {
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro, nguoiDung, null, MethodConstant.DELETE)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.delete.permission_error"));
 			}
@@ -194,10 +181,16 @@ public class ApplicationControler {
 			@PathVariable(value = "id") long id, @PathVariable(value = "isKhoaTaiKhoan") boolean isKhoaTaiKhoan) {
 
 		try {
-
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
-			//TODO check permission
-			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
+
+			NguoiDung nguoiDung = nguoiDungAction.findById(id);
+
+			if (nguoiDung == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("nguoidung.not_found"));
+			}
+
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro, nguoiDung, null, MethodConstant.LOCK)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.lock.permission_error"));
 			}
@@ -316,15 +309,27 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoidung.not_found"));
 			}
 
-			if (vaiTro == null || reqId <= 0
-					|| ((RoleUtil.isCanBoDiaBan(vaiTro) || RoleUtil.isCanBoYTe(vaiTro) || RoleUtil.isCanBoUBND(vaiTro)
-							|| RoleUtil.isNguoiDung(vaiTro)) && reqId != id)
-					|| (RoleUtil.isQuanTriCoSo(vaiTro) && RoleUtil.isQuanTriHeThong(RoleUtil.getVaiTro(nguoiDung))
-							|| (RoleUtil.isQuanTriCoSo(vaiTro)
-									&& !RoleUtil.hasUpdateObjectPermission(vaiTro, nguoiDung)))) {
+			if(vaiTro == null || reqId <= 0) {
+				_log.warn("Not found vai tro or request id");
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("vaitro.notfound"));
+			}
+
+			vaiTro.setCurrentId(reqId);
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro,nguoiDung, reqBody, MethodConstant.UPDATE)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
 			}
+
+//			if (vaiTro == null || reqId <= 0
+//					|| ((RoleUtil.isCanBoDiaBan(vaiTro) || RoleUtil.isCanBoYTe(vaiTro) || RoleUtil.isCanBoUBND(vaiTro)
+//							|| RoleUtil.isNguoiDung(vaiTro)) && reqId != id)
+//					|| (RoleUtil.isQuanTriCoSo(vaiTro) && RoleUtil.isQuanTriHeThong(RoleUtil.getVaiTro(nguoiDung))
+//							|| (RoleUtil.isQuanTriCoSo(vaiTro)
+//									&& !RoleUtil.hasUpdateObjectPermission(vaiTro, nguoiDung)))) {
+//				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
+//			}
 
 			nguoiDungAction.updateNguoiDung(id, reqBody);
 
@@ -355,7 +360,7 @@ public class ApplicationControler {
 
 			VaiTro reqVaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-			if (!RoleUtil.isQuanTriHeThong(reqVaiTro)) {
+			if (!PermissionUtil.canAccessNguoiDung(reqVaiTro, null, null, MethodConstant.UPDATE_ROLE)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.update.permission_error"));
 			}
@@ -388,8 +393,8 @@ public class ApplicationControler {
 		try {
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
-			
-			if (!RoleUtil.isQuanTriHeThong(vaiTro)) {
+
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro, null, null, MethodConstant.GET)) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoidung.danhsach.permission_error"));
 			}
@@ -2566,4 +2571,198 @@ public class ApplicationControler {
 			}
 		}
 	}
+
+
+	@RequestMapping(value = "/add/giaydiduong", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<?> addGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+											@RequestBody GiayDiDuongDto giayDiDuongDto) {
+		try {
+
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			if (!PermissionUtil.canAccessGiayDiDuong(vaiTro, null, null, MethodConstant.CREATE)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("giaydiduong.add.permission_error"));
+			}
+
+			giayDiDuongDto.uyBanNhanDanID = (int) vaiTro.getUyBanNhanDanId();
+			giayDiDuongAction.create(giayDiDuongDto);
+
+			String msg = MessageUtil.getVNMessageText("giaydiduong.add.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/get/giaydiduong/{id}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getDsGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+											  @PathVariable(value = "id") int id,
+											  @RequestParam("status") int trangthai,
+											  @RequestParam("page") int page, @RequestParam("size") int size) {
+
+		try {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			if (!PermissionUtil.canAccessGiayDiDuong(vaiTro, null, null, MethodConstant.GET)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("giaydiduong.danhsach.permission_error"));
+			}
+			List<GiayDiDuong> lstGiayDiDuong = new ArrayList<>();
+
+			if(id > 0) {
+				GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
+				if(giayDiDuong == null) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
+				}
+				lstGiayDiDuong.add(giayDiDuong);
+
+				return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(1, lstGiayDiDuong));
+			}
+
+			long total = 0;
+
+			total = giayDiDuongAction.countByUyBanNhanDanIdAndStatus((int)vaiTro.getUyBanNhanDanId(), trangthai);
+			lstGiayDiDuong = giayDiDuongAction.findByUyBanNhanDanIdAndStatus((int)vaiTro.getUyBanNhanDanId(), trangthai, page, size);
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstGiayDiDuong));
+
+		} catch (Exception e) {
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/get/giaydiduong-maqr", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getGiayDiDuongMaQr(@RequestParam("maQr") String maQr) {
+
+		try {
+			GiayDiDuong giayDiDuong = giayDiDuongAction.findByMaQr(maQr);
+
+			if(giayDiDuong == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(giayDiDuong);
+
+		} catch (Exception e) {
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
+
+	@RequestMapping(value = "/update/giaydiduong/{id}", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+											   @PathVariable(value = "id") long id, @RequestBody GiayDiDuongDto giayDiDuongDto) {
+		try {
+
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
+
+			if (giayDiDuong == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
+			}
+
+			if (!PermissionUtil.canAccessGiayDiDuong(vaiTro, giayDiDuong, null, MethodConstant.UPDATE)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("giaydiduong.update.permission_error"));
+			}
+
+			giayDiDuongAction.update(giayDiDuong, giayDiDuongDto);
+
+			String msg = MessageUtil.getVNMessageText("giaydiduong.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/delete/giaydiduong/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<?> deleteGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+											   @PathVariable(value = "id") long id, @RequestBody GiayDiDuongDto giayDiDuongDto) {
+		try {
+
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
+
+			if (giayDiDuong == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
+			}
+
+			if (!PermissionUtil.canAccessGiayDiDuong(vaiTro, giayDiDuong, null, MethodConstant.UPDATE)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("giaydiduong.delete.permission_error"));
+			}
+
+			giayDiDuongAction.delete(giayDiDuong);
+
+			String msg = MessageUtil.getVNMessageText("giaydiduong.delete.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
 }
