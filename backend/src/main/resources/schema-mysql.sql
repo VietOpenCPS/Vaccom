@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `t_cosoyte` (
   `DiaChiCoSo` varchar(512) DEFAULT NULL,
   `NguoiDaiDien` varchar(128) DEFAULT NULL,
   `SoDienThoai` varchar(20) DEFAULT NULL,
-  `CoSoYTeChaId` bigint(20) DEFAULT NULL,
-  `UyBanNhanDanID` bigint(20) DEFAULT NULL,
+  `CoSoYTeChaId` bigint(20) DEFAULT 0,
+  `UyBanNhanDanID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 
@@ -190,8 +190,8 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   `NoiOPhuongXaTen` varchar(128) DEFAULT NULL,
   `LichLamViec` text DEFAULT NULL,
   `UyBanNhanDanID` bigint(20) DEFAULT 0,
-  `NgayCap` varchar(8) DEFAULT NULL,
-  `ThoiHan` varchar(8) DEFAULT NULL,
+  `NgayCap` varchar(20) DEFAULT NULL,
+  `ThoiHan` varchar(20) DEFAULT NULL,
   `CheckSum` text DEFAULT NULL,
   `GhiChu` text DEFAULT NULL,
   `Status` tinyint(1) DEFAULT 0,

@@ -59,6 +59,11 @@ export default new Router({
         },
         {
           name: 'DiaBanCoSo',
+          path: '/pages/uy-ban-nha-dan',
+          component: () => import('@/views/dashboard/pages/UyBanNhanDan'),
+        },
+        {
+          name: 'DiaBanCoSo',
           path: '/pages/dia-ban-co-so',
           component: () => import('@/views/dashboard/pages/DiaBanCoSo'),
         },

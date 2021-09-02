@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "98ab4c03-d4b4-4359-83a5-be4d40714bbe",
+		"_postman_id": "e9ffa138-5b8d-47db-95f4-cd5404de0782",
 		"name": "Vaccom",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -61,7 +61,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDMzMTcwMCwiZXhwIjoxNjMwMzM1MzAwfQ.4VnGnZHBFvcaC06036nFHXby0Ll94L8fYD1qyCZkpwyXLq6GE3wMZZ2670vtMlB7o41v5QInTksd35bR56zstw",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDE1OTk2NiwiZXhwIjoxNjMwMTYzNTY2fQ.Nf5wk0V6IZSn0VHW68vDAqkz1ij8BgMOA5YwYcoP8LEOE4Ri-BIZExLeOCOPEqqlS9_2mZw24WrwhIVGGJtwrQ",
 							"type": "string"
 						}
 					]
@@ -81,7 +81,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"TenDangNhap\": \"lvn\",\r\n  \"HoVaTen\": \"Le van nam\",\r\n  \"ChucDanh\": \"Dien vien hai\",\r\n  \"SoDienThoai\": \"\",\r\n  \"Email\": \"\",\r\n  \"MatKhau\": \"123456\",\r\n  \"DiaBanCoSo_ID\": 0,\r\n  \"CoSoYTe_ID\": 0,\r\n  \"VaiTro\": 0,\r\n  \"KhoaTaiKhoan\": false\r\n}"
+					"raw": "{\r\n  \"TenDangNhap\": \"quantricoso\",\r\n  \"HoVaTen\": \"admin 2\",\r\n  \"ChucDanh\": \"\",\r\n  \"SoDienThoai\": \"\",\r\n  \"Email\": \"\",\r\n  \"MatKhau\": \"123456\",\r\n  \"DiaBanCoSo_ID\": 0,\r\n  \"CoSoYTe_ID\": 0,\r\n  \"VaiTro\": 2,\r\n  \"KhoaTaiKhoan\": false\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8686/rest/v1/app/add/nguoidung",
@@ -993,11 +993,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "ngaydangki",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "hovaten",
@@ -1005,15 +1005,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "cosoytema",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "kiemtratrung",
@@ -1079,11 +1079,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "ngaydangki",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "hovaten",
@@ -1091,15 +1091,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "cosoytema",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "kiemtratrung",
@@ -1165,11 +1165,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "ngaydangki",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "hovaten",
@@ -1177,15 +1177,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "cosoytema",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "kiemtratrung",
@@ -1251,11 +1251,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "ngaydangki",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "hovaten",
@@ -1263,15 +1263,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "cosoytema",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "kiemtratrung",
@@ -1655,7 +1655,7 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "ngaydangki",
@@ -1671,11 +1671,11 @@
 						},
 						{
 							"key": "cosoytema",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "kiemtratrung",
@@ -2580,11 +2580,11 @@
 						},
 						{
 							"key": "lichtiemchungid",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "diabancosoid",
-							"value": ""
+							"value": null
 						}
 					]
 				}
@@ -3690,467 +3690,6 @@
 							"key": "size",
 							"value": "30",
 							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canboUBND] Lấy danh sách giấy đi đường",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0dWFuIiwiaWF0IjoxNjMwNDMwMjU2LCJleHAiOjE2MzA0MzM4NTZ9.5wzKLaMomY0V7jh6gvxAGA6XsNwzweuHgD0TsFkCWKqEGXGr1BWVzocW63bJQNgzrhYNZl5t4CrNfcixIZpKNg",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "1",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/giaydiduong/0?page=0&size=2&status=0",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"giaydiduong",
-						"0"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "2"
-						},
-						{
-							"key": "status",
-							"value": "0"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canboUBND] Lấy giấy đi đường qua mã Qr",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "0",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/giaydiduong-maqr?maQr=1212121",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"giaydiduong-maqr"
-					],
-					"query": [
-						{
-							"key": "maQr",
-							"value": "1212121"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canboUBND] Tạo giấy đi đường",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0dWFuIiwiaWF0IjoxNjMwNDI5NjA3LCJleHAiOjE2MzA0MzMyMDd9.XQV6Leg7u48P-wt4LdWfBvPTkKZJis_MYbARg3EwwAjmBv_PFzt-W7aboaiBxoIzvwUXEeKvG1TbhJE9vmXSHQ",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "0",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hoVaTen\" : \"Le 3dfdfd22\",\r\n    \"lichLamViec\" : {\"ngayTuan\":[2,3,4,5],\"ngayThang\":[\"01092021\",\"02092021\"],\"tuGio\":\"0800\",\"denGio\":\"1700\"}\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/add/giaydiduong",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"add",
-						"giaydiduong"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0",
-							"disabled": true
-						},
-						{
-							"key": "size",
-							"value": "30",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canboUBND] Update giấy đi đường",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0dWFuIiwiaWF0IjoxNjMwNDI1NzkwLCJleHAiOjE2MzA0MjkzOTB9.6cPvLeBJAWwgR9LBx-wg6RP1pfV3EGgMpgmjG5aGhVQYStyT-6jxw7vfUfmEkmrB5-4H5iYzxaTFeaddngNS4A",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "0",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hoVaTen\" : \"Le 312dsdsd1\",\r\n    \"maQR\": \"dslfshd123123-21312sdrqwerwerwe-3123rqwreqweqw\",\r\n    \"lichLamViec\" : {\r\n        \"ngayTuan\": [2,3,4,7],\r\n        \"ngayThang\": [\"01092021\", \"02092021\"],\r\n        \"tuGio\": \"0800\",\r\n        \"denGio\": \"1700\"\r\n    },\r\n\r\n    \"soDienThoai\" : \"0921312421\",\r\n\r\n\r\n    \"status\" : 2\r\n\r\n\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/update/giaydiduong/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"update",
-						"giaydiduong",
-						"1"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0",
-							"disabled": true
-						},
-						{
-							"key": "size",
-							"value": "30",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[canboUBND] Delete giấy đi đường",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFvIiwiaWF0IjoxNjMwNDIyNTU3LCJleHAiOjE2MzA0MjYxNTd9.ylrVU-MD4IKw7ejM_j7CQMyvZ9EVGcz0ATgMRwQxDU_3eyuTiFijG_vfWroaf7mN7nnKPP2CmuH2-5rq_bLuTw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Accept",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "page",
-						"value": "0",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "size",
-						"value": "30",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hoVaTen\" : \"Le Van Nam\",\r\n    \"lichLamViec\" : {\r\n        \"ngayTuan\": [2,3,4,5],\r\n        \"ngayThang\": [\"01092021\", \"02092021\"],\r\n        \"tuGio\": \"0800\",\r\n        \"denGio\": \"1700\"\r\n    }\r\n\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/delete/giaydiduong/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"delete",
-						"giaydiduong",
-						"1"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0",
-							"disabled": true
-						},
-						{
-							"key": "size",
-							"value": "30",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[nguoidung] Lấy phiếu hẹn tiêm qua Mã QR",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDQ4MjEwMSwiZXhwIjoxNjMwNDg1NzAxfQ.t3PoiU2OPB5t-q3ZA5Z7CyjU8VgYYtMfohoXPWWI7MM6oxiVFXh7uyY9nASU804hV-yYbYa58P05ULJcP1f0WQ",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/phieuhen-maqr?maQr=pht-jvx91m-wqm010-r5ss3a-g13he2-idwonl",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"phieuhen-maqr"
-					],
-					"query": [
-						{
-							"key": "maQr",
-							"value": "pht-jvx91m-wqm010-r5ss3a-g13he2-idwonl"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[nguoidung] Lấy thông tin người tiêm chủng thông qua QR Code",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDQ4MjEwMSwiZXhwIjoxNjMwNDg1NzAxfQ.t3PoiU2OPB5t-q3ZA5Z7CyjU8VgYYtMfohoXPWWI7MM6oxiVFXh7uyY9nASU804hV-yYbYa58P05ULJcP1f0WQ",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/dangkymoi-maqr?maQr=ntc-hotekl-fuv5xl-ufdid7-v7xrtf-kcrnbk",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"dangkymoi-maqr"
-					],
-					"query": [
-						{
-							"key": "maQr",
-							"value": "ntc-hotekl-fuv5xl-ufdid7-v7xrtf-kcrnbk"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "[nguoidung] Lấy giấy chứng nhận tiêm chủng thông qua QR Code",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDQ4MjEwMSwiZXhwIjoxNjMwNDg1NzAxfQ.t3PoiU2OPB5t-q3ZA5Z7CyjU8VgYYtMfohoXPWWI7MM6oxiVFXh7uyY9nASU804hV-yYbYa58P05ULJcP1f0WQ",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/chung-nhan-tiem-chung-maqr?maQr=pht-uxka1s-bvhkte-af8ybl-ka5wwt-zvlcqe",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8686",
-					"path": [
-						"rest",
-						"v1",
-						"app",
-						"get",
-						"chung-nhan-tiem-chung-maqr"
-					],
-					"query": [
-						{
-							"key": "maQr",
-							"value": "pht-uxka1s-bvhkte-af8ybl-ka5wwt-zvlcqe"
 						}
 					]
 				}

@@ -1,3 +1,9 @@
+### Release v0.3.2
+#### Hotfix:
+* Backend: Sửa cơ chế check trùng người tiêm chủng khi impport từ excel
+* Backend: Sửa các điều kiện tìm kiếm cho API lọc danh sách người tiêm chủng
+* Backend: Sửa lỗi impport đối với các mẫu excel có merge các cột
+* Frontend: Sửa lỗi cập nhật người tiêm chủng không tự chọn địa bàn cơ sơ
 ### Release v0.3.1
 #### Hotfix:
 * Frontend: Không tạo được tài khoản 

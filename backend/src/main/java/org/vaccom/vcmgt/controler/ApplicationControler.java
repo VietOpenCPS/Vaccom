@@ -35,6 +35,7 @@ import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.constant.MethodConstant;
 import org.vaccom.vcmgt.constant.ZaloConstant;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
+import org.vaccom.vcmgt.dto.UyBanNhanDanDto;
 import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.repository.UyBanNhanDanRepository;
@@ -119,15 +120,10 @@ public class ApplicationControler {
 
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-            if (!PermissionUtil.hasAddNguoiDung(vaiTro)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
-            }
-
-            if (!PermissionUtil.canAccessNguoiDung(vaiTro, null, reqBody, MethodConstant.CREATE)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
-            }
+			if (!PermissionUtil.canAccessNguoiDung(vaiTro, null, reqBody, MethodConstant.CREATE)) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(MessageUtil.getVNMessageText("nguoidung.add.permission_error"));
+			}
 
 
             NguoiDung nguoiDung = nguoiDungAction.addNguoiDung(reqBody);
@@ -2712,13 +2708,14 @@ public class ApplicationControler {
             }
             List<GiayDiDuong> lstGiayDiDuong = new ArrayList<>();
 
-            if (id > 0) {
-                GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
-                if (giayDiDuong == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
-                }
-                lstGiayDiDuong.add(giayDiDuong);
+			if(id > 0) {
+				GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
+				if(giayDiDuong == null) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.body(MessageUtil.getVNMessageText("giayDiDuong.not_found"));
+				}
+
+				lstGiayDiDuong.add(giayDiDuong);
 
                 return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(1, lstGiayDiDuong));
             }
@@ -2900,6 +2897,26 @@ public class ApplicationControler {
 
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
+            if(id == 0 && giayDiDuongDto.listIdUpdate!= null && giayDiDuongDto.listIdUpdate.size() > 0) {
+                List<Integer> listIdUpdate = giayDiDuongDto.listIdUpdate;
+                for(Integer idUpdate : listIdUpdate) {
+                    try {
+                        GiayDiDuong giayDiDuongUpdate = giayDiDuongAction.findById(idUpdate);
+                        if (giayDiDuongUpdate != null) {
+                            if(giayDiDuongUpdate.getUyBanNhanDanID() != (int)vaiTro.getUyBanNhanDanId()) {
+                                continue;
+                            }
+                            giayDiDuongAction.update(giayDiDuongUpdate, giayDiDuongDto);
+                        }
+                    } catch (Exception e) {
+                        _log.error("Error update with id: " + idUpdate);
+                        e.printStackTrace();
+                    }
+                }
+
+                return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("giaydiduong.update.success"));
+            }
+
             GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
             int statusOld = giayDiDuong.getStatus();
             if (giayDiDuong == null) {
@@ -2960,7 +2977,27 @@ public class ApplicationControler {
 
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-            GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
+			if(id == 0 && giayDiDuongDto.listIdDelete!= null && giayDiDuongDto.listIdDelete.size() > 0) {
+				List<Integer> listIdDelete = giayDiDuongDto.listIdDelete;
+				for(Integer idDelete : listIdDelete) {
+					try {
+						GiayDiDuong giayDiDuongDelete = giayDiDuongAction.findById(idDelete);
+						if (giayDiDuongDelete != null) {
+							if(giayDiDuongDelete.getUyBanNhanDanID() != (int)vaiTro.getUyBanNhanDanId()) {
+								continue;
+							}
+							giayDiDuongAction.delete(giayDiDuongDelete);
+						}
+					} catch (Exception e) {
+						_log.error("Error delete with id: " + idDelete);
+						e.printStackTrace();
+					}
+				}
+
+				return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("giaydiduong.delete.success"));
+			}
+
+			GiayDiDuong giayDiDuong = giayDiDuongAction.findById(id);
 
             if (giayDiDuong == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -2993,5 +3030,181 @@ public class ApplicationControler {
 
         }
     }
+
+	@RequestMapping(value = "/get/uybannhandan/{id}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getDsUyBanNhanDan(HttpServletRequest request, HttpServletResponse response,
+											  @PathVariable(value = "id") int id,
+											  @RequestParam("page") int page, @RequestParam("size") int size) {
+		try {
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			List<UyBanNhanDan> lstUybanNhanDan = new ArrayList<>();
+
+			if(id > 0) {
+				UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(id);
+				if(uyBanNhanDan == null) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
+				}
+				lstUybanNhanDan.add(uyBanNhanDan);
+
+				return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(1, lstUybanNhanDan));
+			}
+
+			long total = 0;
+			total = uyBanNhanDanAction.countAll();
+			lstUybanNhanDan = uyBanNhanDanAction.findAll(page, size);
+
+			return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstUybanNhanDan));
+
+		} catch (Exception e) {
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/add/uybannhandan", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<?> addGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+											@RequestBody UyBanNhanDanDto uyBanNhanDanDto) {
+		try {
+			uyBanNhanDanAction.create(uyBanNhanDanDto);
+
+			String msg = MessageUtil.getVNMessageText("uybannhandan.add.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/update/uybannhandan/{id}", method = RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<?> updateUyBanNhanDan(HttpServletRequest request, HttpServletResponse response,
+											   @PathVariable(value = "id") long id, @RequestBody UyBanNhanDanDto uyBanNhanDanDto) {
+		try {
+
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			if(id == 0 && uyBanNhanDanDto.listIdUpdate!= null && uyBanNhanDanDto.listIdUpdate.size() > 0) {
+				List<Integer> listIdUpdate = uyBanNhanDanDto.listIdUpdate;
+				for(Integer idUpdate : listIdUpdate) {
+					try {
+						UyBanNhanDan uyBanNhanDanUpdate = uyBanNhanDanAction.findById(idUpdate);
+						if (uyBanNhanDanUpdate != null) {
+							uyBanNhanDanAction.update(uyBanNhanDanUpdate, uyBanNhanDanDto);
+						}
+					} catch (Exception e) {
+						_log.error("Error update with id: " + idUpdate);
+						e.printStackTrace();
+					}
+				}
+
+				return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("uyBanNhanDan.update.success"));
+			}
+
+			UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(id);
+
+			if (uyBanNhanDan == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
+			}
+
+			uyBanNhanDanAction.update(uyBanNhanDan, uyBanNhanDanDto);
+
+			String msg = MessageUtil.getVNMessageText("uyBanNhanDan.update.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+	@RequestMapping(value = "/delete/uybannhandan/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<?> deleteUyBanNhanDan(HttpServletRequest request, HttpServletResponse response,
+											   @PathVariable(value = "id") long id, @RequestBody UyBanNhanDanDto uyBanNhanDanDto) {
+		try {
+
+			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+			if(id == 0 && uyBanNhanDanDto.listIdDelete!= null && uyBanNhanDanDto.listIdDelete.size() > 0) {
+				List<Integer> listIdDelete = uyBanNhanDanDto.listIdDelete;
+				for(Integer idDelete : listIdDelete) {
+					try {
+						UyBanNhanDan uyBanNhanDanDelete = uyBanNhanDanAction.findById(idDelete);
+						if (uyBanNhanDanDelete != null) {
+							uyBanNhanDanAction.delete(uyBanNhanDanDelete);
+						}
+					} catch (Exception e) {
+						_log.error("Error delete with id: " + idDelete);
+						e.printStackTrace();
+					}
+				}
+
+				return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("uyBanNhanDan.delete.success"));
+			}
+
+			UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(id);
+
+			if (uyBanNhanDan == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
+			}
+
+			uyBanNhanDanAction.delete(uyBanNhanDan);
+
+			String msg = MessageUtil.getVNMessageText("uyBanNhanDan.delete.success");
+
+			return ResponseEntity.status(HttpStatus.OK).body(msg);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+
+			if (e instanceof ActionException) {
+				String msg = e.getMessage();
+				int status = ((ActionException) e).getStatus();
+				return ResponseEntity.status(status).body(msg);
+
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+
+		}
+	}
+
+
+
+
 
 }

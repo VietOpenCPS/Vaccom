@@ -2,9 +2,7 @@ package org.vaccom.vcmgt.action.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,6 +22,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
 import org.vaccom.vcmgt.dto.LichLamViecDto;
+import org.vaccom.vcmgt.entity.VaiTro;
+import org.vaccom.vcmgt.util.DatetimeUtil;
 
 @Service
 public class ImportDataActionImpl implements ImportDataAction {
@@ -55,8 +55,8 @@ public class ImportDataActionImpl implements ImportDataAction {
 	private GiayDiDuongAction giayDiDuongAction;
 
 	@Override
-	public void importData(String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
-			int endRow) throws Exception {
+	public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
+						   int endRow) throws Exception {
 		HSSFWorkbook workbook = null;
 		try {
 
@@ -171,6 +171,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 					List<Integer> listDayInWeek = null;
 					List<String> listDayMonth = null ;
+					List<String> listDayMonthFormatted = new ArrayList<>();
 					String[] listHour;
 					String fromHour = null;
 					String toHour = null;
@@ -180,7 +181,6 @@ public class ImportDataActionImpl implements ImportDataAction {
 							listDayInWeek = Arrays.stream(rowData[7].replaceAll(" ", "").split(","))
 									.map(Integer::parseInt)
 									.collect(Collectors.toList());
-
 						} catch (Exception e) {
 							listDayInWeek = null;
 							System.out.print("Error with: " + rowData[7]);
@@ -191,8 +191,23 @@ public class ImportDataActionImpl implements ImportDataAction {
 						try {
 							listDayMonth = Arrays.stream(rowData[8].replaceAll(" ", "").split(","))
 									.collect(Collectors.toList());
+
+							for(String oneDayMonth: listDayMonth) {
+								if(oneDayMonth.contains("/")) {
+									continue;
+								}
+
+								Date date = DatetimeUtil.stringToDate(oneDayMonth, "ddMMyyyy");
+
+								if(date == null) {
+									continue;
+								}
+
+								oneDayMonth = DatetimeUtil.dateToString(date, "dd/MM/yyyy");
+								listDayMonthFormatted.add(oneDayMonth);
+							}
+
 						} catch (Exception e) {
-							listDayMonth = null;
 							System.out.print("Error with: " + rowData[8]);
 						}
 					}
@@ -205,7 +220,14 @@ public class ImportDataActionImpl implements ImportDataAction {
 								toHour = null;
 							} else {
 								fromHour = listHour[0];
+								if(fromHour.length() == 4) {
+									fromHour = fromHour.substring(0,2) + ":" + fromHour.substring(2,4);
+								}
 								toHour   = listHour[1];
+								if(toHour.length() == 4) {
+									toHour = toHour.substring(0,2) + ":" + toHour.substring(2,4);
+								}
+
 							}
 						} catch (Exception e) {
 							fromHour = null;
@@ -215,12 +237,15 @@ public class ImportDataActionImpl implements ImportDataAction {
 					}
 
 					lichLamViecDto.ngayTuan = listDayInWeek;
-					lichLamViecDto.ngayThang = listDayMonth;
+					lichLamViecDto.ngayThang = listDayMonthFormatted;
 					lichLamViecDto.tuGio = fromHour;
 					lichLamViecDto.denGio = toHour;
 
 					giayDiDuongDto.thoiHan  = rowData[10] != null ? rowData[10] : "";
 					giayDiDuongDto.ghiChu   = rowData[11] != null ? rowData[11] : "";
+					giayDiDuongDto.lichLamViec = lichLamViecDto;
+
+					giayDiDuongDto.uyBanNhanDanID = (int)vaiTro.getUyBanNhanDanId();
 
 					giayDiDuongAction.create(giayDiDuongDto);
 				default:
