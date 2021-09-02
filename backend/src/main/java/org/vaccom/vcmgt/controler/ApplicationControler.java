@@ -1084,7 +1084,7 @@ public class ApplicationControler {
         }
     }
 
-    @RequestMapping(value = "/get/search-nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/get/search-nguoitiemchung", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> searchNguoiTiemChungNew(HttpServletRequest request, HttpServletResponse response,
                                                      @RequestBody NguoiTiemChungDto nguoiTiemChungDto,
                                                      @RequestParam(name = "page", defaultValue = "0") int page,
@@ -1130,7 +1130,7 @@ public class ApplicationControler {
             });
 
 
-            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, result.datas));
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, data));
 
         } catch (Exception e) {
 

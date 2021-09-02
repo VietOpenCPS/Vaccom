@@ -319,6 +319,14 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
 		}
 
+		if (nguoiTiemChungDto.caTiemChungId > 0) {
+			predicates.add(builder.equal(phieuHenTiemRoot.get("caTiemChungId"), nguoiTiemChungDto.caTiemChungId));
+		}
+
+		if (nguoiTiemChungDto.lichTiemChungId > 0) {
+			predicates.add(builder.equal(phieuHenTiemRoot.get("lichTiemChungId"), nguoiTiemChungDto.lichTiemChungId));
+		}
+
 		if(nguoiTiemChungDto.typeGet == 0) {
 			predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
 		} else {

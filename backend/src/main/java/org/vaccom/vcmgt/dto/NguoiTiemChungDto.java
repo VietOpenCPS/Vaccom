@@ -15,6 +15,10 @@ public class NguoiTiemChungDto {
 
     public int nhomdoituong;
 
+    public int caTiemChungId;
+
+    public int lichTiemChungId;
+
     public String donvicongtac;
 
     public String sodienthoai;
