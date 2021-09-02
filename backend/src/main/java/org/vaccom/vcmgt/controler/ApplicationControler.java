@@ -2,6 +2,7 @@ package org.vaccom.vcmgt.controler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -1121,6 +1122,13 @@ public class ApplicationControler {
                 node.put("muiTiemChung", jsonArrayObj);
 
                 List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                if (nguoiTiemChungDto.lichTiemChungId > 0) {
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
+                }
+
+                if(nguoiTiemChungDto.caTiemChungId > 0) {
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
+                }
 
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
 

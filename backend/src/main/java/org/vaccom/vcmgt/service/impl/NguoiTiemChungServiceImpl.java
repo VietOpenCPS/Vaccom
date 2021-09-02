@@ -303,7 +303,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
 		Root<PhieuHenTiem>   phieuHenTiemRoot   = criteriaQuery.from(PhieuHenTiem.class);
 
-		criteriaQuery.select(nguoiTiemChungRoot);
+		criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
