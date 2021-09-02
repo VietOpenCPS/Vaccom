@@ -77,3 +77,23 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   PRIMARY KEY (`ID`)
 ) ;
 
+create table IF NOT EXISTS t_hangchothongbao (
+
+    `ID` bigint not null auto_increment,
+
+    `LoaiThongBao` varchar(255),
+
+    `isSent` bit,
+
+    `isReady` bit,
+
+    `payload` varchar(1024),
+
+    `toEmail` varchar(255),
+
+    `toTelNo` varchar(255),
+
+    primary key (ID)
+
+);
+
