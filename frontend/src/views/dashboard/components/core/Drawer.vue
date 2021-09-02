@@ -83,7 +83,7 @@
     }),
     created () {
       let vm = this
-      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'admin') {
+      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'QuanTriHeThong') {
         vm.items = [
           {
             icon: 'mdi-home',
@@ -235,7 +235,7 @@
     watch: {
       userLogin (val) {
         let vm = this
-        if (val && val['role_name'] && val['role_name'] === 'admin') {
+        if (val && val['role_name'] && val['role_name'] === 'QuanTriHeThong') {
           
         } else {
           

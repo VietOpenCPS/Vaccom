@@ -70,7 +70,7 @@
                     dense
                   ></v-text-field>
                 </v-col>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="6"
                 >
@@ -104,7 +104,7 @@
                     dense
                     prepend-inner-icon="mdi-map-marker"
                 ></v-autocomplete>
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-container>
           </v-form>
@@ -231,12 +231,12 @@
     created () {
       let vm = this
       vm.getUserInfo()
-      vm.getCoSoYTe()
-      vm.getDiaBanCoSo()
+      // vm.getCoSoYTe()
+      // vm.getDiaBanCoSo()
     },
     coSoYTe (val) {
-      this.userInfo.CoSoYTe_ID = val
-      this.getDiaBanCoSo(val)
+      // this.userInfo.CoSoYTe_ID = val
+      // this.getDiaBanCoSo(val)
     },
     computed: {},
     methods: {
@@ -252,7 +252,8 @@
           vm.userInfo.ChucDanh = dataInfo.chucDanh
           vm.userInfo.SoDienThoai = dataInfo.soDienThoai
           vm.userInfo.Email = dataInfo.email
-          vm.coSoYTe = dataInfo.coSoYTeId
+          // vm.coSoYTe = dataInfo.coSoYTeId
+          vm.userInfo.CoSoYTe_ID = dataInfo.coSoYTe_ID
           vm.userInfo.DiaBanCoSo_ID = dataInfo.diaBanCoSoId
           vm.userInfo.QuanTriHeThong = dataInfo.quanTriHeThong
         }).catch (function () {

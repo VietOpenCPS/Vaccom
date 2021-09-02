@@ -123,7 +123,7 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> ca tiêm
             </span>
-            <v-btn v-if="userLogin['coSoYTeId']" color="#0072bc" class="mx-0" @click.stop="addMember('add')">
+            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="#0072bc" class="mx-0" @click.stop="addMember('add')">
                 <v-icon left size="22">
                   mdi-plus
                 </v-icon>
@@ -401,7 +401,7 @@
           {
             sortable: false,
             text: 'Thao tác',
-            align: 'left',
+            align: 'center',
             value: 'action'
           }
         ],
