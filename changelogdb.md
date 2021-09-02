@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `vaccom`.`t_uybannhandan` (
   PRIMARY KEY (`ID`)
 ) ;
 
-ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `CoSoYTeChaId` bigint(20) DEFAULT NULL;
+ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `CoSoYTeChaId` bigint(20) DEFAULT 0;
 
 ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT 0;
 
@@ -99,8 +99,10 @@ create table IF NOT EXISTS t_hangchothongbao (
 
 
 ----------------------------------------------------------------------------------------------------------
-#update 01/09/2021
+#update 02/09/2021
 ALTER TABLE `t_cosoyte` modify  `UyBanNhanDanID` bigint(20) DEFAULT 0;
+ALTER TABLE `t_cosoyte` modify  `CoSoYTeChaId` bigint(20) DEFAULT 0;
 update t_cosoyte set CoSoYTeChaId = 0;
+update t_cosoyte set UyBanNhanDanID = 0;
 
 
