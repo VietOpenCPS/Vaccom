@@ -34,6 +34,8 @@ public class VaccomUtil {
 	public static final int CHUADUOCTIEM = 5;
 	public static final int XACNHANKHONGDEN = 5;
 
+	public static final int DADUYET = 1;
+
 	
 	public static String generateQRCode(String prefix, int unitLength) {
 		RandomString random = new RandomString(unitLength);

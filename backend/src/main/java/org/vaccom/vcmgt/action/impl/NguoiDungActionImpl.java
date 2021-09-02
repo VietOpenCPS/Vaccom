@@ -63,7 +63,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		String matKhau = bodyData.has(EntityConstant.MATKHAU) ? bodyData.get(EntityConstant.MATKHAU).textValue()
 				: StringPool.BLANK;
 
-		int quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG) ? bodyData.get(EntityConstant.QUANTRIHETHONG).intValue()
+		int vaiTro = bodyData.has(EntityConstant.VAITRO) ? bodyData.get(EntityConstant.VAITRO).intValue()
 				: RoleUtil.REGULAR;
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
@@ -121,7 +121,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
 		nguoiDung.setMatKhau(new BCryptPasswordEncoder(encodingStrength).encode(matKhau));
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		nguoiDung.setQuanTriHeThong(vaiTro);
 		nguoiDung.setSoDienThoai(soDienThoai);
 		nguoiDung.setTenDangNhap(tenDangNhap);
 
@@ -166,16 +166,20 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
 
+		long uyBanNhanDanId = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
+				: 0;
+
 		if (Validator.isNull(hoVaTen)) {
 			throw new ActionException(MessageUtil.getVNMessageText("hovaten.empty"), HttpStatus.NOT_ACCEPTABLE.value());
 		}
 
 		nguoiDung.setChucDanh(chucDanh);
-		nguoiDung.setCoSoYTeId(diaBanCoSoId);
-		nguoiDung.setDiaBanCoSoId(coSoYTeId);
+		nguoiDung.setCoSoYTeId(coSoYTeId);
+		nguoiDung.setDiaBanCoSoId(diaBanCoSoId);
+		nguoiDung.setUyBanNhanDanId(uyBanNhanDanId);
 		nguoiDung.setEmail(email);
 		nguoiDung.setHoVaTen(hoVaTen);
-		// nguoiDung.setQuanTriHeThong(quanTriHeThong);
+//		 nguoiDung.setQuanTriHeThong(quanTriHeThong);
 		nguoiDung.setSoDienThoai(soDienThoai);
 
 		return nguoiDungService.updateNguoiDung(nguoiDung);
@@ -202,6 +206,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		}
 
 		return nguoiDungService.updateNguoiDung(nguoiDung, khoaDangKy);
+	}
+
+	@Override
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId) {
+		return nguoiDungService.findByNguoiTiemChungId(nguoiTiemChungId);
 	}
 
 	@Override

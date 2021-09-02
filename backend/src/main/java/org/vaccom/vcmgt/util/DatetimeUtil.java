@@ -27,4 +27,13 @@ public class DatetimeUtil {
 
 		return formatter.format(calendar.getTime());
 	}
+
+	public static Date stringToDate(String dateString, String pattern) {
+		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+		try {
+			return formatter.parse(dateString);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

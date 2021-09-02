@@ -184,7 +184,19 @@
                         dense
                         clearable
                     ></v-text-field>
-
+                    <v-autocomplete
+                        class="flex xs12 md12"
+                        hide-no-data
+                        :items="listUyBanNhanDan"
+                        v-model="userInfo['UyBanNhanDan_ID']"
+                        item-text="tenCoQuan"
+                        item-value="id"
+                        outlined
+                        label="Cán bộ ủy ban nhân dân"
+                        dense
+                        clearable
+                        prepend-inner-icon="mdi-map-marker"
+                    ></v-autocomplete>
                     <v-autocomplete
                         class="flex xs12 md12"
                         hide-no-data
@@ -327,6 +339,7 @@
         loading: false,
         loadingData: false,
         dialogAddMember: false,
+        listUyBanNhanDan: [],
         listDiaBan: [],
         listCoSoYTe: [],
         vaiTro: 0,
@@ -343,6 +356,7 @@
           SoDienThoai: '',
           Email: '',
           MatKhau: '',
+          UyBanNhanDan_ID: '',
           DiaBanCoSo_ID: '',
           CoSoYTe_ID: '',
           QuanTriHeThong: 0,
@@ -458,6 +472,7 @@
         ]
       }
       vm.getMembers(0)
+      vm.getUyBanNhanDan()
       vm.getCoSoYTe()
       vm.getDiaBanCoSo()
     },
@@ -488,6 +503,14 @@
           if (result.hasOwnProperty('data') && result.data.length) {
             vm.listDiaBan = result.data
           }
+        })
+      },
+      getUyBanNhanDan() {
+        let vm = this
+        let filter = {
+        }
+        vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
+          vm.listUyBanNhanDan = result ? result : []
         })
       },
       getCoSoYTe () {
@@ -540,6 +563,7 @@
             vm.userInfo.ChucDanh = user.chucDanh
             vm.userInfo.SoDienThoai = user.soDienThoai
             vm.userInfo.Email = user.email
+            vm.userInfo.UyBanNhanDan_ID = user.hasOwnProperty('uyBanNhanDanId') ? user.uyBanNhanDanId : ''
             vm.userInfo.DiaBanCoSo_ID = user.diaBanCoSoId
             vm.coSoYTe = user.coSoYTeId
             vm.userInfo.QuanTriHeThong = user.quanTriHeThong

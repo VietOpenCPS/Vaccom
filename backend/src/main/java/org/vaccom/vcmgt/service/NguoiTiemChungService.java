@@ -18,6 +18,8 @@ public interface NguoiTiemChungService {
 
 	public NguoiTiemChung findById(long id);
 
+	public NguoiTiemChung findByMaQR(String MaQR);
+
 	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
 
 	public void deleteNguoiTiemChung(long id) throws Exception;

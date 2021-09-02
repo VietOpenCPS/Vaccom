@@ -65,10 +65,10 @@
               clearable
             >
             <template v-slot:selection="data">
-              <span>{{data.item.id + 1}}. {{ data.item.doiTuongMoTa }}</span>
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
             </template>
             <template v-slot:item="data">
-              <span>{{data.item.id + 1}}. {{ data.item.doiTuongMoTa }}</span>
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
             </template>
             </v-autocomplete>
           </v-col>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userLogin['role_name'] === 'QuanTriHeThong'">
+  <div>
     <v-container
       id="users"
       fluid

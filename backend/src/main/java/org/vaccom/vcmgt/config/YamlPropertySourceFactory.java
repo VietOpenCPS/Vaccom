@@ -16,6 +16,7 @@ import java.io.IOException;
  * @author TrinhNX
  * @since 8/29/2021
  */
+
 public final class YamlPropertySourceFactory implements PropertySourceFactory {
     @Override
     public PropertySource<?> createPropertySource(String s, EncodedResource encodedResource) throws IOException {

@@ -57,6 +57,11 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 	}
 
 	@Override
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId) {
+		return nguoiDungRepository.findByNguoiTiemChungId(nguoiTiemChungId);
+	}
+
+	@Override
 	@Transactional
 	public void deleteNguoiDung(long nguoiDungId, long khoaDangKyId, long khoaTruyCapId) throws Exception {
 		nguoiDungRepository.deleteById(nguoiDungId);
@@ -100,10 +105,8 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 				root.get("soDienThoai"), root.get("email"), root.get("diaBanCoSoId"), root.get("coSoYTeId"),
 				root.get("quanTriHeThong"), root.get("khoaTaiKhoan"), root.get("nguoiTiemChungId"), root.get("uyBanNhanDanId"))
 				.orderBy(cb.asc(root.get("id")));
-		
-		int offset = page * size;
 
-		List<Tuple> result = em.createQuery(cq).setFirstResult(offset).setMaxResults(size).getResultList();
+		List<Tuple> result = em.createQuery(cq).setFirstResult(page).setMaxResults(size).getResultList();
 
 		List<NguoiDung> lstNguoiDung = new ArrayList<NguoiDung>();
 
