@@ -124,8 +124,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
@@ -184,8 +184,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
