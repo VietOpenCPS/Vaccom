@@ -3,6 +3,8 @@ package org.vaccom.vcmgt.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 
 @Service
@@ -35,4 +37,7 @@ public interface NguoiTiemChungService {
 
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, Integer page, Integer size);
+
+	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
+
 }

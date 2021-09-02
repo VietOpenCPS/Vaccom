@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `HoVaTen` varchar(128) NOT NULL,
   `NgaySinh` varchar(10) DEFAULT NULL,
-  `GioiTinh` tinyint(4) DEFAULT NULL,
+  `GioiTinh` tinyint(4) DEFAULT 0,
   `CMTCCCD` varchar(20) DEFAULT NULL,
   `NhomDoiTuong` tinyint(4) DEFAULT 0,
   `DonViCongTac` varchar(256) DEFAULT NULL,

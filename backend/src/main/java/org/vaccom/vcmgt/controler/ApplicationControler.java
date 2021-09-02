@@ -2,6 +2,7 @@ package org.vaccom.vcmgt.controler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,8 @@ import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.constant.MethodConstant;
 import org.vaccom.vcmgt.constant.ZaloConstant;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.dto.UyBanNhanDanDto;
 import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
@@ -1080,6 +1083,78 @@ public class ApplicationControler {
         }
     }
 
+    @RequestMapping(value = "/get/search-nguoitiemchung", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> searchNguoiTiemChungNew(HttpServletRequest request, HttpServletResponse response,
+                                                     @RequestBody NguoiTiemChungDto nguoiTiemChungDto,
+                                                     @RequestParam(name = "page", defaultValue = "0") int page,
+                                                     @RequestParam(name = "size", defaultValue = "30") int size)  {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            ArrayNode data = mapper.createArrayNode();
+
+            VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+            if (RoleUtil.isQuanTriHeThong(vaiTro)) {
+                nguoiTiemChungDto.cosoyteid    = 0;
+                nguoiTiemChungDto.diabancosoid = 0;
+            } else {
+                nguoiTiemChungDto.cosoyteid    = vaiTro.getCoSoYTeId();
+                nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
+            }
+
+            ResultSearchDto<NguoiTiemChung> result = nguoiTiemChungAction.search(nguoiTiemChungDto, page, size);
+
+            List<NguoiTiemChung> lstNguoiTiemChung = result.datas;
+
+            lstNguoiTiemChung.forEach(nguoiTiemChung -> {
+                // JsonNode node = mapper.valueToTree(nguoiTiemChung);
+
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+                ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
+
+                ObjectNode node = mapper.convertValue(nguoiTiemChung, ObjectNode.class);
+
+                node.put("muiTiemChung", jsonArrayObj);
+
+                List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                if (nguoiTiemChungDto.lichTiemChungId > 0) {
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
+                }
+
+                if(nguoiTiemChungDto.caTiemChungId > 0) {
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
+                }
+
+                jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+                node.put("phieuHenTiem", jsonArrayObj);
+
+                data.add(node);
+            });
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, data));
+
+        } catch (Exception e) {
+
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+        }
+    }
+
+
     @Deprecated
     @RequestMapping(value = "/get/nguoitiemchung", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> searchNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
@@ -1113,9 +1188,9 @@ public class ApplicationControler {
 
             List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-            if (RoleUtil.isQuanTriHeThong(vaiTro)) {
-                total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                        diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
+                if (RoleUtil.isQuanTriHeThong(vaiTro)) {
+                    total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
+                            diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size);
@@ -2647,6 +2722,10 @@ public class ApplicationControler {
 
             giayDiDuongDto.uyBanNhanDanID = (int) vaiTro.getUyBanNhanDanId();
             GiayDiDuong giayDiDuong = giayDiDuongAction.create(giayDiDuongDto);
+
+            if(giayDiDuong == null) {
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageUtil.getVNMessageText("giaydiduong.add.error"));
+            }
 
             String msg = MessageUtil.getVNMessageText("giaydiduong.add.success");
 

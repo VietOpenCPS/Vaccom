@@ -5,11 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
+import org.vaccom.vcmgt.entity.PhieuHenTiem;
 import org.vaccom.vcmgt.repository.NguoiTiemChungRepository;
 import org.vaccom.vcmgt.service.NguoiTiemChungService;
 
@@ -292,4 +291,93 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 		return lstNguoiTiemChung;
 	}
+
+	@Override
+	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+
+		CriteriaQuery<NguoiTiemChung> criteriaQuery = builder.createQuery(NguoiTiemChung.class);
+		CriteriaQuery<Long> criteriaQueryCount = builder.createQuery(Long.class);
+
+		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
+		Root<PhieuHenTiem>   phieuHenTiemRoot   = criteriaQuery.from(PhieuHenTiem.class);
+
+		criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
+
+
+
+		if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
+		}
+
+		if (nguoiTiemChungDto.nhomdoituong > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
+		}
+
+		if (nguoiTiemChungDto.caTiemChungId > 0) {
+			predicates.add(builder.equal(phieuHenTiemRoot.get("caTiemChungId"), nguoiTiemChungDto.caTiemChungId));
+		}
+
+		if (nguoiTiemChungDto.lichTiemChungId > 0) {
+			predicates.add(builder.equal(phieuHenTiemRoot.get("lichTiemChungId"), nguoiTiemChungDto.lichTiemChungId));
+		}
+
+		if(nguoiTiemChungDto.typeGet == 0) {
+			predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+		} else {
+			predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.ngaydangki) && !nguoiTiemChungDto.ngaydangki.isEmpty()) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("ngayDangKi"), nguoiTiemChungDto.ngaydangki));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.hovaten) && !nguoiTiemChungDto.hovaten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + nguoiTiemChungDto.hovaten + "%"));
+		}
+
+		if (nguoiTiemChungDto.diabancosoid > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("diaBanCoSoId"), nguoiTiemChungDto.diabancosoid));
+		}
+
+		if (nguoiTiemChungDto.cosoyteid > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("CoSoYTeId"), nguoiTiemChungDto.cosoyteid));
+		}
+
+		if (nguoiTiemChungDto.nhomdoituong > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
+		}
+
+		if (nguoiTiemChungDto.tinhtrangdangki > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), nguoiTiemChungDto.tinhtrangdangki));
+		}
+
+		if (nguoiTiemChungDto.kiemtratrung > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("kiemTraTrung"), nguoiTiemChungDto.kiemtratrung));
+		}
+
+		if (!predicates.isEmpty()) {
+			Predicate[] pdc = new Predicate[predicates.size()];
+			int count = 0;
+			for (Predicate predicate : predicates) {
+				pdc[count] = predicate;
+				count++;
+			}
+			criteriaQuery.where(pdc);
+		}
+
+		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
+
+		long total = typedQuery.getResultList().size();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		em.close();
+
+		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);
+	}
+
 }
