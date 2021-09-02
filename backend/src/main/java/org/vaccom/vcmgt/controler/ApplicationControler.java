@@ -2882,11 +2882,31 @@ public class ApplicationControler {
                 for(Integer idUpdate : listIdUpdate) {
                     try {
                         GiayDiDuong giayDiDuongUpdate = giayDiDuongAction.findById(idUpdate);
+                        int statusOld = giayDiDuongUpdate.getStatus();
                         if (giayDiDuongUpdate != null) {
                             if(giayDiDuongUpdate.getUyBanNhanDanID() != (int)vaiTro.getUyBanNhanDanId()) {
                                 continue;
                             }
-                            giayDiDuongAction.update(giayDiDuongUpdate, giayDiDuongDto);
+                            GiayDiDuong giayDiDuongNew = giayDiDuongAction.update(giayDiDuongUpdate, giayDiDuongDto);
+
+                            if(Validator.isNotNull(giayDiDuongUpdate) && Validator.isNotNull(giayDiDuongNew)){
+                                if(statusOld != VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET){
+                                    UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
+
+                                    if(Validator.isNotNull(uyBanNhanDan)){
+                                        ObjectMapper mapper = new ObjectMapper();
+                                        ObjectNode template_data = mapper.createObjectNode();
+
+                                        template_data.put(ZaloConstant.SoDonViCap,uyBanNhanDan.getSoDienThoai() );
+                                        template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                                        template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
+                                        template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
+                                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
+
+                                    }
+                                }
+
+                            }
                         }
                     } catch (Exception e) {
                         _log.error("Error update with id: " + idUpdate);
@@ -2920,10 +2940,13 @@ public class ApplicationControler {
 
                         template_data.put(ZaloConstant.SoDonViCap,uyBanNhanDan.getSoDienThoai() );
                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
-                        template_data.put("HovaTen", giayDiDuong.getHoVaTen());
-                        template_data.put(ZaloConstant.QrCodeID, giayDiDuong.getMaQR());
+                        template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
+                        template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
 
-                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuong.getSoDienThoai()), giayDiDuong.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
+                        hangChoThongBaoAction.addHangChoThongBao(
+                                template_data.toString(),
+                                ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
+                                giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
 
                     }
                 }
