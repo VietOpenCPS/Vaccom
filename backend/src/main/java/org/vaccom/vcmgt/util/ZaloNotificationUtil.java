@@ -2,7 +2,8 @@ package org.vaccom.vcmgt.util;
 
 
 
-import org.json.simple.JSONObject;
+
+import com.liferay.portal.kernel.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaccom.vcmgt.config.ZaloConfig;
 
@@ -23,7 +24,7 @@ public class ZaloNotificationUtil {
     public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
 
 
-    public static int sendNotification(JSONObject jsonObject, String oaid_access_token) throws IOException {
+    public static int sendNotification(String jsonObject, String oaid_access_token) throws IOException {
         String jsonObjectParams = jsonObject.toString();
 
         URL url = new URL(urlPattern);
