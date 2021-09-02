@@ -151,7 +151,6 @@ public class ApplicationControler {
                 System.out.println(nguoiDung.getTenDangNhap());
                 hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiDung, false, ZaloConstant.Loai_XacNhan_NguoiTiemChung);
 
-
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(msg);
@@ -1794,28 +1793,6 @@ public class ApplicationControler {
 
             String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
 
-            if(Validator.isNotNull(phieuHenTiem)){
-                LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
-                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
-                CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
-
-                //Json
-                JSONObject template_data = new JSONObject();
-                template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-                template_data.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
-                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
-                template_data.put(ZaloConstant.DonViCap, coSoYTe.getTenCoSo());
-                template_data.put(ZaloConstant.DonViTiem, coSoYTe.getTenCoSo());
-                template_data.put(ZaloConstant.DiaDiem, coSoYTe.getDiaChiCoSo());
-                template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
-                template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-                template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
-
-                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung);
-            }
-
-
-
             return ResponseEntity.status(HttpStatus.OK).body(msg);
 
         } catch (Exception e) {
@@ -1885,6 +1862,8 @@ public class ApplicationControler {
 			}
 			*/
             phieuHenTiemAction.updateTinhTrangXacNhan(reqBody);
+
+
 
             String msg = MessageUtil.getVNMessageText("phieuhentiem.update.success");
 

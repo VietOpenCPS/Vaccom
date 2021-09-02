@@ -5,15 +5,14 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.vaccom.vcmgt.action.PhieuHenTiemAction;
+import org.vaccom.vcmgt.action.*;
 import org.vaccom.vcmgt.constant.EntityConstant;
-import org.vaccom.vcmgt.entity.CaTiemChung;
-import org.vaccom.vcmgt.entity.LichTiemChung;
-import org.vaccom.vcmgt.entity.NguoiTiemChung;
-import org.vaccom.vcmgt.entity.PhieuHenTiem;
+import org.vaccom.vcmgt.constant.ZaloConstant;
+import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.CaTiemChungService;
 import org.vaccom.vcmgt.service.LichTiemChungService;
@@ -49,6 +48,18 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 
 	@Autowired
 	private CaTiemChungService caTiemChungService;
+
+	@Autowired
+	private LichTiemChungAction lichTiemChungAction;
+
+	@Autowired
+	private NguoiTiemChungAction nguoiTiemChungAction;
+
+	@Autowired
+	private CoSoYTeAction coSoYTeAction;
+
+	@Autowired
+	private HangChoThongBaoAction hangChoThongBaoAction;
 
 	@Override
 	public long countByLichTiemChungId(long id) {
@@ -300,6 +311,7 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 
 					if (id > 0) {
 						PhieuHenTiem phieuHenTiem = phieuHenTiemService.findById(id);
+						int oldTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
 
 						if (phieuHenTiem != null) {
 							if (tinhTrangXacNhan == VaccomUtil.DACHECKIN) {
@@ -307,7 +319,31 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										DatetimeUtil.dateToString(new Date(), DatetimeUtil._VN_DATE_FORMAT));
 							}
 							phieuHenTiem.setTinhTrangXacNhan(tinhTrangXacNhan);
-							phieuHenTiemService.updatePhieuHenTiem(phieuHenTiem);
+							PhieuHenTiem phieuHenTiemNew =phieuHenTiemService.updatePhieuHenTiem(phieuHenTiem);
+							int newTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
+							if(Validator.isNotNull(phieuHenTiemNew)){
+								if(oldTinhTrangXacNhan!=VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan==VaccomUtil.HENDAXACNHAN){
+									if(Validator.isNotNull(phieuHenTiem)){
+										LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+										NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+										CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+
+										//Json
+										JSONObject template_data = new JSONObject();
+										template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+										template_data.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+										template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
+										template_data.put(ZaloConstant.DonViCap, coSoYTe.getTenCoSo());
+										template_data.put(ZaloConstant.DonViTiem, coSoYTe.getTenCoSo());
+										template_data.put(ZaloConstant.DiaDiem, coSoYTe.getDiaChiCoSo());
+										template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+										template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
+										template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
+
+										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung);
+									}
+								}
+							}
 						}
 					}
 
