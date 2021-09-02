@@ -9,6 +9,10 @@ import 'package:vaccom_mobile/pages/splash/splash_ui.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+class GetArgument {
+  static const injectUser = 'inject_user';
+}
+
 class GetRouter {
   static const root = '/';
   static const login = '/login';
@@ -20,7 +24,11 @@ class GetRouter {
   static List<GetPage> getPages() {
     return [
       GetPage(name: root, page: () => SplashPage()),
-      GetPage(name: login, page: () => LoginPage()),
+      GetPage(
+        name: login,
+        page: () => LoginPage(),
+        transition: Transition.fade,
+      ),
       GetPage(name: main, page: () => MainPage()),
       GetPage(name: register_injection, page: () => RegisterInjection()),
       GetPage(name: injector, page: () => InjectorPage()),

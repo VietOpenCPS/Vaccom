@@ -1,10 +1,10 @@
-import 'package:vaccom_mobile/components/custom_picker_input/custom_picker_input_controller.dart';
+import 'package:vaccom_mobile/model/base_item.dart';
 
-class CoSoYTe {
+class CoSoYTe implements BaseItem {
   CoSoYTe({
     this.id,
-    this.maCoSo,
-    this.tenCoSo,
+    this.code,
+    this.name,
     this.tinhThanhMa,
     this.tinhThanhTen,
     this.quanHuyenMa,
@@ -17,9 +17,9 @@ class CoSoYTe {
     this.maQr,
   });
 
-  int id;
-  String maCoSo;
-  String tenCoSo;
+  int id, parentID;
+  String code;
+  String name;
   String tinhThanhMa;
   String tinhThanhTen;
   String quanHuyenMa;
@@ -33,8 +33,8 @@ class CoSoYTe {
 
   factory CoSoYTe.fromJson(Map<String, dynamic> json) => CoSoYTe(
         id: json["id"],
-        maCoSo: json["maCoSo"],
-        tenCoSo: json["tenCoSo"],
+        code: json["maCoSo"],
+        name: json["tenCoSo"],
         tinhThanhMa: json["tinhThanhMa"],
         tinhThanhTen: json["tinhThanhTen"],
         quanHuyenMa: json["quanHuyenMa"],
@@ -49,8 +49,8 @@ class CoSoYTe {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "maCoSo": maCoSo,
-        "tenCoSo": tenCoSo,
+        "maCoSo": code,
+        "tenCoSo": name,
         "tinhThanhMa": tinhThanhMa,
         "tinhThanhTen": tinhThanhTen,
         "quanHuyenMa": quanHuyenMa,
@@ -65,7 +65,4 @@ class CoSoYTe {
 
   static List<CoSoYTe> listFromJson(dynamic data) =>
       List<CoSoYTe>.from(data.map((x) => CoSoYTe.fromJson(x)));
-
-  static List<PickerItem> parsePicker(List<CoSoYTe> data) =>
-      data.map((x) => PickerItem(title: x.tenCoSo, value: x.id)).toList();
 }

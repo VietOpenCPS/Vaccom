@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:vaccom_mobile/commons/color.dart';
-import 'package:vaccom_mobile/commons/constants.dart';
 import 'package:vaccom_mobile/commons/styles.dart';
-import 'package:vaccom_mobile/commons/toast.dart';
 import 'package:vaccom_mobile/commons/utils.dart';
 import 'package:vaccom_mobile/components/gradient_view.dart';
 import 'package:vaccom_mobile/model/dashboard_item.dart';
 import 'package:get/get.dart';
 import 'package:vaccom_mobile/network/global.dart';
+import 'package:vaccom_mobile/network/response/mapping/user.dart';
 import 'package:vaccom_mobile/pages/main/main_vm.dart';
+import 'package:vaccom_mobile/pages/sample/sample.dart';
 import 'package:vaccom_mobile/router/main_key.dart';
 import 'package:vaccom_mobile/router/router.dart';
 import 'main_item_view.dart';
@@ -39,7 +39,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     );
 
     // TODO: Hiển thị menu item theo tài khoản đăng nhập
-    drawerData = DrawerItemData.items;
+    drawerData = DrawerItemData.items();
 
     super.initState();
 
@@ -53,14 +53,15 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
   void tapOnDrawerItem(DrawerItem item) {
     mainKey.currentState.openEndDrawer();
     switch (item) {
-      case DrawerItem.duyetDanhSachDoiTuongTiemMoi:
+      case DrawerItem.duyetDoiTuongTiemMoi:
         Get.toNamed(GetRouter.injector);
         break;
-      case DrawerItem.nhapDangKyDoiTuongTiemMoi:
+      case DrawerItem.nhapDoiTuongTiemMoi:
         Get.toNamed(GetRouter.register_injection);
         break;
       default:
-        Toast.show(text: item.toString());
+        final title = item.toString().split('.').last;
+        Get.to(() => SamplePage(title: title));
         break;
     }
   }
@@ -199,13 +200,22 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                             ),
                             RichText(
                               text: TextSpan(
-                                text: '${user.tenDangNhap}',
+                                text: '${user.tenDangNhap} - ',
                                 style: GoogleFonts.openSans(
                                   color: AppColor.nearlyWhite,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
                                 ),
-                                children: <TextSpan>[],
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '${user.roleName}',
+                                    style: GoogleFonts.openSans(
+                                      color: Colors.limeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ],
@@ -277,50 +287,77 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         ),
         body: dashboardWidget(),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: r'Checkin',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: r'Lịch sử tiêm',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              label: 'QR của bạn',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more),
-              label: r'Thêm',
-            ),
-          ],
+          items: VBottomBar.items(),
           currentIndex: _selectedIndex,
           unselectedItemColor: Colors.grey,
           selectedItemColor: AppColor.main,
           onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Container(
-            width: 60,
-            height: 60,
-            child: Icon(
-              Icons.add,
-              size: 30,
-            ),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(colors: AppConstant.gradientColor),
-            ),
-          ),
-          // onPressed: () => Get.toNamed(GetRouter.newInjector),
-          onPressed: () => Get.toNamed(GetRouter.register_injection),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: Container(
+        //     width: 60,
+        //     height: 60,
+        //     child: Icon(
+        //       Icons.add,
+        //       size: 30,
+        //     ),
+        //     decoration: BoxDecoration(
+        //       shape: BoxShape.circle,
+        //       gradient: LinearGradient(colors: AppConstant.gradientColor),
+        //     ),
+        //   ),
+        //   onPressed: () => Get.toNamed(GetRouter.register_injection),
+        // ),
       ),
     );
   }
 }
 
+class VBottomBar {
+  static List<BottomNavigationBarItem> items() {
+    final userLoggedIn = Global.shared.currentUser;
+    List<BottomNavigationBarItem> items = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.library_add_check_outlined),
+        label: r'Checkin',
+      ),
+    ];
+    
+    if (userLoggedIn.vRole == VRoles.NGUOI_DUNG) {
+      items.addAll([
+        BottomNavigationBarItem(
+          icon: Icon(Icons.history),
+          label: r'Lịch sử tiêm',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.qr_code),
+          label: 'QR của bạn',
+        ),
+      ]);
+    } else {
+      items.addAll([
+        BottomNavigationBarItem(
+          icon: Icon(Icons.domain_verification),
+          label: r'Chính thức',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.icecream),
+          label: r'Tiêm chủng',
+        ),
+      ]);
+    }
+
+    items.add(BottomNavigationBarItem(
+      icon: Icon(Icons.more),
+      label: r'Thêm',
+    ));
+
+    return items;
+  }
+}
+
+///
 class DrawerItemData {
   String title = '';
   Function onTap = () => {};
@@ -328,48 +365,92 @@ class DrawerItemData {
 
   DrawerItemData({this.title, this.onTap, this.item});
 
-  static List<DrawerItemData> items = [
-    DrawerItemData(
-      title: r'Checkin y tế tại điểm tiêm chủng',
-      item: DrawerItem.checkIn,
-    ),
-    DrawerItemData(
-      title: r'Xem thông tin lịch sử tiêm chủng',
-      item: DrawerItem.xemThongTinLichSu,
-    ),
-    DrawerItemData(
-      title: r'Xác nhận lịch hẹn tiêm',
-      item: DrawerItem.xacNhanLichHen,
-    ),
-    DrawerItemData(
-      title: r'Cập nhật diễn biến sau tiêm',
-      item: DrawerItem.capNhatDienBienSauTiem,
-    ),
-    DrawerItemData(
-      title: r'Nhập đăng kí đối tượng tiêm mới',
-      item: DrawerItem.nhapDangKyDoiTuongTiemMoi,
-    ),
-    DrawerItemData(
-      title: r'Duyệt danh sách đối tượng tiêm mới',
-      item: DrawerItem.duyetDanhSachDoiTuongTiemMoi,
-    ),
-    DrawerItemData(
-      title: r'Tra cứu danh sách đối tượng chính thức',
-      item: DrawerItem.traCuuDanhSachDoiTuongChinhThuc,
-    ),
-    DrawerItemData(
-      title: r'Xác nhận danh sách gọi tiêm',
-      item: DrawerItem.xacNhanDanhSachGoiTiem,
-    ),
-    DrawerItemData(
-      title: r'Quản lý danh sách checkin',
-      item: DrawerItem.quanLyDanhSachCheckIn,
-    ),
-    DrawerItemData(
-      title: r'Nhập kết quả sau tiêm',
-      item: DrawerItem.nhapKetQuaSauTiem,
-    ),
-  ];
+  static DrawerItemData checkIn = DrawerItemData(
+    title: r'Checkin y tế tại điểm tiêm chủng',
+    item: DrawerItem.checkIn,
+  );
+
+  static DrawerItemData xemThongTinLichSu = DrawerItemData(
+    title: r'Xem thông tin lịch sử tiêm chủng',
+    item: DrawerItem.xemThongTinLichSu,
+  );
+
+  static DrawerItemData xacNhanLichHen = DrawerItemData(
+    title: r'Xác nhận lịch hẹn tiêm',
+    item: DrawerItem.xacNhanLichHen,
+  );
+
+  static DrawerItemData capNhatDienBienSauTiem = DrawerItemData(
+    title: r'Cập nhật diễn biến sau tiêm',
+    item: DrawerItem.capNhatDienBienSauTiem,
+  );
+
+  static DrawerItemData nhapDoiTuongTiemMoi = DrawerItemData(
+    title: r'Nhập đăng kí đối tượng tiêm mới',
+    item: DrawerItem.nhapDoiTuongTiemMoi,
+  );
+
+  static DrawerItemData duyetDoiTuongTiemMoi = DrawerItemData(
+    title: r'Duyệt danh sách đối tượng tiêm mới',
+    item: DrawerItem.duyetDoiTuongTiemMoi,
+  );
+
+  static DrawerItemData traCuuDoiTuongChinhThuc = DrawerItemData(
+    title: r'Tra cứu danh sách đối tượng chính thức',
+    item: DrawerItem.traCuuDoiTuongChinhThuc,
+  );
+
+  static DrawerItemData xacNhanDanhSachGoiTiem = DrawerItemData(
+    title: r'Xác nhận danh sách gọi tiêm',
+    item: DrawerItem.xacNhanDanhSachGoiTiem,
+  );
+
+  static DrawerItemData quanLyDanhSachCheckIn = DrawerItemData(
+    title: r'Quản lý danh sách checkin',
+    item: DrawerItem.quanLyDanhSachCheckIn,
+  );
+
+  static DrawerItemData nhapKetQuaSauTiem = DrawerItemData(
+    title: r'Nhập kết quả sau tiêm',
+    item: DrawerItem.nhapKetQuaSauTiem,
+  );
+
+  static List<DrawerItemData> items() {
+    List<DrawerItemData> users = [
+      checkIn,
+      xemThongTinLichSu,
+      xacNhanLichHen,
+      capNhatDienBienSauTiem,
+    ];
+
+    List<DrawerItemData> canBoDiaBan = [
+      nhapDoiTuongTiemMoi,
+      duyetDoiTuongTiemMoi,
+      traCuuDoiTuongChinhThuc,
+      xacNhanDanhSachGoiTiem,
+    ];
+
+    List<DrawerItemData> canBoYTe = [
+      quanLyDanhSachCheckIn,
+      nhapKetQuaSauTiem,
+    ];
+
+    List<DrawerItemData> items = users;
+
+    final userLoggedIn = Global.shared.currentUser;
+    switch (userLoggedIn.vRole) {
+      case VRoles.NGUOI_DUNG:
+        break;
+      case VRoles.CAN_BO_DIA_BAN:
+        items = users + canBoDiaBan;
+        break;
+      case VRoles.CAN_BO_Y_TE:
+      case VRoles.QUAN_TRI:
+        items = users + canBoDiaBan + canBoYTe;
+    }
+
+    return items;
+  }
 }
 
 enum DrawerItem {
@@ -377,9 +458,9 @@ enum DrawerItem {
   xemThongTinLichSu,
   xacNhanLichHen,
   capNhatDienBienSauTiem,
-  nhapDangKyDoiTuongTiemMoi,
-  duyetDanhSachDoiTuongTiemMoi,
-  traCuuDanhSachDoiTuongChinhThuc,
+  nhapDoiTuongTiemMoi,
+  duyetDoiTuongTiemMoi,
+  traCuuDoiTuongChinhThuc,
   xacNhanDanhSachGoiTiem,
   quanLyDanhSachCheckIn,
   nhapKetQuaSauTiem

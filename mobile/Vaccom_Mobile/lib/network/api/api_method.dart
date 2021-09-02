@@ -1,5 +1,7 @@
 part of api;
 
+enum HTTPMethod { post, put, delete }
+
 extension ApiMethod on API {
   static Future<bool> hasNetwork() async {
     try {
@@ -51,8 +53,11 @@ extension ApiMethod on API {
   }
 
   /// POST
-  static Future<dynamic> postData(
-      ApiPath api, Map<String, dynamic> params) async {
+  static Future<dynamic> responseJSON(
+    ApiPath api,
+    Map<String, dynamic> params, {
+    HTTPMethod method = HTTPMethod.post,
+  }) async {
     final isOnline = await hasNetwork();
     if (isOnline == false) {
       throw NetworkException();
@@ -70,11 +75,30 @@ extension ApiMethod on API {
     final uri = Uri.https(Global.shared.authority, api.path);
 
     try {
-      var response = await http.post(
-        uri,
-        body: params,
-        headers: headers,
-      );
+      http.Response response;
+      switch (method) {
+        case HTTPMethod.post:
+          response = await http.post(
+            uri,
+            body: params,
+            headers: headers,
+          );
+          break;
+        case HTTPMethod.put:
+          response = await http.put(
+            uri,
+            body: params,
+            headers: headers,
+          );
+          break;
+        case HTTPMethod.delete:
+          response = await http.delete(
+            uri,
+            body: params,
+            headers: headers,
+          );
+          break;
+      }
       var jsonData = processResponse(response);
       return jsonData;
     } catch (e) {
@@ -110,11 +134,9 @@ extension ApiMethod on API {
 
   /// Renew TOKEN
   static Future<void> renewToken() async {
-    final user = Global.shared.currentUser;
-    final u = user.tenDangNhap;
-    final p = user.matKhau;
+    final loginParam = await Utils.getLoginParam();
 
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$u:$p'));
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode(loginParam));
     logger.info(basicAuth);
 
     try {
