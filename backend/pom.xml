@@ -130,7 +130,7 @@
 			<groupId>com.liferay</groupId>
 			<artifactId>com.liferay.petra.string</artifactId>
 			<version>4.0.2</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.liferay/com.liferay.petra.lang -->
@@ -138,7 +138,8 @@
 			<groupId>com.liferay</groupId>
 			<artifactId>com.liferay.petra.lang</artifactId>
 			<version>4.0.2</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
+
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.liferay.portal/com.liferay.portal.kernel -->
@@ -146,7 +147,7 @@
 			<groupId>com.liferay.portal</groupId>
 			<artifactId>com.liferay.portal.kernel</artifactId>
 			<version>8.1.0</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 
 		<dependency>
@@ -189,7 +190,19 @@
 			<version>3.4.0</version>
 		</dependency>
 
-	</dependencies>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.18</version>
+        </dependency>
+
+
+    </dependencies>
 
 	<build>
 		<plugins>

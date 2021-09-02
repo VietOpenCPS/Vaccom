@@ -334,5 +334,10 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 
 	}
 
+	@Override
+	public PhieuHenTiem findByMaQR(String maQr) {
+		return phieuHenTiemService.findByMaQR(maQr);
+	}
+
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);
 }
