@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-app-bar
+  <!-- <v-app-bar
     v-if="breakpointName === 'xs' || breakpointName === 'sm'"
     id="app-bar"
     absolute
@@ -66,8 +66,8 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  </v-app-bar>
-  <div v-else id="header-desktop">
+  </v-app-bar> -->
+  <div id="header-desktop">
     <header id="banner">
         <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
           <a href="" class="mLogo col-sm-4 py-0" style="text-decoration: none;display: block"> 
@@ -267,8 +267,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]
@@ -304,42 +304,17 @@
               },
             ]
           },
-          // {
-          //   icon: 'mdi-shield-plus-outline',
-          //   title: 'Giấy đi đường',
-          //   id: 'search',
-          //   childItems: [
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Đăng ký mới',
-          //       to: '/pages/dang-ky-di-duong/0',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Danh sách đăng ký mới',
-          //       to: '/pages/danh-sach-di-duong-yeu-cau',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Giấy đi đường đã cấp',
-          //       to: '/pages/danh-sach-di-duong-da-cap',
-          //       id: 'search',
-          //     }
-          //   ]
-          // },
           {
             icon: 'mdi-shield-plus-outline',
             title: 'Quản trị',
             id: 'search',
             childItems: [
-              // {
-              //   icon: 'mdi-shield-plus-outline',
-              //   title: 'Ủy ban nhân dân',
-              //   to: '/pages/uy-ban-nha-dan',
-              //   id: 'search',
-              // },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Ủy ban nhân dân',
+                to: '/pages/uy-ban-nha-dan',
+                id: 'search',
+              },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Cơ sở y tế',
@@ -407,8 +382,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]
@@ -464,6 +439,47 @@
             id: 'hdsd',
           },
         ]
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoUBND') {
+        vm.items = [
+          {
+            icon: 'mdi-home',
+            title: 'Trang chủ',
+            to: '/',
+            class: 'home-tab',
+            id: 'home-vacc'
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Giấy đi đường',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-di-duong/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký mới',
+                to: '/pages/danh-sach-di-duong-yeu-cau',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Giấy đi đường đã cấp',
+                to: '/pages/danh-sach-di-duong-da-cap',
+                id: 'search',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
+        ]
       } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoYTe') {
         vm.items = [
           {
@@ -498,8 +514,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]

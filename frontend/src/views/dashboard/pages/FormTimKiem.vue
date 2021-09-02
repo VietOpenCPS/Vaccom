@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card-text class="px-0">
-        <v-row>
+        <v-row v-if="!form">
           <v-col
             cols="12"
             md="6"
@@ -127,6 +127,69 @@
           ></v-autocomplete>
           </v-col>
         </v-row>
+        <v-row v-if="form === 'giaydiduong'">
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Họ tên"
+              v-model="dataSearch['HoVaTen']"
+              outlined
+              placeholder="Họ và tên"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Số CMND/ CCCD"
+              v-model="dataSearch['CMTCCCD']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Đơn vị/ công ty làm việc"
+              v-model="dataSearch['noiCtTenCoQuan']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Ngày đăng ký tiêm"
+              v-model="ngayDangKyFormatted"
+              outlined
+              placeholder="dd/mm/yyyy, ddmmyyyy"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          
+        </v-row>
         <v-row class="justify-end">
           <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
               <v-icon left size="20">
@@ -150,7 +213,7 @@
 <script>
   export default {
     name: 'Search',
-    props: [],
+    props: ['form'],
     data () {
       return {
         listDoiTuong: [],

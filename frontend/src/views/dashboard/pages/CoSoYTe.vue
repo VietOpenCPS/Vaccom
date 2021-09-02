@@ -318,7 +318,7 @@
     },
     created () {
       let vm = this
-      vm.$store.commit('SET_INDEXTAB', 3)
+      vm.$store.commit('SET_INDEXTAB', 4)
       vm.getCoSoYTe(0)
       vm.getTinhThanh()
     },

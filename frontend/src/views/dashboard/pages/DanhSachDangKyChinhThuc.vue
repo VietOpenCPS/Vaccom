@@ -96,7 +96,7 @@
               </div>
             </template>
             <template v-slot:item.action="{ item }">
-              <div style="width: 100px">
+              <div style="width: 150px">
                 <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="editRegistration(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
@@ -120,6 +120,14 @@
                     </v-btn>
                   </template>
                   <span>Thông tin chi tiết</span>
+                </v-tooltip>
+                <v-tooltip top v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="addMuiTiem(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Thêm thông tin mũi tiêm</span>
                 </v-tooltip>
               </div>
               
@@ -320,7 +328,180 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      
+      <v-dialog
+        max-width="1000"
+        v-model="dialogAddMuiTiem"
+      >
+        <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title v-if="typeAction === 'add'">Thêm thông tin tiêm chủng</v-toolbar-title>
+            <v-toolbar-title v-else>Cập nhật thông tin</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogAddMuiTiem = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text class="mt-5">
+            <v-form
+              ref="formAddMuiTiem"
+              v-model="validFormAdd"
+              lazy-validation
+            >
+                <v-layout wrap>
+                  <v-text-field
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['HoVaTen']"
+                      outlined
+                      :rules="required"
+                      required
+                      label="Họ tên"
+                      placeholder="Họ tên người tiêm"
+                      dense
+                      clearable
+                      hide-details="auto"
+                  ></v-text-field>
+                  <v-text-field
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['NgaySinh']"
+                      outlined
+                      :rules="required"
+                      required
+                      label="Ngày sinh"
+                      placeholder="Ngày sinh"
+                      dense
+                      clearable
+                      hide-details="auto"
+                  ></v-text-field>
+                  <v-text-field
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['CMTCCCD']"
+                      outlined
+                      :rules="required"
+                      required
+                      label="Số CMND/CCCD"
+                      placeholder="Số CMND/CCCD"
+                      dense
+                      clearable
+                      hide-details="auto"
+                  ></v-text-field>
+                  <v-text-field
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['LanTiem']"
+                      outlined
+                      :rules="required"
+                      required
+                      label="Lần tiêm "
+                      placeholder="Lần tiêm"
+                      dense
+                      clearable
+                      hide-details="auto"
+                  ></v-text-field>
+                  <v-text-field
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['DiaDiemTiemChung']"
+                      outlined
+                      :rules="required"
+                      required
+                      label="Địa điểm tiêm chủng "
+                      placeholder="Địa điểm tiêm chủng"
+                      dense
+                      clearable
+                      hide-details="auto"
+                  ></v-text-field>
+                  <v-text-field
+                      label="Loại thuốc tiêm"
+                      class="flex xs12 md6"
+                      v-model="thongTinMuiTiem.LoaiThuocTiem"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Nơi sản xuất"
+                      class="flex xs12 md6 pl-2"
+                      v-model="thongTinMuiTiem.NoiSanXuat"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Số lô thuốc"
+                      class="flex xs12 md6"
+                      v-model="thongTinMuiTiem.SoLoThuoc"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      label="Hạn sử dụng"
+                      class="flex xs12 md6 pl-2"
+                      v-model="expDateFormatted"
+                      @blur="formatExpDate"
+                      dense
+                      outlined
+                    ></v-text-field>
+                  <v-text-field
+                      label="Thời gian tiêm"
+                      class="flex xs12 md4"
+                      v-model="thongTinMuiTiem['GioTiemChung']"
+                      placeholder="mm:ss"
+                      v-mask="'##:##'"
+                      dense
+                      outlined
+                    ></v-text-field>
+                    <v-text-field
+                      class="flex xs12 md4 pl-2"
+                      v-model="ngayTiem"
+                      placeholder="dd/mm/yyyy, ddmmyyyy"
+                      @blur="formatNgayTiem"
+                      dense
+                      hide-details="auto"
+                      outlined
+                      label="Ngày tiêm"
+                    ></v-text-field>
+                  <v-autocomplete
+                      hide-no-data
+                      :items="listCoSoYTe"
+                      v-model="coSoYTe"
+                      :rules="required"
+                      required
+                      item-text="tenCoSo"
+                      item-value="maCoSo"
+                      outlined
+                      label="Cơ sở y tế"
+                      placeholder="Cơ sở y tế"
+                      dense
+                      hide-details="auto"
+                      clearable
+                  ></v-autocomplete>
+                        
+                </v-layout>
+            </v-form>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            
+            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialogAddMuiTiem = false">
+              <v-icon left>
+                mdi-close
+              </v-icon>
+              Thoát
+            </v-btn>
+            <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitForm">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span v-if="typeAction === 'add'">Thêm mới</span>
+              <span v-else>Cập nhật</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
     
   </div>
@@ -338,12 +519,14 @@
     },
     data () {
       return {
+        validFormAdd: true,
         loading: false,
         loadingData: false,
         processingAction: false,
         listDaiLy: [],
         dailySelected: '',
         dialog: false,
+        dialogAddMuiTiem: false,
         lastVisible: '',
         firstVisible: '',
         totalItem: 0,
@@ -361,6 +544,7 @@
         selected: [],
         dataInputSearch: '',
         dialogDetail: '',
+        thongTinMuiTiem: {},
         headers: [
           {
             sortable: false,
@@ -557,6 +741,64 @@
         let vm = this
         vm.detaiInfo = item
         vm.dialogDetail = true
+      },
+      addMuiTiem (item) {
+        let vm = this
+        vm.dialogAddMuiTiem = true
+      },
+      submitForm () {
+        let vm = this
+        if (vm.$refs.formAddMuiTiem.validate()) {
+          if (vm.typeAction === 'add') {
+            let filter = {
+              data: vm.thongTinMuiTiem
+            }
+            vm.loading = true
+            vm.$store.dispatch('addMuiTiem', filter).then(userCredential => {
+              vm.loading = false
+              vm.dialogAddMember = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm mũi tiêm thành công',
+                color: 'success',
+              })
+              vm.page = 0
+              vm.getCaTiem(0, vm.uid)
+            })
+            .catch((error) => {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm mũi tiêm không thành công',
+                color: 'error',
+              })
+            });
+          } else {
+            let filter = {
+              id: vm.lichTiemUpdate['id'],
+              data: vm.thongTinMuiTiem
+            }
+            vm.loading = true
+            vm.$store.dispatch('updateMuiTiem', filter).then(function () {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Cập nhật thành công',
+                color: 'success',
+              })
+              vm.dialogAddMember = false
+              vm.getCaTiem(0, vm.uid)
+            }).catch(function () {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Cập nhật thất bại',
+                color: 'error',
+              })
+            })
+          }
+          
+        }
       },
       changePage (config) {
         let vm = this
