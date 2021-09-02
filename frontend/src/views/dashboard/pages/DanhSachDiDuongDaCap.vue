@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchGiayDiDuong" v-on:trigger-cancel="cancelSearchGiayDiDuong"></tim-kiem>
+          <tim-kiem ref="timkiem" form="giaydiduong" v-on:trigger-search="searchGiayDiDuong" v-on:trigger-cancel="cancelSearchGiayDiDuong"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -108,7 +108,7 @@
             </template>
             <template v-slot:item.thoiHan="{ item, index }">
                 <p class="mb-2">Từ ngày: <span style="color:green;">{{ item.ngayCap }}</span></p>
-                <p class="mb-2">Đến ngày: <span style="color:blue;">{{ item.thoiHan }}</span></p>
+                <p class="mb-2" v-if="item.thoiHan">Đến ngày: <span style="color:blue;">{{ item.thoiHan }}</span></p>
             </template>
             <template v-slot:item.action="{ item }">
               <div style="width: 100px">
@@ -364,13 +364,10 @@
         let filter = {
           page: pageIn,
           size: vm.itemsPerPage,
-          // tinhtrangdangky: 0,
-          // cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
-          // nhomdoituong: dataSearch && dataSearch['NhomDoiTuong'] ? dataSearch['NhomDoiTuong'] : '',
-          // ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
-          // hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
-          // diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
-          // cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : '',
+          cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
+          hoVaTen: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
+          noiCtTenCoQuan: dataSearch && dataSearch['NoiCtTenCoQuan'] ? dataSearch['NoiCtTenCoQuan'] : '',
+          uyBanNhanDanID: dataSearch && dataSearch.hasOwnProperty('UyBanNhanDanID') ? dataSearch['UyBanNhanDanID'] : '',
           status: 1,
           typeSearch: 'giaydiduong'
         }

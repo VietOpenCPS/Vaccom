@@ -7,14 +7,14 @@
       tag="section"
     >
       <v-card class="mt-0">
-        <div class="pt-3" style="max-width: 315px;margin: 0 auto;">
+        <div class="pt-3" style="max-width: 320px;margin: 0 auto;">
           <v-alert
             dense
             type="success"
             v-if="conHieuLuc"
             class="px-2 py-2"
           >
-          <span style="font-size: 16px;">ĐƯỢC PHÉP RA ĐƯỜNG</span>
+          <span style="font-size: 16px;">GIẤY ĐI ĐƯỜNG HỢP LỆ</span>
           </v-alert>
           <v-alert
             dense
@@ -22,19 +22,19 @@
             v-else
             class="px-2 py-2"
           >
-            <span style="font-size: 16px;">KHÔNG ĐƯỢC PHÉP RA ĐƯỜNG</span>
+            <span style="font-size: 16px;">GIẤY ĐI ĐƯỜNG KHÔNG HỢP LỆ</span>
           </v-alert>
         </div>
         
-        <v-card-text class="px-0" style="max-width: 750px; margin: 0px auto;background: #fff;">
-          <div class="pt-0">
+        <v-card-text class="px-0 pb-0" style="max-width: 750px; margin: 0px auto;background: #fff;">
+          <div class="pt-0" style="border: 1px solid #dedede;border-radius: 10px;">
             <div style="text-align: center;">
               <qrcode :value="urlQr" :options="{ width: 150 }" style="border-radius: 10px;"></qrcode>
             </div>
-            <h4 class="my-3" style="text-align: center;text-transform: uppercase;color: #0054a6;">{{dataInfo.checksum}}</h4>
+            <h4 class="my-3" style="text-align: center;text-transform: uppercase;color: #0054a6;">{{dataInfo.Donvicap}}</h4>
             <p style="text-align: center;">Xác nhận: Ông /bà:</p>
             <p style="text-align: center;font-weight: 500">{{dataInfo.hoVaTen}}</p>
-            <div class=" px-3 pb-3">
+            <div class=" px-3 pb-3" style="font-size: 14px;">
               <p style="margin-top: 25px;margin-bottom:10px;color:#0054a6;">
                 Địa chỉ nơi ở/ cư trú: 
               </p>
@@ -60,7 +60,10 @@
               </p>
               <p class="mb-2" style="color:#0054a6;">Thời hạn giấy đi đường: </p>
               <p class="mb-2" style="font-weight: 500;">Từ ngày: <span >{{ dataInfo.ngayCap }}</span></p>
-              <p class="mb-2" style="font-weight: 500;">Đến ngày: <span >{{ dataInfo.thoiHan }}</span></p>
+              <p class="mb-2" style="font-weight: 500;">Đến ngày: 
+                <span v-if="dataInfo.thoiHan">{{ dataInfo.thoiHan }}</span>
+                <span v-else>Đến khi có thông báo mới</span>
+              </p>
             </div>
             
           </div>
@@ -112,7 +115,7 @@
           // noiOTinhThanhTen: "Thành phố Hà Nội",
           // soDienThoai: "0898913413",
           // status: 1,
-          // thoiHan: "03/09/2021",
+          // thoiHan: "",
           // uyBanNhanDanID: 10
         }
       }
@@ -136,8 +139,8 @@
           maQr: vm.uid
         }
         vm.$store.dispatch('getThongTinDiduong', filter).then(function(dataInfo) {
-          console.log('dataInfo', dataInfo)
-          // vm.dataInfo = dataInfo
+          // console.log('dataInfo', dataInfo)
+          vm.dataInfo = dataInfo
           vm.checkHieuLuc(vm.dataInfo)
         }).catch (function () {
         })
@@ -150,7 +153,12 @@
           if (ngayTuan && ngayTuan.length) {
             let ngayTuanString = ''
             ngayTuan.forEach(element => {
-              let day = 'Thứ ' + element + ', '
+              let day = ''
+              if (element == 0) {
+                day = 'Chủ nhật, '
+              } else {
+                day = 'Thứ ' + element + ', '
+              }
               ngayTuanString += day
             })
             ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
@@ -190,14 +198,17 @@
         if (dataInfo.ngayCap) {
           ngayCap = vm.parseDate(dataInfo.ngayCap)
         }
-        let thoiHanDate = vm.parseDate(dataInfo.thoiHan)
+        let thoiHanDate = ''
+        if (dataInfo.thoiHan && String(dataInfo.thoiHan).split('/').length === 3) {
+          thoiHanDate = vm.parseDate(dataInfo.thoiHan)
+        }
         let currentDate = newDate.getFullYear() + '-' + String((newDate.getMonth() + 1)).padStart(2, '0') + '-' + String(newDate.getDate()).padStart(2, '0')
         console.log('currentDate', currentDate)
         if (ngayCap && ((new Date(ngayCap)).getTime() > (new Date(currentDate)).getTime())) {
           vm.conHieuLuc = false
           return
         }
-        if ((new Date(thoiHanDate)).getTime() < (new Date(currentDate)).getTime()) {
+        if (thoiHanDate && (new Date(thoiHanDate)).getTime() < (new Date(currentDate)).getTime()) {
           vm.conHieuLuc = false
           return
         }
@@ -206,10 +217,10 @@
         let currentDay = (new Date()).getDay() == 0 ? 0 : (new Date()).getDay() + 1
         console.log('currentDay', currentDay)
         if (ngayTuan && ngayTuan.length) {
-          let find = ngayTuan.find(function (item) {
+          let find = ngayTuan.filter(function (item) {
             return item == currentDay
           })
-          if (!find) {
+          if (!find || find.length == 0) {
             vm.conHieuLuc = false
             return
           }

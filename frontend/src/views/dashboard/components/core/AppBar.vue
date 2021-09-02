@@ -317,6 +317,31 @@
           },
           {
             icon: 'mdi-shield-plus-outline',
+            title: 'Giấy đi đường',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-di-duong/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký mới',
+                to: '/pages/danh-sach-di-duong-yeu-cau',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Giấy đi đường đã cấp',
+                to: '/pages/danh-sach-di-duong-da-cap',
+                id: 'search',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
             title: 'Quản trị',
             id: 'search',
             childItems: [

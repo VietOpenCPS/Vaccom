@@ -420,7 +420,7 @@
                       label="Từ:"
                       class="flex mr-2"
                       v-model="timeStart"
-                      placeholder="mm:ss"
+                      placeholder="hh:mm"
                       v-mask="'##:##'"
                       dense
                       outlined
@@ -436,7 +436,7 @@
                       label="Đến:"
                       class="flex ml-2"
                       v-model="timeEnd"
-                      placeholder="mm:ss"
+                      placeholder="hh:mm"
                       v-mask="'##:##'"
                       dense
                       outlined
@@ -475,10 +475,8 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Ngày hết hạn <span style="color:red"> (*)</span></div>
+                  <div class="mb-2">Ngày hết hạn <span style="color:red"></span></div>
                   <v-text-field
-                    :rules="required"
-                    required
                     v-model="ngayDuKienFormatted"
                     placeholder="dd/mm/yyyy, ddmmyyyy"
                     @blur="formatNgayTiem"
@@ -905,8 +903,8 @@
         vm.quanHuyenLamViec = vm.dataHistory.noiCtQuanHuyenMa
         vm.xaPhuongLamViec = vm.dataHistory.noiCtPhuongXaMa
 
-        vm.ngayDuKienFormatted = vm.dataHistory.ngayCap
-        vm.applicantDateFormatted = vm.dataHistory.thoiHan
+        vm.ngayDuKienFormatted = vm.dataHistory.thoiHan
+        vm.applicantDateFormatted = vm.dataHistory.ngayCap
         vm.applicantInfo.ghiChu = vm.dataHistory.ghiChu
         vm.converLichLamViec(vm.dataHistory.lichLamViec)
       },
@@ -931,8 +929,8 @@
         vm.quanHuyenLamViec = vm.giaydiduongUpdate.noiCtQuanHuyenMa
         vm.xaPhuongLamViec = vm.giaydiduongUpdate.noiCtPhuongXaMa
 
-        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.ngayCap
-        vm.applicantDateFormatted = vm.giaydiduongUpdate.thoiHan
+        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.thoiHan
+        vm.applicantDateFormatted = vm.giaydiduongUpdate.ngayCap
         vm.applicantInfo.ghiChu = vm.giaydiduongUpdate.ghiChu     
         vm.applicantInfo.status = vm.giaydiduongUpdate.status
         vm.converLichLamViec(vm.giaydiduongUpdate.lichLamViec,'string')
@@ -1096,10 +1094,10 @@
         let timeEnd = dataConvert.denGio
         if (ngayTuan && ngayTuan.length) {
           vm.weekDay.forEach((element, index) => {
-            let find = ngayTuan.find(function (item) {
+            let find = ngayTuan.filter(function (item) {
               return item == element['value']
             })
-            if (find) {
+            if (find && find.length) {
               vm.weekDay[index]['selected'] = true
             }
           })
