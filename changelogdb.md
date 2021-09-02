@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS `vaccom`.`t_uybannhandan` (
   PRIMARY KEY (`ID`)
 ) ;
 
-ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `CoSoYTeChaId` bigint(20) DEFAULT 0;
+ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `CoSoYTeChaId` bigint(20) DEFAULT NULL;
 
-ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT 0;
+ALTER TABLE `vaccom`.`t_cosoyte` ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT NULL;
 
 ALTER TABLE `vaccom`.`t_phieuhentiem` ADD COLUMN  `GhiChuLyDo` text DEFAULT NULL;
 
