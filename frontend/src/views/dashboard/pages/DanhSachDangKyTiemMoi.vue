@@ -29,24 +29,32 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
+
+            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="orange" small class="mx-0 mr-4" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-import
+              </v-icon>
+              Import danh sách
+            </v-btn>
             <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <!-- <v-btn color="red" small class="mx-0 mr-4" @click.stop="translateStatus('multiple', 'remove')" :loading="processingAction" :disabled="processingAction">
+            <v-btn color="red" small class="mx-0 mr-4" @click.stop="removeRegistrationStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-delete
               </v-icon>
               Xóa đăng ký
-            </v-btn>   -->
+            </v-btn>  
             <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-transfer
               </v-icon>
               Chuyển đăng ký chính thức
-            </v-btn>            
+            </v-btn>
+            <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
           
           <v-data-table
@@ -159,6 +167,7 @@
 </template>
 
 <script>
+  import $ from 'jquery'
   import Search from './FormTimKiem.vue'
   import Pagination from './Pagination'
   export default {
@@ -256,9 +265,6 @@
       breakpointName () {
         return this.$store.getters.getBreakpointName
       },
-      userLogin () {
-        return this.$store.getters.getPermistion
-      }
     },
     methods: {
       searchDangKyTiem (data) {
@@ -294,9 +300,10 @@
           nhomdoituong: dataSearch && dataSearch['NhomDoiTuong'] ? dataSearch['NhomDoiTuong'] : '',
           ngaydangki: dataSearch && dataSearch['NgayDangKi'] ? dataSearch['NgayDangKi'] : '',
           hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
-          diabancosoid: dataSearch && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
+          diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
           cosoytema: dataSearch && dataSearch['CoSoYTe_Ma'] ? dataSearch['CoSoYTe_Ma'] : '',
-          kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : ''
+          kiemtratrung: dataSearch && dataSearch['KiemTraTrung'] ? dataSearch['KiemTraTrung'] : '',
+          typeSearch: 'danhsachdangkymoi'
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false
@@ -309,6 +316,8 @@
             vm.totalItem = 0
           }
         }).catch(function () {
+          vm.items = []
+          vm.totalItem = 0
           vm.loadingData = false
         })
       },
@@ -361,10 +370,33 @@
       },
       removeRegistrationStatus (item) {
         let vm = this
+        let arrIds = ''
+        if (item === 'multiple') {
+          if (vm.selected.length === 0) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Vui lòng chọn người đăng ký muốn xóa',
+              color: 'error',
+            })
+            return
+          }
+          arrIds = vm.selected.map(function(item) {
+            return item['id']
+          }).toString()
+          console.log('selected', arrIds)
+        }
+        let filter = {
+          data: {
+            ids: item === 'multiple' ? arrIds : String(item.id)
+          }
+        }
+        if (!filter['data']['ids']) {
+          return
+        }
         let textConfirm = 'Bạn có chắc chắn muốn xóa đăng ký'
         let x = confirm(textConfirm)
         if (x) {
-          vm.$store.dispatch('removeRegistrationStatus', item).then(function (result) {
+          vm.$store.dispatch('removeRegistrationStatus', filter).then(function (result) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
               text: 'Xóa thành công',
@@ -381,6 +413,40 @@
           })
         }
       },
+      pickFileImport () {
+        document.getElementById('fileImport').value = ''
+        document.getElementById('fileImport').click()
+      },
+      uploadFileImport () {
+        let vm = this
+        let files = $('#fileImport')[0].files
+        let file = files[0]
+        vm.processingAction = true
+        let filter = {
+          file: file,
+          sheetAt:0,
+          startCol:0,
+          endCol:16,
+          startRow:8,
+          endRow:1000,
+          table:'nguoitiemchung'
+        }
+        vm.$store.dispatch('importDanhSach', filter).then(function(result) {
+          vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Import danh sách thành công',
+            color: 'success',
+          })
+        }).catch(function () {
+          vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Import thất bại',
+            color: 'error',
+          })
+        })
+      },
       exportDanhSach () {
         let vm = this
         vm.processingAction = true
@@ -394,7 +460,7 @@
             nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
             ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
             hovaten: vm.dataInputSearch && vm.dataInputSearch['HoVaTen'] ? vm.dataInputSearch['HoVaTen'] : '',
-            diabancosoid: vm.dataInputSearch && vm.dataInputSearch['DiaBanCoSo_ID'] ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
+            diabancosoid: vm.dataInputSearch && vm.dataInputSearch.hasOwnProperty('DiaBanCoSo_ID') ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
             cosoytema: vm.dataInputSearch && vm.dataInputSearch['CoSoYTe_Ma'] ? vm.dataInputSearch['CoSoYTe_Ma'] : '',
             kiemtratrung: vm.dataInputSearch && vm.dataInputSearch['KiemTraTrung'] ? vm.dataInputSearch['KiemTraTrung'] : -1
           }

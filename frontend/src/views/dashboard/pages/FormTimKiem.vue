@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card-text class="px-0">
-        <v-row>
+        <v-row v-if="!form">
           <v-col
             cols="12"
             md="6"
@@ -54,7 +54,7 @@
           >
             <v-autocomplete
               :items="listDoiTuong"
-              placeholder="Nhóm đối tượng"
+              label="Nhóm đối tượng"
               v-model="dataSearch['NhomDoiTuong']"
               item-text="doiTuongMoTa"
               item-value="id"
@@ -63,7 +63,14 @@
               dense
               hide-details="auto"
               clearable
-            ></v-autocomplete>
+            >
+            <template v-slot:selection="data">
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            <template v-slot:item="data">
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            </v-autocomplete>
           </v-col>
           <v-col
             cols="12"
@@ -77,7 +84,7 @@
               item-text="tenCoSo"
               item-value="maCoSo"
               outlined
-              placeholder="Cơ sở y tế"
+              label="Cơ sở y tế"
               dense
               hide-details="auto"
               clearable
@@ -95,7 +102,7 @@
               item-text="tenDiaBan"
               item-value="id"
               outlined
-              placeholder="Tổ dân phố, khóm ấp, thôn bản…"
+              label="Tổ dân phố, khóm ấp, thôn bản…"
               dense
               hide-details="auto"
               clearable
@@ -113,12 +120,75 @@
               item-text="name"
               item-value="value"
               outlined
-              placeholder="Kiểm tra trùng lặp"
+              label="Kiểm tra trùng lặp"
               dense
               hide-details="auto"
               clearable
           ></v-autocomplete>
           </v-col>
+        </v-row>
+        <v-row v-if="form === 'giaydiduong'">
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Họ tên"
+              v-model="dataSearch['HoVaTen']"
+              outlined
+              placeholder="Họ và tên"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Số CMND/ CCCD"
+              v-model="dataSearch['CMTCCCD']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Đơn vị/ công ty làm việc"
+              v-model="dataSearch['noiCtTenCoQuan']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Ngày đăng ký tiêm"
+              v-model="ngayDangKyFormatted"
+              outlined
+              placeholder="dd/mm/yyyy, ddmmyyyy"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          
         </v-row>
         <v-row class="justify-end">
           <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
@@ -143,7 +213,7 @@
 <script>
   export default {
     name: 'Search',
-    props: [],
+    props: ['form'],
     data () {
       return {
         listDoiTuong: [],
@@ -221,7 +291,7 @@
         
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           if (result.hasOwnProperty('data') && result.data.length) {
-            vm.listDiaBan = result.data
+            vm.listDiaBan = [{tenDiaBan: "Chưa gán địa bàn", id: 0}].concat(result.data)
           }
         })
       },

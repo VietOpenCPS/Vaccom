@@ -83,7 +83,7 @@
     }),
     created () {
       let vm = this
-      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'admin') {
+      if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'QuanTriHeThong') {
         vm.items = [
           {
             icon: 'mdi-home',
@@ -124,8 +124,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
@@ -184,8 +184,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
@@ -235,7 +235,7 @@
     watch: {
       userLogin (val) {
         let vm = this
-        if (val && val['role_name'] && val['role_name'] === 'admin') {
+        if (val && val['role_name'] && val['role_name'] === 'QuanTriHeThong') {
           
         } else {
           

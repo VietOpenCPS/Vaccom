@@ -36,9 +36,37 @@ export default new Router({
           props: true,
         },
         {
+          path: '/pages/danh-sach-du-kien-tiem',
+          name: 'DanhSachLichHenChoXacNhan',
+          component: () => import('@/views/dashboard/pages/DanhSachDuKienTiem'),
+          props: true,
+        },
+        {
+          path: '/pages/danh-sach-dang-ky-da-rut',
+          name: 'DanhSachRutDangKy',
+          component: () => import('@/views/dashboard/pages/DanhSachRutDangKy'),
+          props: true,
+        },
+        {
+          path: '/pages/chung-nhan-tiem-chung',
+          name: 'DanhSachMuiTiemChung',
+          component: () => import('@/views/dashboard/pages/DanhSachMuiTiem'),
+          props: true,
+        },
+        {
+          name: 'DuLieuDanhMuc',
+          path: '/pages/du-lieu-danh-muc',
+          component: () => import('@/views/dashboard/pages/DuLieuDanhMuc'),
+        },
+        {
           name: 'Users',
           path: '/pages/nguoi-dung',
           component: () => import('@/views/dashboard/pages/NguoiDung'),
+        },
+        {
+          name: 'DiaBanCoSo',
+          path: '/pages/uy-ban-nha-dan',
+          component: () => import('@/views/dashboard/pages/UyBanNhanDan'),
         },
         {
           name: 'DiaBanCoSo',
@@ -59,6 +87,28 @@ export default new Router({
           name: 'CaTiem',
           path: '/pages/lich-tiem-chung/:uid',
           component: () => import('@/views/dashboard/pages/CaTiem'),
+          props: true,
+        },
+        {
+          path: '/pages/dang-ky-di-duong/:uid',
+          name: 'DangKyDiDuong',
+          component: () => import('@/views/dashboard/pages/DangKyDiDuong'),
+          props: true,
+        },
+        {
+          path: '/pages/danh-sach-di-duong-yeu-cau',
+          name: 'DanhSachDiDuongYeuCau',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongYeuCau')
+        },
+        {
+          path: '/pages/danh-sach-di-duong-da-cap',
+          name: 'DanhSachDiDuongDaCap',
+          component: () => import('@/views/dashboard/pages/DanhSachDiDuongDaCap')
+        },
+        {
+          path: '/pages/giay-di-duong/:uid',
+          name: 'MauGiayDiDuong',
+          component: () => import('@/views/dashboard/pages/MauGiayDiDuong'),
           props: true,
         },
         {
