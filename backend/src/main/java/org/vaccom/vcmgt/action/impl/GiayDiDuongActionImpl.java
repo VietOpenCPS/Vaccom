@@ -39,7 +39,6 @@ public class GiayDiDuongActionImpl implements GiayDiDuongAction {
         GiayDiDuong giayDiDuongExisted = giayDiDuongService.findByChecksum(checkSum);
 
         if(giayDiDuongExisted != null) {
-            _log.warn("giay di duong da ton tai");
             return null;
         }
 

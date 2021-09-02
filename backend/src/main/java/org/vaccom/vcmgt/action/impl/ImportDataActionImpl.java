@@ -22,6 +22,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
 import org.vaccom.vcmgt.dto.LichLamViecDto;
+import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.util.DatetimeUtil;
 
 @Service
@@ -54,8 +55,8 @@ public class ImportDataActionImpl implements ImportDataAction {
 	private GiayDiDuongAction giayDiDuongAction;
 
 	@Override
-	public void importData(String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
-			int endRow) throws Exception {
+	public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
+						   int endRow) throws Exception {
 		HSSFWorkbook workbook = null;
 		try {
 
@@ -245,6 +246,8 @@ public class ImportDataActionImpl implements ImportDataAction {
 					giayDiDuongDto.thoiHan  = rowData[10] != null ? rowData[10] : "";
 					giayDiDuongDto.ghiChu   = rowData[11] != null ? rowData[11] : "";
 					giayDiDuongDto.lichLamViec = lichLamViecDto;
+
+					giayDiDuongDto.uyBanNhanDanID = (int)vaiTro.getUyBanNhanDanId();
 
 					giayDiDuongAction.create(giayDiDuongDto);
 				default:

@@ -1,6 +1,7 @@
 package org.vaccom.vcmgt.entity;
 
 import org.vaccom.vcmgt.constant.DBConstant;
+import org.vaccom.vcmgt.dto.UyBanNhanDanDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,20 @@ public class UyBanNhanDan implements Serializable {
     private static final long serialVersionUID = 1L;
     public UyBanNhanDan() {
 
+    }
+
+    public UyBanNhanDan(UyBanNhanDanDto uyBanNhanDanDto) {
+        this.setTenCoQuan(uyBanNhanDanDto.tenCoQuan);
+        this.setMaDinhDanh(uyBanNhanDanDto.maDinhDanh);
+        this.setTinhThanhMa(uyBanNhanDanDto.tinhThanhMa);
+        this.setTinhThanhTen(uyBanNhanDanDto.tinhThanhTen);
+        this.setQuanHuyenMa(uyBanNhanDanDto.quanHuyenMa);
+        this.setQuanHuyenTen(uyBanNhanDanDto.quanHuyenTen);
+        this.setPhuongXaMa(uyBanNhanDanDto.phuongXaMa);
+        this.setPhuongXaTen(uyBanNhanDanDto.phuongXaTen);
+        this.setDiaChiHoatDong(uyBanNhanDanDto.diaChiHoatDong);
+        this.setNguoiDaiDien(uyBanNhanDanDto.nguoiDaiDien);
+        this.setSoDienThoai(uyBanNhanDanDto.soDienThoai);
     }
 
     @Id
