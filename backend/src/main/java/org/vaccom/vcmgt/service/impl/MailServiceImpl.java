@@ -21,10 +21,11 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 @Service
 public class MailServiceImpl implements MailService {
-    private final JavaMailSender sender;
+   // private final JavaMailSender sender;
 
     @Override
     public void sendMail(SimpleMail mail) {
+    	/*
         final MimeMessage message = sender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
         try {
@@ -36,5 +37,6 @@ public class MailServiceImpl implements MailService {
         } catch (Exception e) {
             log.error("Invalid mail info {}", mail, e);
         }
+        */
     }
 }
