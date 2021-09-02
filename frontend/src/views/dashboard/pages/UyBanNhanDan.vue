@@ -93,7 +93,7 @@
                 <v-layout wrap>
                     <v-text-field
                         class="flex xs12 md6"
-                        v-model="thongTinUbnd.TenCoQuan"
+                        v-model="thongTinUbnd.tenCoQuan"
                         outlined
                         label="Tên cơ quan"
                         prepend-inner-icon="mdi-account-check-outline"
@@ -102,7 +102,7 @@
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md6 pl-2"
-                        v-model="thongTinUbnd.MaDinhDanh"
+                        v-model="thongTinUbnd.maDinhDanh"
                         outlined
                         label="Mã cơ quan"
                         prepend-inner-icon="mdi-account-check-outline"
@@ -111,7 +111,7 @@
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md12"
-                        v-model="thongTinUbnd.DiaChiHoatDong"
+                        v-model="thongTinUbnd.diaChiHoatDong"
                         outlined
                         label="Địa chỉ"
                         prepend-inner-icon="mdi-account-check-outline"
@@ -162,7 +162,7 @@
                     ></v-autocomplete>
                     <v-text-field
                         class="flex xs12 md6"
-                        v-model="thongTinUbnd.NguoiDaiDien"
+                        v-model="thongTinUbnd.nguoiDaiDien"
                         outlined
                         label="Người đại diện"
                         prepend-inner-icon="mdi-account-check-outline"
@@ -171,7 +171,7 @@
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md6 pl-2"
-                        v-model="thongTinUbnd.SoDienThoai"
+                        v-model="thongTinUbnd.soDienThoai"
                         outlined
                         label="Số điện thoại"
                         prepend-inner-icon="mdi-account-check-outline"
@@ -218,18 +218,18 @@
         loadingData: false,
         dialogAddMember: false,
         thongTinUbnd: {
-          UyBanNhanDanCha_ID: 0,
-          MaDinhDanh: '',
-          TenCoQuan: '',
-          TinhThanh_Ma: '',
-          TinhThanh_Ten: '',
-          QuanHuyen_Ma: '',
-          QuanHuyen_Ten: '',
-          PhuongXa_Ma: '',
-          PhuongXa_Ten: '',
-          DiaChiHoatDong: '',
-          NguoiDaiDien: '',
-          SoDienThoai: ''
+          uyBanNhanDanChaId: 0,
+          maDinhDanh: '',
+          tenCoQuan: '',
+          tinhThanhMa: '',
+          tinhThanhTen: '',
+          quanHuyenMa: '',
+          quanHuyenTen: '',
+          phuongXaMa: '',
+          phuongXaTen: '',
+          diaChiHoatDong: '',
+          nguoiDaiDien: '',
+          soDienThoai: ''
         },
         listTinhThanh: [],
         tinhThanh: '',
@@ -240,7 +240,7 @@
         totalItem: 0,
         page: 0,
         pageCount: 0,
-        itemsPerPage: 100,
+        itemsPerPage: 50,
         typeAction: '',
         coSoUpdate: '',
         items: [],
@@ -265,7 +265,7 @@
             sortable: false,
             text: 'Mã cơ quan',
             align: 'center',
-            value: 'maCoQuan'
+            value: 'maDinhDanh'
           },
           {
             sortable: false,
@@ -325,15 +325,15 @@
     },
     watch: {
       tinhThanh (val) {
-        this.thongTinUbnd.TinhThanh_Ma = val
+        this.thongTinUbnd.tinhThanhMa = val
         this.getQuanHuyen(val)
       },
       quanHuyen (val) {
-        this.thongTinUbnd.QuanHuyen_Ma = val
+        this.thongTinUbnd.quanHuyenMa = val
         this.getXaPhuong(val)
       },
       xaPhuong (val) {
-        this.thongTinUbnd.PhuongXa_Ma = val 
+        this.thongTinUbnd.phuongXaMa = val 
       },
     },
     computed: {
@@ -349,11 +349,9 @@
           size: vm.itemsPerPage
         }
         vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
-          // vm.items = result.hasOwnProperty('data') ? result.data : []
-          // vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
-          // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-          vm.items = result ? result : []
-          vm.totalItem = result.length
+          vm.items = result.hasOwnProperty('data') ? result.data : []
+          vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+          vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
         })
       },
       getTinhThanh () {
@@ -415,14 +413,14 @@
           }, 200)
         } else {
           setTimeout(function () {
-            vm.thongTinUbnd.MaCoQuan = vm.coSoUpdate.maCoQuan
-            vm.thongTinUbnd.TenCoQuan = vm.coSoUpdate.tenCoQuan
-            vm.thongTinUbnd.DiaChiHoatDong = vm.coSoUpdate.diaChiHoatDong
-            vm.thongTinUbnd.NguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
+            vm.thongTinUbnd.maDinhDanh = vm.coSoUpdate.maDinhDanh
+            vm.thongTinUbnd.tenCoQuan = vm.coSoUpdate.tenCoQuan
+            vm.thongTinUbnd.diaChiHoatDong = vm.coSoUpdate.diaChiHoatDong
+            vm.thongTinUbnd.nguoiDaiDien = vm.coSoUpdate.nguoiDaiDien
             vm.tinhThanh = vm.coSoUpdate.tinhThanhMa
             vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
             vm.xaPhuong = vm.coSoUpdate.phuongXaMa
-            vm.thongTinUbnd.SoDienThoai = vm.coSoUpdate.soDienThoai
+            vm.thongTinUbnd.soDienThoai = vm.coSoUpdate.soDienThoai
 
             vm.$refs.formAddMember.resetValidation()
           }, 200)
@@ -436,22 +434,22 @@
             let obj = vm.listTinhThanh.find(function (item) {
               return item.tinhThanhMa == vm.tinhThanh
             })
-            vm.thongTinUbnd.TinhThanh_Ma = vm.tinhThanh
-            vm.thongTinUbnd.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
+            vm.thongTinUbnd.tinhThanhMa = vm.tinhThanh
+            vm.thongTinUbnd.tinhThanhTen = obj ? obj['tinhThanhTen'] : ''
           }
           if (vm.quanHuyen) {
             let obj = vm.listQuanHuyen.find(function (item) {
               return item.quanHuyenMa == vm.quanHuyen
             })
-            vm.thongTinUbnd.QuanHuyen_Ma = vm.quanHuyen
-            vm.thongTinUbnd.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
+            vm.thongTinUbnd.quanHuyenMa = vm.quanHuyen
+            vm.thongTinUbnd.quanHuyenTen = obj ? obj['quanHuyenTen'] : ''
           }
           if (vm.xaPhuong) {
             let obj = vm.listXaPhuong.find(function (item) {
               return item.phuongXaMa == vm.xaPhuong
             })
-            vm.thongTinUbnd.PhuongXa_Ma = vm.xaPhuong
-            vm.thongTinUbnd.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
+            vm.thongTinUbnd.phuongXaMa = vm.xaPhuong
+            vm.thongTinUbnd.phuongXaTen = obj ? obj['phuongXaTen'] : ''
           }
           console.log('thongTinUbnd', vm.thongTinUbnd)
         } catch (error) {
@@ -463,7 +461,7 @@
         let x = confirm('Bạn có chắc chắn xóa cơ sở y tế này?')
         if (x) {
           let filter = {
-            id: user['id']
+            ids: [user['id']]
           }
           vm.loading = true
           vm.$store.dispatch('deleteUyBanNhanDan', filter).then(function () {

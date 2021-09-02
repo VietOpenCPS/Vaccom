@@ -165,7 +165,7 @@
           >
             <v-text-field
               label="Đơn vị/ công ty làm việc"
-              v-model="dataSearch['noiCtTenCoQuan']"
+              v-model="dataSearch['NoiCtTenCoQuan']"
               outlined
               placeholder="Số CMND/ CCCD"
               dense
@@ -178,15 +178,18 @@
             md="6"
             class="pb-0"
           >
-            <v-text-field
-              label="Ngày đăng ký tiêm"
-              v-model="ngayDangKyFormatted"
-              outlined
-              placeholder="dd/mm/yyyy, ddmmyyyy"
-              dense
-              clearable
-              hide-details="auto"
-            ></v-text-field>
+            <v-autocomplete
+                class="flex xs12 md12"
+                hide-no-data
+                :items="listUyBanNhanDan"
+                v-model="dataSearch['UyBanNhanDanID']"
+                item-text="tenCoQuan"
+                item-value="id"
+                outlined
+                label="Cán bộ ủy ban nhân dân"
+                dense
+                clearable
+            ></v-autocomplete>
           </v-col>
           
         </v-row>
@@ -216,6 +219,7 @@
     props: ['form'],
     data () {
       return {
+        listUyBanNhanDan: [],
         listDoiTuong: [],
         listDiaBan: [],
         listCoSoYTe: [],
@@ -242,6 +246,7 @@
       vm.getCoSoYTe()
       vm.getDiaBanCoSo()
       vm.getNhomDoiTuong()
+      vm.getUyBanNhanDan()
     },
     watch: {
       coSoYTe (val) {
@@ -274,6 +279,16 @@
           KiemTraTrung: -1
         },
         vm.$emit('trigger-cancel', vm.dataSearch)
+      },
+      getUyBanNhanDan () {
+        let vm = this
+        let filter = {
+          page: 0,
+          size: 100
+        }
+        vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
+          vm.listUyBanNhanDan = result.hasOwnProperty('data') ? result.data : []
+        })
       },
       getDiaBanCoSo (val) {
         let vm = this

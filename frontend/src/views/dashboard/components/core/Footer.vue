@@ -13,7 +13,8 @@
         >
           <div>
             <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
-            <p class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+            <p v-if="isTempDiDuong" class="mb-2 ml-2" style="text-transform: uppercase;">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+            <p v-else class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-home-city-outline</v-icon> </p> -->
             <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
             <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
@@ -26,6 +27,7 @@
         <v-col
           cols="12"
           md="auto"
+          v-if="!isTempDiDuong"
         >
           <div class="text-body-1 pt-md-0">
             <div>
@@ -47,7 +49,25 @@
 
     data: () => ({
       links: [],
+      isTempDiDuong: false
     }),
+    created () {
+      let vm = this
+      try {
+        let currentQuery = vm.$router.history.current
+        if (currentQuery.name === 'MauGiayDiDuong' && (vm.breakpointName === 'xs' || vm.breakpointName === 'sm')) {
+          vm.isTempDiDuong = true
+        } else {
+          vm.isTempDiDuong = false
+        }
+      } catch (error) {
+      }
+    },
+    computed: {
+      breakpointName () {
+        return this.$store.getters.getBreakpointName
+      }
+    }
   }
 </script>
 

@@ -85,13 +85,25 @@
             </template>
             <template v-slot:item.muiTiemChung="{ item, index }">
               <div style="width: 250px;height: 100%;">
-                <v-layout wrap style="height: 100%;">
-                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;">
-                    <p class="py-2 mb-0"></p>
+                <v-layout wrap style="height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2">
+                    <p class="py-2 mb-0" v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1" style="text-align: left;">
+                      <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
+                      <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
+                      <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
+                    </p>
                   </v-flex>
-                  <v-flex class="xs12 md6">
-                    <p class="py-2 mb-0"></p>
+                  <v-flex class="xs12 md6" v-for="(item2, index2) in item.muiTiemChung" :key="index2">
+                    <p class="py-2 mb-0 pl-2" v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 2" style="text-align: left;">
+                      <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
+                      <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
+                      <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
+                    </p>
                   </v-flex>
+                </v-layout>
+                <v-layout wrap style="height: 100%;" v-else>
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;"></v-flex>
+                  <v-flex class="xs12 md6"></v-flex>
                 </v-layout>
               </div>
             </template>
@@ -181,7 +193,7 @@
                   label="Giới tính"
                   placeholder="Giới tính"
                   class="flex xs12 md3 pl-2 mb-2"
-                  v-model="detaiInfo.gioiTinh"
+                  :value="formatSex(detaiInfo.gioiTinh)"
                   dense
                   outlined
                   hide-details="auto"
@@ -285,32 +297,19 @@
                 <span style="color: #0072bc;font-weight: bold">LỊCH SỬ TIÊM</span>
             </div>
             <v-layout wrap v-if="detaiInfo['muiTiemChung'] && detaiInfo['muiTiemChung'].length">
-              <v-card  outlined class="pa-2 mr-2" max-width="450" min-width="350" v-for="(item, index) in detaiInfo['muiTiemChung']" v-bind:key="index">
+              <v-card outlined class="pa-2 mr-2" max-width="450" min-width="350" v-for="(item, index) in detaiInfo['muiTiemChung']" v-bind:key="index">
                 <div class="mb-2">
                   <v-icon size=22 color="green" class="mr-3" >
                       mdi-checkbox-marked-circle-outline
                   </v-icon>
-                  <span style="font-weight: bold">MŨI {{index + 1}}</span> - 
-                  <span style="">Đã tiêm</span>
+                  <span style="font-weight: bold">MŨI TIÊM {{item['lanTiem']}}</span>
                 </div>
-                <p class="mb-2">Tên vắc xin: </p>
-                <p class="mb-2">Lô vắc xin: </p>
-                <p class="mb-2">Ngày tiêm: </p>
-                <p class="mb-2">Địa điểm tiêm: </p>
+                <p class="mb-2">Tên vắc xin: {{item['loaiThuocTiem']}}</p>
+                <p class="mb-2">Nơi sản xuất: {{item['noiSanXuat']}}</p>
+                <p class="mb-2">Lô vắc xin: {{item['soLoThuoc']}}</p>
+                <p class="mb-2">Ngày tiêm: {{item['ngayTiemChung']}}</p>
+                <p class="mb-2">Địa điểm tiêm: {{item['diaDiemTiemChung']}}</p>
               </v-card>
-              <!-- <v-card class="pa-2 ml-2" outlined max-width="450" min-width="350">
-                <div class="mb-2">
-                  <v-icon size=22 color="red" class="mr-3" >
-                      mdi-cancel
-                  </v-icon>
-                  <span style="font-weight: bold">MŨI 2</span> - 
-                  <span style="">Chưa tiêm</span>
-                </div>
-                <p class="mb-2">Tên vắc xin: </p>
-                <p class="mb-2">Lô vắc xin: </p>
-                <p class="mb-2">Ngày tiêm: </p>
-                <p class="mb-2">Địa điểm tiêm: </p>
-              </v-card> -->
             </v-layout>
             <p v-else>Chưa có lịch sử tiêm chủng</p>
             <div class="my-3">
@@ -321,7 +320,15 @@
             </div>
             <v-layout wrap v-if="detaiInfo['phieuHenTiem'] && detaiInfo['phieuHenTiem'].length">
               <v-card  outlined class="pa-2 mr-2" max-width="450" min-width="350" v-for="(item, index) in detaiInfo['phieuHenTiem']" v-bind:key="index">
-                
+                <div class="mb-2">
+                  <v-icon size=22 color="green" class="mr-3" >
+                      mdi-checkbox-marked-circle-outline
+                  </v-icon>
+                  <span style="font-weight: bold">Lần tiêm {{item['lanTiem']}}</span>
+                </div>
+                <p class="mb-2">Ngày hẹn tiêm: {{item['ngayHenTiem']}}</p>
+                <p class="mb-2">Giờ hẹn tiêm: {{item['gioHenTiem']}}</p>
+                <p class="mb-2">Tình trạng: {{formatTinhTrangTiem(item['tinhTrangXacNhan'])}}</p>
               </v-card>
             </v-layout>
             <p v-else>Chưa có thông tin hẹn tiêm</p>
@@ -358,7 +365,7 @@
             >
                 <v-layout wrap>
                   <v-text-field
-                      class="flex xs12 md4"
+                      class="flex xs12 md4 pr-2"
                       v-model="thongTinMuiTiem['HoVaTen']"
                       outlined
                       :rules="required"
@@ -367,19 +374,18 @@
                       placeholder="Họ tên người tiêm"
                       dense
                       clearable
-                      hide-details="auto"
                   ></v-text-field>
                   <v-text-field
-                      class="flex xs12 md4"
-                      v-model="thongTinMuiTiem['NgaySinh']"
+                      class="flex xs12 md4 pr-2"
+                      v-model="ngaySinh"
                       outlined
                       :rules="required"
                       required
                       label="Ngày sinh"
                       placeholder="Ngày sinh"
+                      @blur="formatNgaySinh"
                       dense
                       clearable
-                      hide-details="auto"
                   ></v-text-field>
                   <v-text-field
                       class="flex xs12 md4"
@@ -391,10 +397,9 @@
                       placeholder="Số CMND/CCCD"
                       dense
                       clearable
-                      hide-details="auto"
                   ></v-text-field>
                   <v-text-field
-                      class="flex xs12 md4"
+                      class="flex xs12 md4 pr-2"
                       v-model="thongTinMuiTiem['LanTiem']"
                       outlined
                       :rules="required"
@@ -402,11 +407,11 @@
                       label="Lần tiêm "
                       placeholder="Lần tiêm"
                       dense
+                      type='number'
                       clearable
-                      hide-details="auto"
                   ></v-text-field>
                   <v-text-field
-                      class="flex xs12 md4"
+                      class="flex xs12 md8"
                       v-model="thongTinMuiTiem['DiaDiemTiemChung']"
                       outlined
                       :rules="required"
@@ -415,7 +420,6 @@
                       placeholder="Địa điểm tiêm chủng"
                       dense
                       clearable
-                      hide-details="auto"
                   ></v-text-field>
                   <v-text-field
                       label="Loại thuốc tiêm"
@@ -423,6 +427,8 @@
                       v-model="thongTinMuiTiem.LoaiThuocTiem"
                       dense
                       outlined
+                      :rules="required"
+                      required
                     ></v-text-field>
                     <v-text-field
                       label="Nơi sản xuất"
@@ -430,6 +436,8 @@
                       v-model="thongTinMuiTiem.NoiSanXuat"
                       dense
                       outlined
+                      :rules="required"
+                      required
                     ></v-text-field>
                     <v-text-field
                       label="Số lô thuốc"
@@ -437,6 +445,8 @@
                       v-model="thongTinMuiTiem.SoLoThuoc"
                       dense
                       outlined
+                      :rules="required"
+                      required
                     ></v-text-field>
                     <v-text-field
                       label="Hạn sử dụng"
@@ -445,18 +455,22 @@
                       @blur="formatExpDate"
                       dense
                       outlined
+                      :rules="required"
+                      required
                     ></v-text-field>
                   <v-text-field
                       label="Thời gian tiêm"
-                      class="flex xs12 md4"
+                      class="flex xs12 md6"
                       v-model="thongTinMuiTiem['GioTiemChung']"
                       placeholder="mm:ss"
                       v-mask="'##:##'"
                       dense
                       outlined
+                      :rules="required"
+                      required
                     ></v-text-field>
                     <v-text-field
-                      class="flex xs12 md4 pl-2"
+                      class="flex xs12 md6 pl-2"
                       v-model="ngayTiem"
                       placeholder="dd/mm/yyyy, ddmmyyyy"
                       @blur="formatNgayTiem"
@@ -464,8 +478,11 @@
                       hide-details="auto"
                       outlined
                       label="Ngày tiêm"
+                      :rules="required"
+                      required
                     ></v-text-field>
                   <v-autocomplete
+                      class="flex xs12"
                       hide-no-data
                       :items="listCoSoYTe"
                       v-model="coSoYTe"
@@ -478,7 +495,7 @@
                       placeholder="Cơ sở y tế"
                       dense
                       hide-details="auto"
-                      clearable
+                      readonly
                   ></v-autocomplete>
                         
                 </v-layout>
@@ -526,7 +543,13 @@
         listDaiLy: [],
         dailySelected: '',
         dialog: false,
+        ngaySinh: '',
+        ngayTiem: '',
+        expDateFormatted: '',
+        typeAction: 'add',
         dialogAddMuiTiem: false,
+        listCoSoYTe: [],
+        coSoYTe: '',
         lastVisible: '',
         firstVisible: '',
         totalItem: 0,
@@ -544,7 +567,26 @@
         selected: [],
         dataInputSearch: '',
         dialogDetail: '',
-        thongTinMuiTiem: {},
+        thongTinMuiTiem: {
+          "HoVaTen":"",
+          "NgaySinh":"",
+          "CMTCCCD":"",
+          "CoSoYTe_Ma":"",
+          "CoSoYTe_Ten":"",
+          "LanTiem": '',
+          "NgayTiemChung":"",
+          "GioTiemChung":"",
+          "DiaDiemTiemChung":"",
+          "LoaiThuocTiem":"",
+          "NoiSanXuat":"",
+          "SoLoThuoc":"",
+          "HanSuDung":"",
+          "NguoiTiemChung_ID": '', 
+          "CoSoYTe_Id": ''
+        },
+        required: [
+          v => !!v || 'Thông tin bắt buộc'
+        ],
         headers: [
           {
             sortable: false,
@@ -607,6 +649,7 @@
         return
       }
       vm.getDanhSachDangKyChinhThuc(0)
+      vm.getCoSoYTe()
     },
     computed: {
       breakpointName () {
@@ -635,6 +678,25 @@
       showTimKiem () {
         let vm = this
         vm.showAdvanceSearch = true
+      },
+      getCoSoYTe () {
+        let vm = this
+        let filter = {
+        }
+        vm.$store.dispatch('getCoSoYTe', filter).then(function (result) {
+          vm.listCoSoYTe = result ? result : []
+          // bind co so y te
+          try {
+            let data = localStorage.getItem('user')
+            if (data && JSON.parse(data) && JSON.parse(data)['coSoYTeId']) {
+              let obj = vm.listCoSoYTe.find(function (item) {
+                return item.id == JSON.parse(data)['coSoYTeId']
+              })
+              vm.coSoYTe = obj['maCoSo']
+            }
+          } catch (error) {
+          }
+        })
       },
       getDanhSachDangKyChinhThuc (pageIn, dataSearch) {
         let vm = this
@@ -737,6 +799,46 @@
           })
         }
       },
+      formatNgaySinh () {
+        let vm = this
+        let lengthDate = String(vm.ngaySinh).trim().length
+        let splitDate = String(vm.ngaySinh).split('/')
+        if (lengthDate && lengthDate == 4) {
+        } else if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.ngaySinh = vm.translateDate(vm.ngaySinh)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.ngaySinh)
+          vm.ngaySinh = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.ngaySinh = ''
+        }
+      },
+      formatNgayTiem () {
+        let vm = this
+        let lengthDate = String(vm.ngayTiem).trim().length
+        let splitDate = String(vm.ngayTiem).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.ngayTiem = vm.translateDate(vm.ngayTiem)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.ngayTiem)
+          vm.ngayTiem = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.ngayTiem = ''
+        }
+      },
+      formatExpDate () {
+        let vm = this
+        let lengthDate = String(vm.expDateFormatted).trim().length
+        let splitDate = String(vm.expDateFormatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.expDateFormatted = vm.translateDate(vm.expDateFormatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.expDateFormatted)
+          vm.expDateFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.expDateFormatted = ''
+        }
+      },
       viewDetail (item) {
         let vm = this
         vm.detaiInfo = item
@@ -744,11 +846,30 @@
       },
       addMuiTiem (item) {
         let vm = this
+        vm.thongTinMuiTiem.NguoiTiemChung_ID = item.id
+        vm.thongTinMuiTiem.HoVaTen = item.hoVaTen
+        vm.thongTinMuiTiem['CMTCCCD'] = item.cmtcccd
+        vm.ngaySinh = item.ngaySinh
         vm.dialogAddMuiTiem = true
+      },
+      formatDataInput () {
+        let vm = this
+        let obj = vm.listCoSoYTe.find(function (item) {
+          return item.maCoSo == vm.coSoYTe
+        })
+        vm.thongTinMuiTiem.CoSoYTe_Ma = vm.coSoYTe
+        vm.thongTinMuiTiem.CoSoYTe_Ten = obj ? obj['tenCoSo'] : ''
+        vm.thongTinMuiTiem.CoSoYTe_Id = obj ? obj['id'] : ''
+        vm.thongTinMuiTiem.NgaySinh = vm.ngaySinh
+        vm.thongTinMuiTiem.NgayTiemChung = vm.ngayTiem
+        vm.thongTinMuiTiem.HanSuDung = vm.expDateFormatted
+        vm.thongTinMuiTiem['LanTiem'] = Number(vm.thongTinMuiTiem['LanTiem'])
       },
       submitForm () {
         let vm = this
         if (vm.$refs.formAddMuiTiem.validate()) {
+          vm.formatDataInput()
+          console.log('thongTinMuiTiem', vm.thongTinMuiTiem)
           if (vm.typeAction === 'add') {
             let filter = {
               data: vm.thongTinMuiTiem
@@ -756,14 +877,13 @@
             vm.loading = true
             vm.$store.dispatch('addMuiTiem', filter).then(userCredential => {
               vm.loading = false
-              vm.dialogAddMember = false
+              vm.dialogAddMuiTiem = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Thêm mũi tiêm thành công',
                 color: 'success',
               })
-              vm.page = 0
-              vm.getCaTiem(0, vm.uid)
+              vm.getDanhSachDangKyChinhThuc(0)
             })
             .catch((error) => {
               vm.loading = false
@@ -786,8 +906,8 @@
                 text: 'Cập nhật thành công',
                 color: 'success',
               })
-              vm.dialogAddMember = false
-              vm.getCaTiem(0, vm.uid)
+              vm.dialogAddMuiTiem = false
+              vm.getDanhSachDangKyChinhThuc(0)
             }).catch(function () {
               vm.loading = false
               vm.$store.commit('SHOW_SNACKBAR', {
@@ -798,6 +918,30 @@
             })
           }
           
+        }
+      },
+      formatTinhTrangTiem (val) {
+        if (val == 0) {
+          return 'Dự kiến tiêm'
+        } else if (val == 1) {
+          return 'Hẹn gọi chờ xác nhận'
+        } else if (val == 2) {
+          return 'Hẹn gọi đã xác nhận'
+        } else if (val == 3) {
+          return 'Đã tiêm xong'
+        } else if (val == 4) {
+          return 'Chưa được tiêm'
+        } else if (val == 5) {
+          return 'Xác nhận không đến'
+        }
+      },
+      formatSex (val) {
+        if (val == 1) {
+          return 'Nữ'
+        } else if (val == 0) {
+          return 'Nam'
+        } else {
+          return 'Không xác định'
         }
       },
       changePage (config) {
