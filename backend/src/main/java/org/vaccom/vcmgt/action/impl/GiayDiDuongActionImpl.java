@@ -47,7 +47,6 @@ public class GiayDiDuongActionImpl implements GiayDiDuongAction {
 
         GiayDiDuong giayDiDuong = new GiayDiDuong();
         transformService.paperTraffic(giayDiDuong, giayDiDuongDto, true);
-        giayDiDuong.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
         return giayDiDuongService.save(giayDiDuong);
     }
 

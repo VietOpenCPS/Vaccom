@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.NguoiTiemChungAction;
 
 import org.vaccom.vcmgt.constant.EntityConstant;
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.entity.CoSoYTe;
 import org.vaccom.vcmgt.entity.KhoaDangKy;
 import org.vaccom.vcmgt.entity.NguoiDung;
@@ -660,6 +662,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public NguoiTiemChung findByMaQR(String MaQR) {
 		return nguoiTiemChungService.findByMaQR(MaQR);
+	}
+
+	@Override
+	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+		return nguoiTiemChungService.search(nguoiTiemChungDto, page, size);
 	}
 
 	@Override
