@@ -114,11 +114,9 @@ public class ImportDataActionImpl implements ImportDataAction {
 						value = cell.getStringCellValue();
 					}
 					
-					//System.out.println(cell.getCellType().getCode() + "|" + value + "|" + cell.getColumnIndex() + "|" + cellNumber);
+					System.out.println(cell.getCellType().getCode() + "|" + value);
 
-					//rowData[cell.getColumnIndex()] = value;
-					
-					rowData[cellNumber] = value;
+					rowData[cell.getColumnIndex()] = value;
 
 					cellNumber++;
 				}
@@ -232,7 +230,6 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 			workbook.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception(e);
 		} finally {
 			if (workbook != null) {

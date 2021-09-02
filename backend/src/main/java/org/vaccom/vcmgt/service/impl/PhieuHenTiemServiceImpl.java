@@ -120,9 +120,7 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 				pdc[count] = predicate;
 				count++;
 			}
-			Predicate allPredicate = cb.and(pdc);
-			//cq.where(pdc);
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -164,9 +162,7 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 				pdc[count] = predicate;
 				count++;
 			}
-			Predicate allPredicate = cb.and(pdc);
-			//cq.where(pdc);
-			cq.where(allPredicate);
+			cq.where(pdc);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
@@ -176,10 +172,8 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 		cq.orderBy(orderList);
 
 		TypedQuery<PhieuHenTiem> typedQuery = em.createQuery(cq);
-		
-		int offset = page * size;
 
-		List<PhieuHenTiem> lstPhieuHenTiem = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
+		List<PhieuHenTiem> lstPhieuHenTiem = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
 		
 		em.close();
 

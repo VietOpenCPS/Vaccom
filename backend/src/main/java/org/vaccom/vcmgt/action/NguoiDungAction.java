@@ -28,4 +28,5 @@ public interface NguoiDungAction {
 	
 	public NguoiDung updateNguoiDung(long id, int quanTriHeThong) throws Exception;
 
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId);
 }

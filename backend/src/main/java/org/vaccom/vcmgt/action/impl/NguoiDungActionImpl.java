@@ -63,7 +63,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		String matKhau = bodyData.has(EntityConstant.MATKHAU) ? bodyData.get(EntityConstant.MATKHAU).textValue()
 				: StringPool.BLANK;
 
-		int quanTriHeThong = bodyData.has(EntityConstant.QUANTRIHETHONG) ? bodyData.get(EntityConstant.QUANTRIHETHONG).intValue()
+		int vaiTro = bodyData.has(EntityConstant.VAITRO) ? bodyData.get(EntityConstant.VAITRO).intValue()
 				: RoleUtil.REGULAR;
 
 		String hoVaTen = bodyData.has(EntityConstant.HOVATEN) ? bodyData.get(EntityConstant.HOVATEN).textValue()
@@ -121,7 +121,7 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		nguoiDung.setHoVaTen(hoVaTen);
 		nguoiDung.setKhoaTaiKhoan(khoaTaiKhoan);
 		nguoiDung.setMatKhau(new BCryptPasswordEncoder(encodingStrength).encode(matKhau));
-		nguoiDung.setQuanTriHeThong(quanTriHeThong);
+		nguoiDung.setQuanTriHeThong(vaiTro);
 		nguoiDung.setSoDienThoai(soDienThoai);
 		nguoiDung.setTenDangNhap(tenDangNhap);
 
@@ -202,6 +202,11 @@ public class NguoiDungActionImpl implements NguoiDungAction {
 		}
 
 		return nguoiDungService.updateNguoiDung(nguoiDung, khoaDangKy);
+	}
+
+	@Override
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId) {
+		return nguoiDungService.findByNguoiTiemChungId(nguoiTiemChungId);
 	}
 
 	@Override
