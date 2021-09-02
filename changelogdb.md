@@ -97,3 +97,12 @@ create table IF NOT EXISTS t_hangchothongbao (
 
 );
 
+
+----------------------------------------------------------------------------------------------------------
+#update 02/09/2021
+ALTER TABLE `t_cosoyte` modify  `UyBanNhanDanID` bigint(20) DEFAULT 0;
+ALTER TABLE `t_cosoyte` modify  `CoSoYTeChaId` bigint(20) DEFAULT 0;
+update t_cosoyte set CoSoYTeChaId = 0;
+update t_cosoyte set UyBanNhanDanID = 0;
+
+
