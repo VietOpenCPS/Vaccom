@@ -105,4 +105,9 @@ ALTER TABLE `t_cosoyte` modify  `CoSoYTeChaId` bigint(20) DEFAULT 0;
 update t_cosoyte set CoSoYTeChaId = 0;
 update t_cosoyte set UyBanNhanDanID = 0;
 
+----------------------------------------------------------------------------------------------------------
+#update 03/09/2021
+ALTER TABLE t_giaydiduong modify `NgayCap` varchar(20) DEFAULT NULL;
+ALTER TABLE t_giaydiduong modify `ThoiHan` varchar(20) DEFAULT NULL;
+
 
