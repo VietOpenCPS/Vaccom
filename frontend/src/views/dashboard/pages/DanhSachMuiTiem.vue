@@ -30,12 +30,12 @@
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
 
-            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="orange" small class="mx-0" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
+            <!-- <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" color="orange" small class="mx-0" @click.stop="pickFileImport" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-import
               </v-icon>
               Import danh sách
-            </v-btn>
+            </v-btn> -->
             <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
           

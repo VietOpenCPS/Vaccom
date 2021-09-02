@@ -315,7 +315,10 @@
                   cols="12"
                   class="pb-0"
                 >
-                  <div class="font-weight-bold">LỊCH LÀM VIỆC</div>
+                  <div>
+                    <span class="font-weight-bold">LỊCH LÀM VIỆC</span>
+                    <i> (Chọn các ngày trong tuần hoặc ngày cụ thể) </i>
+                  </div>
                 </v-col>
               </v-row>
               <!--  -->
@@ -326,7 +329,7 @@
                   class="pb-0"
                 >
                   <div class="mb-3">Các ngày trong tuần <span style="color:red">(*)</span></div>
-                  <div>
+                  <div class="pt-2">
                     <v-chip
                       v-for="(item, index) in weekDay" v-bind:key="index"
                       class="mr-2"
@@ -343,6 +346,72 @@
                   md="6"
                   class="pb-0"
                 >
+                  <div class="mb-3">Các ngày cụ thể <span style="color:red">(*)</span></div>
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="dates"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-combobox
+                        v-model="dates"
+                        multiple
+                        chips
+                        placeholder="Các ngày cụ thể"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        hide-details="auto"
+                        outlined
+                        clearable
+                      >
+                        <template v-slot:selection="data">
+                          <v-chip
+                            class="ma-2"
+                            color="green"
+                            text-color="white"
+                          >
+                            {{formatDate(data.item)}}
+                          </v-chip>
+                        </template>
+                      </v-combobox>
+                    </template>
+                    <v-date-picker
+                      v-model="dates"
+                      multiple
+                      no-title
+                      scrollable
+                      locale="vi"
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                      >
+                        Thoát
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(dates)"
+                      >
+                        Đồng ý
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0"
+                >
                   <div class="mb-2">Thời gian làm việc<span style="color:red">(*)</span></div>
                   <v-layout wrap>
                     
@@ -351,13 +420,15 @@
                       label="Từ:"
                       class="flex mr-2"
                       v-model="timeStart"
-                      placeholder="mm:ss"
+                      placeholder="hh:mm"
                       v-mask="'##:##'"
                       dense
                       outlined
                       hide-details="auto"
                       id="starttime"
                       @keyup.enter="nextFocus('endtime')"
+                      :rules="required"
+                      required
                     ></v-text-field>
                   
                     <v-text-field
@@ -365,13 +436,15 @@
                       label="Đến:"
                       class="flex ml-2"
                       v-model="timeEnd"
-                      placeholder="mm:ss"
+                      placeholder="hh:mm"
                       v-mask="'##:##'"
                       dense
                       outlined
                       hide-details="auto"
                       id="endtime"
                       @keyup.enter="nextFocus('ngaycap')"
+                      :rules="required"
+                      required
                     ></v-text-field>
                   </v-layout>
                 </v-col>
@@ -381,7 +454,7 @@
                 <v-col
                   cols="12"
                   md="6"
-                  class="pb-0"
+                  class="pb-0 pt-3"
                 >
                   <div class="mb-2">Ngày cấp giấy đi đường<span style="color:red"> (*)</span></div>
                   <v-text-field
@@ -402,10 +475,8 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Ngày hết hạn <span style="color:red"> (*)</span></div>
+                  <div class="mb-2">Ngày hết hạn <span style="color:red"></span></div>
                   <v-text-field
-                    :rules="required"
-                    required
                     v-model="ngayDuKienFormatted"
                     placeholder="dd/mm/yyyy, ddmmyyyy"
                     @blur="formatNgayTiem"
@@ -479,6 +550,8 @@
         typeAction: 'add',
         processingAction: false,
         giayToLoaiKhac: false,
+        dates: [],
+        menu: false,
         weekDay: [
           {name: 'Thứ 2', value: 2, selected: false},
           {name: 'Thứ 3', value: 3, selected: false},
@@ -486,7 +559,16 @@
           {name: 'Thứ 5', value: 5, selected: false},
           {name: 'Thứ 6', value: 6, selected: false},
           {name: 'Thứ 7', value: 7, selected: false},
-          {name: 'Chủ nhật', value: 8, selected: false}
+          {name: 'Chủ nhật', value: 0, selected: false}
+        ],
+        weekDayDefault: [
+          {name: 'Thứ 2', value: 2, selected: false},
+          {name: 'Thứ 3', value: 3, selected: false},
+          {name: 'Thứ 4', value: 4, selected: false},
+          {name: 'Thứ 5', value: 5, selected: false},
+          {name: 'Thứ 6', value: 6, selected: false},
+          {name: 'Thứ 7', value: 7, selected: false},
+          {name: 'Chủ nhật', value: 0, selected: false}
         ],
         timeStart: '',
         timeEnd: '',
@@ -628,6 +710,11 @@
           vm.bindDataUpdate()
         }
       },
+      dates (val) {
+        if (val && val.length) {
+          this.weekDay = this.weekDayDefault
+        }
+      },
       tinhThanh (val) {
         this.applicantInfo.noiOTinhThanhMa = val
         this.getQuanHuyen(val)
@@ -693,6 +780,12 @@
       changeWeekDay(index) {
         let vm = this
         vm.weekDay[index]['selected'] = !vm.weekDay[index]['selected']
+        let exits = vm.weekDay.filter(function (item) {
+          return item.selected
+        })
+        if (exits && exits.length) {
+          vm.dates = []
+        }
       },
       autoBind() {
         let vm = this
@@ -810,8 +903,8 @@
         vm.quanHuyenLamViec = vm.dataHistory.noiCtQuanHuyenMa
         vm.xaPhuongLamViec = vm.dataHistory.noiCtPhuongXaMa
 
-        vm.ngayDuKienFormatted = vm.dataHistory.ngayCap
-        vm.applicantDateFormatted = vm.dataHistory.thoiHan
+        vm.ngayDuKienFormatted = vm.dataHistory.thoiHan
+        vm.applicantDateFormatted = vm.dataHistory.ngayCap
         vm.applicantInfo.ghiChu = vm.dataHistory.ghiChu
         vm.converLichLamViec(vm.dataHistory.lichLamViec)
       },
@@ -836,8 +929,8 @@
         vm.quanHuyenLamViec = vm.giaydiduongUpdate.noiCtQuanHuyenMa
         vm.xaPhuongLamViec = vm.giaydiduongUpdate.noiCtPhuongXaMa
 
-        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.ngayCap
-        vm.applicantDateFormatted = vm.giaydiduongUpdate.thoiHan
+        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.thoiHan
+        vm.applicantDateFormatted = vm.giaydiduongUpdate.ngayCap
         vm.applicantInfo.ghiChu = vm.giaydiduongUpdate.ghiChu     
         vm.applicantInfo.status = vm.giaydiduongUpdate.status
         vm.converLichLamViec(vm.giaydiduongUpdate.lichLamViec,'string')
@@ -901,6 +994,14 @@
           vm.workTime['tuGio'] = vm.timeStart
           vm.workTime['denGio'] = vm.timeEnd
           vm.applicantInfo['lichLamViec'] = vm.workTime
+          if (vm.dates && vm.dates.length) {
+            let dateInput = []
+            vm.dates.forEach((element, index) => {
+              let day = vm.formatDate(element)
+              dateInput.push(day)
+            })
+            vm.workTime['ngayThang'] = dateInput
+          }
           console.log('work', vm.workTime)
           console.log('applicantInfo', vm.applicantInfo)
         } catch (error) {
@@ -993,13 +1094,21 @@
         let timeEnd = dataConvert.denGio
         if (ngayTuan && ngayTuan.length) {
           vm.weekDay.forEach((element, index) => {
-            let find = ngayTuan.find(function (item) {
+            let find = ngayTuan.filter(function (item) {
               return item == element['value']
             })
-            if (find) {
+            if (find && find.length) {
               vm.weekDay[index]['selected'] = true
             }
           })
+        }
+        if (ngayThang && ngayThang.length) {
+          let dateInput = []
+          ngayThang.forEach((element, index) => {
+            let day = vm.parseDate(element)
+            dateInput.push(day)
+          })
+          vm.dates = dateInput
         }
         vm.timeStart = timeStart
         vm.timeEnd = timeEnd
