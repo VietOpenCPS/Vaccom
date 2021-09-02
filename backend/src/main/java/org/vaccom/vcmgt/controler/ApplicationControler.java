@@ -12,8 +12,7 @@ import com.liferay.portal.kernel.util.Validator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -138,7 +137,8 @@ public class ApplicationControler {
                 JsonNode bodyData = mapper.readTree(reqBody);
                 String matKhau = bodyData.get(EntityConstant.MATKHAU).textValue();
                 System.out.println(matKhau);
-                JSONObject template_data = new JSONObject();
+
+                ObjectNode template_data = mapper.createObjectNode();
                 template_data.put(ZaloConstant.HoVaTen, nguoiDung.getHoVaTen());
                 template_data.put(ZaloConstant.TenDangNhap, nguoiDung.getTenDangNhap());
                 template_data.put(ZaloConstant.MatKhau, matKhau);
@@ -2775,7 +2775,8 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("coSoYTe.not_found"));
             }
-            JSONObject response = new JSONObject();
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode response = mapper.createObjectNode();
             response.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
             response.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
             response.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayCheckin());
@@ -2821,7 +2822,7 @@ public class ApplicationControler {
             ObjectMapper mapper = new ObjectMapper();
 
             String json = mapper.writeValueAsString(giayDiDuong);
-            JSONObject response = (JSONObject) new JSONParser().parse(json);
+            ObjectNode response = mapper.createObjectNode();
             response.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
             response.put(ZaloConstant.LinkQrCode, domainUrl+ "/#/pages/giay-di-duong/"+giayDiDuong.getMaQR());
 
@@ -2914,7 +2915,8 @@ public class ApplicationControler {
                     UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
 
                     if(Validator.isNotNull(uyBanNhanDan)){
-                        JSONObject template_data = new JSONObject();
+                        ObjectMapper mapper = new ObjectMapper();
+                        ObjectNode template_data = mapper.createObjectNode();
 
                         template_data.put(ZaloConstant.SoDonViCap,uyBanNhanDan.getSoDienThoai() );
                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());

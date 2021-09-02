@@ -1,8 +1,10 @@
 package org.vaccom.vcmgt.scheduler;
 
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liferay.portal.kernel.util.Validator;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +54,22 @@ public class OneMinute {
                 String phone = hangChoThongBao.getToTelNo();
                 String tracking_id = "tracking_id";
                 String payload = hangChoThongBao.getPayload();
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(ZaloConstant.template_id, template_id);
-                jsonObject.put(ZaloConstant.phone, phone);
-                jsonObject.put(ZaloConstant.tracking_id, tracking_id);
-                Object payloadJson = JSONValue.parse(payload);
 
-                jsonObject.put(ZaloConstant.template_data, (JSONObject) payloadJson);
-                log.info(jsonObject.toString());
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectNode body = mapper.createObjectNode();
+                body.put(ZaloConstant.template_id, template_id);
+                body.put(ZaloConstant.phone, phone);
+                body.put(ZaloConstant.tracking_id, tracking_id);
+
+                JsonNode template_data_json = mapper.readTree(payload);
+                body.put(ZaloConstant.template_data, template_data_json);
+
+
+
+                log.info(body.toString());
                 Integer code = null;
                 try {
-                    code = ZaloNotificationUtil.sendNotification(jsonObject, oaid_access_token);
+                    code = ZaloNotificationUtil.sendNotification(body.toString(), oaid_access_token);
                 } catch (Exception ex){
                     log.error(ex.getMessage());
                 }

@@ -3,9 +3,11 @@ package org.vaccom.vcmgt.action.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -329,7 +331,8 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
 
 										//Json
-										JSONObject template_data = new JSONObject();
+										ObjectNode template_data = mapper.createObjectNode();
+
 										template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
 										template_data.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
 										template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
