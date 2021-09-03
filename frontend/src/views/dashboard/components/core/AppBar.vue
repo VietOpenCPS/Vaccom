@@ -70,11 +70,10 @@
   <div id="header-desktop">
     <header id="banner">
         <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
-          <a href="" class="mLogo col-md-4 py-0" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'text-decoration: none;display: block;text-align: center;' : 'text-decoration: none;display: block'"> 
+          <a href="" class="mLogo col-md-4 py-0 px-0" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'text-decoration: none;display: block;text-align: center;' : 'text-decoration: none;display: block'"> 
             <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
             <div>
-              <p v-if="breakpointName === 'xs' || breakpointName === 'sm'" class="ml-2 mb-2" style="font-size: 16px; color: #fff">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
-              <p v-else class="ml-2 mb-2" style="font-size: 16px; color: #fff;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+              <p class="mb-2" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'font-size: 15px; color: #fff' : 'font-size: 16px;color: #fff'">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG VACCINE</p>
             </div>
             
           </a>
@@ -751,7 +750,7 @@
 </script>
 <style lang="css">
   #header-desktop #banner {
-      background: linear-gradient(65deg,#171cc2,#ff5200);
+      background: linear-gradient(65deg,#3ec7d3,#2243ad);
       padding: 0;
   }
   #header-desktop #navigation {
