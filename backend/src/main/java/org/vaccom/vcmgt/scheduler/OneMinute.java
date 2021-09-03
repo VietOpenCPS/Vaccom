@@ -17,6 +17,7 @@ import org.vaccom.vcmgt.entity.HangChoThongBao;
 import org.vaccom.vcmgt.util.ZaloNotificationUtil;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,7 @@ public class OneMinute {
     public void doAction() throws IOException {
         String oaid_access_token = zaloConfig.getAccessToken();
 
-        log.info("VACCOM SCHEDULER SEND NOTIFICATION START: ", dateFormat.format(new Date()));
+        log.info("VACCOM SCHEDULER SEND NOTIFICATION START: " +  dateFormat.format(new Date()));
 
         List<HangChoThongBao> ThongBaoChuaGui = hangChoThongBaoAction.findByIsSentIsReady(false, true);
         for (HangChoThongBao hangChoThongBao : ThongBaoChuaGui) {
@@ -73,8 +74,12 @@ public class OneMinute {
                 } catch (Exception ex){
                     log.error(ex.getMessage());
                 }
-                if(code!= null){
+                if(code == HttpURLConnection.HTTP_OK){
                     hangChoThongBao.setSent(true);
+                    hangChoThongBaoAction.update(hangChoThongBao);
+                } else {
+                    hangChoThongBao.setSent(true);
+                    hangChoThongBao.setReady(false);
                     hangChoThongBaoAction.update(hangChoThongBao);
                 }
             }

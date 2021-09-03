@@ -3,9 +3,12 @@ package org.vaccom.vcmgt.util;
 
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.portal.kernel.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaccom.vcmgt.config.ZaloConfig;
+import org.vaccom.vcmgt.constant.ZaloConstant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,7 +56,18 @@ public class ZaloNotificationUtil {
                 sb.append(line + "\n");
             }
             br.close();
-            return HttpResult;
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode response = mapper.readTree(sb.toString());
+            Long error = response.get(ZaloConstant.error).asLong();
+            String message = response.get(ZaloConstant.message).asText();
+            if(error == 0 && message.equals("Success")){
+                return HttpResult;
+            } else {
+                return HttpURLConnection.HTTP_INTERNAL_ERROR;
+            }
+
+
+
         } else {
             return connection.getResponseCode();
         }
