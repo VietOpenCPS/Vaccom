@@ -69,7 +69,7 @@ public class ZaloNotificationUtil {
 
 
         } else {
-            return connection.getResponseCode();
+            return HttpURLConnection.HTTP_INTERNAL_ERROR;
         }
     }
 
