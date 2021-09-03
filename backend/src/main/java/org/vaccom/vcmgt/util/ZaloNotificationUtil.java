@@ -66,8 +66,6 @@ public class ZaloNotificationUtil {
                 return HttpURLConnection.HTTP_INTERNAL_ERROR;
             }
 
-
-
         } else {
             return HttpURLConnection.HTTP_INTERNAL_ERROR;
         }
