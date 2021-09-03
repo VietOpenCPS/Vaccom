@@ -309,8 +309,6 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 		predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
 
-
-
 		if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
 			predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
 		}
@@ -327,10 +325,14 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 			predicates.add(builder.equal(phieuHenTiemRoot.get("lichTiemChungId"), nguoiTiemChungDto.lichTiemChungId));
 		}
 
-		if(nguoiTiemChungDto.typeGet == 0) {
-			predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+		if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
+			predicates.add((phieuHenTiemRoot.get("tinhTrangXacNhan").in(nguoiTiemChungDto.listtinhtrangxacnhan)));
 		} else {
-			predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+			if(nguoiTiemChungDto.typeGet == 0) {
+				predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+			} else {
+				predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+			}
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.ngaydangki) && !nguoiTiemChungDto.ngaydangki.isEmpty()) {
