@@ -286,17 +286,25 @@ export default new Vuex.Store({
         params: {
         }
       }
-      try {
-        if (Vue.$cookies.get('Token')) {
-          param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
-        }
-      } catch (error) {
-      }
-      axios.delete('/rest/v1/app/delete/uybannhandan/' + filter.id, param).then(function (response) {
-        let serializable = response
+      let config = {
+        method: 'delete',
+        url: '/rest/v1/app/delete/uybannhandan/0',
+        headers: { 
+          'Accept': 'application/json', 
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + Vue.$cookies.get('Token')
+        },
+        data : JSON.stringify({listIdDelete: filter.ids})
+      };
+      
+      axios(config)
+      .then(function (response) {
+        let serializable = response.data
         resolve(serializable)
-      }).catch(function (error) {
-        reject(error)
+      })
+      .catch(function (error) {
+        let serializable = response.data
+        resolve(serializable)
       })
     },
     addCoSoYTe ({commit, state}, filter) {
@@ -383,7 +391,33 @@ export default new Vuex.Store({
           }
         } catch (error) {
         }
-        axios.get('/rest/v1/app/get/uybannhandan', param).then(function (response) {
+        axios.get('/rest/v1/app/get/uybannhandan/0', param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
+        })
+      })
+    },
+    getThongTinUyBanNhanDan ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        axios.get('/rest/v1/app/get/uybannhandan/' + filter.id, param).then(function (response) {
           let serializable = response.data
           resolve(serializable)
         }).catch(function (error) {
@@ -652,6 +686,29 @@ export default new Vuex.Store({
         })
       })
     },
+    addMuiTiem ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/add/muitiemchung', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
     getNhomDoiTuong ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -831,6 +888,205 @@ export default new Vuex.Store({
           resolve(serializable)
         }).catch(function (error) {
           reject(error)
+        })
+      })
+    },
+    createGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/add/giaydiduong', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    updateGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.put('/rest/v1/app/update/giaydiduong/' + filter.id, dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    duyetGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {
+          status: filter.data.status
+        }
+        axios.put('/rest/v1/app/update/giaydiduong/' + filter.data.id, dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    duyetNhieuGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {
+          listIdUpdate: filter.data.ids,
+          status: filter.data.status
+        }
+        axios.put('/rest/v1/app/update/giaydiduong/0', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    getGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+            cmtcccd: filter.hasOwnProperty('cmtcccd') ? filter.cmtcccd : '',
+            hovaten: filter.hasOwnProperty('hovaten') ? filter.hovaten : '',
+            status: filter.hasOwnProperty('status') ? filter.status : ''
+          }
+        }
+        if (filter.hasOwnProperty('page')) {
+          param.params['page'] = filter.page
+          param.params['size'] = filter.size
+        }
+
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let url = '/rest/v1/app/get/' + filter.typeSearch + '/0'
+        axios.get(url, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
+        })
+      })
+    },
+    removeGiayDiDuong ({commit, state}, filter) {
+      let param = {
+        headers: {
+        },
+        params: {
+        }
+      }
+      let config = {
+        method: 'delete',
+        url: '/rest/v1/app/delete/giaydiduong/' + filter.id,
+        headers: { 
+          'Accept': 'application/json', 
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + Vue.$cookies.get('Token')
+        },
+        data : JSON.stringify({})
+      };
+      
+      axios(config)
+      .then(function (response) {
+        let serializable = response.data
+        resolve(serializable)
+      })
+      .catch(function (error) {
+        let serializable = response.data
+        resolve(serializable)
+      })
+    },
+    removeMultipleGiayDiDuong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let data = JSON.stringify({listIdDelete: filter['data']['ids']})
+        console.log('dataselected', data)
+        let config = {
+          method: 'delete',
+          url: '/rest/v1/app/delete/giaydiduong/0',
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + Vue.$cookies.get('Token')
+          },
+          data : data
+        };
+        
+        axios(config)
+        .then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        })
+        .catch(function (error) {
+          let serializable = response.data
+          resolve(serializable)
+        })
+      })
+    },
+    getThongTinDiduong ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+            maQr: filter.maQr
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        console.log('filter', filter)
+        let url = '/rest/v1/app/get/giaydiduong-maqr'
+        axios.get(url, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
         })
       })
     },

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-app-bar
+  <!-- <v-app-bar
     v-if="breakpointName === 'xs' || breakpointName === 'sm'"
     id="app-bar"
     absolute
@@ -66,19 +66,20 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  </v-app-bar>
-  <div v-else id="header-desktop">
+  </v-app-bar> -->
+  <div id="header-desktop">
     <header id="banner">
         <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
-          <a href="" class="mLogo col-sm-4 py-0" style="text-decoration: none;display: block"> 
+          <a href="" class="mLogo col-md-4 py-0" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'text-decoration: none;display: block;text-align: center;' : 'text-decoration: none;display: block'"> 
             <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
             <div>
-              <p class="ml-2 mb-2" style="font-size: 16px; color: #fff;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+              <p v-if="breakpointName === 'xs' || breakpointName === 'sm'" class="ml-2 mb-2" style="font-size: 16px; color: #fff">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+              <p v-else class="ml-2 mb-2" style="font-size: 16px; color: #fff;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
             </div>
             
           </a>
-          <div class="col-sm-8 text-right py-0" style="color:#ff6a00;">
-            <nav class="sort-pages modify-pages mt-3" id="navigation"> 
+          <div class="col-md-8 text-right py-0" style="color:#ff6a00;">
+            <nav class="sort-pages modify-pages mt-3" id="navigation" v-if="showLogin"> 
                 <ul aria-label="Site Pages" role="menubar" class="container">
                     <li v-for="(item, i) in items" :key="i" :class="indexTab == i ? 'selected' : ''" :id="'layout_'+i" role="presentation">
                       <v-menu
@@ -173,8 +174,8 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <div class="btns" v-if="!isSigned"> 
-          <a @click="goToLogin" href="javascript:;" class="login">Đăng nhập</a> 
+        <div class="btns" v-if="!isSigned && showLogin"> 
+          <a @click="goToLogin" href="javascript:;" class="login" id="loginBtn">Đăng nhập</a> 
         </div>
     </header>
   </div>
@@ -227,12 +228,22 @@
 
     data: () => ({
       showMenu: false,
+      showLogin: true,
       items: [],
       notifications: [
       ],
     }),
     created () {
       let vm = this
+      try {
+        let currentQuery = vm.$router.history.current
+        if (currentQuery.name === 'MauGiayDiDuong' && (vm.breakpointName === 'xs' || breakpointName === 'sm')) {
+          vm.showLogin = false
+        } else {
+          vm.showLogin = true
+        }
+      } catch (error) {
+      }
       if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'QuanTriHeThong') {
         vm.items = [
           {
@@ -267,8 +278,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]
@@ -304,42 +315,42 @@
               },
             ]
           },
-          // {
-          //   icon: 'mdi-shield-plus-outline',
-          //   title: 'Giấy đi đường',
-          //   id: 'search',
-          //   childItems: [
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Đăng ký mới',
-          //       to: '/pages/dang-ky-di-duong/0',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Danh sách đăng ký mới',
-          //       to: '/pages/danh-sach-di-duong-yeu-cau',
-          //       id: 'search',
-          //     },
-          //     {
-          //       icon: 'mdi-shield-plus-outline',
-          //       title: 'Giấy đi đường đã cấp',
-          //       to: '/pages/danh-sach-di-duong-da-cap',
-          //       id: 'search',
-          //     }
-          //   ]
-          // },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Giấy đi đường',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-di-duong/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký mới',
+                to: '/pages/danh-sach-di-duong-yeu-cau',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Giấy đi đường đã cấp',
+                to: '/pages/danh-sach-di-duong-da-cap',
+                id: 'search',
+              }
+            ]
+          },
           {
             icon: 'mdi-shield-plus-outline',
             title: 'Quản trị',
             id: 'search',
             childItems: [
-              // {
-              //   icon: 'mdi-shield-plus-outline',
-              //   title: 'Ủy ban nhân dân',
-              //   to: '/pages/uy-ban-nha-dan',
-              //   id: 'search',
-              // },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Ủy ban nhân dân',
+                to: '/pages/uy-ban-nha-dan',
+                id: 'search',
+              },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Cơ sở y tế',
@@ -407,8 +418,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]
@@ -464,6 +475,47 @@
             id: 'hdsd',
           },
         ]
+      } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoUBND') {
+        vm.items = [
+          {
+            icon: 'mdi-home',
+            title: 'Trang chủ',
+            to: '/',
+            class: 'home-tab',
+            id: 'home-vacc'
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'Giấy đi đường',
+            id: 'search',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đăng ký mới',
+                to: '/pages/dang-ky-di-duong/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký mới',
+                to: '/pages/danh-sach-di-duong-yeu-cau',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Giấy đi đường đã cấp',
+                to: '/pages/danh-sach-di-duong-da-cap',
+                id: 'search',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
+            title: 'HDSD',
+            to: '/pages/huong-dan-su-dung',
+            id: 'hdsd',
+          },
+        ]
       } else if (vm.userLogin && vm.userLogin['role_name'] && vm.userLogin['role_name'] === 'CanBoYTe') {
         vm.items = [
           {
@@ -498,8 +550,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách mũi tiêm chủng',
-                to: '/pages/danh-sach-mui-tiem-chung',
+                title: 'Chứng nhận tiêm chủng',
+                to: '/pages/chung-nhan-tiem-chung',
                 id: 'search',
               }
             ]
@@ -658,7 +710,12 @@
     watch: {
       userLogin (val) {
         let vm = this
-      }
+      },
+      '$route': function (newRoute, oldRoute) {
+        let vm = this
+        let currentQuery = newRoute.query
+        console.log(newRoute)
+      },
     },
     methods: {
       ...mapMutations({

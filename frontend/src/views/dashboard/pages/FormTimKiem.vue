@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card-text class="px-0">
-        <v-row>
+        <v-row v-if="!form">
           <v-col
             cols="12"
             md="6"
@@ -127,6 +127,72 @@
           ></v-autocomplete>
           </v-col>
         </v-row>
+        <v-row v-if="form === 'giaydiduong'">
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Họ tên"
+              v-model="dataSearch['HoVaTen']"
+              outlined
+              placeholder="Họ và tên"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Số CMND/ CCCD"
+              v-model="dataSearch['CMTCCCD']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Đơn vị/ công ty làm việc"
+              v-model="dataSearch['NoiCtTenCoQuan']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-autocomplete
+                class="flex xs12 md12"
+                hide-no-data
+                :items="listUyBanNhanDan"
+                v-model="dataSearch['UyBanNhanDanID']"
+                item-text="tenCoQuan"
+                item-value="id"
+                outlined
+                label="Cán bộ ủy ban nhân dân"
+                dense
+                clearable
+            ></v-autocomplete>
+          </v-col>
+          
+        </v-row>
         <v-row class="justify-end">
           <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
               <v-icon left size="20">
@@ -150,9 +216,10 @@
 <script>
   export default {
     name: 'Search',
-    props: [],
+    props: ['form'],
     data () {
       return {
+        listUyBanNhanDan: [],
         listDoiTuong: [],
         listDiaBan: [],
         listCoSoYTe: [],
@@ -179,6 +246,7 @@
       vm.getCoSoYTe()
       vm.getDiaBanCoSo()
       vm.getNhomDoiTuong()
+      vm.getUyBanNhanDan()
     },
     watch: {
       coSoYTe (val) {
@@ -211,6 +279,16 @@
           KiemTraTrung: -1
         },
         vm.$emit('trigger-cancel', vm.dataSearch)
+      },
+      getUyBanNhanDan () {
+        let vm = this
+        let filter = {
+          page: 0,
+          size: 100
+        }
+        vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
+          vm.listUyBanNhanDan = result.hasOwnProperty('data') ? result.data : []
+        })
       },
       getDiaBanCoSo (val) {
         let vm = this
