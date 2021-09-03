@@ -1128,6 +1128,11 @@ public class ApplicationControler {
                     lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
                 }
 
+                if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
+                    List<Integer> listTinhTrang = nguoiTiemChungDto.listtinhtrangxacnhan;
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(p -> listTinhTrang.contains(p.getTinhTrangXacNhan())).collect(Collectors.toList());
+                }
+
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
 
                 node.put("phieuHenTiem", jsonArrayObj);

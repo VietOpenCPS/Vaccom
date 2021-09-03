@@ -1,6 +1,7 @@
 package org.vaccom.vcmgt.dto;
 
 import javax.persistence.Column;
+import java.util.List;
 
 public class NguoiTiemChungDto {
     public String hovaten;
@@ -70,6 +71,8 @@ public class NguoiTiemChungDto {
     public String ketquakiemTra;
 
     public int tinhtrangxacnhan;
+
+    public List<Integer> listtinhtrangxacnhan;
 
     public int typeGet;
 }
