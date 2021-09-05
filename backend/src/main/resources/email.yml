@@ -1,0 +1,43 @@
+email:
+  support: support@vaccom.vn
+  create-account:
+    subject: Đăng kí đối tượng tiêm chủng mới
+    body: |-
+      <html>
+      <body>
+      Chào ông/bà ${fullName}, <br>
+      Ông/bà đã được tạo đăng kí tiêm chủng mới trên hệ thống phần mềm Vaccom. <br>
+      Xin mời truy cập theo đường dẫn sau để kiểm tra và cập nhật lại thông tin đăng kí. <br>
+      <img alt="QR Code" src="data:image/png;base64,${base64Img}" />
+      URL: https://${domain}/#/dang-ki-moi?${maQR}
+      </body>
+      </html>
+  access-account:
+    subject: Đăng kí đối tượng tiêm chủng đã được duyệt chính thức
+    body: |-
+      <html>
+      <body>
+      Chào ông/bà ${fullName}, <br>
+      Đăng kí tiêm chủng của Ông/bà đã được duyệt chính thức trên hệ thống phần mềm Vaccom.<br>
+      Ông/bà có thể truy cập hệ thống để theo dõi và cập nhật thông tin tiêm chủng với tài khoản sau. <br>
+      Tên đăng nhập: ${userName}
+      MatKhau: ${password}
+      URL: https://${}domain}
+      </body>
+      </html>
+  vaccinate:
+    subject: Thông báo lịch hẹn gọi tiêm chủng
+    body: |-
+      <html>
+      <body>
+      Chào ông/bà ${fullName}, <br>
+      Ông/bà được [CoSoYTe] gọi tiêm chủng theo lịch như sau: <br>
+      Ngày giờ: [NgayHenTiem] [GioHenTiem] <br>
+      Địa điểm: [DiaDiemTiemChung] <br>
+      Mũi tiêm: [LanTiem] <br>
+      Loại vaccin: [LoaiThuocTiem] <br>
+      <br>
+      Rất mong ông/bà có mặt đúng giờ. Đề nghi ông bà xác nhận lịch hẹn qua mã QRCode hoặc đường dẫn truy cập dưới đây. <br>
+      <img alt="QR Code" src="data:image/png;base64,${base64Img}" />
+      </body>
+      </html>

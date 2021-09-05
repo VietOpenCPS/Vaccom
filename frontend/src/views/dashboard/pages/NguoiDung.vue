@@ -508,9 +508,11 @@
       getUyBanNhanDan() {
         let vm = this
         let filter = {
+          page: 0,
+          size: 100
         }
         vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
-          vm.listUyBanNhanDan = result ? result : []
+          vm.listUyBanNhanDan = result.hasOwnProperty('data') ? result.data : []
         })
       },
       getCoSoYTe () {

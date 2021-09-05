@@ -27,6 +27,7 @@
         <v-col
           cols="12"
           md="auto"
+          v-if="!isTempDiDuong"
         >
           <div class="text-body-1 pt-md-0">
             <div>
@@ -49,7 +50,25 @@
 
     data: () => ({
       links: [],
+      isTempDiDuong: false
     }),
+    created () {
+      let vm = this
+      try {
+        let currentQuery = vm.$router.history.current
+        if (currentQuery.name === 'MauGiayDiDuong' && (vm.breakpointName === 'xs' || vm.breakpointName === 'sm')) {
+          vm.isTempDiDuong = true
+        } else {
+          vm.isTempDiDuong = false
+        }
+      } catch (error) {
+      }
+    },
+    computed: {
+      breakpointName () {
+        return this.$store.getters.getBreakpointName
+      }
+    }
   }
 </script>
 
