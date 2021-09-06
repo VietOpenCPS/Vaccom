@@ -1,3 +1,12 @@
+### Release v0.3.3
+#### Feature:
+* Quản lý giấy đi đường
+* Cấp giấy đi đường
+* Gửi thông báo giấy đi đường qua Zalo
+* Kiểm tra giấy đi đường qua QR code
+#### Hotfix:
+* Sửa lỗi phân trang và lọc danh sách: Người tiêm chủng, người dùng, phiếu tiêm chủng.
+
 ### Release v0.3.2
 #### Hotfix:
 * Backend: Sửa cơ chế check trùng người tiêm chủng khi impport từ excel
