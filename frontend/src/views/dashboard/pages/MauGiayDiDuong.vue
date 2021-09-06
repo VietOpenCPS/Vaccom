@@ -123,7 +123,6 @@
     created () {
       let vm = this
       vm.getThongTinDiDuong()
-      vm.urlQr = window.location.host + '/#/pages/giay-di-duong/' + vm.uid
     },
     watch: {
     },
@@ -141,8 +140,10 @@
         vm.$store.dispatch('getThongTinDiduong', filter).then(function(dataInfo) {
           // console.log('dataInfo', dataInfo)
           vm.dataInfo = dataInfo
+          vm.urlQr = dataInfo['LinkQrCode']
           vm.checkHieuLuc(vm.dataInfo)
         }).catch (function () {
+          vm.conHieuLuc = false
         })
       },
       translateLichNgay (data) {
@@ -188,6 +189,10 @@
       },
       checkHieuLuc (dataInfo) {
         let vm = this
+        if (!dataInfo) {
+          vm.conHieuLuc = false
+          return
+        }
         let dataTime = JSON.parse(dataInfo.lichLamViec)
         if (dataInfo.status == 0 || dataInfo.status == 2) {
           vm.conHieuLuc = false
