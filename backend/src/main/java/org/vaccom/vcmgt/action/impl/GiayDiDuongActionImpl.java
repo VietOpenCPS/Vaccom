@@ -34,7 +34,6 @@ public class GiayDiDuongActionImpl implements GiayDiDuongAction {
     public GiayDiDuong create(GiayDiDuongDto giayDiDuongDto) throws Exception {
 
         if(giayDiDuongDto.hoVaTen == null || giayDiDuongDto.hoVaTen.isEmpty()) {
-            _log.warn("hoVaTen is null");
             return null;
         }
 
