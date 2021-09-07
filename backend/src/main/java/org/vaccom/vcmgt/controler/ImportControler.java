@@ -38,13 +38,17 @@ public class ImportControler {
 			@RequestParam("table") String table) {
 		try {
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
-			//TODO check
-			
-			if (!RoleUtil.isCanBoDiaBan(vaiTro) && !RoleUtil.isCanBoYTe(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro) && !RoleUtil.isQuanTriHeThong(vaiTro)) {
+
+			if (!RoleUtil.isCanBoDiaBan(vaiTro)
+					&& !RoleUtil.isCanBoYTe(vaiTro)
+					&& !RoleUtil.isQuanTriCoSo(vaiTro)
+					&& !RoleUtil.isQuanTriHeThong(vaiTro)
+					&& !RoleUtil.isCanBoUBND(vaiTro)
+			) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
 			}
-			importDataAction.importData(table, file, sheetAt, startCol, endCol, startRow, endRow);
+			importDataAction.importData(vaiTro, table, file, sheetAt, startCol, endCol, startRow, endRow);
 			String msg = MessageUtil.getVNMessageText("data.import." + table + ".success");
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);

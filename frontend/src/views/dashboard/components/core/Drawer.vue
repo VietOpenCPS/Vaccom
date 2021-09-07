@@ -130,8 +130,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
               {
@@ -190,8 +190,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
               {

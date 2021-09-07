@@ -61,6 +61,9 @@ public class PhieuHenTiem implements Serializable {
 	@Column(name = "GioDuocTiem")
 	private String GioDuocTiem;
 
+	@Column(name = "GhiChuLyDo")
+	private String GhiChuLyDo;
+
 	@Column(name = "TrieuChungSauTiem")
 	private String trieuChungSauTiem;
 
@@ -73,6 +76,14 @@ public class PhieuHenTiem implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getGhiChuLyDo() {
+		return GhiChuLyDo;
+	}
+
+	public void setGhiChuLyDo(String ghiChuLyDo) {
+		GhiChuLyDo = ghiChuLyDo;
 	}
 
 	public long getLichTiemChungId() {

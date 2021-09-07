@@ -161,7 +161,7 @@ export default {
       
     },
     goBack () {
-      this.$router.push({ path: '/' })
+      window.history.back()
     },
     handleRegister() {
       // console.log(this)

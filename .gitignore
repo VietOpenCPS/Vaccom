@@ -1,0 +1,79 @@
+docker-deploy/backend/jre8-latest.rpm
+mobile/VaccomApp/
+
+mobile/Vaccom_Mobile/build/url_launcher/outputs/logs/manifest-merger-debug-report.txt
+mobile/Vaccom_Mobile/android/gradle/wrapper/gradle-wrapper.jar
+# Miscellaneous
+mobile/Vaccom_Mobile/*.class
+mobile/Vaccom_Mobile/*.log
+mobile/Vaccom_Mobile/*.pyc
+mobile/Vaccom_Mobile/*.swp
+mobile/Vaccom_Mobile/.DS_Store
+mobile/Vaccom_Mobile/.atom/
+mobile/Vaccom_Mobile/.buildlog/
+mobile/Vaccom_Mobile/.history
+mobile/Vaccom_Mobile/.svn/
+
+# IntelliJ related
+mobile/Vaccom_Mobile/*.iml
+mobile/Vaccom_Mobile/*.ipr
+mobile/Vaccom_Mobile/*.iws
+mobile/Vaccom_Mobile/.idea/
+
+# Visual Studio Code related
+mobile/Vaccom_Mobile/.vscode/
+
+# Flutter/Dart/Pub related
+mobile/Vaccom_Mobile/**/doc/api/
+mobile/Vaccom_Mobile/.dart_tool/
+mobile/Vaccom_Mobile/.flutter-plugins
+mobile/Vaccom_Mobile/.packages
+mobile/Vaccom_Mobile/.pub-cache/
+mobile/Vaccom_Mobile/.pub/
+mobile/Vaccom_Mobile/build/
+mobile/Vaccom_Mobile/.fvm/flutter_sdk
+
+# Android related
+mobile/Vaccom_Mobile/**/android/**/gradle-wrapper.jar
+mobile/Vaccom_Mobile/**/android/.gradle
+mobile/Vaccom_Mobile/**/android/captures/
+mobile/Vaccom_Mobile/**/android/gradlew
+mobile/Vaccom_Mobile/**/android/gradlew.bat
+mobile/Vaccom_Mobile/**/android/local.properties
+mobile/Vaccom_Mobile/**/android/**/GeneratedPluginRegistrant.java
+mobile/Vaccom_Mobile/
+# iOS/XCode related
+mobile/Vaccom_Mobile/**/ios/**/*.mode1v3
+mobile/Vaccom_Mobile/**/ios/**/*.mode2v3
+mobile/Vaccom_Mobile/**/ios/**/*.moved-aside
+mobile/Vaccom_Mobile/**/ios/**/*.pbxuser
+mobile/Vaccom_Mobile/**/ios/**/*.perspectivev3
+mobile/Vaccom_Mobile/**/ios/**/*sync/
+mobile/Vaccom_Mobile/**/ios/**/.sconsign.dblite
+mobile/Vaccom_Mobile/**/ios/**/.tags*
+mobile/Vaccom_Mobile/**/ios/**/.vagrant/
+mobile/Vaccom_Mobile/**/ios/**/DerivedData/
+mobile/Vaccom_Mobile/**/ios/**/Icon?
+mobile/Vaccom_Mobile/**/ios/**/Pods/
+mobile/Vaccom_Mobile/**/ios/**/.symlinks/
+mobile/Vaccom_Mobile/**/ios/**/profile
+mobile/Vaccom_Mobile/**/ios/**/xcuserdata
+mobile/Vaccom_Mobile/**/ios/.generated/
+mobile/Vaccom_Mobile/**/ios/Flutter/App.framework
+mobile/Vaccom_Mobile/**/ios/Flutter/Flutter.framework
+mobile/Vaccom_Mobile/**/ios/Flutter/Generated.xcconfig
+mobile/Vaccom_Mobile/**/ios/Flutter/app.flx
+mobile/Vaccom_Mobile/**/ios/Flutter/app.zip
+mobile/Vaccom_Mobile/**/ios/Flutter/flutter_assets/
+mobile/Vaccom_Mobile/**/ios/ServiceDefinitions.json
+mobile/Vaccom_Mobile/**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+!mobile/Vaccom_Mobile/**/ios/**/default.mode1v3
+!mobile/Vaccom_Mobile/**/ios/**/default.mode2v3
+!mobile/Vaccom_Mobile/**/ios/**/default.pbxuser
+!mobile/Vaccom_Mobile/**/ios/**/default.perspectivev3
+!mobile/Vaccom_Mobile/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+mobile/Vaccom_Mobile/*.json
+mobile/Vaccom_Mobile/.dart_tool/**
+mobile/Vaccom_Mobile/*.json

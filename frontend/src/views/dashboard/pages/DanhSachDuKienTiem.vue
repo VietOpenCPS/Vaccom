@@ -30,6 +30,7 @@
                 hide-no-data
                 :items="danhSachLichTiemChung"
                 v-model="lichTiemChungFilter"
+                @change="getCaTiem('search')"
                 item-text="diaDiemTiemChung"
                 item-value="id"
                 outlined
@@ -46,12 +47,12 @@
             >
               <v-autocomplete
                 hide-no-data
-                :items="danhSachCaTiemChung"
-                v-model="lichTiemChungFilter"
-                item-text="diaDiemTiemChung"
+                :items="danhSachCaTiemChungFilte"
+                v-model="caTiemChungFilter"
+                item-text="gioHenTiem"
                 item-value="id"
                 outlined
-                placeholder="Lịch tiêm chủng"
+                placeholder="Ca tiêm chủng"
                 dense
                 hide-details="auto"
                 clearable
@@ -65,7 +66,7 @@
                 </v-icon>
                 Thoát
             </v-btn>
-            <v-btn color="#0072bc" small class="mt-3 mx-3" @click="$emit('trigger-search', dataSearch)">
+            <v-btn color="#0072bc" small class="mt-3 mx-3" @click="search">
                 <v-icon left size="20">
                 mdi-content-save
                 </v-icon>
@@ -87,7 +88,7 @@
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn color="orange" small class="mx-2 mr-4" @click.stop="addPhieuHenTiem('add')">
+            <v-btn v-if="selected.length" color="orange" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 1, 'multiple')">
               Gọi tiêm
             </v-btn>
             <v-btn v-if="userLogin['coSoYTeId']" small color="#0072bc" class="mx-0" @click.stop="addPhieuHenTiem('add')">
@@ -134,11 +135,19 @@
               <div class="text-center">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="goiTiem(item)" color="orange" small flat class="" v-bind="attrs" v-on="on">
-                      Gọi tiêm
+                    <v-btn @click="editPhieuHenTiem(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-pencil</v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện gọi tiêm</span>
+                  <span>Sửa thông tin</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="xacNhanTinhTrangPhieuHen(item.id, 1, 'only')" color="orange" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-account-voice</v-icon>
+                    </v-btn>
+                  </template>
+                   <span>Thực hiện gọi tiêm</span>
                 </v-tooltip>
               </div>
             </template>
@@ -175,7 +184,7 @@
               lazy-validation
             >
                 <v-layout wrap>
-                    <v-text-field
+                    <!-- <v-text-field
                         class="flex xs12 md12 px-2"
                         v-model="phieuHenTiem.ID"
                         outlined
@@ -184,7 +193,7 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
-                    ></v-text-field>
+                    ></v-text-field> -->
                     <v-autocomplete
                         class="flex xs12 md6 px-2"
                         hide-no-data
@@ -205,8 +214,8 @@
                         hide-no-data
                         :items="danhSachCaTiemChung"
                         v-model="phieuHenTiem.CaTiemChung_ID"
-                        item-text="name"
-                        item-value="value"
+                        item-text="gioHenTiem"
+                        item-value="id"
                         clearable
                         :rules="required"
                         required
@@ -219,8 +228,8 @@
                         hide-no-data
                         :items="danhSachNguoiTiemChung"
                         v-model="phieuHenTiem.NguoiTiemChung_ID"
-                        item-text="name"
-                        item-value="value"
+                        item-text="hoVaTen"
+                        item-value="id"
                         clearable
                         :rules="required"
                         required
@@ -228,29 +237,33 @@
                         label="Người tiêm chủng"
                         dense
                     ></v-autocomplete>
-                    <v-text-field
+                    <!-- <v-text-field
                       label="Lần tiêm"
                       class="flex xs12 md12 px-2"
                       v-model="phieuHenTiem.LanTiem"
                       dense
                       outlined
-                    ></v-text-field>
+                    ></v-text-field> -->
                     <v-text-field
                       label="Ngày hẹn tiêm"
                       class="flex xs12 md6 px-2"
-                      v-model="ngayHenTiemFomarted"
+                      v-model="phieuHenTiem.NgayHenTiem"
                       placeholder="dd/mm/yyyy, ddmmyyyy"
+                      v-mask="'##/##/####'"
                       @blur="formatNgayHenTiem"
                       dense
                       outlined
+                      required
                     ></v-text-field>
                     <v-text-field
                       label="Giờ hẹn tiêm"
                       class="flex xs12 md6 px-2"
                       v-model="phieuHenTiem.GioHenTiem"
                       placeholder="hh:mm, hhmm"
+                      v-mask="'##:##'"
                       dense
                       outlined
+                      required
                     ></v-text-field>
                     <!-- <v-autocomplete
                         class="flex xs12 md6"
@@ -266,29 +279,29 @@
                         label="Ca tiêm chủng"
                         dense
                     ></v-autocomplete> -->
-                    <v-textarea
+                    <!-- <v-textarea
                       label="Ghi chú lý do"
                       class="flex xs12 md12 px-2"
                       v-model="phieuHenTiem.TinhTrangXacNhan"
                       dense
                       outlined
-                    ></v-textarea>
-                    <v-textarea
+                    ></v-textarea> -->
+                    <!-- <v-textarea
                       label="Thông tin check-in"
                       class="flex xs12 md12 px-2"
                       v-model="phieuHenTiem.ThongTinCheckin"
                       dense
                       outlined
-                    ></v-textarea>
-                    <v-text-field
+                    ></v-textarea> -->
+                    <!-- <v-text-field
                       label="Giờ được tiêm"
                       class="flex xs12 md6 px-2"
                       v-model="phieuHenTiem.GioDuocTiem"
                       placeholder="hh:mm, hhmm"
                       dense
                       outlined
-                    ></v-text-field>
-                    <v-text-field
+                    ></v-text-field> -->
+                    <!-- <v-text-field
                       label="Ngày check-in"
                       class="flex xs12 md6 px-2"
                       v-model="ngayCheckinFomarted"
@@ -296,8 +309,8 @@
                       @blur="formatNgayCheckin"
                       dense
                       outlined
-                    ></v-text-field>
-                    <v-text-field
+                    ></v-text-field> -->
+                    <!-- <v-text-field
                       label="TrieuChungSauTiem"
                       class="flex xs12 md6 px-2"
                       v-model="phieuHenTiem.TrieuChungSauTiem"
@@ -310,7 +323,7 @@
                       v-model="phieuHenTiem.DieuTriTrieuChung"
                       dense
                       outlined
-                    ></v-text-field>
+                    ></v-text-field> -->
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -421,6 +434,7 @@
     },
     data () {
       return {
+        processingAction: false,
         selected: [],
         validFormAdd: true,
         loading: false,
@@ -434,13 +448,12 @@
         typeAction: 'add',
         dialogPhieuDuKienTiem: false,
         items: [],
-        listCoSoYTe: [],
         coSoYTe: '',
-        ngayHenTiemFomarted: '',
         ngayCheckinFomarted: '',
         endDateFormatted: '',
         expDateFormatted: '',
         danhSachLichTiemChung: [],
+        danhSachCaTiemChungFilte: [],
         danhSachCaTiemChung: [],
         danhSachNguoiTiemChung: [],
         danhSachTinhTrangXacNhan: [
@@ -474,7 +487,6 @@
           branchUid: ''
         },
         showAdvanceSearch: false,
-        phieuHenTiemUpdate: '',
         required: [
           (value) => {
             if(String(value).trim()){
@@ -495,19 +507,19 @@
             sortable: false,
             text: 'Người tiêm chủng',
             align: 'center',
-            value: 'NguoiTiemChung_ID'
+            value: 'nguoiTiemChungId'
           },
           {
             sortable: false,
             text: 'Ngày hẹn tiêm',
             align: 'left',
-            value: 'NgayHenTiem'
+            value: 'ngayHenTiem'
           },
           {
             sortable: false,
             text: 'Giờ hẹn tiêm',
             align: 'left',
-            value: 'GioHenTiem'
+            value: 'gioHenTiem'
           },
           {
             sortable: false,
@@ -526,8 +538,8 @@
         vm.$router.push({ path: '/login?redirect=/pages/lich-tiem-chung' })
         return
       }
-      vm.getDanhSachPhieuDuKienTiem(0)
       vm.getLichTiem()
+      vm.getAllNguoiTiemChung()
     },
     computed: {
       breakpointName () {
@@ -538,34 +550,25 @@
       editPhieuHenTiem (item) {
         let vm = this
         vm.typeAction = 'update'
-        vm.phieuHenTiemUpdate = item
-        vm.phieuHenTiem.MaDot = item.maDot
-        vm.ngayHenTiemFomarted = item.ngayBatDau
-        vm.endDateFormatted = item.ngayKetThuc
-        vm.phieuHenTiem.DiaDiemTiemChung = item.diaDiemTiemChung
-        vm.phieuHenTiem.LoaiThuocTiem = item.loaiThuocTiem
-        vm.phieuHenTiem.NoiSanXuat = item.noiSanXuat
-        vm.phieuHenTiem.SoLoThuoc = item.soLoThuoc
-        vm.expDateFormatted = item.hanSuDung
-        vm.phieuHenTiem.SoCaTiem = item.soCaTiem
-        vm.phieuHenTiem.SoMuiMotCa = item.soMuiMotCa
-        vm.phieuHenTiem.TongSoMuiTiem = item.tongSoMuiTiem
-        vm.phieuHenTiem.TinhTrangLich = item.tinhTrangLich
-        vm.phieuHenTiem.BacSiKham = item.bacSiKham
-        vm.phieuHenTiem.SoDienThoai = item.soDienThoai
+        vm.phieuHenTiem.ID = item.id
+        vm.phieuHenTiem.LichTiemChung_ID = item.lichTiemChungId
+        vm.phieuHenTiem.NguoiTiemChung_ID = item.nguoiTiemChungId
+        vm.phieuHenTiem.CaTiemChung_ID = item.caTiemChungId
+        vm.phieuHenTiem.NgayHenTiem = item.ngayHenTiem
+        vm.phieuHenTiem.GioHenTiem = item.gioHenTiem
         vm.dialogPhieuDuKienTiem = true
       },
       formatNgayHenTiem () {
         let vm = this
-        let lengthDate = String(vm.ngayHenTiemFomarted).trim().length
-        let splitDate = String(vm.ngayHenTiemFomarted).split('/')
+        let lengthDate = String(vm.phieuHenTiem.NgayHenTiem).trim().length
+        let splitDate = String(vm.phieuHenTiem.NgayHenTiem).split('/')
         if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
-          vm.ngayHenTiemFomarted = vm.translateDate(vm.ngayHenTiemFomarted)
+          vm.phieuHenTiem.NgayHenTiem = vm.translateDate(vm.phieuHenTiem.NgayHenTiem)
         } else if (lengthDate && lengthDate === 8) {
-          let date = String(vm.ngayHenTiemFomarted)
-          vm.ngayHenTiemFomarted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+          let date = String(vm.phieuHenTiem.NgayHenTiem)
+          vm.phieuHenTiem.NgayHenTiem = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
         } else {
-          vm.ngayHenTiemFomarted = ''
+          vm.phieuHenTiem.NgayHenTiem = ''
         }
       },
       formatNgayCheckin () {
@@ -581,14 +584,19 @@
           vm.ngayCheckinFomarted = ''
         }
       },
+      translateDate (date) {
+        if (!date) return null
+        const [day, month, year] = date.split('/')
+        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
+      },
       getDanhSachPhieuDuKienTiem (pageIn) {
         let vm = this
         let param = {
           headers: {
           },
           params: {
-            lichtiemchungid: vm.lichTiemChungFilter,
-            catiemchungid: vm.lichTiemChungFilter,
+            lichtiemchungid: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
+            catiemchungid: vm.caTiemChungFilter ? vm.caTiemChungFilter  : '',
             page: pageIn,
             size: vm.itemsPerPage,
           }
@@ -599,7 +607,7 @@
           }
         } catch (error) {
         }
-        axios.get('/rest/v1/app/get/phieuhentiem/4', param).then(function (response) {
+        axios.get('/rest/v1/app/get/phieuhentiem/0', param).then(function (response) {
           let serializable = response.data
           if(serializable) {
             vm.items = serializable.hasOwnProperty('data') ? serializable.data : []
@@ -624,22 +632,61 @@
         vm.$store.dispatch('getLichTiem', filter).then(function (result) {
           vm.danhSachLichTiemChung = result.hasOwnProperty('data') ? result.data : []
           if (vm.danhSachLichTiemChung.length) {
-            vm.lichTiemChungFilter = danhSachLichTiemChung[0].hasOwnProperty('id') ? danhSachLichTiemChung[0]['id'] : ''
-            th
+            vm.lichTiemChungFilter = vm.danhSachLichTiemChung[0].hasOwnProperty('id') ? vm.danhSachLichTiemChung[0]['id'] : ''
+            vm.getCaTiem('created')
           }
         })
       },
-      getCaTiem () {
+      getCaTiem (type) {
         let vm = this
-        let filter = {
-          lichtiemchungid: this.phieuHenTiem.LichTiemChung_ID,
-          // diabancosoid:  
-          page: -1,
-          size: -1,
+        try {
+          // const user = JSON.parse(localStorage.getItem('user'))
+          let filter = {
+            lichtiemchungid: type === 'search' || type === 'created' ? vm.lichTiemChungFilter : this.phieuHenTiem.LichTiemChung_ID,
+            diabancosoid:  '',
+            page: 0,
+            size: 100,
+          }
+          vm.$store.dispatch('getCaTiem', filter).then(function (result) {
+            if (type === 'search'  || type === 'created') {
+              vm.danhSachCaTiemChungFilte = result.hasOwnProperty('data') ? result.data : []
+              vm.caTiemChungFilter = vm.danhSachCaTiemChungFilte.length ? vm.danhSachCaTiemChungFilte[0]['id'] : ''
+              if (type === 'created') {
+                vm.getDanhSachPhieuDuKienTiem(0)
+              }
+            } else {
+              vm.danhSachCaTiemChung = result.hasOwnProperty('data') ? result.data : []
+            }
+            
+          })
+        } catch (err) {
+
         }
-        vm.$store.dispatch('getCaTiem', filter).then(function (result) {
-          vm.danhSachCaTiemChung = result.hasOwnProperty('data') ? result.data : []
-        })
+
+      },
+      getAllNguoiTiemChung () {
+        let vm = this
+        try {
+          let param = {
+            headers: {
+            },
+            params: {
+              page: 0,
+              size: 100,
+            }
+          }
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+          axios.get('/rest/v1/app/get/nguoitiemchung/all', param).then(function (response) {
+            if (response.data && response.data.data) {
+              vm.danhSachNguoiTiemChung = response.data.data
+            }
+            
+          }).catch(function (error) {});
+        } catch (e) {
+
+        }
       },
       changePage (config) {
         let vm = this
@@ -661,8 +708,8 @@
         let vm = this
         try {
           vm.phieuHenTiem.CoSoYTe_ID = vm.userLogin['coSoYTeId']
-          // let splitNgayBatDau = String(vm.ngayHenTiemFomarted).split('/')
-          vm.phieuHenTiem.NgayBatDau = vm.ngayHenTiemFomarted
+          // let splitNgayBatDau = String(vm.phieuHenTiem.NgayHenTiem).split('/')
+          vm.phieuHenTiem.NgayBatDau = vm.phieuHenTiem.NgayHenTiem
           // let splitNgayKetThuc = String(vm.endDateFormatted).split('/')
           vm.phieuHenTiem.NgayKetThuc = vm.endDateFormatted
           // let splitHanSuDung = String(vm.expDateFormatted).split('/')
@@ -679,11 +726,27 @@
         if (vm.$refs.formPhieuHenTiem.validate()) {
           vm.formatDataInput()
           if (vm.typeAction === 'add') {
-            let filter = {
-              data: vm.phieuHenTiem
+            let param = {
+              headers: {
+              },
+              params: {
+              }
+            }
+            try {
+              if (Vue.$cookies.get('Token')) {
+                param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+              }
+            } catch (error) {
+            }
+            let dataPost = {
+              LichTiemChung_ID: vm.phieuHenTiem.LichTiemChung_ID,
+              NguoiTiemChung_ID: vm.phieuHenTiem.NguoiTiemChung_ID,
+              CaTiemChung_ID: vm.phieuHenTiem.CaTiemChung_ID,
+              NgayHenTiem: vm.phieuHenTiem.NgayHenTiem,
+              GioHenTiem: vm.phieuHenTiem.GioHenTiem,
             }
             vm.loading = true
-            vm.$store.dispatch('addLichTiem', filter).then(userCredential => {
+            axios.post('/rest/v1/app/add/phieuhentiem', dataPost, param).then(function (response) {
               vm.loading = false
               vm.dialogPhieuDuKienTiem = false
               vm.$store.commit('SHOW_SNACKBAR', {
@@ -693,37 +756,53 @@
               })
               vm.page = 0
               vm.getDanhSachPhieuDuKienTiem(0)
-            })
-            .catch((error) => {
-              vm.loading = false
-              vm.$store.commit('SHOW_SNACKBAR', {
-                show: true,
-                text: 'Thêm lịch tiêm không thất bại',
-                color: 'error',
-              })
+            }).catch(function (error) {
+                vm.loading = false
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Thêm phiếu hẹn tiêm dự kiến thất bại',
+                  color: 'error',
+                })
             });
           } else {
-            let filter = {
-              id: vm.phieuHenTiemUpdate['id'],
-              data: vm.phieuHenTiem
+            let param = {
+              headers: {
+              },
+              params: {
+              }
+            }
+            try {
+              if (Vue.$cookies.get('Token')) {
+                param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+              }
+            } catch (error) {
+            }
+            let dataPost = {
+              LichTiemChung_ID: vm.phieuHenTiem.LichTiemChung_ID,
+              NguoiTiemChung_ID: vm.phieuHenTiem.NguoiTiemChung_ID,
+              CaTiemChung_ID: vm.phieuHenTiem.CaTiemChung_ID,
+              NgayHenTiem: vm.phieuHenTiem.NgayHenTiem,
+              GioHenTiem: vm.phieuHenTiem.GioHenTiem,
             }
             vm.loading = true
-            vm.$store.dispatch('updateLichTiem', filter).then(function () {
+            axios.put('/rest/v1/app/update/phieuhentiem/' + vm.phieuHenTiem.ID, dataPost, param).then(function (response) {
               vm.loading = false
+              vm.dialogPhieuDuKienTiem = false
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
-                text: 'Cập nhật thành công',
+                text: 'Cập nhập phiếu dự kiến tiêm thành công',
                 color: 'success',
               })
-              vm.dialogPhieuDuKienTiem = false
+              vm.page = 0
               vm.getDanhSachPhieuDuKienTiem(0)
-            }).catch(function () {
-              vm.$store.commit('SHOW_SNACKBAR', {
-                show: true,
-                text: 'Cập nhật thất bại',
-                color: 'error',
-              })
-            })
+            }).catch(function (error) {
+                vm.loading = false
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Cập nhập phiếu hẹn tiêm dự kiến thất bại',
+                  color: 'error',
+                })
+            });
           }
           
         }
@@ -753,13 +832,55 @@
         let vm = this
         vm.dialogPhieuDuKienTiem = false
       },
-      goiTiem () {
-  
+      xacNhanTinhTrangPhieuHen (item, tinhTrang, type) {
+        let vm = this
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {
+          TinhTrangXacNhan: tinhTrang,
+          ids: ''
+        }
+        if (type === 'only') {
+          dataPost.ids = String(item)
+        }
+        vm.loading = true
+        axios.put('/rest/v1/app/update/phieuhentiem/tinhtrangxacnhan', dataPost, param).then(function (response) {
+          vm.loading = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Gọi tiêm thành công',
+            color: 'success',
+          })
+          vm.getDanhSachPhieuDuKienTiem(0)
+        }).catch(function (error) {
+            vm.loading = false
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Gọi tiêm thất bại',
+              color: 'error',
+            })
+        });
       },
       showTimKiem () {
         let vm = this
         vm.showAdvanceSearch = true
       },
+      cancelSearch () {
+        this.showAdvanceSearch = false
+      },
+      search() {
+        this.getDanhSachPhieuDuKienTiem(0)
+      }
     },
   }
 </script>
