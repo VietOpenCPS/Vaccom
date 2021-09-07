@@ -2862,12 +2862,39 @@ public class ApplicationControler {
         try {
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findByMaQR(maQr);
 
+            LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+
+            CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+
             if (phieuHenTiem == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("phieuHenTiem.not_found"));
             }
+            if (Validator.isNull(lichTiemChung)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(MessageUtil.getVNMessageText("lichTiemChung.not_found"));
+            }
+            if (Validator.isNull(nguoiTiemChung)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
+            }
+            if (Validator.isNull(coSoYTe)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(MessageUtil.getVNMessageText("coSoYTe.not_found"));
+            }
 
-            return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiem);
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(phieuHenTiem);
+            JsonNode phieuHenTiemJson = mapper.readTree(json);
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/hen-tiem-chung/" + phieuHenTiem.getMaQR());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
+
+            return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiemJson);
 
         } catch (Exception e) {
             _log.error(e);
@@ -2913,16 +2940,17 @@ public class ApplicationControler {
                         .body(MessageUtil.getVNMessageText("coSoYTe.not_found"));
             }
             ObjectMapper mapper = new ObjectMapper();
-            ObjectNode response = mapper.createObjectNode();
-            response.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-            response.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
-            response.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayCheckin());
-            response.put(ZaloConstant.GioTiemChung, phieuHenTiem.getGioDuocTiem());
-            response.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
-            response.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
-            response.put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
-            response.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            String json = mapper.writeValueAsString(phieuHenTiem);
+            JsonNode phieuHenTiemJson = mapper.readTree(json);
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/chung-nhan-tiem-chung/" + phieuHenTiem.getMaQR());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
+
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiemJson);
 
         } catch (Exception e) {
             _log.error(e);
@@ -2956,13 +2984,13 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
             }
+
             ObjectMapper mapper = new ObjectMapper();
-
             String json = mapper.writeValueAsString(giayDiDuong);
-
             JsonNode giayDiDuongJson = mapper.readTree(json);
 
             ((ObjectNode) giayDiDuongJson).put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan() + " - " + uyBanNhanDan.getQuanHuyenTen() + " - " + uyBanNhanDan.getTinhThanhTen());
+
             ((ObjectNode) giayDiDuongJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/giay-di-duong/" + giayDiDuong.getMaQR());
 
             return ResponseEntity.status(HttpStatus.OK).body(giayDiDuongJson);
@@ -2992,8 +3020,13 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
             }
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(nguoiTiemChung);
+            JsonNode nguoiTiemChungJson = mapper.readTree(json);
 
-            return ResponseEntity.status(HttpStatus.OK).body(nguoiTiemChung);
+            ((ObjectNode) nguoiTiemChungJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/dang-ky-moi/" + nguoiTiemChung.getMaQR());
+
+            return ResponseEntity.status(HttpStatus.OK).body(nguoiTiemChungJson);
 
         } catch (Exception e) {
             _log.error(e);
@@ -3040,6 +3073,7 @@ public class ApplicationControler {
                                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
+
                                         hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong);
 
                                     }
