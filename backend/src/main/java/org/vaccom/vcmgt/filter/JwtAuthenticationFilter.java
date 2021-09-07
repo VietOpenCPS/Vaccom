@@ -66,7 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			try {
 				if (!requestUri.contains("/rest/v1/security/login") && !requestUri.contains("/rest/v1/security/logout")
 						&& !requestUri.contains("/rest/v1/app/update/phieuhentiem/checkin")
-						&& !requestUri.contains("/rest/v1/app/get/giaydiduong-maqr")) {
+						&& !requestUri.contains("/rest/v1/app/get/giaydiduong-maqr")
+						&& !requestUri.contains("/rest/v1/app/get/dangkymoi-maqr")
+						&& !requestUri.contains("/rest/v1/app/get/phieuhen-maqr")
+						&& !requestUri.contains("/rest/v1/app/get/chung-nhan-tiem-chung-maqr")) {
 
 					KhoaTruyCap khoaTruyCap = khoaTruyCapService.findByKhoaTruyCap(token);
 

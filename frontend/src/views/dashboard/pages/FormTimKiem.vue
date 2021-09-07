@@ -440,7 +440,6 @@
               vm.dataSearch['DiaBanCoSo_ID'] = ''
             }
           }
-          
         })
       },
       getCoSoYTe () {

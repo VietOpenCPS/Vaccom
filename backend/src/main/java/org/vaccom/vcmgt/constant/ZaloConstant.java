@@ -47,4 +47,9 @@ public class ZaloConstant {
 
     public final static String LinkQrCode = "LinkQrCode";
 
+
+    // response trả về
+    public final static String error = "error";
+    public final static String message = "message";
+
 }

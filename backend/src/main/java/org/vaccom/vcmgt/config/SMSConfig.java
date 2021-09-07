@@ -7,17 +7,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
- * @author VietDD
- * @since 9/2/2021
+ * @author TrinhNX
+ * @since 8/29/2021
  */
 
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "zalo")
+@ConfigurationProperties(prefix = "sms")
 @PropertySource(value = "classpath:NotificationTemplate.yml", factory = YamlPropertySourceFactory.class)
-public class ZaloConfig {
-    private String accessToken;
+public class SMSConfig {
+    private String account;
+    private String password;
     private String henTiemChung;
     private String giayDiDuong;
 }

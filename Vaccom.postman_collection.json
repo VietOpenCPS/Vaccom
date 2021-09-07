@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e9ffa138-5b8d-47db-95f4-cd5404de0782",
+		"_postman_id": "eaa913a1-962a-4b1f-9d07-f2aedbe9bf24",
 		"name": "Vaccom",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -993,11 +993,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "ngaydangki",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "hovaten",
@@ -1005,15 +1005,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "cosoytema",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "kiemtratrung",
@@ -1079,11 +1079,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "ngaydangki",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "hovaten",
@@ -1091,15 +1091,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "cosoytema",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "kiemtratrung",
@@ -1165,11 +1165,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "ngaydangki",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "hovaten",
@@ -1177,15 +1177,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "cosoytema",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "kiemtratrung",
@@ -1251,11 +1251,11 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "ngaydangki",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "hovaten",
@@ -1263,15 +1263,15 @@
 						},
 						{
 							"key": "diabancosoid",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "cosoytema",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "kiemtratrung",
@@ -1655,7 +1655,7 @@
 						},
 						{
 							"key": "nhomdoituong",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "ngaydangki",
@@ -1671,11 +1671,11 @@
 						},
 						{
 							"key": "cosoytema",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "tinhtrangdangky",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "kiemtratrung",
@@ -2580,11 +2580,11 @@
 						},
 						{
 							"key": "lichtiemchungid",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "diabancosoid",
-							"value": null
+							"value": ""
 						}
 					]
 				}
@@ -3690,6 +3690,122 @@
 							"key": "size",
 							"value": "30",
 							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy Giấy Đi Đường Thông Qua QR Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/giaydiduong-maqr?maQr=gdd-xu9eet-msgnwx-xn0wr0-qg62dm-varj98",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"giaydiduong-maqr"
+					],
+					"query": [
+						{
+							"key": "maQr",
+							"value": "gdd-xu9eet-msgnwx-xn0wr0-qg62dm-varj98"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy Giấy Hẹn Thông Qua QR Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/phieuhen-maqr?maQr=pht-owzjhn-sc39xq-rjlbdh-p4du6t-yfnbby",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"phieuhen-maqr"
+					],
+					"query": [
+						{
+							"key": "maQr",
+							"value": "pht-owzjhn-sc39xq-rjlbdh-p4du6t-yfnbby"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy Đăng Ký Mới Thông Qua QR Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/dangkymoi-maqr?maQr=ntc-ab7nz1-dpdlxq-95rjkz-rsmgfn-5j00eo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"dangkymoi-maqr"
+					],
+					"query": [
+						{
+							"key": "maQr",
+							"value": "ntc-ab7nz1-dpdlxq-95rjkz-rsmgfn-5j00eo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy Chứng Nhận Tiêm Chủng Thông Qua QR Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/chung-nhan-tiem-chung-maqr?maQr=pht-owzjhn-sc39xq-rjlbdh-p4du6t-yfnbby",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"chung-nhan-tiem-chung-maqr"
+					],
+					"query": [
+						{
+							"key": "maQr",
+							"value": "pht-owzjhn-sc39xq-rjlbdh-p4du6t-yfnbby"
 						}
 					]
 				}
