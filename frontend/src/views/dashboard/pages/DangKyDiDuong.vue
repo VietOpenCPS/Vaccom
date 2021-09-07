@@ -46,7 +46,7 @@
                 >
                   <div class="mb-2">Họ và tên <span style="color:red">(*)</span></div>
                   <v-text-field
-                    v-model="applicantInfo['HoVaTen']"
+                    v-model="applicantInfo['hoVaTen']"
                     :rules="required"
                     required
                     outlined
@@ -67,7 +67,7 @@
                 >
                   <div class="mb-2">Số CMND/CCCD <span style="color:red">(*)</span></div>
                   <v-text-field
-                    v-model="applicantInfo['CMTCCCD']"
+                    v-model="applicantInfo['cmtcccd']"
                     :rules="!giayToLoaiKhac ? requiredCredit : required"
                     required
                     outlined
@@ -90,7 +90,7 @@
                 >
                   <div class="mb-2">Số điện thoại <span style="color:red">(*)</span></div>
                   <v-text-field
-                    v-model="applicantInfo['SoDienThoai']"
+                    v-model="applicantInfo['soDienThoai']"
                     :rules="requiredTelNo"
                     required
                     outlined
@@ -108,9 +108,9 @@
                 >
                   <div class="mb-2">Email</div>
                   <v-text-field
-                    v-model="applicantInfo['Email']"
+                    v-model="applicantInfo['email']"
                     outlined
-                    placeholder="Email"
+                    placeholder="email"
                     dense
                     id="email"
                     hide-details="auto"
@@ -125,9 +125,9 @@
                   cols="12"
                   class="py-0"
                 >
-                  <div class="mb-2 font-weight-bold">Địa chỉ nơi ở/ cư trú <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Địa chỉ nơi ở/ cư trú <span style="color:red">(*)</span></div>
                   <v-text-field
-                    v-model="applicantInfo['NoiO_DiaChi']"
+                    v-model="applicantInfo['noiODiaChi']"
                     :rules="required"
                     required
                     outlined
@@ -201,7 +201,7 @@
                       placeholder="Phường/ Xã"
                       dense
                       hide-details="auto"
-                      @keyup.enter="nextFocus('noilamviec')"
+                      @keyup.enter="nextFocus('congtylamviec')"
                   ></v-autocomplete>
                 </v-col>
                                 
@@ -212,9 +212,26 @@
                   cols="12"
                   class="pb-0"
                 >
-                  <div class="mb-2 font-weight-bold">Địa chỉ nơi làm việc <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Đơn vị/ công ty làm việc <span style="color:red">(*)</span></div>
                   <v-text-field
-                    v-model="applicantInfo['NoiCT_DiaChi']"
+                    v-model="applicantInfo['noiCtTenCoQuan']"
+                    :rules="required"
+                    required
+                    outlined
+                    placeholder=""
+                    dense
+                    id="congtylamviec"
+                    hide-details="auto"
+                    @keyup.enter="nextFocus('noilamviec')"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="12"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Địa chỉ nơi làm việc <span style="color:red">(*)</span></div>
+                  <v-text-field
+                    v-model="applicantInfo['noiCtDiaChi']"
                     :rules="required"
                     required
                     outlined
@@ -288,19 +305,158 @@
                       placeholder="Phường/ Xã"
                       dense
                       hide-details="auto"
-                      @keyup.enter="nextFocus('ngaycap')"
+                      @keyup.enter="nextFocus('starttime')"
                   ></v-autocomplete>
                 </v-col>
                                 
               </v-row>
-              <!-- row 7 -->
+              <v-row>
+                <v-col
+                  cols="12"
+                  class="pb-0"
+                >
+                  <div>
+                    <span class="font-weight-bold">LỊCH LÀM VIỆC</span>
+                    <i> (Chọn các ngày trong tuần hoặc ngày cụ thể) </i>
+                  </div>
+                </v-col>
+              </v-row>
+              <!--  -->
               <v-row>
                 <v-col
                   cols="12"
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Ngày cấp <span style="color:red">(*)</span></div>
+                  <div class="mb-3">Các ngày trong tuần <span style="color:red">(*)</span></div>
+                  <div class="pt-2">
+                    <v-chip
+                      v-for="(item, index) in weekDay" v-bind:key="index"
+                      class="mr-2"
+                      :color="item.selected ? 'primary' : 'dark'"
+                      label
+                      @click="changeWeekDay(index)"
+                    >
+                      <span style="font-size: 12px">{{item.name}}</span>
+                    </v-chip>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0"
+                >
+                  <div class="mb-3">Các ngày cụ thể <span style="color:red">(*)</span></div>
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="dates"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-combobox
+                        v-model="dates"
+                        multiple
+                        chips
+                        placeholder="Các ngày cụ thể"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        hide-details="auto"
+                        outlined
+                        clearable
+                      >
+                        <template v-slot:selection="data">
+                          <v-chip
+                            class="ma-2"
+                            color="green"
+                            text-color="white"
+                          >
+                            {{formatDate(data.item)}}
+                          </v-chip>
+                        </template>
+                      </v-combobox>
+                    </template>
+                    <v-date-picker
+                      v-model="dates"
+                      multiple
+                      no-title
+                      scrollable
+                      locale="vi"
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                      >
+                        Thoát
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(dates)"
+                      >
+                        Đồng ý
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Thời gian làm việc<span style="color:red">(*)</span></div>
+                  <v-layout wrap>
+                    
+                    <v-text-field
+                      style="max-width: 120px;"
+                      label="Từ:"
+                      class="flex mr-2"
+                      v-model="timeStart"
+                      placeholder="hh:mm"
+                      v-mask="'##:##'"
+                      dense
+                      outlined
+                      hide-details="auto"
+                      id="starttime"
+                      @keyup.enter="nextFocus('endtime')"
+                      :rules="required"
+                      required
+                    ></v-text-field>
+                  
+                    <v-text-field
+                      style="max-width: 120px;"
+                      label="Đến:"
+                      class="flex ml-2"
+                      v-model="timeEnd"
+                      placeholder="hh:mm"
+                      v-mask="'##:##'"
+                      dense
+                      outlined
+                      hide-details="auto"
+                      id="endtime"
+                      @keyup.enter="nextFocus('ngaycap')"
+                      :rules="required"
+                      required
+                    ></v-text-field>
+                  </v-layout>
+                </v-col>
+              </v-row>
+              <!-- -->
+              <v-row>
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="pb-0 pt-3"
+                >
+                  <div class="mb-2">Ngày cấp giấy đi đường<span style="color:red"> (*)</span></div>
                   <v-text-field
                     :rules="required"
                     required
@@ -319,10 +475,8 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Ngày hết hạn <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Ngày hết hạn <span style="color:red"></span></div>
                   <v-text-field
-                    :rules="required"
-                    required
                     v-model="ngayDuKienFormatted"
                     placeholder="dd/mm/yyyy, ddmmyyyy"
                     @blur="formatNgayTiem"
@@ -339,7 +493,7 @@
                 >
                   <div class="mb-2">Ghi chú</div>
                   <v-textarea
-                    v-model="applicantInfo['GhiChu']"
+                    v-model="applicantInfo['ghiChu']"
                     outlined
                     placeholder=""
                     dense
@@ -396,34 +550,61 @@
         typeAction: 'add',
         processingAction: false,
         giayToLoaiKhac: false,
-        applicantInfo: {
-          HoVaTen: '',
-          CMTCCCD: '',
-          SoDienThoai: '',
-          Email: '',
-          NoiCT_TenCoQuan: '',
-          NoiCT_DiaChi: '',
-          NoiCT_TinhThanh_Ma: '',
-          NoiCT_TinhThanh_Ten: '',
-          NoiCT_QuanHuyen_Ma: '',
-          NoiCT_QuanHuyen_Ten: '',
-          NoiCT_PhuongXa_Ma: '',
-          NoiCT_PhuongXa_Ten: '',
-          NoiO_DiaChi: '',
-          NoiO_TinhThanh_Ma: '',
-          NoiO_TinhThanh_Ten: '',
-          NoiO_QuanHuyen_Ma: '',
-          NoiO_QuanHuyen_Ten: '',
-          NoiO_PhuongXa_Ma: '',
-          NoiO_PhuongXa_Ten: '',
-          LichLamViec: '',
-          UyBanNhanDan_ID: '',
-          NgayCap: '',
-          ThoiHan: '',
-          GhiChu: ''
+        dates: [],
+        menu: false,
+        weekDay: [
+          {name: 'Thứ 2', value: 2, selected: false},
+          {name: 'Thứ 3', value: 3, selected: false},
+          {name: 'Thứ 4', value: 4, selected: false},
+          {name: 'Thứ 5', value: 5, selected: false},
+          {name: 'Thứ 6', value: 6, selected: false},
+          {name: 'Thứ 7', value: 7, selected: false},
+          {name: 'Chủ nhật', value: 0, selected: false}
+        ],
+        weekDayDefault: [
+          {name: 'Thứ 2', value: 2, selected: false},
+          {name: 'Thứ 3', value: 3, selected: false},
+          {name: 'Thứ 4', value: 4, selected: false},
+          {name: 'Thứ 5', value: 5, selected: false},
+          {name: 'Thứ 6', value: 6, selected: false},
+          {name: 'Thứ 7', value: 7, selected: false},
+          {name: 'Chủ nhật', value: 0, selected: false}
+        ],
+        timeStart: '',
+        timeEnd: '',
+        workTime: {
+          ngayTuan: [],
+          ngayThang: [],
+          tuGio: '',
+          denGio: ''
         },
-        listGioiTinh: [{name: 'Nam', value: 0},{name: 'Nữ', value: 1},{name: 'Không xác định', value: 2}],
-        listDoiTuong: [],
+        applicantInfo: {
+          hoVaTen: '',
+          cmtcccd: '',
+          soDienThoai: '',
+          email: '',
+          noiCtTenCoQuan: '',
+          noiCtDiaChi: '',
+          noiCtTinhThanhMa: '',
+          noiCtTinhThanhTen: '',
+          noiCtQuanHuyenMa: '',
+          noiCtQuanHuyenTen: '',
+          noiCtPhuongXaMa: '',
+          noiCtPhuongXaTen: '',
+          noiODiaChi: '',
+          noiOTinhThanhMa: '',
+          noiOTinhThanhTen: '',
+          noiOQuanHuyenMa: '',
+          noiOQuanHuyenTen: '',
+          noiOPhuongXaMa: '',
+          noiOPhuongXaTen: '',
+          lichLamViec: '',
+          uyBanNhanDanID: '',
+          ngayCap: '',
+          thoiHan: '',
+          ghiChu: '',
+          status: 0
+        },
         listTinhThanh: [],
         tinhThanh: '01',
         tinhThanhLamViec: '01',
@@ -529,27 +710,32 @@
           vm.bindDataUpdate()
         }
       },
+      dates (val) {
+        if (val && val.length) {
+          this.weekDay = this.weekDayDefault
+        }
+      },
       tinhThanh (val) {
-        this.applicantInfo.NoiO_TinhThanh_Ma = val
+        this.applicantInfo.noiOTinhThanhMa = val
         this.getQuanHuyen(val)
       },
       quanHuyen (val) {
-        this.applicantInfo.NoiO_QuanHuyen_Ma = val
+        this.applicantInfo.noiOQuanHuyenMa = val
         this.getXaPhuong(val)
       },
       xaPhuong (val) {
-        this.applicantInfo.NoiO_PhuongXa_Ma = val 
+        this.applicantInfo.noiOPhuongXaMa = val 
       },
       tinhThanhLamViec (val) {
-        this.applicantInfo.NoiCT_TinhThanh_Ma = val
-        this.getQuanHuyen(val)
+        this.applicantInfo.noiCtTinhThanhMa = val
+        this.getQuanHuyen(val, 'noilamviec')
       },
       quanHuyenLamViec (val) {
-        this.applicantInfo.NoiCT_QuanHuyen_Ma = val
-        this.getXaPhuong(val)
+        this.applicantInfo.noiCtQuanHuyenMa = val
+        this.getXaPhuong(val, 'noilamviec')
       },
       xaPhuongLamViec (val) {
-        this.applicantInfo.NoiCT_PhuongXa_Ma = val 
+        this.applicantInfo.noiCtPhuongXaMa = val 
       },
       birthDate (val) {
         this.applicantDateFormatted = this.formatDate(this.birthDate)
@@ -571,7 +757,7 @@
     },
     created () {
       let vm = this
-      vm.$store.commit('SET_INDEXTAB', 1)
+      vm.$store.commit('SET_INDEXTAB', 3)
       let isSigned = this.$store.getters.getIsSigned
       if (!isSigned) {
         vm.$router.push({ path: '/login' })
@@ -591,6 +777,16 @@
       }
     },
     methods: {
+      changeWeekDay(index) {
+        let vm = this
+        vm.weekDay[index]['selected'] = !vm.weekDay[index]['selected']
+        let exits = vm.weekDay.filter(function (item) {
+          return item.selected
+        })
+        if (exits && exits.length) {
+          vm.dates = []
+        }
+      },
       autoBind() {
         let vm = this
         console.log('add', $('#nhomdoituong').val())
@@ -605,8 +801,7 @@
           return
         }
         vm.processingAction = true
-        let validateTuoi = vm.checkTuoi()
-        // let validateTuoi = true
+        // vm.formatDataInput()
         if (vm.$refs.formDangKy.validate()) {
           vm.formatDataInput()
           let filter = {
@@ -621,25 +816,21 @@
             }
           }
           if (vm.typeAction === 'add') {
-            vm.$store.dispatch('createRegistration', filter).then(function (result) {
+            vm.$store.dispatch('createGiayDiDuong', filter).then(function (result) {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Đăng ký thành công',
                 color: 'success',
               })
               vm.processingAction = false
-              
-              vm.tinhThanh = '01'
-              vm.quanHuyen = '004'
-              // vm.xaPhuong = '00148'
-              vm.applicantInfo['DanToc_Ma'] = '01'
-              vm.applicantInfo['QuocTich_Ma'] = 'VN'
-              vm.applicantInfo['HoVaTen'] = ''
-              vm.applicantInfo['GioiTinh'] = ''
-              vm.applicantDateFormatted = ''
-              vm.applicantInfo['CMTCCCD'] = ''
-              vm.applicantInfo['SoTheBHYT'] = ''
-              vm.applicantInfo['SoDienThoai'] = ''
+              // vm.tinhThanh = '01'
+              // vm.quanHuyen = '004'
+              // vm.tinhThanhLamViec = '01'
+              // vm.quanHuyenLamViec = '004'
+              vm.applicantInfo.hoVaTen = ''
+              vm.applicantInfo['cmtcccd'] = ''
+              vm.applicantInfo.email = ''
+              vm.applicantInfo.soDienThoai = ''
               vm.$refs.formDangKy.resetValidation()
               $('html, body').animate({
                   scrollTop: $('#xemdanhsach').offset().top,
@@ -659,14 +850,14 @@
           } else {
             // thực hiện cập nhật
             filter['id'] = vm.uid
-            vm.$store.dispatch('updateRegistration', filter).then(function (result) {
+            vm.$store.dispatch('updateGiayDiDuong', filter).then(function (result) {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Cập nhật thành công',
                 color: 'success',
               })
               vm.processingAction = false
-              vm.$router.push('/pages/danh-sach-dang-ky-tiem-moi')
+              vm.$router.push('/pages/danh-sach-di-duong-yeu-cau')
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
@@ -698,22 +889,24 @@
           vm.dataHistory = data ? JSON.parse(data) : ''
         } catch (error) {
         }
-        vm.applicantInfo['Email'] = vm.dataHistory['Email']
-        vm.applicantInfo['NhomDoiTuong'] = vm.dataHistory['NhomDoiTuong']
-        vm.applicantInfo['DiaChiNoiO'] = vm.dataHistory['DiaChiNoiO']
-        vm.tinhThanh = vm.dataHistory['TinhThanh_Ma']
-        vm.quanHuyen = vm.dataHistory['QuanHuyen_Ma']
-        vm.xaPhuong = vm.dataHistory['PhuongXa_Ma']
-        vm.applicantInfo['DiaBanCoSo_ID'] = vm.dataHistory['DiaBanCoSo_ID']
-        vm.coSoYTe = vm.dataHistory['CoSoYTe_Ma']
-        vm.applicantInfo['DanToc_Ma'] = vm.dataHistory['DanToc_Ma']
-        vm.applicantInfo['QuocTich_Ma'] = vm.dataHistory['QuocTich_Ma']
-        vm.applicantInfo['DonViCongTac'] = vm.dataHistory['DonViCongTac']
-        vm.applicantInfo['TienSuDiUng'] = vm.dataHistory['TienSuDiUng']
-        vm.applicantInfo['CacBenhLyDangMac'] = vm.dataHistory['CacBenhLyDangMac']
-        vm.applicantInfo['CacThuocDangDung'] = vm.dataHistory['CacThuocDangDung']
-        vm.ngayDuKienFormatted = vm.dataHistory['NgayDangKi']
-        vm.applicantInfo['GhiChu'] = vm.dataHistory['GhiChu']
+        vm.applicantInfo.hoVaTen = vm.dataHistory.hoVaTen
+        vm.applicantInfo['cmtcccd'] = vm.dataHistory['cmtcccd']
+        vm.applicantInfo.email = vm.dataHistory.email
+        vm.applicantInfo.soDienThoai = vm.dataHistory.soDienThoai
+        vm.applicantInfo.noiODiaChi = vm.dataHistory.noiODiaChi
+        vm.tinhThanh = vm.dataHistory.noiOTinhThanhMa
+        vm.quanHuyen = vm.dataHistory.noiOQuanHuyenMa
+        vm.xaPhuong = vm.dataHistory.noiOPhuongXaMa
+        vm.applicantInfo.noiCtTenCoQuan = vm.dataHistory.noiCtTenCoQuan
+        vm.applicantInfo.noiCtDiaChi = vm.dataHistory.noiCtDiaChi
+        vm.tinhThanhLamViec = vm.dataHistory.noiCtTinhThanhMa
+        vm.quanHuyenLamViec = vm.dataHistory.noiCtQuanHuyenMa
+        vm.xaPhuongLamViec = vm.dataHistory.noiCtPhuongXaMa
+
+        vm.ngayDuKienFormatted = vm.dataHistory.thoiHan
+        vm.applicantDateFormatted = vm.dataHistory.ngayCap
+        vm.applicantInfo.ghiChu = vm.dataHistory.ghiChu
+        vm.converLichLamViec(vm.dataHistory.lichLamViec)
       },
       huyDangKy () {
         let vm = this
@@ -722,102 +915,97 @@
       },
       bindDataUpdate () {
         let vm = this
-        vm.applicantInfo.CacBenhLyDangMac = vm.giaydiduongUpdate.cacBenhLyDangMac
-        vm.applicantInfo.CacThuocDangDung = vm.giaydiduongUpdate.cacThuocDangDung
-        vm.applicantInfo['CMTCCCD'] = vm.giaydiduongUpdate.cmtcccd
-        vm.coSoYTe = vm.giaydiduongUpdate.coSoYTeMa
-        vm.applicantInfo.DanToc_Ma = vm.giaydiduongUpdate.danTocMa
-        vm.applicantInfo.DiaBanCoSo_ID = vm.giaydiduongUpdate.diaBanCoSoID
-        vm.applicantInfo.DiaChiNoiO = vm.giaydiduongUpdate.diaChiNoiO
-        vm.applicantInfo.DonViCongTac = vm.giaydiduongUpdate.donViCongTac
-        vm.applicantInfo.Email = vm.giaydiduongUpdate.email
-        vm.applicantInfo.GhiChu = vm.giaydiduongUpdate.ghiChu
-        vm.applicantInfo.GioiTinh = vm.giaydiduongUpdate.gioiTinh
-        vm.applicantInfo.HoVaTen = vm.giaydiduongUpdate.hoVaTen
-        vm.applicantInfo.MaSoBHXH = vm.giaydiduongUpdate.maSoBHXH
-        // vm.ngayDuKienFormatted = vm.convertDate(vm.giaydiduongUpdate.ngayDangKi)
-        // vm.applicantDateFormatted = vm.convertDate(vm.giaydiduongUpdate.ngaySinh)
-        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.ngayDangKi
-        vm.applicantDateFormatted = vm.giaydiduongUpdate.ngaySinh
-        vm.applicantInfo.NgheNghiep = vm.giaydiduongUpdate.ngheNghiep
-        vm.applicantInfo.NhomDoiTuong = vm.giaydiduongUpdate.nhomDoiTuong
-        vm.tinhThanh = vm.giaydiduongUpdate.tinhThanhMa
-        vm.quanHuyen = vm.giaydiduongUpdate.quanHuyenMa
-        vm.xaPhuong = vm.giaydiduongUpdate.phuongXaMa
-        vm.applicantInfo.QuocTich_Ma = vm.giaydiduongUpdate.quocTichMa
-        vm.applicantInfo.SoDienThoai = vm.giaydiduongUpdate.soDienThoai
-        vm.applicantInfo.SoTheBHYT = vm.giaydiduongUpdate.soTheBHYT
-        vm.applicantInfo.TienSuDiUng = vm.giaydiduongUpdate.tienSuDiUng
-        vm.applicantInfo.TinhTrangDangKi = vm.giaydiduongUpdate.tinhTrangDangKi
+        vm.applicantInfo.hoVaTen = vm.giaydiduongUpdate.hoVaTen
+        vm.applicantInfo['cmtcccd'] = vm.giaydiduongUpdate.cmtcccd
+        vm.applicantInfo.email = vm.giaydiduongUpdate.email
+        vm.applicantInfo.soDienThoai = vm.giaydiduongUpdate.soDienThoai
+        vm.applicantInfo.noiODiaChi = vm.giaydiduongUpdate.noiODiaChi
+        vm.tinhThanh = vm.giaydiduongUpdate.noiOTinhThanhMa
+        vm.quanHuyen = vm.giaydiduongUpdate.noiOQuanHuyenMa
+        vm.xaPhuong = vm.giaydiduongUpdate.noiOPhuongXaMa
+        vm.applicantInfo.noiCtDiaChi = vm.giaydiduongUpdate.noiCtDiaChi
+        vm.applicantInfo.noiCtTenCoQuan = vm.giaydiduongUpdate.noiCtTenCoQuan
+        vm.tinhThanhLamViec = vm.giaydiduongUpdate.noiCtTinhThanhMa
+        vm.quanHuyenLamViec = vm.giaydiduongUpdate.noiCtQuanHuyenMa
+        vm.xaPhuongLamViec = vm.giaydiduongUpdate.noiCtPhuongXaMa
+
+        vm.ngayDuKienFormatted = vm.giaydiduongUpdate.thoiHan
+        vm.applicantDateFormatted = vm.giaydiduongUpdate.ngayCap
+        vm.applicantInfo.ghiChu = vm.giaydiduongUpdate.ghiChu     
+        vm.applicantInfo.status = vm.giaydiduongUpdate.status
+        vm.converLichLamViec(vm.giaydiduongUpdate.lichLamViec,'string')
       },
       formatDataInput () {
         let vm = this
+        vm.applicantInfo.uyBanNhanDanID = vm.userLogin['uyBanNhanDanId']
         try {
           if (vm.tinhThanh) {
             let obj = vm.listTinhThanh.find(function (item) {
               return item.tinhThanhMa == vm.tinhThanh
             })
-            vm.applicantInfo.TinhThanh_Ma = vm.tinhThanh
-            vm.applicantInfo.TinhThanh_Ten = obj ? obj['tinhThanhTen'] : ''
+            vm.applicantInfo.noiOTinhThanhMa = vm.tinhThanh
+            vm.applicantInfo.noiOTinhThanhTen = obj ? obj['tinhThanhTen'] : ''
           }
           if (vm.quanHuyen) {
             let obj = vm.listQuanHuyen.find(function (item) {
               return item.quanHuyenMa == vm.quanHuyen
             })
-            vm.applicantInfo.QuanHuyen_Ma = vm.quanHuyen
-            vm.applicantInfo.QuanHuyen_Ten = obj ? obj['quanHuyenTen'] : ''
+            vm.applicantInfo.noiOQuanHuyenMa = vm.quanHuyen
+            vm.applicantInfo.noiOQuanHuyenTen = obj ? obj['quanHuyenTen'] : ''
           }
           if (vm.xaPhuong) {
             let obj = vm.listXaPhuong.find(function (item) {
               return item.phuongXaMa == vm.xaPhuong
             })
-            vm.applicantInfo.PhuongXa_Ma = vm.xaPhuong
-            vm.applicantInfo.PhuongXa_Ten = obj ? obj['phuongXaTen'] : ''
+            vm.applicantInfo.noiOPhuongXaMa = vm.xaPhuong
+            vm.applicantInfo.noiOPhuongXaTen = obj ? obj['phuongXaTen'] : ''
           }
-          if (vm.coSoYTe) {
-            let obj = vm.listCoSoYTe.find(function (item) {
-              return item.maCoSo == vm.coSoYTe
+          if (vm.tinhThanhLamViec) {
+            let obj = vm.listTinhThanh.find(function (item) {
+              return item.tinhThanhMa == vm.tinhThanhLamViec
             })
-            vm.applicantInfo.CoSoYTe_Ma = vm.coSoYTe
-            vm.applicantInfo.CoSoYTe_Ten = obj ? obj['tenCoSo'] : ''
+            vm.applicantInfo.noiCtTinhThanhMa = vm.tinhThanhLamViec
+            vm.applicantInfo.noiCtTinhThanhTen = obj ? obj['tinhThanhTen'] : ''
           }
-          vm.applicantInfo.NgaySinh = vm.applicantDateFormatted
-          vm.applicantInfo.NgayDangKi = vm.ngayDuKienFormatted
-          // let splitNgayDangKy = String(vm.ngayDuKienFormatted).split('/')
-          // vm.applicantInfo.NgayDangKi = splitNgayDangKy[2] + splitNgayDangKy[1] + splitNgayDangKy[0]
-          // let lengthDate = String(vm.applicantDateFormatted).trim().length
-          // let splitDate = String(vm.applicantDateFormatted).split('/')
-          // if (lengthDate && lengthDate == 4) {
-          //   vm.applicantInfo.NgaySinh = vm.applicantDateFormatted + '0000'
-          // } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
-          //   vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
-          // }
+          if (vm.quanHuyenLamViec) {
+            let obj = vm.listQuanHuyenLamViec.find(function (item) {
+              return item.quanHuyenMa == vm.quanHuyenLamViec
+            })
+            vm.applicantInfo.noiCtQuanHuyenMa = vm.quanHuyenLamViec
+            vm.applicantInfo.noiCtQuanHuyenTen = obj ? obj['quanHuyenTen'] : ''
+          }
+          if (vm.xaPhuongLamViec) {
+            let obj = vm.listXaPhuongLamViec.find(function (item) {
+              return item.phuongXaMa == vm.xaPhuongLamViec
+            })
+            vm.applicantInfo.noiCtPhuongXaMa = vm.xaPhuongLamViec
+            vm.applicantInfo.noiCtPhuongXaTen = obj ? obj['phuongXaTen'] : ''
+          }
+          vm.applicantInfo.ngayCap = vm.applicantDateFormatted
+          vm.applicantInfo.thoiHan = vm.ngayDuKienFormatted
+          let weekDayArr = vm.weekDay.filter(function(item) {
+            return item.selected
+          })
+          vm.workTime['ngayTuan'] = weekDayArr.map(function(item) {
+            return item['value']
+          })
+          // vm.workTime['tuGio'] = vm.timeStart.replace(':','')
+          // vm.workTime['denGio'] = vm.timeEnd.replace(':','')
+          vm.workTime['tuGio'] = vm.timeStart
+          vm.workTime['denGio'] = vm.timeEnd
+          vm.applicantInfo['lichLamViec'] = vm.workTime
+          if (vm.dates && vm.dates.length) {
+            let dateInput = []
+            vm.dates.forEach((element, index) => {
+              let day = vm.formatDate(element)
+              dateInput.push(day)
+            })
+            vm.workTime['ngayThang'] = dateInput
+          }
+          console.log('work', vm.workTime)
           console.log('applicantInfo', vm.applicantInfo)
         } catch (error) {
           vm.processingAction = false
-        }
-      },
-      checkTuoi () {
-        let vm = this
-        let tuoi = ''
-        let year = ''
-        let lengthDate = String(vm.applicantDateFormatted).trim().length
-        let splitDate = String(vm.applicantDateFormatted).split('/')
-        let namTiem = (new Date()).getFullYear()
-        // if (vm.ngayDuKienFormatted) {
-        //   namTiem = String(vm.ngayDuKienFormatted).split('/')[2]
-        // }
-        if (lengthDate && lengthDate == 4) {
-          year = Number(vm.applicantDateFormatted)
-          tuoi = Number(namTiem) - year
-        } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
-          let isoDate = vm.parseDate(vm.applicantDateFormatted)
-          tuoi = Math.floor((new Date() - new Date(isoDate).getTime()) / 3.15576e+10)
-        }
-        if (tuoi >= 18) {
-          return true
-        } else {
-          return false
         }
       },
       getTinhThanh () {
@@ -868,9 +1056,16 @@
         if (!code) {
           return
         }
-        let obj = vm.listQuanHuyen.find(function (item) {
-          return item.quanHuyenMa == code
-        })
+        let obj = ''
+        if (type) {
+          obj = vm.listQuanHuyenLamViec.find(function (item) {
+            return item.quanHuyenMa == code
+          })
+        } else {
+          obj = vm.listQuanHuyen.find(function (item) {
+            return item.quanHuyenMa == code
+          })
+        }
         if (!obj) {
           return
         }
@@ -885,23 +1080,62 @@
           }
         })
       },
+      converLichLamViec (data, type) {
+        let vm = this
+        let dataConvert = ''
+        if (type) {
+          dataConvert = JSON.parse(data)
+        } else {
+          dataConvert = data
+        }
+        let ngayTuan = dataConvert.ngayTuan
+        let ngayThang = dataConvert.ngayThang
+        let timeStart = dataConvert.tuGio
+        let timeEnd = dataConvert.denGio
+        if (ngayTuan && ngayTuan.length) {
+          vm.weekDay.forEach((element, index) => {
+            let find = ngayTuan.filter(function (item) {
+              return item == element['value']
+            })
+            if (find && find.length) {
+              vm.weekDay[index]['selected'] = true
+            }
+          })
+        }
+        if (ngayThang && ngayThang.length) {
+          let dateInput = []
+          ngayThang.forEach((element, index) => {
+            let day = vm.parseDate(element)
+            dateInput.push(day)
+          })
+          vm.dates = dateInput
+        }
+        vm.timeStart = timeStart
+        vm.timeEnd = timeEnd
+        // if (timeStart) {
+        //   vm.timeStart = String(timeStart).slice(0,2) + ':' + String(timeStart).slice(2,4)
+        // }
+        // if (timeEnd) {
+        //   vm.timeEnd = String(timeEnd).slice(0,2) + ':' + String(timeEnd).slice(2,4)
+        // }
+      },
       showDanhSach () {
         let vm = this
-        vm.$router.push({ path: '/pages/danh-sach-dang-ky-tiem-moi' })
+        vm.$router.push({ path: '/pages/danh-sach-di-duong-yeu-cau' })
       },
       nextFocus(id) {
         $("#"+id).focus()
       },
       formatHoTen () {
         let vm = this
-        if (vm.applicantInfo.HoVaTen) {
-          let str = String(vm.applicantInfo.HoVaTen).toLocaleLowerCase()
+        if (vm.applicantInfo.hoVaTen) {
+          let str = String(vm.applicantInfo.hoVaTen).toLocaleLowerCase()
           let arr = str.split(" ");
           for (var i = 0; i < arr.length; i++) {
             arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
           }
           let str2 = arr.join(" ")
-          vm.applicantInfo.HoVaTen = str2
+          vm.applicantInfo.hoVaTen = str2
         }
       },
       convertDate (dateInput) {
@@ -930,23 +1164,7 @@
           vm.applicantDateFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
         } else {
           vm.applicantDateFormatted = ''
-        }
-        if (vm.applicantDateFormatted) {
-          if (lengthDate === 4) {
-            tuoi = currentYear - Number(vm.applicantDateFormatted)
-          } else {
-            let isoDate = vm.parseDate(vm.applicantDateFormatted)
-            tuoi = Math.floor((new Date() - new Date(isoDate).getTime()) / 3.15576e+10)
-          }
-          if (tuoi < 18) {
-            vm.$store.commit('SHOW_SNACKBAR', {
-              show: true,
-              text: 'Người đăng ký chưa đủ 18 tuổi',
-              color: 'error',
-            })
-          }
-        }
-        
+        }        
       },
       formatNgayTiem () {
         let vm = this

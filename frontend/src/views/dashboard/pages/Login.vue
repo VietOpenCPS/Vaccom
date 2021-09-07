@@ -9,7 +9,7 @@
                 <!-- <img style="border-radius: 10px;" src="/images/logo.png?t=1619886615424" alt="" height="80" contain /> -->
                 <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
               </div>
-              <div class="text-title-login white--text text-center mb-3">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</div>
+              <div class="text-title-login white--text text-center mb-3">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG VACCINE</div>
             </v-card-title>
             <v-card-text class="pb-0">
               <v-form ref="form" v-model="formValid" class="mt-10 mb-5" lazy-validation>
@@ -97,12 +97,16 @@ export default {
               vm.loading = false
               if (dataInfo) {
                 dataUser['hoVaTen'] = dataInfo.hoVaTen
+                dataUser['uyBanNhanDanId'] = dataInfo.hasOwnProperty('uyBanNhanDanId') ? dataInfo.uyBanNhanDanId : ''
                 dataUser['diaBanCoSoId'] = dataInfo.diaBanCoSoId
                 dataUser['coSoYTeId'] = dataInfo.coSoYTeId
                 dataUser['nguoiTiemChungId'] = dataInfo.nguoiTiemChungId
                 localStorage.setItem('user', JSON.stringify(dataUser))
                 let redirect = vm.$route.query.redirect
                 let route = redirect ? { path: redirect } : { path: '/pages/dang-ky-tiem-moi/0' }
+                if (result.role_name === 'CanBoUBND') {
+                  route = redirect ? { path: redirect } : { path: '/pages/danh-sach-di-duong-yeu-cau' }
+                }
                 vm.$router.push(route)
               } else {
                 vm.$store.commit('SHOW_SNACKBAR', {
@@ -157,7 +161,7 @@ export default {
       
     },
     goBack () {
-      this.$router.push({ path: '/' })
+      window.history.back()
     },
     handleRegister() {
       // console.log(this)
@@ -195,7 +199,7 @@ export default {
   border-radius: 6px !important;
 }
 .v-card__title {
-  background: linear-gradient(65deg,#171cc2,#ff5200);
+  background: linear-gradient(65deg,#3ec7d3,#2243ad);
   color: #fff;
   margin-top: -55px;
   height: auto;

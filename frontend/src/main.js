@@ -13,8 +13,8 @@ import axios from 'axios'
 Vue.use(VueCookies)
 Vue.directive('mask', VueMaskDirective)
 
-// const baseURL = 'http://119.17.200.69:8630'
-const baseURL = 'https://thachban.vaccom.vn:8080'
+const baseURL = 'http://119.17.200.69:8630'
+// const baseURL = 'https://vaccom.vn:8080'
 if (typeof baseURL !== 'undefined') {
   axios.defaults.baseURL = baseURL
 }

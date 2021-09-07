@@ -1,7 +1,189 @@
 <template>
   <div>
     <v-card-text class="px-0">
-        <v-row>
+        <v-row v-if="!form">
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Họ tên"
+              v-model="dataSearch['HoVaTen']"
+              outlined
+              placeholder="Họ và tên"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Số CMND/ CCCD"
+              v-model="dataSearch['CMTCCCD']"
+              outlined
+              placeholder="Số CMND/ CCCD"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+              :items="listDoiTuong"
+              label="Nhóm đối tượng"
+              v-model="dataSearch['NhomDoiTuong']"
+              item-text="doiTuongMoTa"
+              item-value="id"
+              hide-no-data
+              outlined
+              dense
+              hide-details="auto"
+              clearable
+            >
+            <template v-slot:selection="data">
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            <template v-slot:item="data">
+              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
+            </template>
+            </v-autocomplete>
+          </v-col>
+          
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+                hide-no-data
+                :items="listTinhThanh"
+                v-model="tinhThanh"
+                item-text="tinhThanhTen"
+                item-value="tinhThanhMa"
+                clearable
+                outlined
+                label="Tỉnh/ Thành phố"
+                dense
+                hide-details="auto"
+            ></v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+                hide-no-data
+                :items="listQuanHuyen"
+                v-model="quanHuyen"
+                item-text="quanHuyenTen"
+                item-value="quanHuyenMa"
+                clearable
+                outlined
+                label="Quận/ Huyện"
+                dense
+                hide-details="auto"
+            ></v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+                hide-no-data
+                :items="listXaPhuong"
+                v-model="xaPhuong"
+                item-text="phuongXaTen"
+                item-value="phuongXaMa"
+                clearable
+                outlined
+                label="Phường/ Xã"
+                dense
+                hide-details="auto"
+            ></v-autocomplete>
+          </v-col>
+          
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+              hide-no-data
+              :items="listCoSoYTe"
+              v-model="coSoYTe"
+              item-text="tenCoSo"
+              item-value="maCoSo"
+              outlined
+              label="Cơ sở y tế"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+              hide-no-data
+              :items="listDiaBan"
+              v-model="dataSearch['DiaBanCoSo_ID']"
+              item-text="tenDiaBan"
+              item-value="id"
+              outlined
+              label="Tổ dân phố, khóm ấp, thôn bản…"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-text-field
+              label="Ngày đăng ký tiêm"
+              v-model="ngayDangKyFormatted"
+              outlined
+              placeholder="dd/mm/yyyy, ddmmyyyy"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+          >
+            <v-autocomplete
+              hide-no-data
+              :items="listTrangThaiTrung"
+              v-model="dataSearch['KiemTraTrung']"
+              item-text="name"
+              item-value="value"
+              outlined
+              label="Kiểm tra trùng lặp"
+              dense
+              hide-details="auto"
+              clearable
+          ></v-autocomplete>
+          </v-col>
+        </v-row>
+        <v-row v-if="form === 'giaydiduong'">
           <v-col
             cols="12"
             md="6"
@@ -38,10 +220,10 @@
             class="pb-0"
           >
             <v-text-field
-              label="Ngày đăng ký tiêm"
-              v-model="ngayDangKyFormatted"
+              label="Đơn vị/ công ty làm việc"
+              v-model="dataSearch['NoiCtTenCoQuan']"
               outlined
-              placeholder="dd/mm/yyyy, ddmmyyyy"
+              placeholder="Số CMND/ CCCD"
               dense
               clearable
               hide-details="auto"
@@ -53,79 +235,19 @@
             class="pb-0"
           >
             <v-autocomplete
-              :items="listDoiTuong"
-              label="Nhóm đối tượng"
-              v-model="dataSearch['NhomDoiTuong']"
-              item-text="doiTuongMoTa"
-              item-value="id"
-              hide-no-data
-              outlined
-              dense
-              hide-details="auto"
-              clearable
-            >
-            <template v-slot:selection="data">
-              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
-            </template>
-            <template v-slot:item="data">
-              <span>{{data.item.id}}. {{ data.item.doiTuongMoTa }}</span>
-            </template>
-            </v-autocomplete>
+                class="flex xs12 md12"
+                hide-no-data
+                :items="listUyBanNhanDan"
+                v-model="dataSearch['UyBanNhanDanID']"
+                item-text="tenCoQuan"
+                item-value="id"
+                outlined
+                label="Cán bộ ủy ban nhân dân"
+                dense
+                clearable
+            ></v-autocomplete>
           </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="pb-0"
-          >
-            <v-autocomplete
-              hide-no-data
-              :items="listCoSoYTe"
-              v-model="coSoYTe"
-              item-text="tenCoSo"
-              item-value="maCoSo"
-              outlined
-              label="Cơ sở y tế"
-              dense
-              hide-details="auto"
-              clearable
-          ></v-autocomplete>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="pb-0"
-          >
-            <v-autocomplete
-              hide-no-data
-              :items="listDiaBan"
-              v-model="dataSearch['DiaBanCoSo_ID']"
-              item-text="tenDiaBan"
-              item-value="id"
-              outlined
-              label="Tổ dân phố, khóm ấp, thôn bản…"
-              dense
-              hide-details="auto"
-              clearable
-          ></v-autocomplete>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="pb-0"
-          >
-            <v-autocomplete
-              hide-no-data
-              :items="listTrangThaiTrung"
-              v-model="dataSearch['KiemTraTrung']"
-              item-text="name"
-              item-value="value"
-              outlined
-              label="Kiểm tra trùng lặp"
-              dense
-              hide-details="auto"
-              clearable
-          ></v-autocomplete>
-          </v-col>
+          
         </v-row>
         <v-row class="justify-end">
           <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
@@ -150,12 +272,19 @@
 <script>
   export default {
     name: 'Search',
-    props: [],
+    props: ['form'],
     data () {
       return {
+        listUyBanNhanDan: [],
         listDoiTuong: [],
         listDiaBan: [],
         listCoSoYTe: [],
+        listTinhThanh: [],
+        tinhThanh: '',
+        listQuanHuyen: [],
+        quanHuyen: '',
+        listXaPhuong: [],
+        xaPhuong: '',
         coSoYTe: '',
         dataSearch: {
           HoVaTen: '',
@@ -164,7 +293,10 @@
           DiaBanCoSo_ID: '',
           CoSoYTe_Ma: '',
           NgayDangKi: '',
-          KiemTraTrung: -1
+          KiemTraTrung: -1,
+          TinhThanh_Ma: '',
+          QuanHuyen_Ma: '',
+          PhuongXa_Ma: ''
         },
         listTrangThaiTrung: [
           {name: 'Chưa kiểm tra', value: 0},
@@ -179,11 +311,24 @@
       vm.getCoSoYTe()
       vm.getDiaBanCoSo()
       vm.getNhomDoiTuong()
+      vm.getUyBanNhanDan()
+      vm.getTinhThanh()
     },
     watch: {
       coSoYTe (val) {
         this.dataSearch.CoSoYTe_Ma = val
         this.getDiaBanCoSo(val)
+      },
+      tinhThanh (val) {
+        this.dataSearch.TinhThanh_Ma = val
+        this.getQuanHuyen(val)
+      },
+      quanHuyen (val) {
+        this.dataSearch.QuanHuyen_Ma = val
+        this.getXaPhuong(val)
+      },
+      xaPhuong (val) {
+        this.dataSearch.PhuongXa_Ma = val 
       },
       // ngayDangKyFormatted (val) {
       //   let splitNgayDangKy = String(val).split('/')
@@ -208,9 +353,22 @@
           DiaBanCoSo_ID: '',
           CoSoYTe_Ma: '',
           NgayDangKi: '',
-          KiemTraTrung: -1
+          KiemTraTrung: -1,
+          TinhThanh_Ma: '',
+          QuanHuyen_Ma: '',
+          PhuongXa_Ma: ''
         },
         vm.$emit('trigger-cancel', vm.dataSearch)
+      },
+      getUyBanNhanDan () {
+        let vm = this
+        let filter = {
+          page: 0,
+          size: 100
+        }
+        vm.$store.dispatch('getUyBanNhanDan', filter).then(function (result) {
+          vm.listUyBanNhanDan = result.hasOwnProperty('data') ? result.data : []
+        })
       },
       getDiaBanCoSo (val) {
         let vm = this
@@ -230,6 +388,17 @@
           if (result.hasOwnProperty('data') && result.data.length) {
             vm.listDiaBan = [{tenDiaBan: "Chưa gán địa bàn", id: 0}].concat(result.data)
           }
+          try {
+            let data = localStorage.getItem('user')
+            let diaBanUser = JSON.parse(data)['diaBanCoSoId']
+            let obj = vm.listDiaBan.find(function (item) {
+              return item.id == diaBanUser
+            })
+            if (obj) {
+              vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
+            }
+          } catch (error) {
+          }
         })
       },
       getCoSoYTe () {
@@ -246,6 +415,59 @@
         }
         vm.$store.dispatch('getNhomDoiTuong', filter).then(function (result) {
           vm.listDoiTuong = result ? result : []
+        })
+      },
+      getTinhThanh () {
+        let vm = this
+        let filter = {
+        }
+        vm.$store.dispatch('getDanhMucTinhThanh', filter).then(function (result) {
+          vm.listTinhThanh = result ? result : []
+          vm.tinhThanh = '01'
+          vm.quanHuyen = '004'
+          if (vm.tinhThanh && vm.listTinhThanh.length) {
+            vm.getQuanHuyen(vm.tinhThanh)
+          }
+        }).catch(function(error){
+          if (error && error.response && error.response.status == 401) {
+            vm.$router.push({ path: '/login' })
+          }
+        })
+      },
+      getQuanHuyen (code) {
+        let vm = this
+        if (!code) {
+          return
+        }
+        let obj = vm.listTinhThanh.find(function (item) {
+          return item.tinhThanhMa == code
+        })
+        let filter = {
+          idParent: obj['id']
+        }
+        vm.$store.dispatch('getDanhMucQuanHuyen', filter).then(function (result) {
+          vm.listQuanHuyen = result ? result : []
+          if (vm.quanHuyen) {
+            vm.getXaPhuong(vm.quanHuyen)
+          }
+        })
+      },
+      getXaPhuong (code) {
+        let vm = this
+        if (!code) {
+          return
+        }
+        let obj = vm.listQuanHuyen.find(function (item) {
+          return item.quanHuyenMa == code
+        })
+        if (!obj) {
+          return
+        }
+        let filter = {
+          idParent: obj['id']
+        }
+        vm.$store.dispatch('getDanhMucXaPhuong', filter).then(function (result) {
+          vm.listXaPhuong = result ? result : []
         })
       },
       formatNgayDangKy () {

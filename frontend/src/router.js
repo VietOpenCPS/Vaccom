@@ -42,7 +42,7 @@ export default new Router({
           props: true,
         },
         {
-          path: '/pages/danh-sach-mui-tiem-chung',
+          path: '/pages/chung-nhan-tiem-chung',
           name: 'DanhSachMuiTiemChung',
           component: () => import('@/views/dashboard/pages/DanhSachMuiTiem'),
           props: true,
@@ -98,6 +98,12 @@ export default new Router({
           path: '/pages/danh-sach-di-duong-da-cap',
           name: 'DanhSachDiDuongDaCap',
           component: () => import('@/views/dashboard/pages/DanhSachDiDuongDaCap')
+        },
+        {
+          path: '/pages/giay-di-duong/:uid',
+          name: 'MauGiayDiDuong',
+          component: () => import('@/views/dashboard/pages/MauGiayDiDuong'),
+          props: true,
         },
         {
           name: 'Dashboard',

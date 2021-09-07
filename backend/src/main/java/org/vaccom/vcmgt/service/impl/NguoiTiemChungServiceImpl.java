@@ -60,7 +60,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -195,7 +197,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -273,7 +277,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
@@ -284,8 +290,10 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		cq.orderBy(orderList);
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(cq);
+		
+		int offset = page * size;
 
-		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		
 		em.close();
 
@@ -371,12 +379,18 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 				count++;
 			}
 			criteriaQuery.where(pdc);
+			
+			Predicate allPredicate = builder.and(pdc);
+			//cq.where(pdc);
+			criteriaQuery.where(allPredicate);
 		}
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
+		
+		int offset = page * size;
 
 		long total = typedQuery.getResultList().size();
-		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(page).setMaxResults(size).getResultList();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		em.close();
 
 		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);

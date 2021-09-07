@@ -1,5 +1,5 @@
 <template>
-  <v-footer
+  <!-- <v-footer
     id="dashboard-core-footer" class="py-0"
   >
     <v-container class="pt-1">
@@ -13,11 +13,8 @@
         >
           <div>
             <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
-            <p class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
-            <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-home-city-outline</v-icon> </p> -->
-            <!-- <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
-            <p class="mb-2"><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p>
-            <p><v-icon color="#fff" class="mr-1">mdi-map-marker-star</v-icon> </p> -->
+            <p v-if="isTempDiDuong" class="mb-2 ml-2" style="text-transform: uppercase;">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
+            <p v-else class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
           </div>
         </v-col>
 
@@ -26,6 +23,7 @@
         <v-col
           cols="12"
           md="auto"
+          v-if="!isTempDiDuong"
         >
           <div class="text-body-1 pt-md-0">
             <div>
@@ -33,6 +31,45 @@
               <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_netnam.png">
               <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_iway.png">
               <img class="pt-1" style="width: 90px;height: 42px;" src="/images/logo_epacific.png">
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-footer> -->
+  <v-footer
+    id="dashboard-core-footer" class="py-0 pl-0"
+  >
+    <div class="bg-line"></div>
+    <v-container class="pt-1">
+      <v-row
+        align="center"
+        no-gutters
+      >
+        <v-col
+          class=" mb-sm-0"
+          cols="auto"
+        >
+          <div class="mt-2">
+            <img src="/images/logo_footer2.png" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'max-width: 150px' : ''">
+            <p class="mb-2" style="text-transform: uppercase;color:black">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG VACCINE</p>
+          </div>
+        </v-col>
+
+        <v-spacer class="hidden-sm-and-down" />
+
+        <v-col
+          cols="12"
+          md="auto"
+          v-if="!isTempDiDuong"
+        >
+          <div class="text-body-1 pt-md-0">
+            <div>
+              <img class="mr-3" src="/images/logo_fds2.png">
+              <img class="mr-3 pt-2" src="/images/logo_netnam2.png">
+              <img class="mr-3" src="/images/logo_iway3.png">
+              <img class="mr-3" src="/images/logo_pacific2.png">
+              <img class="" src="/images/logo_vinades.png">
             </div>
           </div>
         </v-col>
@@ -47,7 +84,25 @@
 
     data: () => ({
       links: [],
+      isTempDiDuong: false
     }),
+    created () {
+      let vm = this
+      try {
+        let currentQuery = vm.$router.history.current
+        if (currentQuery.name === 'MauGiayDiDuong' && (vm.breakpointName === 'xs' || vm.breakpointName === 'sm')) {
+          vm.isTempDiDuong = true
+        } else {
+          vm.isTempDiDuong = false
+        }
+      } catch (error) {
+      }
+    },
+    computed: {
+      breakpointName () {
+        return this.$store.getters.getBreakpointName
+      }
+    }
   }
 </script>
 
@@ -60,10 +115,27 @@
       text-transform: uppercase
 </style>
 <style lang="css" scoped>
-  #dashboard-core-footer{
+  /* #dashboard-core-footer{
     background: linear-gradient(65deg,#171cc2,#ff5200);
     color: #fff;
     height: 120px;
+  } */
+  #dashboard-core-footer{
+    background-image: url('/images/bg-footer2.png');
+    background-repeat: repeat;
+    background-size: cover;
+    color: #fff;
+    height: 120px;
+  }
+  .bg-line{
+    position: absolute;
+    top:0px;
+    height: 11px;
+    background: linear-gradient(65deg,#3ec7d3,#2243ad);
+    width: 100%;
+  }
+  #dashboard-core-footer .container {
+    padding-bottom: 0px !important;
   }
   #dashboard-core-footer .container {
     padding-bottom: 0px !important;

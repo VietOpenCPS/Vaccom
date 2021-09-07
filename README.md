@@ -123,8 +123,7 @@ Kế hoạch thực hiện: Phần mềm được làm trong 2 tuần, đầu th
 
 # Các đầu mối liên lạc của dự án
 1. Chủ nhiệm dự án: anh [Trần Kiêm Dũng](http://m.me/trantn1) - CEO FDS
-2. Phụ trách truyền thông: anh [Nguyễn Thế Hùng](http://m.me/hungnuke) - CEO VINADES
-3. Phụ trách công nghệ: anh [Tạ Tuấn Anh](http://m.me/tanhtanhvn) - CTO FDS
+2. Phụ trách công nghệ: anh [Tạ Tuấn Anh](http://m.me/tanhtanhvn) - CTO FDS
 
 # Các địa chỉ mạng xã hội
 - Group Facebook: https://www.facebook.com/groups/vaccom.vn

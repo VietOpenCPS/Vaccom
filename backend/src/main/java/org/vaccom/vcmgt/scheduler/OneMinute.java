@@ -38,7 +38,7 @@ public class OneMinute {
     public void doAction() throws IOException {
         String oaid_access_token = zaloConfig.getAccessToken();
 
-        log.info("The time is now {}", dateFormat.format(new Date()));
+        log.info("VACCOM SCHEDULER SEND NOTIFICATION START: ", dateFormat.format(new Date()));
 
         List<HangChoThongBao> ThongBaoChuaGui = hangChoThongBaoAction.findByIsSentIsReady(false, true);
         for (HangChoThongBao hangChoThongBao : ThongBaoChuaGui) {
