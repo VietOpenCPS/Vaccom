@@ -1096,8 +1096,8 @@ public class ApplicationControler {
 
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-            if (RoleUtil.isQuanTriHeThong(vaiTro)) {
-                nguoiTiemChungDto.cosoyteid    = 0;
+                    if (RoleUtil.isQuanTriHeThong(vaiTro)) {
+                        nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = 0;
             } else {
                 nguoiTiemChungDto.cosoyteid    = vaiTro.getCoSoYTeId();
@@ -1165,7 +1165,14 @@ public class ApplicationControler {
     public ResponseEntity<?> searchNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
                                                   @RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
                                                   @RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
-                                                  @RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+                                                  @RequestParam("ngaydangki") String ngaydangki,
+                                                  @RequestParam("tinhthanhma") String tinhthanhma,
+                                                  @RequestParam("tinhthanhten") String tinhthanhten,
+                                                  @RequestParam("quanhuyenma") String quanhuyenma,
+                                                  @RequestParam("quanhuyenten") String quanhuyenten,
+                                                  @RequestParam("phuongxama") String phuongxama,
+                                                  @RequestParam("phuongxaten") String phuongxaten,
+                                                  @RequestParam("hovaten") String hovaten,
                                                   @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                   @RequestParam("cosoytema") String cosoytema,
                                                   @RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangky,
@@ -1195,10 +1202,12 @@ public class ApplicationControler {
 
                 if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                     total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                            diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung);
+                            diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, tinhthanhma,  tinhthanhten,  quanhuyenma
+                            ,   quanhuyenten,  phuongxama,  phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
-                        hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size);
+                        hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size
+                        , tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1217,11 +1226,12 @@ public class ApplicationControler {
 
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa, tinhtrangdangky,
-                        kiemtratrung);
+                        kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        tinhtrangdangky, kiemtratrung, page, size);
+                        tinhtrangdangky, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
             }
 
@@ -1267,6 +1277,12 @@ public class ApplicationControler {
                                                      @RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
                                                      @RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
                                                      @RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+                                                     @RequestParam("tinhthanhma") String tinhthanhma,
+                                                     @RequestParam("tinhthanhten") String tinhthanhten,
+                                                     @RequestParam("quanhuyenma") String quanhuyenma,
+                                                     @RequestParam("quanhuyenten") String quanhuyenten,
+                                                     @RequestParam("phuongxama") String phuongxama,
+                                                     @RequestParam("phuongxaten") String phuongxaten,
                                                      @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                      @RequestParam("cosoytema") String cosoytema,
                                                      @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
@@ -1295,10 +1311,12 @@ public class ApplicationControler {
 
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                        diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung);
+                        diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
-                        hovaten, diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, page, size);
+                        hovaten, diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1317,11 +1335,13 @@ public class ApplicationControler {
 
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.MOIDANGKY, kiemtratrung);
+                        VaccomUtil.MOIDANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.MOIDANGKY, kiemtratrung, page, size);
+                        VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
+                        quanhuyenten, phuongxama, phuongxaten);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1366,6 +1386,12 @@ public class ApplicationControler {
                                                            @RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
                                                            @RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
                                                            @RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+                                                           @RequestParam("tinhthanhma") String tinhthanhma,
+                                                           @RequestParam("tinhthanhten") String tinhthanhten,
+                                                           @RequestParam("quanhuyenma") String quanhuyenma,
+                                                           @RequestParam("quanhuyenten") String quanhuyenten,
+                                                           @RequestParam("phuongxama") String phuongxama,
+                                                           @RequestParam("phuongxaten") String phuongxaten,
                                                            @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                            @RequestParam("cosoytema") String cosoytema,
                                                            @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
@@ -1394,10 +1420,12 @@ public class ApplicationControler {
 
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                        diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung);
+                        diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
-                        hovaten, diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size);
+                        hovaten, diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size,
+                        tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1416,11 +1444,13 @@ public class ApplicationControler {
 
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.DANGKYCHINHTHUC, kiemtratrung);
+                        VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size);
+                        VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1465,6 +1495,12 @@ public class ApplicationControler {
                                                  @RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
                                                  @RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
                                                  @RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+                                                 @RequestParam("tinhthanhma") String tinhthanhma,
+                                                 @RequestParam("tinhthanhten") String tinhthanhten,
+                                                 @RequestParam("quanhuyenma") String quanhuyenma,
+                                                 @RequestParam("quanhuyenten") String quanhuyenten,
+                                                 @RequestParam("phuongxama") String phuongxama,
+                                                 @RequestParam("phuongxaten") String phuongxaten,
                                                  @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                  @RequestParam("cosoytema") String cosoytema,
                                                  @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
@@ -1493,10 +1529,12 @@ public class ApplicationControler {
 
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                        diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung);
+                        diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
-                        hovaten, diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, page, size);
+                        hovaten, diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma,
+                        tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1515,11 +1553,13 @@ public class ApplicationControler {
 
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.XOADANGKY, kiemtratrung);
+                        VaccomUtil.XOADANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
-                        VaccomUtil.XOADANGKY, kiemtratrung, page, size);
+                        VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
+                        quanhuyenten, phuongxama, phuongxaten);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1668,7 +1708,15 @@ public class ApplicationControler {
 
     @RequestMapping(value = "/get/diabancoso", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getDSDiaBanCoSo(HttpServletRequest request, HttpServletResponse response,
-                                             @RequestParam("cosoyteid") long id) {
+                                             @RequestParam(name = "tinhthanhma", defaultValue = "") String tinhthanhma,
+                                             @RequestParam(name = "tinhthanhten", defaultValue = "") String tinhthanhten,
+                                             @RequestParam(name = "quanhuyenma", defaultValue = "") String quanhuyenma,
+                                             @RequestParam(name = "quanhuyenten", defaultValue = "") String quanhuyenten,
+                                             @RequestParam(name = "phuongxama", defaultValue = "") String phuongxama,
+                                             @RequestParam(name = "phuongxaten", defaultValue = "") String phuongxaten,
+                                             @RequestParam(name = "cosoyteid") long id
+
+    ) {
 
         try {
 
@@ -1683,7 +1731,14 @@ public class ApplicationControler {
 
             if (id < 0) {
                 lstDiaBanCoSo = diaBanCoSoAction.findAll();
-
+                lstDiaBanCoSo = lstDiaBanCoSo.stream()
+                        .filter(Validator.isNotNull(tinhthanhma) ? diaBanCoSo -> tinhthanhma.equals(diaBanCoSo.getTinhThanhMa()) : diaBanCoSo -> true)
+                        .filter(Validator.isNotNull(tinhthanhten) ? diaBanCoSo -> tinhthanhten.equals(diaBanCoSo.getTinhThanhTen()) : diaBanCoSo -> true)
+                        .filter(Validator.isNotNull(quanhuyenma) ? diaBanCoSo -> quanhuyenma.equals(diaBanCoSo.getQuanHuyenMa()) : diaBanCoSo -> true)
+                        .filter(Validator.isNotNull(quanhuyenten) ? diaBanCoSo -> quanhuyenten.equals(diaBanCoSo.getQuanHuyenTen()) : diaBanCoSo -> true)
+                        .filter(Validator.isNotNull(phuongxama) ? diaBanCoSo -> phuongxama.equals(diaBanCoSo.getPhuongXaMa()) : diaBanCoSo -> true)
+                        .filter(Validator.isNotNull(phuongxaten) ? diaBanCoSo -> phuongxaten.equals(diaBanCoSo.getPhuongXaTen()) : diaBanCoSo -> true)
+                        .collect(Collectors.toList());
             } else {
                 lstDiaBanCoSo = diaBanCoSoAction.findByCoSoYTeId(id);
             }

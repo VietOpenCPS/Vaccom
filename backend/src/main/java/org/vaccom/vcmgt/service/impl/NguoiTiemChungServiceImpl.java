@@ -133,7 +133,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 	@Override
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
-			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung) {
+			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -163,6 +164,30 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		if (Validator.isNotNull(hovaten)) {
 			// ParameterExpression<String> p = cb.parameter(String.class);
 			predicates.add(cb.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + hovaten + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhma)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenma) ) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxama)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxaten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + phuongxaten + "%"));
 		}
 
 		if (diabancosoid != null && diabancosoid >= 0) {
@@ -212,7 +237,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung,
-			Integer page, Integer size) {
+			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -238,6 +264,30 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		if (Validator.isNotNull(ngaydangki)) {
 			// ParameterExpression<String> p = cb.parameter(String.class);
 			predicates.add(cb.equal(nguoiTiemChungRoot.get("ngayDangKi"), ngaydangki));
+		}
+
+		if (Validator.isNotNull(tinhthanhma)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenma) ) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxama)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxaten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + phuongxaten + "%"));
 		}
 
 		if (Validator.isNotNull(hovaten)) {
