@@ -1,44 +1,6 @@
 <template>
-  <!-- <v-footer
-    id="dashboard-core-footer" class="py-0"
-  >
-    <v-container class="pt-1">
-      <v-row
-        align="center"
-        no-gutters
-      >
-        <v-col
-          class=" mb-sm-0"
-          cols="auto"
-        >
-          <div>
-            <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
-            <p v-if="isTempDiDuong" class="mb-2 ml-2" style="text-transform: uppercase;">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
-            <p v-else class="mb-2 ml-2" style="text-transform: uppercase;">HỆ THỐNG QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG</p>
-          </div>
-        </v-col>
-
-        <v-spacer class="hidden-sm-and-down" />
-
-        <v-col
-          cols="12"
-          md="auto"
-          v-if="!isTempDiDuong"
-        >
-          <div class="text-body-1 pt-md-0">
-            <div>
-              <img class="mr-4" style="width: 80px;height: 52px;" src="/images/logo_fds.png">
-              <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_netnam.png">
-              <img class="mr-4" style="width: 90px;height: 42px;" src="/images/logo_iway.png">
-              <img class="pt-1" style="width: 90px;height: 42px;" src="/images/logo_epacific.png">
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-footer> -->
   <v-footer
-    id="dashboard-core-footer" class="py-0 pl-0"
+    id="dashboard-core-footer" class="py-0 pl-0" :style="isTempDiDuong ? 'height: 85px;' : 'height: 120px'"
   >
     <div class="bg-line"></div>
     <v-container class="pt-1">

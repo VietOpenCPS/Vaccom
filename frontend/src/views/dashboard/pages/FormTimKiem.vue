@@ -272,7 +272,7 @@
 <script>
   export default {
     name: 'Search',
-    props: ['form'],
+    props: ['form','diabanid'],
     data () {
       return {
         listUyBanNhanDan: [],
@@ -328,7 +328,10 @@
         this.getXaPhuong(val)
       },
       xaPhuong (val) {
-        this.dataSearch.PhuongXa_Ma = val 
+        this.dataSearch.PhuongXa_Ma = val
+        if (this.tinhThanh && this.quanHuyen) {
+          this.getDiaBanCoSo('', 'tinhThanh')
+        }
       },
       // ngayDangKyFormatted (val) {
       //   let splitNgayDangKy = String(val).split('/')
@@ -370,10 +373,21 @@
           vm.listUyBanNhanDan = result.hasOwnProperty('data') ? result.data : []
         })
       },
-      getDiaBanCoSo (val) {
+      getDiaBanCoSo (val, tinhThanh) {
         let vm = this
         let filter = {
           id: -1
+        }
+        if (tinhThanh) {
+          filter = {
+            id: -1,
+            tinhthanhma: vm.tinhThanh,
+            quanhuyenma: vm.quanHuyen,
+            phuongxama: vm.xaPhuong,
+            tinhthanhten: '',
+            quanhuyenten: '',
+            phuongxaten: '',
+          }
         }
         if (val) {
           let obj = vm.listCoSoYTe.find(function (item) {
@@ -383,22 +397,50 @@
             id: obj['id']
           }
         }
-        
         vm.$store.dispatch('getDiaBanCoSo', filter).then(function (result) {
           if (result.hasOwnProperty('data') && result.data.length) {
             vm.listDiaBan = [{tenDiaBan: "Chưa gán địa bàn", id: 0}].concat(result.data)
+          } else {
+            vm.listDiaBan = []
           }
-          try {
-            let data = localStorage.getItem('user')
-            let diaBanUser = JSON.parse(data)['diaBanCoSoId']
-            let obj = vm.listDiaBan.find(function (item) {
-              return item.id == diaBanUser
-            })
-            if (obj) {
-              vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
+          if (!val && !tinhThanh) {
+            try {
+              let data = localStorage.getItem('user')
+              let diaBanUser = JSON.parse(data)['diaBanCoSoId']
+              let obj = vm.listDiaBan.find(function (item) {
+                return item.id == diaBanUser
+              })
+              if (obj) {
+                vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
+                vm.tinhThanh= obj['tinhThanhMa']
+                vm.quanHuyen = obj['quanHuyenMa']
+                vm.xaPhuong = obj['phuongXaMa']
+              } else {
+                vm.dataSearch['DiaBanCoSo_ID'] = ''
+              }
+            } catch (error) {
+              vm.dataSearch['DiaBanCoSo_ID'] = ''
             }
-          } catch (error) {
+          } else {
+            try {
+              let data = localStorage.getItem('user')
+              let diaBanUser = JSON.parse(data)['diaBanCoSoId']
+              let obj = vm.listDiaBan.find(function (item) {
+                return item.id == diaBanUser
+              })
+              if (obj) {
+                vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
+                vm.tinhThanh= obj['tinhThanhMa']
+                vm.quanHuyen = obj['quanHuyenMa']
+                vm.xaPhuong = obj['phuongXaMa']
+              } else {
+                vm.dataSearch['DiaBanCoSo_ID'] = ''
+              }
+            } catch (error) {
+              vm.dataSearch['DiaBanCoSo_ID'] = ''
+            }
           }
+          
         })
       },
       getCoSoYTe () {

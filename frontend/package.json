@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.2",
+    "gradle": "^1.2.4",
     "jquery": "^3.6.0",
     "v-mask": "^2.2.4",
     "vue": "^2.6.11",

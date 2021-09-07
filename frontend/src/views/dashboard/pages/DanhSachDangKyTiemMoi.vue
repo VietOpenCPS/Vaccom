@@ -306,6 +306,9 @@
           tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
           quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
           phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
+          tinhthanhten: '',
+          quanhuyenten: '',
+          phuongxaten: '',
           typeSearch: 'danhsachdangkymoi'
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
@@ -467,8 +470,11 @@
             cosoytema: vm.dataInputSearch && vm.dataInputSearch['CoSoYTe_Ma'] ? vm.dataInputSearch['CoSoYTe_Ma'] : '',
             kiemtratrung: vm.dataInputSearch && vm.dataInputSearch['KiemTraTrung'] ? vm.dataInputSearch['KiemTraTrung'] : -1,
             tinhthanhma: vm.dataInputSearch && vm.dataInputSearch['TinhThanh_Ma'] ? vm.dataInputSearch['TinhThanh_Ma'] : '',
+            tinhthanhten: '',
             quanhuyenma: vm.dataInputSearch && vm.dataInputSearch['QuanHuyen_Ma'] ? vm.dataInputSearch['QuanHuyen_Ma'] : '',
-            phuongxama: vm.dataInputSearch && vm.dataInputSearch['PhuongXa_Ma'] ? vm.dataInputSearch['PhuongXa_Ma'] : ''
+            quanhuyenten: '',
+            phuongxama: vm.dataInputSearch && vm.dataInputSearch['PhuongXa_Ma'] ? vm.dataInputSearch['PhuongXa_Ma'] : '',
+            phuongxaten: ''
           }
         }
         vm.$store.dispatch('exportDanhSach', filter).then(function(result) {

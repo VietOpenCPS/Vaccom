@@ -24,37 +24,41 @@
           >
             <span style="font-size: 16px;">GIẤY ĐI ĐƯỜNG KHÔNG HỢP LỆ</span>
           </v-alert>
+          <div v-if="!conHieuLuc">
+            <p v-if="dataInfo.status == 2 && dataInfo.ghiChu" style="text-align: center;font-weight: bold;">{{dataInfo.ghiChu}}</p>
+            <p v-else style="text-align: center;font-weight: bold;">NGOÀI THỜI GIAN ĐƯỢC RA ĐƯỜNG</p>
+          </div>
         </div>
         
-        <v-card-text class="px-0 pb-0" style="max-width: 750px; margin: 0px auto;background: #fff;">
+        <v-card-text class="px-0 py-0" style="max-width: 750px; margin: 0px auto;background: #fff;">
           <div class="pt-0" style="border: 1px solid #dedede;border-radius: 10px;">
             <div style="text-align: center;">
               <qrcode :value="urlQr" :options="{ width: 150 }" style="border-radius: 10px;"></qrcode>
             </div>
             <h4 class="my-3" style="text-align: center;text-transform: uppercase;color: #0054a6;">{{dataInfo.Donvicap}}</h4>
-            <p style="text-align: center;">Xác nhận: Ông /bà:</p>
-            <p style="text-align: center;font-weight: 500">{{dataInfo.hoVaTen}}</p>
+            <p style="text-align: center;" class="mb-2">Xác nhận: Ông /bà:</p>
+            <p style="text-align: center;font-weight: 500;text-transform: uppercase;" class="mb-2">{{dataInfo.hoVaTen}}</p>
             <div class=" px-3 pb-3" style="font-size: 14px;">
-              <p style="margin-top: 25px;margin-bottom:10px;color:#0054a6;">
+              <p style="margin-top: 15px;margin-bottom:10px;color:#0054a6;">
                 Địa chỉ nơi ở/ cư trú: 
               </p>
-              <p style="font-weight: 500;">
+              <p style="font-weight: 500;" class="mb-2">
                 {{ dataInfo.noiODiaChi}}, {{dataInfo.noiOPhuongXaTen}} - {{dataInfo.noiOQuanHuyenTen}} - {{dataInfo.noiOTinhThanhTen}}
               </p>
               <p class="mb-2" style="color:#0054a6;">Địa điểm làm việc: </p>
-              <p style="font-weight: 500;">
+              <p style="font-weight: 500;" class="mb-2">
                 {{ dataInfo.noiCtDiaChi }}, {{dataInfo.noiCtPhuongXaTen}} - {{dataInfo.noiCtQuanHuyenTen}} - {{dataInfo.noiCtTinhThanhTen}}
               </p>
-              <p class=""><span style="color:#0054a6;">Số CCCD/CMTND:</span> <span style="font-weight: 500">{{dataInfo.cmtcccd}}</span></p>
-              <p class=""><span style="color:#0054a6;">Đơn vị/cty:</span> <span class="mb-2" style="font-weight: 500;">
+              <p class="mb-2"><span style="color:#0054a6;">Số CCCD/CMTND:</span> <span style="font-weight: 500">{{dataInfo.cmtcccd}}</span></p>
+              <p class="mb-2"><span style="color:#0054a6;">Đơn vị/cty:</span> <span class="mb-2" style="font-weight: 500;">
                 {{dataInfo.noiCtTenCoQuan}}
               </span></p>
               
               <p class="mb-2" style="color:#0054a6;">Thời gian làm việc: </p>
               <p class="mb-2" style="font-weight: 500;">
-                Các ngày: {{translateLichNgay(dataInfo.lichLamViec)}}
+                {{translateLichNgay(dataInfo.lichLamViec)}}
               </p>
-              <p class="" style="font-weight: 500;">
+              <p class="mb-2" style="font-weight: 500;">
                 Từ: <span class="mr-2" style="font-weight: 500">{{translateLichGio(dataInfo.lichLamViec, 'start')}}</span>
                 đến <span class="ml-2" style="font-weight: 500">{{translateLichGio(dataInfo.lichLamViec, 'end')}}</span>
               </p>
@@ -64,6 +68,9 @@
                 <span v-if="dataInfo.thoiHan">{{ dataInfo.thoiHan }}</span>
                 <span v-else>Đến khi có thông báo mới</span>
               </p>
+              <div>
+                (Giấy này chỉ có hiệu lực trong phạm vi {{scopePhamVi}})
+              </div>
             </div>
             
           </div>
@@ -89,13 +96,14 @@
       return {
         urlQr: '',
         conHieuLuc: true,
+        scopePhamVi: '',
         dataInfo: {
           // cmtcccd: "989878123",
           // email: "congtrinh0209@gmail.com",
           // ghiChu: "12312 123",
           // hoVaTen: "Trịnh Công Trình",
           // id: 3,
-          // lichLamViec: "{\"ngayTuan\":[2,4,5,6],\"ngayThang\":[],\"tuGio\":\"03:00\",\"denGio\":\"22:22\"}",
+          // lichLamViec: "{\"ngayTuan\":[2,3,4,6],\"ngayThang\":[\"07/09/2021\",\"09/09/2021\"],\"tuGio\":\"08:00\",\"denGio\":\"10:00\"}",
           // maQR: null,
           // ngayCap: "01/09/2021",
           // noiCtDiaChi: "123123",
@@ -142,6 +150,7 @@
           vm.dataInfo = dataInfo
           vm.urlQr = dataInfo['LinkQrCode']
           vm.checkHieuLuc(vm.dataInfo)
+          vm.scopePhamVi = vm.dataInfo['Donvicap'].split('-')[1] + ' - ' + vm.dataInfo['Donvicap'].split('-')[2]
         }).catch (function () {
           vm.conHieuLuc = false
         })
@@ -149,6 +158,7 @@
       translateLichNgay (data) {
         try {
           let input = JSON.parse(data)
+          let dataOut = ''
           let ngayTuan = input['ngayTuan']
           let ngayThang = input['ngayThang']
           if (ngayTuan && ngayTuan.length) {
@@ -163,12 +173,12 @@
               ngayTuanString += day
             })
             ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
-            return ngayTuanString
+            dataOut += ngayTuanString
           }
           if (ngayThang && ngayThang.length) {
-            return ngayThang.toString().replace(/,/g, "; ")
+            dataOut = dataOut + ' - Các ngày: ' +  ngayThang.toString().replace(/,/g, "; ")
           }
-          
+          return dataOut
         } catch (error) {
           return ''
         }
