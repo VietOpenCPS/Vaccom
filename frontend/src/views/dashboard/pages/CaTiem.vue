@@ -329,7 +329,8 @@
           NgayHenTiem: '',
           GioHenTiem: '',
           SoMuiTiem: '',
-          DiaBanCoSo_ID: ''
+          DiaBanCoSo_ID: '',
+          LichTiemChung_ID: 0
         },
         thongTinLichTiem: {
           bacSiKham: '',
@@ -470,18 +471,23 @@
         vm.dialogAddMember = true
       },
       getCaTiem (pageIn, idLich) {
-        let vm = this
-        let filter = {
-          lichtiemchungid: idLich,
-          diabancosoid: '',
-          page: pageIn,
-          size: vm.itemsPerPage,
+        try{
+          let vm = this
+          let filter = {
+            lichtiemchungid: idLich,
+            diabancosoid: '',
+            page: pageIn,
+            size: vm.itemsPerPage,
+          }
+          vm.$store.dispatch('getCaTiem', filter).then(function (result) {
+            vm.items = result.hasOwnProperty('data') ? result.data : []
+            vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+            vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+          })
+        } catch (e) {
+
         }
-        vm.$store.dispatch('getCaTiem', filter).then(function (result) {
-          vm.items = result.hasOwnProperty('data') ? result.data : []
-          vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
-          vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-        })
+
       },
       formatNgayTiem () {
         let vm = this
@@ -528,6 +534,7 @@
         if (vm.$refs.formAddCaTiem.validate()) {
           vm.formatDataInput()
           if (vm.typeAction === 'add') {
+            vm.thongTinCaTiem['LichTiemChung_ID'] = parseInt(vm.uid)
             let filter = {
               data: vm.thongTinCaTiem
             }

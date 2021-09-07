@@ -456,10 +456,8 @@
                   md="6"
                   class="pb-0 pt-3"
                 >
-                  <div class="mb-2">Ngày cấp giấy đi đường<span style="color:red"> (*)</span></div>
+                  <div class="mb-2">Ngày cấp giấy đi đường</div>
                   <v-text-field
-                    :rules="required"
-                    required
                     v-model="applicantDateFormatted"
                     placeholder="dd/mm/yyyy, ddmmyyyy"
                     @blur="formatBirthDate"
@@ -712,7 +710,7 @@
       },
       dates (val) {
         if (val && val.length) {
-          this.weekDay = this.weekDayDefault
+          // this.weekDay = this.weekDayDefault
         }
       },
       tinhThanh (val) {
@@ -784,7 +782,7 @@
           return item.selected
         })
         if (exits && exits.length) {
-          vm.dates = []
+          // vm.dates = []
         }
       },
       autoBind() {

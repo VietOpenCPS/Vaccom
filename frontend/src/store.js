@@ -165,7 +165,13 @@ export default new Vuex.Store({
           headers: {
           },
           params: {
-            cosoyteid: filter.id
+            cosoyteid: filter.hasOwnProperty('id') ? filter.id : '',
+            tinhthanhma: filter.hasOwnProperty('tinhthanhma') ? filter.tinhthanhma : '',
+            quanhuyenma: filter.hasOwnProperty('quanhuyenma') ? filter.quanhuyenma : '',
+            phuongxama: filter.hasOwnProperty('phuongxama') ? filter.phuongxama : '',
+            tinhthanhten: '',
+            quanhuyenten: '',
+            phuongxaten: '',
           }
         }
         if (filter.hasOwnProperty('page')) {
@@ -946,7 +952,8 @@ export default new Vuex.Store({
         } catch (error) {
         }
         let dataPost = {
-          status: filter.data.status
+          status: filter.data.status,
+          ghiChu: filter.data.ghiChu
         }
         axios.put('/rest/v1/app/update/giaydiduong/' + filter.data.id, dataPost, param).then(function (response) {
           let serializable = response.data
@@ -970,7 +977,8 @@ export default new Vuex.Store({
         }
         let dataPost = {
           listIdUpdate: filter.data.ids,
-          status: filter.data.status
+          status: filter.data.status,
+          ghiChu: filter.data.ghiChu
         }
         axios.put('/rest/v1/app/update/giaydiduong/0', dataPost, param).then(function (response) {
           let serializable = response.data
@@ -1107,6 +1115,9 @@ export default new Vuex.Store({
             tinhthanhma: filter.hasOwnProperty('tinhthanhma') ? filter.tinhthanhma : '',
             quanhuyenma: filter.hasOwnProperty('quanhuyenma') ? filter.quanhuyenma : '',
             phuongxama: filter.hasOwnProperty('phuongxama') ? filter.phuongxama : '',
+            tinhthanhten: filter.hasOwnProperty('tinhthanhten') ? filter.tinhthanhten : '',
+            quanhuyenten: filter.hasOwnProperty('quanhuyenten') ? filter.quanhuyenten : '',
+            phuongxaten: filter.hasOwnProperty('phuongxaten') ? filter.phuongxaten : ''
           }
         }
         if (filter.hasOwnProperty('page')) {
