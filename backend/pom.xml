@@ -130,7 +130,7 @@
 			<groupId>com.liferay</groupId>
 			<artifactId>com.liferay.petra.string</artifactId>
 			<version>4.0.2</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.liferay/com.liferay.petra.lang -->
@@ -138,7 +138,8 @@
 			<groupId>com.liferay</groupId>
 			<artifactId>com.liferay.petra.lang</artifactId>
 			<version>4.0.2</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
+
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.liferay.portal/com.liferay.portal.kernel -->
@@ -146,7 +147,7 @@
 			<groupId>com.liferay.portal</groupId>
 			<artifactId>com.liferay.portal.kernel</artifactId>
 			<version>8.1.0</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 
 		<dependency>
@@ -172,23 +173,30 @@
 			<artifactId>groovy-console</artifactId>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<!-- TODO: Check the homepage to install lombok with your IDE -->
+		<!-- https://projectlombok.org/setup/overview -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-freemarker</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>core</artifactId>
-			<version>3.4.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>3.4.0</version>
-		</dependency>
-
+        <!--For String operation-->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <!--For QR Code-->
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.1</version>
+        </dependency>
 	</dependencies>
 
 	<build>

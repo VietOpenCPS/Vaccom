@@ -57,6 +57,11 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 	}
 
 	@Override
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId) {
+		return nguoiDungRepository.findByNguoiTiemChungId(nguoiTiemChungId);
+	}
+
+	@Override
 	@Transactional
 	public void deleteNguoiDung(long nguoiDungId, long khoaDangKyId, long khoaTruyCapId) throws Exception {
 		nguoiDungRepository.deleteById(nguoiDungId);

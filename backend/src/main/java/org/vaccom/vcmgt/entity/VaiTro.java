@@ -26,6 +26,9 @@ public class VaiTro {
 
 	public long diaBanCoSoId;
 
+	public long currentId;
+
+
 	public VaiTro(NguoiDung nguoiDung) {
 
 		if (nguoiDung == null) {
@@ -68,8 +71,16 @@ public class VaiTro {
 		} else if (isNguoiDung) {
 			return "NguoiDung";
 		} else {
-			return "KhongXacDinh";
+			return StringPool.BLANK;
 		}
+	}
+
+	public long getCurrentId() {
+		return currentId;
+	}
+
+	public void setCurrentId(long currentId) {
+		this.currentId = currentId;
 	}
 
 	public boolean isQuanTriHeThong() {

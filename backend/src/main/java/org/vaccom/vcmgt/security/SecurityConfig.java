@@ -74,7 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/rest/v1/security/login", "/rest/v1/captcha/image", "/rest/v1/app/update/phieuhentiem/checkin/*").permitAll().anyRequest()
+				.antMatchers("/rest/v1/security/login", "/rest/v1/captcha/image",
+						"/rest/v1/app/update/phieuhentiem/checkin/*", "/rest/v1/app/get/giaydiduong-maqr").permitAll().anyRequest()
 				.authenticated();
 
 		// Add our custom JWT security filter

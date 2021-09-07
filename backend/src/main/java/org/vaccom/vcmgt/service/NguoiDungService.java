@@ -30,4 +30,5 @@ public interface NguoiDungService {
 	
 	public NguoiDung updateNguoiDung(NguoiDung nguoiDung, KhoaDangKy khoaDangKy);
 
+	public NguoiDung findByNguoiTiemChungId(long nguoiTiemChungId);
 }

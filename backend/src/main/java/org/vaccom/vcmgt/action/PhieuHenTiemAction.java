@@ -37,4 +37,7 @@ public interface PhieuHenTiemAction {
 	public void updateTinhTrangXacNhan(String reqBody);
 	
 	public boolean checkin(String qrcode, String reqBody);
+
+	public PhieuHenTiem findByMaQR(String maQr);
+
 }

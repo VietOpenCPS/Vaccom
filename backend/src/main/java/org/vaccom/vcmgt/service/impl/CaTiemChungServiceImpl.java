@@ -73,7 +73,9 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 		
 		TypedQuery<Long> typedQuery = em.createQuery(cq);
@@ -116,7 +118,9 @@ public class CaTiemChungServiceImpl implements CaTiemChungService{
 				pdc[count] = predicate;
 				count++;
 			}
-			cq.where(pdc);
+			Predicate allPredicate = cb.and(pdc);
+			//cq.where(pdc);
+			cq.where(allPredicate);
 		}
 
 		List<Order> orderList = new ArrayList<Order>();
