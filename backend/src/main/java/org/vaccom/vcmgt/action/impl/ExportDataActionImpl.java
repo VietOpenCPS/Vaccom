@@ -40,7 +40,8 @@ public class ExportDataActionImpl implements ExportDataAction {
 
 	@Override
 	public File exportNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
-			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung) throws Exception {
+			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) throws Exception {
 
 		File destDir = new File(exportDir);
 
@@ -53,10 +54,11 @@ public class ExportDataActionImpl implements ExportDataAction {
 		File export = new File(fileDir);
 
 		long total = nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
-				cosoytema, tinhtrangdangki, kiemtratrung);
+				cosoytema, tinhtrangdangki, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
 		List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong,
-				ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangki, kiemtratrung, 0, (int) total);
+				ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangki, kiemtratrung, 0, (int) total,
+				tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
 		if (lstNguoiTiemChung != null) {
 

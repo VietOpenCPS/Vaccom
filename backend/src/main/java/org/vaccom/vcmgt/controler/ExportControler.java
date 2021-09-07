@@ -40,6 +40,12 @@ public class ExportControler {
 			@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
 			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
 			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+		    @RequestParam("tinhthanhma") String tinhthanhma,
+		    @RequestParam("tinhthanhten") String tinhthanhten,
+		    @RequestParam("quanhuyenma") String quanhuyenma,
+		    @RequestParam("quanhuyenten") String quanhuyenten,
+		    @RequestParam("phuongxama") String phuongxama,
+		    @RequestParam("phuongxaten") String phuongxaten,
 			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
 			@RequestParam("cosoytema") String cosoytema,
 			@RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangki,
@@ -55,7 +61,7 @@ public class ExportControler {
 			}
 
 			File file = exportDataAction.exportNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
-					cosoytema, tinhtrangdangki, kiemtratrung);
+					cosoytema, tinhtrangdangki, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nguoitiemchung.xls");
