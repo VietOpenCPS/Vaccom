@@ -1104,6 +1104,9 @@ export default new Vuex.Store({
             cosoytema: filter.hasOwnProperty('cosoytema') ? filter.cosoytema : -1,
             tinhtrangdangky: filter.hasOwnProperty('tinhtrangdangky') ? filter.tinhtrangdangky : '',
             kiemtratrung: filter.hasOwnProperty('kiemtratrung') ? filter.kiemtratrung : '',
+            tinhthanhma: filter.hasOwnProperty('tinhthanhma') ? filter.tinhthanhma : '',
+            quanhuyenma: filter.hasOwnProperty('quanhuyenma') ? filter.quanhuyenma : '',
+            phuongxama: filter.hasOwnProperty('phuongxama') ? filter.phuongxama : '',
           }
         }
         if (filter.hasOwnProperty('page')) {
