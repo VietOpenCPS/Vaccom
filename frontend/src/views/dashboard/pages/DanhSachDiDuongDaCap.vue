@@ -36,7 +36,8 @@
               </v-icon>
               Xuất danh sách
             </v-btn> -->
-            <v-btn color="red" small class="mx-0" @click.stop="translateStatusMultiple()" :loading="processingAction" :disabled="processingAction">
+            <!-- translateStatusMultiple -->
+            <v-btn color="red" small class="mx-0" @click.stop="showRutGiayDiDuong('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-text-box-check-outline
               </v-icon>
@@ -122,7 +123,7 @@
                 </v-tooltip> -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="translateStatus(item)" color="red" text icon class="" v-bind="attrs" v-on="on">
+                    <v-btn @click="showRutGiayDiDuong('one', item)" color="red" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-text-box-check-outline</v-icon>
                     </v-btn>
                   </template>
@@ -136,15 +137,15 @@
         </v-card-text>
       </base-material-card>
       <v-dialog
-        max-width="600"
+        max-width="1000"
         v-model="dialog"
       >
         <v-card>
           <v-toolbar
             dark
-            color="primary"
+            color="#0072bc"
           >
-            <v-toolbar-title>Thông tin chi tiết</v-toolbar-title>
+            <v-toolbar-title >Rút giấy đi đường</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn
@@ -157,14 +158,39 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text class="mt-5">
-            
+            <v-form
+              ref="formRut"
+              v-model="validFormRut"
+              lazy-validation
+            >
+                <v-layout wrap>
+                  <v-textarea
+                      class="flex xs12 md12"
+                      v-model="lyDoRut"
+                      outlined
+                      label="Lý do rút giấy đi đường"
+                      dense
+                      clearable
+                      rows="3"
+                      :rules="required"
+                      required
+                  ></v-textarea>
+                </v-layout>
+            </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
+            
             <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialog = false">
               <v-icon left>
                 mdi-close
               </v-icon>
               Thoát
+            </v-btn>
+            <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitTranslate">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span>Đồng ý</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -208,6 +234,13 @@
         showAdvanceSearch: false,
         selected: [],
         dataInputSearch: '',
+        validFormRut: true,
+        typeAction: '',
+        giayDiDuongRut: '',
+        lyDoRut: '',
+        required: [
+          v => !!v || 'Thông tin bắt buộc'
+        ],
         headers: [
           {
             sortable: false,
@@ -294,6 +327,7 @@
       translateLichNgay (data) {
         try {
           let input = JSON.parse(data)
+          let dataOut = ''
           let ngayTuan = input['ngayTuan']
           let ngayThang = input['ngayThang']
           if (ngayTuan && ngayTuan.length) {
@@ -308,11 +342,12 @@
               ngayTuanString += day
             })
             ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
-            return ngayTuanString
+            dataOut += ngayTuanString
           }
           if (ngayThang && ngayThang.length) {
-            return ngayThang.toString().replace(/,/g, "; ")
+            dataOut = dataOut + ' - Các ngày: ' + ngayThang.toString().replace(/,/g, "; ")
           }
+          return dataOut
           
         } catch (error) {
           return ''
@@ -390,7 +425,7 @@
       translateStatus (item) {
         let vm = this
         let filter = {
-          data: Object.assign(item, {status: 2})
+          data: Object.assign(item, {status: 2, ghiChu: vm.lyDoRut})
         }
         vm.$store.dispatch('duyetGiayDiDuong', filter).then(function (result) {
           vm.$store.commit('SHOW_SNACKBAR', {
@@ -400,6 +435,7 @@
           })
           vm.processingAction = false
           vm.getDanhSachDaCap(0)
+          vm.dialog = false
         }).catch(function () {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,
@@ -410,13 +446,42 @@
         })
         
       },
+      showRutGiayDiDuong (type, item) {
+        let vm = this
+        vm.typeAction = type
+        vm.lyDoRut = ''
+        if (type === 'multiple') {
+          if (vm.selected.length === 0) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Vui lòng chọn người muốn rút giấy đi đường',
+              color: 'error',
+            })
+            return
+          }
+          vm.dialog = true
+        } else {
+          vm.giayDiDuongRut = item
+          vm.dialog = true
+        }
+      },
+      submitTranslate () {
+        let vm = this
+        if (vm.$refs.formRut.validate()) {
+          if (vm.typeAction === 'multiple') {
+            vm.translateStatusMultiple()
+          } else {
+            vm.translateStatus(vm.giayDiDuongRut)
+          }
+        }
+      },
       translateStatusMultiple () {
         let vm = this
         let arrIds = ''
         if (vm.selected.length === 0) {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,
-            text: 'Vui lòng chọn người muốn cấp giấy đi đường',
+            text: 'Vui lòng chọn người muốn rút giấy đi đường',
             color: 'error',
           })
           return
@@ -428,7 +493,8 @@
         let filter = {
           data: {
             ids: arrIds,
-            status: 2
+            status: 2,
+            ghiChu: vm.lyDoRut
           }
         }
         console.log('filter', filter)
@@ -446,6 +512,7 @@
             })
             vm.getDanhSachDaCap(0)
             vm.selected = []
+            vm.dialog = false
           }).catch(function () {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,

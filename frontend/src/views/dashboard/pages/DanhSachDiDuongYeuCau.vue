@@ -320,6 +320,7 @@
       translateLichNgay (data) {
         try {
           let input = JSON.parse(data)
+          let dataOut = ''
           let ngayTuan = input['ngayTuan']
           let ngayThang = input['ngayThang']
           if (ngayTuan && ngayTuan.length) {
@@ -334,12 +335,12 @@
               ngayTuanString += day
             })
             ngayTuanString = ngayTuanString.trim().substring(0, ngayTuanString.trim().length - 1)
-            return ngayTuanString
+            dataOut += ngayTuanString
           }
           if (ngayThang && ngayThang.length) {
-            return ngayThang.toString().replace(/,/g, "; ")
+            dataOut = dataOut + ' - Các ngày: ' + ngayThang.toString().replace(/,/g, "; ")
           }
-          
+          return dataOut
         } catch (error) {
           return ''
         }
@@ -563,7 +564,6 @@
         vm.processingAction = true
         let filter = {
           file: file,
-          sheetAt:15,
           startCol:0,
           endCol:11,
           startRow:4,

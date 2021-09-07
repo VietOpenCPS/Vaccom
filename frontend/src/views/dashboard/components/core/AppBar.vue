@@ -70,13 +70,14 @@
   <div id="header-desktop">
     <header id="banner">
         <div class="container layout wrap" style="padding-top: 5px;padding-bottom: 5px;padding-left: 10px;"> 
-          <a href="" class="mLogo col-md-4 py-0 px-0" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'text-decoration: none;display: block;text-align: center;' : 'text-decoration: none;display: block'"> 
+          <a v-if="showLogin" href="" class="mLogo col-md-4 py-0 px-0" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'text-decoration: none;display: block;text-align: center;' : 'text-decoration: none;display: block'"> 
             <img style="width: auto;height: 52px;border-radius: 10px;" src="/images/logo_banner.png">
             <div>
               <p class="mb-2" :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'font-size: 15px; color: #fff' : 'font-size: 16px;color: #fff'">QUẢN LÝ VÀ TỔ CHỨC ĐIỂM TIÊM CHỦNG VACCINE</p>
             </div>
             
           </a>
+          <!-- <a class="py-2" v-else href="" style="text-decoration: none;font-size: 16px;color: #fff">QUẬN LONG BIÊN - THÀNH PHỐ HÀ NỘI</a> -->
           <div class="col-md-8 text-right py-0" style="color:#ff6a00;">
             <nav class="sort-pages modify-pages mt-3" id="navigation" v-if="showLogin"> 
                 <ul aria-label="Site Pages" role="menubar" class="container">
@@ -296,22 +297,22 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách tiêm chủng',
-                to: '/pages/danh-sach-tiem-chung',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách tiêm chủng',
+              //   to: '/pages/danh-sach-tiem-chung',
+              //   id: 'search',
+              // },
             ]
           },
           {
@@ -436,22 +437,22 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách tiêm chủng',
-                to: '/pages/danh-sach-tiem-chung',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách tiêm chủng',
+              //   to: '/pages/danh-sach-tiem-chung',
+              //   id: 'search',
+              // },
             ]
           },
           {
@@ -568,22 +569,22 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách tiêm chủng',
-                to: '/pages/danh-sach-tiem-chung',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách tiêm chủng',
+              //   to: '/pages/danh-sach-tiem-chung',
+              //   id: 'search',
+              // },
             ]
           },
           {
@@ -634,22 +635,22 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn chờ xác nhận',
-                to: '/pages/lich-hen-cho-xac-nhan',
+                title: 'Danh sách dự kiến tiêm',
+                to: '/pages/danh-sach-du-kien-tiem',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Lịch hẹn đã xác nhận',
-                to: '/pages/lich-hen-da-xac-nhan',
+                title: 'Danh sách gọi tiêm',
+                to: '/pages/danh-sach-goi-tiem',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách tiêm chủng',
-                to: '/pages/danh-sach-tiem-chung',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách tiêm chủng',
+              //   to: '/pages/danh-sach-tiem-chung',
+              //   id: 'search',
+              // },
             ]
           },
           {
