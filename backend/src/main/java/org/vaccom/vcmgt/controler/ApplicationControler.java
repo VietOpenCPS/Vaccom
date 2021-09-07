@@ -2962,7 +2962,7 @@ public class ApplicationControler {
 
             JsonNode giayDiDuongJson = mapper.readTree(json);
 
-            ((ObjectNode) giayDiDuongJson).put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+            ((ObjectNode) giayDiDuongJson).put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan() + " - " + uyBanNhanDan.getQuanHuyenTen() + " - " + uyBanNhanDan.getTinhThanhTen());
             ((ObjectNode) giayDiDuongJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/giay-di-duong/" + giayDiDuong.getMaQR());
 
             return ResponseEntity.status(HttpStatus.OK).body(giayDiDuongJson);
