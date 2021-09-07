@@ -342,6 +342,7 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
 										template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
 										template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
+										template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung);
 									}
