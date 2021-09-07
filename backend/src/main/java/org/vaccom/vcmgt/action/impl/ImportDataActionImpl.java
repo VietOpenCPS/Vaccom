@@ -178,7 +178,11 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 					if(rowData[7] != null && !rowData[7].isEmpty()) {
 						try {
-							listDayInWeek = Arrays.stream(rowData[7].replaceAll(" ", "").split(","))
+							listDayInWeek = Arrays.stream(rowData[7]
+									.replaceAll(" ", "")
+									.replaceAll("CN", "0")
+									.replaceAll("cn", "0")
+									.split(","))
 									.map(Integer::parseInt)
 									.collect(Collectors.toList());
 						} catch (Exception e) {
@@ -194,6 +198,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 							for(String oneDayMonth: listDayMonth) {
 								if(oneDayMonth.contains("/")) {
+									listDayMonthFormatted.add(oneDayMonth);
 									continue;
 								}
 

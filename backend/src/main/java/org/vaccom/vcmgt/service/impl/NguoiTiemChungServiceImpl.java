@@ -133,7 +133,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 	@Override
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
-			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung) {
+			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -163,6 +164,30 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		if (Validator.isNotNull(hovaten)) {
 			// ParameterExpression<String> p = cb.parameter(String.class);
 			predicates.add(cb.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + hovaten + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhma)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenma) ) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxama)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxaten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + phuongxaten + "%"));
 		}
 
 		if (diabancosoid != null && diabancosoid >= 0) {
@@ -212,7 +237,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung,
-			Integer page, Integer size) {
+			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -238,6 +264,30 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		if (Validator.isNotNull(ngaydangki)) {
 			// ParameterExpression<String> p = cb.parameter(String.class);
 			predicates.add(cb.equal(nguoiTiemChungRoot.get("ngayDangKi"), ngaydangki));
+		}
+
+		if (Validator.isNotNull(tinhthanhma)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(tinhthanhten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenma) ) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(quanhuyenten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxama)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(phuongxaten)) {
+			predicates.add(cb.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + phuongxaten + "%"));
 		}
 
 		if (Validator.isNotNull(hovaten)) {
@@ -306,7 +356,6 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 
 		CriteriaQuery<NguoiTiemChung> criteriaQuery = builder.createQuery(NguoiTiemChung.class);
-		CriteriaQuery<Long> criteriaQueryCount = builder.createQuery(Long.class);
 
 		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
 		Root<PhieuHenTiem>   phieuHenTiemRoot   = criteriaQuery.from(PhieuHenTiem.class);
@@ -316,8 +365,6 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
-
-
 
 		if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
 			predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
@@ -335,10 +382,14 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 			predicates.add(builder.equal(phieuHenTiemRoot.get("lichTiemChungId"), nguoiTiemChungDto.lichTiemChungId));
 		}
 
-		if(nguoiTiemChungDto.typeGet == 0) {
-			predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+		if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
+			predicates.add((phieuHenTiemRoot.get("tinhTrangXacNhan").in(nguoiTiemChungDto.listtinhtrangxacnhan)));
 		} else {
-			predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+			if(nguoiTiemChungDto.typeGet == 0) {
+				predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+			} else {
+				predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+			}
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.ngaydangki) && !nguoiTiemChungDto.ngaydangki.isEmpty()) {
@@ -347,6 +398,30 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 		if (Validator.isNotNull(nguoiTiemChungDto.hovaten) && !nguoiTiemChungDto.hovaten.isEmpty()) {
 			predicates.add(builder.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + nguoiTiemChungDto.hovaten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhma) && !nguoiTiemChungDto.tinhthanhma.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + nguoiTiemChungDto.tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhten) && !nguoiTiemChungDto.tinhthanhten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + nguoiTiemChungDto.tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenma) && !nguoiTiemChungDto.quanhuyenma.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + nguoiTiemChungDto.quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenten) && !nguoiTiemChungDto.quanhuyenten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + nguoiTiemChungDto.quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.phuongxama) && !nguoiTiemChungDto.phuongxama.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + nguoiTiemChungDto.phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.phuongxaten) && !nguoiTiemChungDto.phuongxaten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + nguoiTiemChungDto.phuongxaten + "%"));
 		}
 
 		if (nguoiTiemChungDto.diabancosoid > 0) {

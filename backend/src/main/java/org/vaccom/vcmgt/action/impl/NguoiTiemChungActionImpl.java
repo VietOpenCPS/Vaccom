@@ -426,17 +426,21 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 	@Override
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
-			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung) {
+			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 		return nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
-				cosoytema, tinhtrangdangky, kiemtratrung);
+				cosoytema, tinhtrangdangky, kiemtratrung,  tinhthanhma,  tinhthanhten,  quanhuyenma
+				,   quanhuyenten,  phuongxama,  phuongxaten);
 	}
 
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
-			Integer page, Integer size) {
+			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
+			,  String quanhuyenten, String phuongxama, String phuongxaten) {
 		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
-				cosoytema, tinhtrangdangky, kiemtratrung, page, size);
+				cosoytema, tinhtrangdangky, kiemtratrung, page, size,  tinhthanhma,  tinhthanhten,  quanhuyenma
+				,   quanhuyenten,  phuongxama,  phuongxaten);
 	}
 
 	@Override
