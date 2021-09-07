@@ -32,7 +32,7 @@ public class ImportControler {
 
 	@RequestMapping(value = "/exceldata", method = RequestMethod.POST)
 	public ResponseEntity<?> importQuocGia(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("file") MultipartFile file, @RequestParam("sheetAt") int sheetAt,
+			@RequestParam("file") MultipartFile file, @RequestParam(name = "sheetAt", defaultValue = "0") int sheetAt,
 			@RequestParam("startCol") int startCol, @RequestParam("endCol") int endCol,
 			@RequestParam("startRow") int startRow, @RequestParam("endRow") int endRow,
 			@RequestParam("table") String table) {

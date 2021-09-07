@@ -116,6 +116,12 @@ public class TransformServiceImpl implements TransformService {
             if(giayDiDuongDto.status != StatusConstant.PENDING) {
                 giayDiDuong.setStatus(giayDiDuongDto.status);
             }
+            if(giayDiDuong.getStatus() == StatusConstant.PENDING) {
+                if(giayDiDuongDto.lichLamViec != null) {
+                    String lichLamViecUpdate = calenderWorking(giayDiDuongDto);
+                    giayDiDuong.setLichLamViec(lichLamViecUpdate);
+                }
+            }
         }
 
         if(giayDiDuongDto.ngayCap != null && !giayDiDuongDto.ngayCap.isEmpty()) {
