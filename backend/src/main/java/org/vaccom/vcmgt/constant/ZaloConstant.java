@@ -2,10 +2,6 @@ package org.vaccom.vcmgt.constant;
 
 public class ZaloConstant {
     //Zalo Notification
-    public final static String template_id_add_NguoiDung = "211214";
-    public final static String template_id_add_LichHenTiem = "211214";
-    public final static String template_id_add_ChungNhan = "211214";
-    public final static String template_id_add_GiayDiDuong = "211214";
 
     // Khung của Body Zalo
     public final static String phone = "phone";
@@ -33,6 +29,7 @@ public class ZaloConstant {
     public final static String Loai_XacNhan_NguoiTiemChung = "AUTH_ACC";
     public final static String Loai_Giay_Di_Duong = "GIAY_DI_DUONG";
     public final static String Loai_Hen_TiemChung = "HEN_TIEM_CHUNG";
+    public final static String Access_Token = "ACCESS_TOKEN";
 
 
     // Notification chứng nhận tiêm chủng
@@ -51,5 +48,10 @@ public class ZaloConstant {
     // response trả về
     public final static String error = "error";
     public final static String message = "message";
+
+    // SMS config
+    public final static String account = "account";
+    public final static String password = "password";
+
 
 }

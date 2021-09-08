@@ -5,9 +5,7 @@ package org.vaccom.vcmgt.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liferay.portal.kernel.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaccom.vcmgt.config.ZaloConfig;
 import org.vaccom.vcmgt.constant.ZaloConstant;
 
 import java.io.BufferedReader;
@@ -15,14 +13,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Locale;
 
 public class ZaloNotificationUtil {
 
-    @Autowired
-    private ZaloConfig zaloConfig;
 
     public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
 

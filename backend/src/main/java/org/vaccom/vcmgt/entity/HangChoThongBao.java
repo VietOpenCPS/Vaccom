@@ -20,6 +20,9 @@ public class HangChoThongBao implements Serializable {
     @Column(name = "ID")
     private long id;
 
+    @Column(name = "UyBanNhanDanID")
+    private long uyBanNhanDanId;
+
     @Column(name = "LoaiThongBao")
     private String LoaiThongBao;
 
@@ -96,4 +99,11 @@ public class HangChoThongBao implements Serializable {
         isReady = ready;
     }
 
+    public long getUyBanNhanDanId() {
+        return uyBanNhanDanId;
+    }
+
+    public void setUyBanNhanDanId(long uyBanNhanDanId) {
+        this.uyBanNhanDanId = uyBanNhanDanId;
+    }
 }
