@@ -13,13 +13,21 @@
         class="px-5 py-3"
       >
       
-        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn>
-        <v-card-text v-if="showAdvanceSearch">
+        </v-btn> -->
+        <v-card-text>
+          <v-row>
+            <v-col
+              cols="12"
+              class="pb-0"
+            >
+              <div><span style="color: red">(*) </span>Chọn lịch tiêm và ca tiêm</div>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col
               cols="12"
@@ -34,11 +42,18 @@
                 item-text="diaDiemTiemChung"
                 item-value="id"
                 outlined
-                placeholder="Lịch tiêm chủng"
+                label="Chọn lịch tiêm"
                 dense
                 hide-details="auto"
                 clearable
-            ></v-autocomplete>
+            >
+              <template v-slot:selection="data">
+                <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+              </template>
+              <template v-slot:item="data">
+                <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+              </template>
+            </v-autocomplete>
             </v-col>
             <v-col
               cols="12"
@@ -52,14 +67,21 @@
                 item-text="gioHenTiem"
                 item-value="id"
                 outlined
-                placeholder="Ca tiêm chủng"
+                label="Chọn ca tiêm"
                 dense
                 hide-details="auto"
                 clearable
-            ></v-autocomplete>
+            >
+              <template v-slot:selection="data">
+                <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+              </template>
+              <template v-slot:item="data">
+                <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+              </template>
+            </v-autocomplete>
             </v-col>
           </v-row>
-          <v-row class="justify-end">
+          <!-- <v-row class="justify-end">
             <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
                 <v-icon left size="20">
                 mdi-close
@@ -72,9 +94,9 @@
                 </v-icon>
                 Lọc danh sách
             </v-btn>
-          </v-row>
+          </v-row> -->
         </v-card-text>
-        <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
+        <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-3'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex mb-3'">
             <div class="mr-auto pt-2 mb-3" v-if="breakpointName === 'xs'">
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span>
@@ -88,15 +110,17 @@
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn v-if="selected.length" color="orange" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 1, 'multiple')">
+            
+            <v-btn v-if="userLogin['coSoYTeId']" small color="#0072bc" class="mx-0 mr-4" @click.stop="addPhieuHenTiem('add')">
+              <v-icon left size="22">
+                mdi-plus
+              </v-icon>
+              Bổ sung danh sách dự kiến
+            </v-btn>
+            <v-btn color="orange" small class="mr-0" @click.stop="xacNhanTinhTrangPhieuHen(selected, 1, 'multiple')">
+              <v-icon size="16" class="mr-2">mdi-account-voice</v-icon>
               Gọi tiêm
             </v-btn>
-            <v-btn v-if="userLogin['coSoYTeId']" small color="#0072bc" class="mx-0" @click.stop="addPhieuHenTiem('add')">
-                <v-icon left size="22">
-                  mdi-plus
-                </v-icon>
-                Bổ sung danh sách dự kiến
-              </v-btn>
           </div>
           <v-data-table
             v-model="selected"
@@ -208,7 +232,14 @@
                         outlined
                         label="Lịch Tiêm Chủng"
                         dense
-                    ></v-autocomplete>
+                    >
+                      <template v-slot:selection="data">
+                        <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+                      </template>
+                      <template v-slot:item="data">
+                        <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+                      </template>
+                    </v-autocomplete>
                     <v-autocomplete
                         class="flex xs12 md6 px-2"
                         hide-no-data
@@ -222,7 +253,14 @@
                         outlined
                         label="Ca tiêm chủng"
                         dense
-                    ></v-autocomplete>
+                    >
+                      <template v-slot:selection="data">
+                        <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+                      </template>
+                      <template v-slot:item="data">
+                        <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+                      </template>
+                    </v-autocomplete>
                     <v-autocomplete
                         class="flex xs12 px-2"
                         hide-no-data
@@ -253,7 +291,8 @@
                       @blur="formatNgayHenTiem"
                       dense
                       outlined
-                      required
+                      :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                       label="Giờ hẹn tiêm"
@@ -263,7 +302,8 @@
                       v-mask="'##:##'"
                       dense
                       outlined
-                      required
+                      :rules="required"
+                        required
                     ></v-text-field>
                     <!-- <v-autocomplete
                         class="flex xs12 md6"
@@ -352,84 +392,13 @@
 </template>
 
 <script>
-  const danhSachPhieu = [
-    {
-      ID: '1',
-      MaQR: '',
-      LichTiemChung_ID: 'LichTiem1',
-      CaTiemChung_ID: 'CaTiem1',
-      NguoiTiemChung_ID: 'NguoiTiem1',
-      LanTiem: 1,
-      NgayHenTiem: '20/11/20201',
-      GioHenTiem: '09:00',
-      TinhTrangXacNhan: 0,
-      GhiChuLyDo: 'Chưa đc tiêm bala bala',
-      NgayCheckin: '20/11/20201',
-      ThongTinCheckin: 'Thông tin bala bala bala',
-      GioDuocTiem: '10:00',
-      TrieuChungSauTiem: 'Đau đầu sổ mũi',
-      DieuTriTrieuChung: 'ok ok',
-    },
-    {
-      ID: '2',
-      MaQR: '',
-      LichTiemChung_ID: 'LichTiem2',
-      CaTiemChung_ID: 'CaTiem2',
-      NguoiTiemChung_ID: 'NguoiTiem2',
-      LanTiem: 1,
-      NgayHenTiem: '20/11/20201',
-      GioHenTiem: '09:00',
-      TinhTrangXacNhan: 0,
-      GhiChuLyDo: 'Chưa đc tiêm bala bala',
-      NgayCheckin: '20/11/20201',
-      ThongTinCheckin: 'Thông tin bala bala bala',
-      GioDuocTiem: '10:00',
-      TrieuChungSauTiem: 'Đau đầu sổ mũi',
-      DieuTriTrieuChung: 'ok ok',
-    },
-    {
-      ID: '3',
-      MaQR: '',
-      LichTiemChung_ID: 'LichTiem3',
-      CaTiemChung_ID: 'CaTiem3',
-      NguoiTiemChung_ID: 'NguoiTiem3',
-      LanTiem: 1,
-      NgayHenTiem: '20/11/20201',
-      GioHenTiem: '09:00',
-      TinhTrangXacNhan: 0,
-      GhiChuLyDo: 'Chưa đc tiêm bala bala',
-      NgayCheckin: '20/11/20201',
-      ThongTinCheckin: 'Thông tin bala bala bala',
-      GioDuocTiem: '10:00',
-      TrieuChungSauTiem: 'Đau đầu sổ mũi',
-      DieuTriTrieuChung: 'ok ok',
-    },
-    {
-      ID: '4',
-      MaQR: '',
-      LichTiemChung_ID: 'LichTiem4',
-      CaTiemChung_ID: 'CaTiem4',
-      NguoiTiemChung_ID: 'NguoiTiem4',
-      LanTiem: 1,
-      NgayHenTiem: '20/11/20201',
-      GioHenTiem: '09:00',
-      TinhTrangXacNhan: 0,
-      GhiChuLyDo: 'Chưa đc tiêm bala bala',
-      NgayCheckin: '20/11/20201',
-      ThongTinCheckin: 'Thông tin bala bala bala',
-      GioDuocTiem: '10:00',
-      TrieuChungSauTiem: 'Đau đầu sổ mũi',
-      DieuTriTrieuChung: 'ok ok',
-    }
-  ]
+  const danhSachPhieu = []
   import axios from 'axios'
   import Vue from 'vue'
-  // import Search from './FormTimKiem.vue'
   import Pagination from './Pagination'
   export default {
     name: 'DanhSachDuKienTiem',
     components: {
-    // 'tim-kiem': Search,
     'pagination': Pagination
     },
     data () {
@@ -488,13 +457,7 @@
         },
         showAdvanceSearch: false,
         required: [
-          (value) => {
-            if(String(value).trim()){
-                return true
-              } else {
-                return 'Thông tin bắt buộc'
-              } 
-          }
+          v => !!v || 'Thông tin bắt buộc'
         ],
         headers: [
           {
@@ -507,7 +470,7 @@
             sortable: false,
             text: 'Người tiêm chủng',
             align: 'center',
-            value: 'nguoiTiemChungId'
+            value: 'hoVaTen'
           },
           {
             sortable: false,
@@ -544,6 +507,13 @@
     computed: {
       breakpointName () {
         return this.$store.getters.getBreakpointName
+      }
+    },
+    watch: {
+      caTiemChungFilter (val) {
+        if (val) {
+          this.getDanhSachPhieuDuKienTiem(0)
+        }
       }
     },
     methods: {
@@ -607,21 +577,27 @@
           }
         } catch (error) {
         }
+        vm.loadingData = true
         axios.get('/rest/v1/app/get/phieuhentiem/0', param).then(function (response) {
-          let serializable = response.data
-          if(serializable) {
-            vm.items = serializable.hasOwnProperty('data') ? serializable.data : []
-            vm.totalItem = serializable.hasOwnProperty('total') ? serializable.total : 0
-            vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-          }
+          setTimeout(function () {
+            vm.loadingData = false
+            let serializable = response.data
+            if(serializable) {
+              vm.items = serializable.hasOwnProperty('data') ? serializable.data : []
+              vm.totalItem = serializable.hasOwnProperty('total') ? serializable.total : 0
+              vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+            }
+          }, 300)
+          
         }).catch(function (error) {
+          vm.loadingData = false
           vm.items = []
-          vm.totalItem = danhSachPhieu.length
-          vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+          vm.totalItem = 0
+          vm.pageCount = 0
         })
-        vm.items = danhSachPhieu
-        vm.totalItem = danhSachPhieu.length
-        vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+        // vm.items = danhSachPhieu
+        // vm.totalItem = danhSachPhieu.length
+        // vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
       },
       getLichTiem () {
         let vm = this
@@ -632,8 +608,9 @@
         vm.$store.dispatch('getLichTiem', filter).then(function (result) {
           vm.danhSachLichTiemChung = result.hasOwnProperty('data') ? result.data : []
           if (vm.danhSachLichTiemChung.length) {
-            vm.lichTiemChungFilter = vm.danhSachLichTiemChung[0].hasOwnProperty('id') ? vm.danhSachLichTiemChung[0]['id'] : ''
-            vm.getCaTiem('created')
+            vm.danhSachLichTiemChung = vm.danhSachLichTiemChung.filter(function (item) {
+              return item.tinhTrangLich == 0
+            })
           }
         })
       },
@@ -648,12 +625,13 @@
             size: 100,
           }
           vm.$store.dispatch('getCaTiem', filter).then(function (result) {
+            vm.caTiemChungFilter = ''
             if (type === 'search'  || type === 'created') {
               vm.danhSachCaTiemChungFilte = result.hasOwnProperty('data') ? result.data : []
-              vm.caTiemChungFilter = vm.danhSachCaTiemChungFilte.length ? vm.danhSachCaTiemChungFilte[0]['id'] : ''
-              if (type === 'created') {
-                vm.getDanhSachPhieuDuKienTiem(0)
-              }
+              // vm.caTiemChungFilter = vm.danhSachCaTiemChungFilte.length ? vm.danhSachCaTiemChungFilte[0]['id'] : ''
+              // if (type === 'created') {
+              //   vm.getDanhSachPhieuDuKienTiem(0)
+              // }
             } else {
               vm.danhSachCaTiemChung = result.hasOwnProperty('data') ? result.data : []
             }
@@ -698,9 +676,16 @@
         vm.typeAction = type
         vm.dialogPhieuDuKienTiem = true
         if (type === 'add') {
+          vm.phieuHenTiem.LichTiemChung_ID = ''
+          vm.phieuHenTiem.CaTiemChung_ID = ''
           setTimeout(function () {
             vm.$refs.formPhieuHenTiem.reset()
             vm.$refs.formPhieuHenTiem.resetValidation()
+            vm.phieuHenTiem.LichTiemChung_ID = vm.lichTiemChungFilter
+            vm.phieuHenTiem.CaTiemChung_ID = vm.caTiemChungFilter
+            if (vm.phieuHenTiem.LichTiemChung_ID) {
+              vm.getCaTiem()
+            }
           }, 200)
         }         
       },
@@ -755,6 +740,8 @@
                 color: 'success',
               })
               vm.page = 0
+              vm.lichTiemChungFilter = vm.phieuHenTiem.LichTiemChung_ID
+              vm.caTiemChungFilter = vm.phieuHenTiem.CaTiemChung_ID
               vm.getDanhSachPhieuDuKienTiem(0)
             }).catch(function (error) {
                 vm.loading = false
@@ -838,6 +825,16 @@
           headers: {
           },
           params: {
+          }
+        }
+        if (type === 'multiple') {
+          if (!vm.selected || vm.selected.length === 0) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Vui lòng chọn người tiêm',
+              color: 'error',
+            })
+            return
           }
         }
         try {

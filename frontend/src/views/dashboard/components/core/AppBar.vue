@@ -348,7 +348,7 @@
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Ủy ban nhân dân',
-                to: '/pages/uy-ban-nha-dan',
+                to: '/pages/uy-ban-nhan-dan',
                 id: 'search',
               },
               {

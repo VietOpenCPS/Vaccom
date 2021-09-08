@@ -99,6 +99,8 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
+                        :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md6 pl-2"
@@ -108,6 +110,8 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
+                        :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md12"
@@ -117,6 +121,8 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
+                        :rules="required"
+                        required
                     ></v-text-field>
                     <v-autocomplete
                         class="flex xs12 md4"
@@ -178,6 +184,16 @@
                         dense
                         clearable
                     ></v-text-field>
+                    <v-textarea
+                      class="flex xs12"
+                      label="Cấu hình thông báo"
+                      v-model="notificationConfig"
+                      outlined
+                      placeholder=""
+                      dense
+                      hide-details="auto"
+                      rows="8"
+                    ></v-textarea>
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -217,6 +233,7 @@
         loading: false,
         loadingData: false,
         dialogAddMember: false,
+        notificationConfig: '{}',
         thongTinUbnd: {
           uyBanNhanDanChaId: 0,
           maDinhDanh: '',
@@ -229,7 +246,8 @@
           phuongXaTen: '',
           diaChiHoatDong: '',
           nguoiDaiDien: '',
-          soDienThoai: ''
+          soDienThoai: '',
+          notificationConfig: ''
         },
         listTinhThanh: [],
         tinhThanh: '',
@@ -246,13 +264,7 @@
         items: [],
         validFormAdd: true,
         required: [
-          (value) => {
-            if(String(value).trim()){
-                return true
-              } else {
-                return 'Thông tin bắt buộc'
-              } 
-          }
+          v => !!v || 'Thông tin bắt buộc'
         ],
         headers: [
           {
@@ -421,7 +433,7 @@
             vm.quanHuyen = vm.coSoUpdate.quanHuyenMa
             vm.xaPhuong = vm.coSoUpdate.phuongXaMa
             vm.thongTinUbnd.soDienThoai = vm.coSoUpdate.soDienThoai
-
+            vm.notificationConfig = vm.coSoUpdate.notificationConfig ? vm.coSoUpdate.notificationConfig : '{}'
             vm.$refs.formAddMember.resetValidation()
           }, 200)
         }
@@ -450,6 +462,18 @@
             })
             vm.thongTinUbnd.phuongXaMa = vm.xaPhuong
             vm.thongTinUbnd.phuongXaTen = obj ? obj['phuongXaTen'] : ''
+            if (vm.notificationConfig) {
+              try {
+                vm.thongTinUbnd.notificationConfig = JSON.parse(vm.notificationConfig)
+              } catch (error) {
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Cấu hình thông báo không chính xác',
+                  color: 'error',
+                })
+                return
+              }
+            }      
           }
           console.log('thongTinUbnd', vm.thongTinUbnd)
         } catch (error) {

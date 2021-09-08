@@ -157,6 +157,8 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
+                        :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                       label="Ngày bắt đầu"
@@ -166,6 +168,8 @@
                       @blur="formatStartDate"
                       dense
                       outlined
+                      :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                       label="Ngày kết thúc"
@@ -175,6 +179,8 @@
                       @blur="formatEndDate"
                       dense
                       outlined
+                      :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                       label="Địa chỉ tiêm chủng"
@@ -182,6 +188,8 @@
                       v-model="thongTinLichTiem.DiaDiemTiemChung"
                       dense
                       outlined
+                      :rules="required"
+                        required
                     ></v-text-field>
                     <v-text-field
                       label="Loại thuốc tiêm"
@@ -342,13 +350,7 @@
         showAdvanceSearch: false,
         lichTiemUpdate: '',
         required: [
-          (value) => {
-            if(String(value).trim()){
-                return true
-              } else {
-                return 'Thông tin bắt buộc'
-              } 
-          }
+          v => !!v || 'Thông tin bắt buộc'
         ],
         headers: [
           {
