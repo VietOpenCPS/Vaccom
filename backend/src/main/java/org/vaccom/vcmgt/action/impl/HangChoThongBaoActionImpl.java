@@ -18,7 +18,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     private HangChoThongBaoService hangChoThongBaoService;
 
     @Override
-    public HangChoThongBao addHangChoThongBao(String jsonObject, NguoiDung nguoiDung, boolean isReady, String loaiThongBao) throws Exception {
+    public HangChoThongBao addHangChoThongBao(String jsonObject, NguoiDung nguoiDung, boolean isReady, String loaiThongBao, long uyBanNhanDanID) throws Exception {
         HangChoThongBao hangChoThongBao = new HangChoThongBao();
         hangChoThongBao.setLoaiThongBao(loaiThongBao);
         hangChoThongBao.setSent(false);
@@ -26,12 +26,13 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setToEmail(nguoiDung.getEmail());
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(nguoiDung.getSoDienThoai()));
         hangChoThongBao.setReady(isReady);
+        hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
 
     @Override
-    public HangChoThongBao addHangChoThongBao(String jsonObject, String SoDienThoai, String Email, boolean isReady, String loaiThongBao) throws Exception {
+    public HangChoThongBao addHangChoThongBao(String jsonObject, String SoDienThoai, String Email, boolean isReady, String loaiThongBao, long uyBanNhanDanID) throws Exception {
 
         HangChoThongBao hangChoThongBao = new HangChoThongBao();
         hangChoThongBao.setLoaiThongBao(loaiThongBao);
@@ -40,6 +41,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setToEmail(Email);
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(SoDienThoai));
         hangChoThongBao.setReady(isReady);
+        hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }

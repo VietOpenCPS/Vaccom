@@ -330,6 +330,8 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 										CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
 
+										long uyBanNhanDanId = coSoYTe.getUyBanNhanDanId();
+
 										//Json
 										ObjectNode template_data = mapper.createObjectNode();
 
@@ -344,7 +346,8 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
 										template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
-										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung);
+
+										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
 									}
 								}
 							}

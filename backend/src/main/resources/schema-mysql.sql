@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `t_uybannhandan` (
   `DiaChiHoatDong` text DEFAULT NULL,
   `NguoiDaiDien` varchar(256) DEFAULT NULL,
   `SoDienThoai` varchar(20) DEFAULT NULL,
+  `NotificationConfig` varchar(2048) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
@@ -290,6 +291,7 @@ create table IF NOT EXISTS t_hangchothongbao (
     `payload` varchar(1024),
     `toEmail` varchar(255),
     `toTelNo` varchar(255),
+    `UyBanNhanDanID` bigint(20) DEFAULT 0,
     primary key (ID)
 );
 

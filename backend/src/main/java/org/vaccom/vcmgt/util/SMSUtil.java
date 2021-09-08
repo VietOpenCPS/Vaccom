@@ -2,25 +2,15 @@ package org.vaccom.vcmgt.util;
 
 import com.liferay.petra.string.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaccom.vcmgt.config.SMSConfig;
 import org.vaccom.vcmgt.constant.SMSConstant;
-import org.vaccom.vcmgt.scheduler.SMSLoginToken;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SMSUtil {
-
-    @Autowired
-    private SMSConfig smsConfig;
 
 
     public static String keepAccessToken(String session_id) throws IOException {
@@ -99,10 +89,9 @@ public class SMSUtil {
         }
         return null;
     }
-    public static String sendSMSMessage(String params) throws IOException {
+    public static String sendSMSMessage(String params, String smsAccessToken) throws IOException {
 
-        String session_id = SMSLoginToken.getAccessToken();
-
+        String session_id = smsAccessToken;
         StringBuilder sb = new StringBuilder("http://onesms.mobifone.vn:8082/SMSAPI/SendSMS");
         sb.append(StringPool.QUESTION);
         sb.append(SMSConstant.MSG_NAME).append(StringPool.EQUAL).append("send_sms");;

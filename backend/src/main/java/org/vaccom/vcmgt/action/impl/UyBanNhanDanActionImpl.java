@@ -77,6 +77,9 @@ public class UyBanNhanDanActionImpl implements UyBanNhanDanAction {
         if(uyBanNhanDanDto.soDienThoai != null && !uyBanNhanDanDto.soDienThoai.isEmpty()) {
             uyBanNhanDan.setSoDienThoai(uyBanNhanDanDto.soDienThoai);
         }
+        if(uyBanNhanDanDto.notificationConfig != null && !uyBanNhanDanDto.notificationConfig.isEmpty()) {
+            uyBanNhanDan.setNotificationConfig(uyBanNhanDanDto.notificationConfig.toString());
+        }
 
         return uyBanNhanDanService.save(uyBanNhanDan);
     }

@@ -26,6 +26,7 @@ public class UyBanNhanDan implements Serializable {
         this.setDiaChiHoatDong(uyBanNhanDanDto.diaChiHoatDong);
         this.setNguoiDaiDien(uyBanNhanDanDto.nguoiDaiDien);
         this.setSoDienThoai(uyBanNhanDanDto.soDienThoai);
+        this.setNotificationConfig(uyBanNhanDanDto.notificationConfig.toString());
     }
 
     @Id
@@ -68,6 +69,17 @@ public class UyBanNhanDan implements Serializable {
 
     @Column(name = "SoDienThoai")
     private String soDienThoai;
+
+    @Column(name = "NotificationConfig")
+    private String NotificationConfig;
+
+    public String getNotificationConfig() {
+        return NotificationConfig;
+    }
+
+    public void setNotificationConfig(String notificationConfig) {
+        NotificationConfig = notificationConfig;
+    }
 
     public long getId() {
         return id;
@@ -172,4 +184,6 @@ public class UyBanNhanDan implements Serializable {
     public void setSoDienThoai(String soDienThoai) {
         this.soDienThoai = soDienThoai;
     }
+
+
 }
