@@ -198,6 +198,17 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   PRIMARY KEY (`ID`)
 ) ;
 
+CREATE TABLE IF NOT EXISTS `t_thuoc` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TenThuoc` varchar(256) NOT NULL,
+  `MaThuoc` varchar(128) DEFAULT NULL,
+  `GhiChu` varchar(512) DEFAULT NULL,
+  `NgayNhap` varchar(10) DEFAULT NULL,
+  `NgayHetHan` varchar(10) DEFAULT NULL,
+  `Status` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`ID`)
+) ;
+
 CREATE TABLE IF NOT EXISTS `t_catiemchung` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `LichTiemChungID` bigint(20) NOT NULL,

@@ -451,15 +451,91 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 				pdc[count] = predicate;
 				count++;
 			}
-			criteriaQuery.where(pdc);
-			
+
 			Predicate allPredicate = builder.and(pdc);
-			//cq.where(pdc);
 			criteriaQuery.where(allPredicate);
 		}
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
 		
+		int offset = page * size;
+
+		long total = typedQuery.getResultList().size();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
+		em.close();
+
+		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);
+	}
+
+	@Override
+	public ResultSearchDto<NguoiTiemChung> searchOr(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+
+		CriteriaQuery<NguoiTiemChung> criteriaQuery = builder.createQuery(NguoiTiemChung.class);
+
+		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
+
+		criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("cmtcccd")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("hoVaTen"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("hoVaTen")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("ngaySinh"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("ngaySinh")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("soDienThoai"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("soDienThoai")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), 0));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("tinhThanhTen"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("tinhThanhTen")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("quanHuyenTen"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("quanHuyenTen")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("phuongXaTen"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("phuongXaTen")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("diaChiNoiO"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("diaChiNoiO")));
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("coSoYTeMa"), ""));
+		predicates.add(builder.isNull(nguoiTiemChungRoot.get("coSoYTeMa")));
+
+		Predicate predicateTinhTrangDangki = null;
+
+		if(nguoiTiemChungDto.tinhtrangdangki > 0) {
+			predicateTinhTrangDangki = builder.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), nguoiTiemChungDto.tinhtrangdangki);
+		}
+
+		if (!predicates.isEmpty()) {
+			Predicate[] pdc = new Predicate[predicates.size()];
+			int count = 0;
+			for (Predicate predicate : predicates) {
+				pdc[count] = predicate;
+				count++;
+			}
+
+			Predicate predicateOr = builder.or(pdc);
+
+			Predicate allPredicate = null;
+			if(predicateTinhTrangDangki != null) {
+				allPredicate = builder.and(predicateOr, predicateTinhTrangDangki);
+			} else {
+				allPredicate = builder.and(predicateOr);
+			}
+
+			criteriaQuery.where(allPredicate);
+		}
+
+		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
+
 		int offset = page * size;
 
 		long total = typedQuery.getResultList().size();

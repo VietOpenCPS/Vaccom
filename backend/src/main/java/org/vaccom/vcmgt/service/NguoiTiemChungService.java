@@ -41,5 +41,6 @@ public interface NguoiTiemChungService {
 			,  String quanhuyenten, String phuongxama, String phuongxaten);
 
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
+	public ResultSearchDto<NguoiTiemChung> searchOr(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 
 }

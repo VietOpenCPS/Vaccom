@@ -113,6 +113,9 @@ public class ApplicationControler {
     @Autowired
     private UyBanNhanDanAction uyBanNhanDanAction;
 
+    @Autowired
+    private ThuocTiemAction thuocTiemAction;
+
     @RequestMapping(value = "/add/nguoidung", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> addNguoiDung(HttpServletRequest request, HttpServletResponse response,
                                           @RequestBody String reqBody) {
@@ -1096,8 +1099,8 @@ public class ApplicationControler {
 
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
-                    if (RoleUtil.isQuanTriHeThong(vaiTro)) {
-                        nguoiTiemChungDto.cosoyteid    = 0;
+            if (RoleUtil.isQuanTriHeThong(vaiTro)) {
+                nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = 0;
             } else {
                 nguoiTiemChungDto.cosoyteid    = vaiTro.getCoSoYTeId();
@@ -3380,5 +3383,28 @@ public class ApplicationControler {
         }
     }
 
+    @RequestMapping(value = "/get/thuoctiem", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> getDSThuocTiem(HttpServletRequest request, HttpServletResponse response,
+                                            @RequestParam("page") int page, @RequestParam("size") int size) {
+        try {
+            long total = 0;
+            List<ThuocTiem> listThuocTiem = new ArrayList<>();
+            listThuocTiem = thuocTiemAction.findAll();
+            total = thuocTiemAction.count();
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, listThuocTiem));
+        } catch (Exception e) {
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
 
 }
