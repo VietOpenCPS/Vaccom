@@ -410,7 +410,7 @@
               let obj = vm.listDiaBan.find(function (item) {
                 return item.id == diaBanUser
               })
-              if (obj) {
+              if (diaBanUser) {
                 vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
                 vm.tinhThanh= obj['tinhThanhMa']
                 vm.quanHuyen = obj['quanHuyenMa']
@@ -483,15 +483,17 @@
         let obj = vm.listTinhThanh.find(function (item) {
           return item.tinhThanhMa == code
         })
-        let filter = {
-          idParent: obj['id']
-        }
-        vm.$store.dispatch('getDanhMucQuanHuyen', filter).then(function (result) {
-          vm.listQuanHuyen = result ? result : []
-          if (vm.quanHuyen) {
-            vm.getXaPhuong(vm.quanHuyen)
+        if (obj) {
+          let filter = {
+            idParent: obj['id']
           }
-        })
+          vm.$store.dispatch('getDanhMucQuanHuyen', filter).then(function (result) {
+            vm.listQuanHuyen = result ? result : []
+            if (vm.quanHuyen) {
+              vm.getXaPhuong(vm.quanHuyen)
+            }
+          })
+        }
       },
       getXaPhuong (code) {
         let vm = this

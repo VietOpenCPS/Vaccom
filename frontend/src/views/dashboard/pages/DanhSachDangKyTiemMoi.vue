@@ -56,7 +56,17 @@
             </v-btn>
             <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
-          
+          <v-flex xs12 style="text-align: right;">
+            <v-checkbox
+              color="#0072bc"
+              class="mt-0 checkboxCmt d-inline-block"
+              v-model="dangkythieuthongtin"
+            >
+              <template v-slot:label>
+                <span style="font-weight: 500;color: #0072bc">LỌC ĐĂNG KÝ THIẾU THÔNG TIN</span>
+              </template>
+            </v-checkbox>
+          </v-flex>
           <v-data-table
             v-model="selected"
             show-select
@@ -191,6 +201,8 @@
         pageCount: 0,
         itemsPerPage: 50,
         items: [],
+        dangkythieuthongtin: false,
+        searchAll: true,
         advanceSearchData: {
           codeNumber: '',
           customerTelNo: '',
@@ -266,14 +278,28 @@
         return this.$store.getters.getBreakpointName
       },
     },
+    watch: {
+      dangkythieuthongtin (val) {
+        if (val) {
+          this.searchAll = false
+          this.locDanhSachNguoiTiemThieuThongTin(0)
+        } else {
+          if (!this.searchAll) {
+            this.getDanhSachDangKyMoi(0)
+          }
+        }
+      }
+    },
     methods: {
       searchDangKyTiem (data) {
         let vm = this
+        vm.searchAll = true
         console.log('dataSearch', data)
         vm.dataInputSearch = data
         vm.page = 0
         vm.totalItem = 0
         vm.pageCount = 0
+        vm.dangkythieuthongtin = false
         vm.getDanhSachDangKyMoi(0, data)
       },
       cancelSearchDangKyTiem (data) {
@@ -312,6 +338,34 @@
           typeSearch: 'danhsachdangkymoi'
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
+          vm.loadingData = false
+          if (result) {
+            vm.items = result.hasOwnProperty('data') ? result.data : []
+            vm.totalItem = result.hasOwnProperty('total') ? result.total : 0
+            vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+          } else {
+            vm.items = []
+            vm.totalItem = 0
+          }
+        }).catch(function () {
+          vm.items = []
+          vm.totalItem = 0
+          vm.loadingData = false
+        })
+      },
+      locDanhSachNguoiTiemThieuThongTin (pageIn) {
+        let vm = this
+        vm.loadingData = true
+        let filter = {
+          page: pageIn,
+          size: vm.itemsPerPage,
+          data: {
+            tinhtrangdangki: 0,
+            isSearchOr: true
+          }
+          
+        }
+        vm.$store.dispatch('locDanhSachNguoiTiemThieuThongTin', filter).then(function(result) {
           vm.loadingData = false
           if (result) {
             vm.items = result.hasOwnProperty('data') ? result.data : []
@@ -486,7 +540,11 @@
       changePage (config) {
         let vm = this
         vm.page = config.page
-        vm.getDanhSachDangKyMoi(config.page, vm.dataInputSearch)
+        if (vm.dangkythieuthongtin) {
+          vm.locDanhSachNguoiTiemThieuThongTin(config.page)
+        } else {
+          vm.getDanhSachDangKyMoi(config.page, vm.dataInputSearch)
+        }
       },
       editRegistration (item) {
         let vm = this

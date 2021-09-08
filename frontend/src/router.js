@@ -71,7 +71,7 @@ export default new Router({
         },
         {
           name: 'DiaBanCoSo',
-          path: '/pages/uy-ban-nha-dan',
+          path: '/pages/uy-ban-nhan-dan',
           component: () => import('@/views/dashboard/pages/UyBanNhanDan'),
         },
         {
