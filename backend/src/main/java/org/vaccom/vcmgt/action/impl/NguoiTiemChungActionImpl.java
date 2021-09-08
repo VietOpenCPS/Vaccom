@@ -213,7 +213,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setTinhThanhTen(tinhThanhTen);
 		nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
 		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
-
+		CoSoYTe coSoYTe = coSoYTeService.findByMaCoSo(coSoYTeMa);
+		nguoiTiemChung.setCoSoYTeId(coSoYTe != null ? coSoYTe.getId() : 0);
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 	}
 
@@ -670,6 +671,9 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 	@Override
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+		if(nguoiTiemChungDto.isSearchOr) {
+			return nguoiTiemChungService.searchOr(nguoiTiemChungDto, page, size);
+		}
 		return nguoiTiemChungService.search(nguoiTiemChungDto, page, size);
 	}
 
