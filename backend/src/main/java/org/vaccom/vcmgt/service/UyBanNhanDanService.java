@@ -17,4 +17,6 @@ public interface UyBanNhanDanService {
 
     //Delete
     public void delete(UyBanNhanDan uyBanNhanDan);
+
+    public List<UyBanNhanDan> findByNotificationConfigExceptNull();
 }

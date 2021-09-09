@@ -1,5 +1,6 @@
 package org.vaccom.vcmgt.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.data.relational.core.sql.In;
 
 import javax.persistence.Column;
@@ -30,6 +31,9 @@ public class UyBanNhanDanDto {
     public String nguoiDaiDien;
 
     public String soDienThoai;
+
+    public JsonNode notificationConfig;
+
 
     public List<Integer> listIdUpdate;
     public List<Integer> listIdDelete;
