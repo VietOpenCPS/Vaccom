@@ -1,3 +1,13 @@
+### Release v0.4.1
+* Thêm tính năng lọc danh sách dữ liệu không chuẩn(thiếu các trường bắt buộc khi import từ excel)
+* Thêm danh mục loại thuốc
+* Thêm cột địa bàn cơ sơ trong danh sách export
+* Thêm cấu hình gửi zalo cho nhiều đơn vị
+### Release v0.4.0
+* Tính năng quản lý lịch tiêm
+* Gửi tin nhắn SMS thông báo giấy đi đường, lịch hẹn tiêm
+* Bổ sung bộ lọc Tỉnh/Huyện/Xã
+
 ### Release v0.3.2
 #### Hotfix:
 * Backend: Sửa cơ chế check trùng người tiêm chủng khi impport từ excel
