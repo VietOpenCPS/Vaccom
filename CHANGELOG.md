@@ -3,6 +3,7 @@
 * Thêm danh mục loại thuốc
 * Thêm cột địa bàn cơ sơ trong danh sách export
 * Thêm cấu hình gửi zalo cho nhiều đơn vị
+* Đổi tên "Danh sách chứng nhận tiêm chủng" thành "Danh sách đã tiêm"
 ### Release v0.4.0
 * Tính năng quản lý lịch tiêm
 * Gửi tin nhắn SMS thông báo giấy đi đường, lịch hẹn tiêm
