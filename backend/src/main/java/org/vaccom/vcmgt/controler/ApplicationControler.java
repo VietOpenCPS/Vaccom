@@ -886,6 +886,9 @@ public class ApplicationControler {
             for (String strId : lstId) {
                 long id = GetterUtil.getLong(strId, 0);
                 NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
+                if(nguoiTiemChung == null) {
+                    continue;
+                }
                 if (nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.DANGKYCHINHTHUC) {
                     HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByPhone_LoaiThongBao(ZaloNotificationUtil.convertPhoneNumber(nguoiTiemChung.getSoDienThoai()), ZaloConstant.Loai_XacNhan_NguoiTiemChung);
                     if (Validator.isNotNull(hangChoThongBao)) {
