@@ -1,5 +1,7 @@
 package org.vaccom.vcmgt.dto;
 
+import org.vaccom.vcmgt.entity.MuiTiemChung;
+
 import javax.persistence.Column;
 import java.util.List;
 
@@ -77,4 +79,7 @@ public class NguoiTiemChungDto {
     public int typeGet;
 
     public boolean isSearchOr = false;
+
+    public List<MuiTiemChungDto> listMuiTieuChungDto;
+
 }

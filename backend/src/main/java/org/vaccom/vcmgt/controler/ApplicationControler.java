@@ -868,8 +868,20 @@ public class ApplicationControler {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
 			}
-			
+
 			*/
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode bodyData = mapper.readTree(reqBody);
+            boolean isAutoAccept = bodyData.has(EntityConstant.IS_AUTO_ACCEPT) ? bodyData.get(EntityConstant.IS_AUTO_ACCEPT).booleanValue() : false;
+
+            if(isAutoAccept) {
+                if(!RoleUtil.isQuanTriHeThong(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
+                }
+            }
+
             nguoiTiemChungAction.duyetDangKyMoi(reqBody);
 
             String msg = MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.success");
@@ -1103,7 +1115,8 @@ public class ApplicationControler {
                 nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = 0;
             } else {
-                nguoiTiemChungDto.cosoyteid    = vaiTro.getCoSoYTeId();
+                //todo set cosoyteId
+                nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
             }
 
