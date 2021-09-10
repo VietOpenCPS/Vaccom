@@ -23,6 +23,9 @@ import org.vaccom.vcmgt.util.VaccomUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/rest/v1/import")
@@ -48,7 +51,16 @@ public class ImportControler {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
 			}
-			importDataAction.importData(vaiTro, table, file, sheetAt, startCol, endCol, startRow, endRow);
+
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			executor.submit(() -> {
+				try {
+					importDataAction.importData(vaiTro, table, file, sheetAt, startCol, endCol, startRow, endRow);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+
 			String msg = MessageUtil.getVNMessageText("data.import." + table + ".success");
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);

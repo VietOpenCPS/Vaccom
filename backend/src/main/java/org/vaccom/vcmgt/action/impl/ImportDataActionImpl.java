@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -22,11 +25,15 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
 import org.vaccom.vcmgt.dto.LichLamViecDto;
+import org.vaccom.vcmgt.dto.MuiTiemChungDto;
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.entity.VaiTro;
 import org.vaccom.vcmgt.util.DatetimeUtil;
+import org.vaccom.vcmgt.util.VaccomUtil;
 
 @Service
 public class ImportDataActionImpl implements ImportDataAction {
+	private final Log _log = LogFactory.getLog(ImportDataActionImpl.class);
 	@Autowired
 	private FileStorageAction fileStorageAction;
 
@@ -114,7 +121,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 						value = cell.getStringCellValue();
 					}
 					
-					System.out.println(cell.getCellType().getCode() + "|" + value);
+//					System.out.println(cell.getCellType().getCode() + "|" + value);
 
 					rowData[cell.getColumnIndex()] = value;
 
@@ -157,6 +164,59 @@ public class ImportDataActionImpl implements ImportDataAction {
 							StringPool.BLANK, StringPool.BLANK, 0);
 					break;
 
+				case "nguoidatiemchung":
+					if(rowData[0] == null || rowData[0].isEmpty()) {
+						continue;
+					}
+
+					if(rowData[1] == null || rowData[1].isEmpty()) {
+						continue;
+					}
+
+					NguoiTiemChungDto nguoiTiemChungDto = new NguoiTiemChungDto();
+					nguoiTiemChungDto.diabancosoid  = GetterUtil.getLong(rowData[0], 0);
+					nguoiTiemChungDto.hovaten = rowData[1];
+					nguoiTiemChungDto.ngaysinh = rowData[2];
+					if(rowData[4] != null && !rowData[4].isEmpty()) {
+						nguoiTiemChungDto.gioitinh = StringUtils.stripAccents(rowData[4])
+								.equalsIgnoreCase("Nu") ? 1 : 0;
+					} else {
+						int lgbt = 2;
+						nguoiTiemChungDto.gioitinh = lgbt;
+					}
+					nguoiTiemChungDto.nhomdoituong = GetterUtil.getInteger(rowData[5], 0);
+					nguoiTiemChungDto.donvicongtac = rowData[6];
+					nguoiTiemChungDto.sodienthoai = rowData[7];
+					nguoiTiemChungDto.cmtcccd = rowData[8] != null && !rowData[8].isEmpty() ? rowData[8].trim(): "";
+					nguoiTiemChungDto.sothebhyt = rowData[9];
+					nguoiTiemChungDto.diachinoio = rowData[10];
+					nguoiTiemChungDto.phuongxaten = rowData[11];
+					nguoiTiemChungDto.quanhuyenten = rowData[12];
+					nguoiTiemChungDto.tinhthanhten = rowData[13];
+					nguoiTiemChungDto.tinhtrangdangki = VaccomUtil.DANGKYCHINHTHUC;
+
+					List<MuiTiemChungDto> listMuiTiemChung = new ArrayList<>();
+
+					if(rowData[15] != null && !rowData[15].isEmpty()) {
+						MuiTiemChungDto muiTiem1 = new MuiTiemChungDto(rowData[14], rowData[15], rowData[16]);
+						listMuiTiemChung.add(muiTiem1);
+					}
+
+					if(rowData[18] != null && !rowData[18].isEmpty()) {
+						MuiTiemChungDto muiTiem2 = new MuiTiemChungDto(rowData[17], rowData[18], rowData[19]);
+						listMuiTiemChung.add(muiTiem2);
+					}
+
+					nguoiTiemChungDto.listMuiTieuChungDto = listMuiTiemChung;
+					try {
+						_log.info("Saving " + nguoiTiemChungDto.hovaten + "...");
+						nguoiTiemChungAction.addNguoiTiemChung(nguoiTiemChungDto);
+					} catch (Exception e) {
+						_log.error("Error voi ho ten: " + nguoiTiemChungDto.hovaten + ", cmt: " + nguoiTiemChungDto.cmtcccd);
+						_log.error(e);
+						continue;
+					}
+					break;
 
 				case "giaydiduong":
 					GiayDiDuongDto giayDiDuongDto = new GiayDiDuongDto();
