@@ -1429,6 +1429,31 @@ export default new Vuex.Store({
           reject(xhr)
         })
       })
-    }
+    },
+    searchNguoiTiemChung ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+            page: filter.page,
+            size: filter.size
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter.data
+        axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
   },
 })
