@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `t_muitiemchung` (
   `NoiSanXuat` varchar(64) DEFAULT NULL,
   `SoLoThuoc` varchar(64) DEFAULT NULL,
   `HanSuDung` varchar(10) DEFAULT NULL,
-  `CoSoYTeID` bigint(20) DEFAULT NULL,
+  `CoSoYTeID` bigint(20) DEFAULT 0,
   `NguoiTiemChungID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;
