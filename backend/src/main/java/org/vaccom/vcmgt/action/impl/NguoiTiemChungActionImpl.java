@@ -14,15 +14,13 @@ import org.vaccom.vcmgt.action.NguoiTiemChungAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
-import org.vaccom.vcmgt.entity.CoSoYTe;
-import org.vaccom.vcmgt.entity.KhoaDangKy;
-import org.vaccom.vcmgt.entity.NguoiDung;
-import org.vaccom.vcmgt.entity.NguoiTiemChung;
+import org.vaccom.vcmgt.entity.*;
 
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.security.impl.RandomString;
 import org.vaccom.vcmgt.security.impl.StrongTextDataEncryptor;
 import org.vaccom.vcmgt.service.CoSoYTeService;
+import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.service.NguoiDungService;
 import org.vaccom.vcmgt.service.NguoiTiemChungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -51,6 +49,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Autowired
 	private CoSoYTeService coSoYTeService;
 
+	@Autowired
+	private MuiTiemChungService muiTiemChungService;
 
 	@Override
 	public long countAll() {
@@ -465,16 +465,29 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
+								List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByNguoiTiemChungId(nguoiTiemChung.getId());
+								if(lstMuiTiemChung != null ) {
+									if(lstMuiTiemChung.size() == 1) {
+										if(lstMuiTiemChung.get(0).getLanTiem() > 1) {
+											continue;
+										}
+									}
+
+									if(lstMuiTiemChung.size() >=2) {
+										continue;
+									}
+								}
+
 								nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
-								
+
 								long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(nguoiTiemChung.getCmtcccd(), VaccomUtil.DANGKYCHINHTHUC);
-								
+
 								if(countByCmtcccd > 0) {
 									nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
 								}else {
 									nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
 								}
-								
+
 								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 
 								if (Validator.isNotNull(nguoiTiemChung.getCmtcccd())) {
