@@ -18,6 +18,18 @@ export default new Router({
           component: () => import('@/views/dashboard/pages/TrangChu'),
         },
         {
+          path: '/pages/bao-cao/doi-tuong-tiem-chung',
+          name: 'BaoCaoDoiTuongTiemChung',
+          component: () => import('@/views/dashboard/pages/BaoCaoDoiTuongTiemChung'),
+          props: true,
+        },
+        {
+          path: '/pages/bao-cao/ke-hoach-tiem-chung',
+          name: 'BaoCaoKeHoachTiemChung',
+          component: () => import('@/views/dashboard/pages/BaoCaoKeHoachTiemChung'),
+          props: true,
+        },
+        {
           path: '/pages/dang-ky-tiem-moi/:uid',
           name: 'DangKyTiemMoi',
           component: () => import('@/views/dashboard/pages/DangKyTiemMoi'),

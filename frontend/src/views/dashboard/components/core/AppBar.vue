@@ -255,6 +255,25 @@
           },
           {
             icon: 'mdi-shield-plus-outline',
+            title: 'Báo Cáo',
+            id: 'report',
+            childItems: [
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Đối tượng tiêm chủng',
+                to: '/pages/bao-cao/doi-tuong-tiem-chung',
+                id: 'report',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Kế hoạch tiêm chủng',
+                to: '/pages/bao-cao/ke-hoach-tiem-chung',
+                id: 'report',
+              },
+            ]
+          },
+          {
+            icon: 'mdi-shield-plus-outline',
             title: 'Đăng ký tiêm',
             id: 'search',
             childItems: [
