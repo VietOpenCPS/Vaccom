@@ -124,4 +124,7 @@ PRIMARY KEY (ID)
 
 ALTER TABLE t_hangchothongbao ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT NULL;
 ALTER TABLE t_uybannhandan ADD COLUMN  `NotificationConfig` varchar(2048) DEFAULT NULL;
-
+----------------------------------------------------------------------------------------------------------
+#update 09/09/2021
+ALTER TABLE t_hangchothongbao MODIFY `UyBanNhanDanID` bigint(20) DEFAULT 0;
+update t_hangchothongbao set UyBanNhanDanID = 0;
