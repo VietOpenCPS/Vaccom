@@ -9,6 +9,7 @@ import org.vaccom.vcmgt.entity.NguoiTiemChung;
 
 @Service
 public interface NguoiTiemChungAction {
+	public void addNguoiTiemChung(NguoiTiemChungDto nguoiTiemChungDto) throws Exception;
 
 	public NguoiTiemChung addNguoiTiemChung(String reqBody) throws Exception;
 

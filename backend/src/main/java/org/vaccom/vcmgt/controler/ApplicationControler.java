@@ -868,33 +868,48 @@ public class ApplicationControler {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
 			}
-			
+
 			*/
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode bodyData = mapper.readTree(reqBody);
+            boolean isAutoAccept = bodyData.has(EntityConstant.IS_AUTO_ACCEPT) ? bodyData.get(EntityConstant.IS_AUTO_ACCEPT).booleanValue() : false;
+
+            if(isAutoAccept) {
+                if(!RoleUtil.isQuanTriHeThong(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
+                }
+            }
+
             nguoiTiemChungAction.duyetDangKyMoi(reqBody);
 
             String msg = MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.success");
 
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode bodyData = mapper.readTree(reqBody);
-
-
-            String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
-                    : StringPool.BLANK;
-
-            List<String> lstId = StringUtil.split(ids);
-
-            for (String strId : lstId) {
-                long id = GetterUtil.getLong(strId, 0);
-                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
-                if (nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.DANGKYCHINHTHUC) {
-                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByPhone_LoaiThongBao(ZaloNotificationUtil.convertPhoneNumber(nguoiTiemChung.getSoDienThoai()), ZaloConstant.Loai_XacNhan_NguoiTiemChung);
-                    if (Validator.isNotNull(hangChoThongBao)) {
-                        hangChoThongBao.setReady(true);
-                        hangChoThongBaoAction.update(hangChoThongBao);
-                    }
-                }
-
-            }
+//            ObjectMapper mapper = new ObjectMapper();
+//            JsonNode bodyData = mapper.readTree(reqBody);
+//
+//
+//            String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
+//                    : StringPool.BLANK;
+//
+//            List<String> lstId = StringUtil.split(ids);
+//
+//            for (String strId : lstId) {
+//                long id = GetterUtil.getLong(strId, 0);
+//                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
+//                if(nguoiTiemChung == null) {
+//                    continue;
+//                }
+//                if (nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.DANGKYCHINHTHUC) {
+//                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByPhone_LoaiThongBao(ZaloNotificationUtil.convertPhoneNumber(nguoiTiemChung.getSoDienThoai()), ZaloConstant.Loai_XacNhan_NguoiTiemChung);
+//                    if (Validator.isNotNull(hangChoThongBao)) {
+//                        hangChoThongBao.setReady(true);
+//                        hangChoThongBaoAction.update(hangChoThongBao);
+//                    }
+//                }
+//
+//            }
 
 
             return ResponseEntity.status(HttpStatus.OK).body(msg);
@@ -1100,7 +1115,8 @@ public class ApplicationControler {
                 nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = 0;
             } else {
-                nguoiTiemChungDto.cosoyteid    = vaiTro.getCoSoYTeId();
+                //todo set cosoyteId
+                nguoiTiemChungDto.cosoyteid    = 0;
                 nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
             }
 

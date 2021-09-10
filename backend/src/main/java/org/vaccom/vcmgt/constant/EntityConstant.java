@@ -68,6 +68,9 @@ public class EntityConstant {
 	public static final String KIEMTRATRUNG = "KiemTraTrung";
 	public static final String KETQUAKIEMTRA = "KetQuaKiemTra";
 	public static final String IDS = "ids";
+	public static final String IS_AUTO_ACCEPT = "isAutoAccept";
+	public static final String COUNT_ACCEPT = "countAccept";
+
 	public static final String STT = "STT";
 	public static final String GIODUOCTIEM = "GioDuocTiem";
 	public static final String SOMUITIEM = "SoMuiTiem";

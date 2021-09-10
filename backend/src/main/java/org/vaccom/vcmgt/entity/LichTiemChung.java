@@ -80,7 +80,10 @@ public class LichTiemChung implements Serializable {
 	private long UyBanNhanDanID;
 
 	@Column(name = "TenCoSo")
-	private String TenCoSo;
+	private String tenCoSo;
+
+	@Column(name = "GioHenTiem")
+	private String gioHenTiem;
 
 	public long getId() {
 		return id;
@@ -227,10 +230,18 @@ public class LichTiemChung implements Serializable {
 	}
 
 	public String getTenCoSo() {
-		return TenCoSo;
+		return tenCoSo;
 	}
 
 	public void setTenCoSo(String tenCoSo) {
-		TenCoSo = tenCoSo;
+		this.tenCoSo = tenCoSo;
+	}
+
+	public String getGioHenTiem() {
+		return gioHenTiem;
+	}
+
+	public void setGioHenTiem(String gioHenTiem) {
+		this.gioHenTiem = gioHenTiem;
 	}
 }

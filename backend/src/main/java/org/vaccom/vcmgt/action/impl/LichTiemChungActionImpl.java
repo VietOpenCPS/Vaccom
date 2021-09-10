@@ -77,6 +77,9 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
 
+		String gioHenTiem = bodyData.has(EntityConstant.GIOHENTIEM) ? bodyData.get(EntityConstant.GIOHENTIEM).textValue()
+				: StringPool.BLANK;
+
 		long uyBanNhanDanID = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
 				: 0;
 
@@ -141,6 +144,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setMaQR(VaccomUtil.generateQRCode("ltc", 6));
 		lichTiemChung.setUyBanNhanDanID(uyBanNhanDanID);
 		lichTiemChung.setTenCoSo(tenCoSo);
+		lichTiemChung.setGioHenTiem(gioHenTiem);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}
@@ -227,6 +231,34 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 				? bodyData.get(EntityConstant.SODIENTHOAI).textValue()
 				: StringPool.BLANK;
 
+		String gioHenTiem = bodyData.has(EntityConstant.GIOHENTIEM) ? bodyData.get(EntityConstant.GIOHENTIEM).textValue()
+				: StringPool.BLANK;
+
+		long uyBanNhanDanID = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
+				: 0;
+
+		String tenCoSo = null;
+
+		if(coSoYTeId > 0){
+			CoSoYTe coSoYTe = null;
+			try {
+				coSoYTe = coSoYTeService.findById(coSoYTeId);
+			} catch (Exception ex){
+				tenCoSo = bodyData.has(EntityConstant.TENCOSO)
+						? bodyData.get(EntityConstant.TENCOSO).textValue()
+						: StringPool.BLANK;
+			}
+			if(Validator.isNotNull(coSoYTe)){
+				tenCoSo = coSoYTe.getTenCoSo();
+			}
+
+
+		} else {
+			tenCoSo = bodyData.has(EntityConstant.TENCOSO)
+					? bodyData.get(EntityConstant.TENCOSO).textValue()
+					: StringPool.BLANK;
+		}
+
 		// TODO Validate fields
 
 		lichTiemChung.setCoSoYTeId(coSoYTeId);
@@ -245,6 +277,9 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setSoDienThoai(soDienThoai);
 		lichTiemChung.setSoMuiMotCa(soMuiMotCa);
 		lichTiemChung.setSoCaTiem(soCaTiem);
+		lichTiemChung.setGioHenTiem(gioHenTiem);
+		lichTiemChung.setUyBanNhanDanID(uyBanNhanDanID);
+		lichTiemChung.setTenCoSo(tenCoSo);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}

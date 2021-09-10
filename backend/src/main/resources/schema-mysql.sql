@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `t_lichtiemchung` (
   `SoDienThoai` varchar(256) DEFAULT NULL,
   `UyBanNhanDanID` bigint(20) DEFAULT 0,
   `TenCoSo` varchar(256) DEFAULT NULL,
+  `GioHenTiem` varchar(6) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
@@ -128,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `t_muitiemchung` (
   `NoiSanXuat` varchar(64) DEFAULT NULL,
   `SoLoThuoc` varchar(64) DEFAULT NULL,
   `HanSuDung` varchar(10) DEFAULT NULL,
-  `CoSoYTeID` bigint(20) DEFAULT NULL,
+  `CoSoYTeID` bigint(20) DEFAULT 0,
   `NguoiTiemChungID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ;

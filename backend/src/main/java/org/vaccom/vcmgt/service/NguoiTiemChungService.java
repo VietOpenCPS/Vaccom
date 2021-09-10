@@ -11,7 +11,9 @@ import org.vaccom.vcmgt.entity.NguoiTiemChung;
 public interface NguoiTiemChungService {
 
 	public long countByCmtcccd(String cmtcccd);
-	
+
+	public long countBySoDienThoai(String sdt);
+
 	public long countByCmtcccd(String cmtcccd, int tinhTrangDangKy);
 
 	public long countByDiaBanCoSoId(long id);
@@ -43,6 +45,9 @@ public interface NguoiTiemChungService {
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 	public ResultSearchDto<NguoiTiemChung> searchOr(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 
+	public List<NguoiTiemChung> searchListChuyenDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto);
+
 	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
+
 
 }
