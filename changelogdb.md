@@ -109,5 +109,22 @@ update t_cosoyte set UyBanNhanDanID = 0;
 #update 03/09/2021
 ALTER TABLE t_giaydiduong modify `NgayCap` varchar(20) DEFAULT NULL;
 ALTER TABLE t_giaydiduong modify `ThoiHan` varchar(20) DEFAULT NULL;
+----------------------------------------------------------------------------------------------------------
+#update 08/09/2021
+CREATE TABLE IF NOT EXISTS t_thuoc (
+ID bigint(20) NOT NULL AUTO_INCREMENT,
+TenThuoc varchar(256) NOT NULL,
+MaThuoc varchar(128) DEFAULT NULL,
+GhiChu varchar(512) DEFAULT NULL,
+NgayNhap varchar(10) DEFAULT NULL,
+NgayHetHan varchar(10) DEFAULT NULL,
+Status tinyint(1) DEFAULT 0,
+PRIMARY KEY (ID)
+) ;
 
-
+ALTER TABLE t_hangchothongbao ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT NULL;
+ALTER TABLE t_uybannhandan ADD COLUMN  `NotificationConfig` varchar(2048) DEFAULT NULL;
+----------------------------------------------------------------------------------------------------------
+#update 09/09/2021
+ALTER TABLE t_hangchothongbao MODIFY `UyBanNhanDanID` bigint(20) DEFAULT 0;
+update t_hangchothongbao set UyBanNhanDanID = 0;

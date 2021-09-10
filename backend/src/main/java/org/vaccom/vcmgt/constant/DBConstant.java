@@ -18,11 +18,11 @@ public class DBConstant {
 	public static final String _QUOCGIA_TABLE_NAME = "t_quocgia";
 	public static final String _DANTOC_TABLE_NAME = "t_dantoc";
 	public static final String _TINHTHANH_TABLE_NAME = "t_tinhthanh";
+	public static final String _THUOC_TABLE_NAME = "t_thuoc";
 	public static final String _QUANHUYEN_TABLE_NAME = "t_quanhuyen";
 	public static final String _PHUONGXA_TABLE_NAME = "t_phuongxa";
 	public static final String _DOITUONG_TABLE_NAME = "t_doituong";
 	public static final String _HANGCHO_THONGBAO_TABLE_NAME = "t_hangchothongbao";
-	public static final String _MAU_THONGBAO_TABLE_NAME = "t_mauthongbao";
 
 	public static final String _KHOADANGKY_TABLE_NAME = "vc_khoadangky";
 	public static final String _KHOATRUYCAP_TABLE_NAME = "vc_khoatruycap";

@@ -48,4 +48,9 @@ public class UyBanNhanDanServiceImpl implements UyBanNhanDanService {
     public void delete(UyBanNhanDan uyBanNhanDan) {
         uyBanNhanDanRepository.delete(uyBanNhanDan);
     }
+
+    @Override
+    public List<UyBanNhanDan> findByNotificationConfigExceptNull() {
+        return uyBanNhanDanRepository.findByNotificationConfigExceptNull();
+    }
 }

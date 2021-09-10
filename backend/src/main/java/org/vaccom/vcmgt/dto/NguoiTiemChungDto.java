@@ -75,4 +75,6 @@ public class NguoiTiemChungDto {
     public List<Integer> listtinhtrangxacnhan;
 
     public int typeGet;
+
+    public boolean isSearchOr = false;
 }

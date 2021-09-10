@@ -13,13 +13,21 @@
         class="px-5 py-3"
       >
       
-        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn>
-        <v-card-text v-if="showAdvanceSearch">
+        </v-btn> -->
+        <v-card-text>
+          <v-row>
+            <v-col
+              cols="12"
+              class="pb-0"
+            >
+              <div><span style="color: red">(*) </span>Chọn lịch tiêm và ca tiêm</div>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col
               cols="12"
@@ -53,27 +61,46 @@
               class="pb-0"
             >
               <v-autocomplete
-                hide-no-data
-                :items="danhSachCaTiemChungFilte"
-                v-model="caTiemChungFilter"
-                item-text="gioHenTiem"
-                item-value="id"
-                outlined
-                label="Ca tiêm chủng"
-                dense
-                hide-details="auto"
-                clearable
+                  hide-no-data
+                  :items="danhSachCaTiemChungFilte"
+                  v-model="caTiemChungFilter"
+                  item-text="gioHenTiem"
+                  item-value="id"
+                  outlined
+                  label="Ca tiêm chủng"
+                  dense
+                  hide-details="auto"
+                  clearable
+              >
+                <template v-slot:selection="data">
+                  <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+                </template>
+                <template v-slot:item="data">
+                  <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+              class="pb-0 mt-2"
             >
-              <template v-slot:selection="data">
-                <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
-              </template>
-              <template v-slot:item="data">
-                <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
-              </template>
-            </v-autocomplete>
+              <v-autocomplete
+                  hide-no-data
+                  :items="danhSachTinhTrangXacNhan"
+                  v-model="trangThaiFilter"
+                  item-text="name"
+                  item-value="value"
+                  outlined
+                  label="Trạng thái phiếu hẹn"
+                  dense
+                  hide-details="auto"
+                  clearable
+              >
+              </v-autocomplete>
             </v-col>
           </v-row>
-          <v-row class="justify-end">
+          <!-- <v-row class="justify-end">
             <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
                 <v-icon left size="20">
                 mdi-close
@@ -86,7 +113,7 @@
                 </v-icon>
                 Lọc danh sách
             </v-btn>
-          </v-row>
+          </v-row> -->
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0 pt-5'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex mb-3'">
@@ -396,17 +423,18 @@
         items: [],
         coSoYTe: '',
         ngayCheckinFomarted: '',
+        trangThaiFilter: '',
         danhSachLichTiemChung: [],
         danhSachCaTiemChungFilte: [],
         danhSachCaTiemChung: [],
         danhSachNguoiTiemChung: [],
         danhSachTinhTrangXacNhan: [
-          {name: 'Dự kiến', value: 0},
-          {name: 'Hẹn gọi chờ xác nhận', value: 1},
-          {name: 'Hẹn đã xác nhận', value: 2},
-          {name: 'Đã tiêm xong, đã check-in', value: 3},
-          {name: 'Chưa được tiêm', value: 4},
-          {name: 'Xác nhận không đến', value: 5},
+          {name: 'Chờ xác nhận', value: 1},
+          {name: 'Đã xác nhận', value: 2},
+          {name: 'Đã check-in', value: 3},
+          {name: 'Đã tiêm xong', value: 4},
+          {name: 'Chưa được tiêm', value: 5},
+          {name: 'Xác nhận không đến', value: 6}
         ],
         muiTiemChung: {
           NguoiTiemChung_ID: '',
@@ -470,7 +498,7 @@
           {
             sortable: false,
             text: 'Thao tác',
-            align: 'left',
+            align: 'center',
             value: 'action'
           }
         ],
@@ -486,6 +514,16 @@
       }
       vm.getLichTiem()
       vm.getDanhSachPhieuHenTiem(0)
+    },
+    watch: {
+      caTiemChungFilter (val) {
+        if (val) {
+          this.getDanhSachPhieuHenTiem(0)
+        }
+      },
+      trangThaiFilter (val) {
+        this.getDanhSachPhieuHenTiem(0)
+      }
     },
     computed: {
       breakpointName () {
@@ -544,6 +582,7 @@
             typeGet: 1,
             lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
             caTiemChungId: vm.caTiemChungFilter ? vm.caTiemChungFilter : '',
+            tinhtrangxacnhan: vm.trangThaiFilter
         }
         vm.loading = true
         axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
@@ -575,6 +614,9 @@
         vm.$store.dispatch('getLichTiem', filter).then(function (result) {
           vm.danhSachLichTiemChung = result.hasOwnProperty('data') ? result.data : []
           if (vm.danhSachLichTiemChung.length) {
+            vm.danhSachLichTiemChung = vm.danhSachLichTiemChung.filter(function (item) {
+              return item.tinhTrangLich == 0
+            })
             vm.getCaTiem('created')
           }
         })
@@ -765,13 +807,13 @@
       getTextTrangThai(trangThai) {
           switch (trangThai) {
               case 1:
-                  return 'Chưa xác nhận hẹn';
+                  return 'Chờ xác nhận';
               case 2:
-                  return 'Đã xác nhận hẹn'
+                  return 'Đã xác nhận'
               case 3:
                   return 'Đã check-in'
               case 4:
-                  return 'Đã tiêm'
+                  return 'Đã tiêm xong'
               case 5:
                   return 'Chưa được tiêm'
               case 6:
