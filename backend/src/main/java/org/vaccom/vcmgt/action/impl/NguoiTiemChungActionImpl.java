@@ -101,14 +101,20 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			return ;
 		}
 
-		if(listTiemChungDto == null || listTiemChungDto.size() == 0) {
-			_log.warn("Khong thay thong tin mui tiem cua: " + nguoiTiemChungDto.cmtcccd);
-			return;
-		}
-
 		long idNguoiTiem = nguoiTiemChungCreated.getId();
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
+
+		if(listTiemChungDto == null || listTiemChungDto.size() == 0) {
+			MuiTiemChung muiTiemChung = new MuiTiemChung();
+			muiTiemChung.setNguoiTiemChungId(idNguoiTiem);
+			muiTiemChung.setLanTiem(1);
+			muiTiemChung.setHoVaTen(tenNguoiTiem);
+			muiTiemChung.setCmtcccd(cmt);
+			muiTiemChungService.updateMuiTiemChung(muiTiemChung);
+			return;
+		}
+
 		int lanTiem = 1;
 		for(MuiTiemChungDto muiTiemChungDto: listTiemChungDto) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
