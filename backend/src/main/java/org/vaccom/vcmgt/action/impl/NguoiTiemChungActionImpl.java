@@ -790,6 +790,10 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 	@Override
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+		if(nguoiTiemChungDto.isSearchDaTiem) {
+			return nguoiTiemChungService.searchDaTiem(nguoiTiemChungDto, page, size);
+		}
+
 		if(nguoiTiemChungDto.isSearchOr) {
 			return nguoiTiemChungService.searchOr(nguoiTiemChungDto, page, size);
 		}
