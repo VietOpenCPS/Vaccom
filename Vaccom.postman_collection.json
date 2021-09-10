@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "eaa913a1-962a-4b1f-9d07-f2aedbe9bf24",
+		"_postman_id": "2b00e119-de62-477c-aff6-e77158f4c107",
 		"name": "Vaccom",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,12 +13,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "",
+							"value": "KillCovid19",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "",
+							"value": "admin",
 							"type": "string"
 						}
 					]
@@ -965,7 +965,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"raw": "http://localhost:8686/rest/v1/app/get/nguoitiemchung?page=0&size=50&cmtcccd=&nhomdoituong=&ngaydangki=&hovaten=&diabancosoid=&cosoytema=&tinhtrangdangky=&kiemtratrung=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1051,7 +1051,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkymoi?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkymoi?page=0&size=50&cmtcccd=&nhomdoituong=&ngaydangki=&hovaten=&diabancosoid=&cosoytema=&tinhtrangdangky=&kiemtratrung=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1137,7 +1137,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkychinhthuc?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdangkychinhthuc?page=0&size=50&cmtcccd=&nhomdoituong=&ngaydangki=&hovaten=&diabancosoid=&cosoytema=&tinhtrangdangky=&kiemtratrung=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1223,7 +1223,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdahuy?page=0&size=50&cmtcccd=&nhomdoituong&ngaydangki&hovaten=&diabancosoid&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"raw": "http://localhost:8686/rest/v1/app/get/danhsachdahuy?page=0&size=50&cmtcccd=&nhomdoituong=&ngaydangki=&hovaten=&diabancosoid=&cosoytema=&tinhtrangdangky=&kiemtratrung=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1348,6 +1348,101 @@
 						"rest",
 						"v1",
 						"import",
+						"exceldata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin]Import Phiếu Hẹn Tiêm",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTI5MjY0OSwiZXhwIjoxNjMxMjk2MjQ5fQ.1X1z8ExlBPG1xJVvjwGPMqqexvi5eEku9VfBWPhHWNFll5r8K24FXz3G_zzOZmQpIlmL_evWFUl9CxoKM9YIfA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/DanhSachTiemChinhThuc (3).xls"
+						},
+						{
+							"key": "sheetAt",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "startCol",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "endCol",
+							"value": "26",
+							"type": "text"
+						},
+						{
+							"key": "startRow",
+							"value": "8",
+							"type": "text"
+						},
+						{
+							"key": "endRow",
+							"value": "20000",
+							"type": "text"
+						},
+						{
+							"key": "table",
+							"value": "phieuhentiem",
+							"type": "text"
+						},
+						{
+							"key": "lichTiemChung_ID",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ngayHenTiem",
+							"value": "15/08/2021",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "gioHenTiem",
+							"value": "09:00",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "lanTiem",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/import/phieuhentiem/exceldata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"import",
+						"phieuhentiem",
 						"exceldata"
 					]
 				}
@@ -1628,7 +1723,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/export/nguoitiemchung?page=-1&size=-1&cmtcccd=&nhomdoituong&ngaydangki=&hovaten=&diabancosoid=&cosoytema&tinhtrangdangky&kiemtratrung=",
+					"raw": "http://localhost:8686/rest/v1/export/nguoitiemchung?page=-1&size=-1&cmtcccd=&nhomdoituong=&ngaydangki=&hovaten=&diabancosoid=&cosoytema=&tinhtrangdangky=&kiemtratrung=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2556,7 +2651,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8686/rest/v1/app/get/catiemchung?page=0&size=10&lichtiemchungid&diabancosoid",
+					"raw": "http://localhost:8686/rest/v1/app/get/catiemchung?page=0&size=10&lichtiemchungid=&diabancosoid=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -3784,7 +3879,85 @@
 			"response": []
 		},
 		{
-			"name": "[QR Code] Lấy Chứng Nhận Tiêm Chủng Thông Qua QR Code",
+			"name": "[canboyte] Gửi thông báo hàng loạt theo lịch tiêm chủng",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTI5NTkwNywiZXhwIjoxNjMxMjk5NTA3fQ.cKIhSVh63gZj5HTyD1VSaiY1f0OLKzxZCdBBtW3ZY87zrawIYotaNyGfSYKXdtEht_GeXtU7sMt2kIwn1pNPGA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/phieuhentiem/guiThongBao/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"phieuhentiem",
+						"guiThongBao",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy danh sách hàng đợi thông báo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTI5NTkwNywiZXhwIjoxNjMxMjk5NTA3fQ.cKIhSVh63gZj5HTyD1VSaiY1f0OLKzxZCdBBtW3ZY87zrawIYotaNyGfSYKXdtEht_GeXtU7sMt2kIwn1pNPGA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/hangchothongbao?isSent=true&isReady=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"hangchothongbao"
+					],
+					"query": [
+						{
+							"key": "isSent",
+							"value": "true"
+						},
+						{
+							"key": "isReady",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[QR Code] Lấy Chứng Nhận Tiêm Chủng Thông Qua QR Code Copy 2",
 			"request": {
 				"method": "GET",
 				"header": [],
