@@ -2,13 +2,16 @@ package org.vaccom.vcmgt.action.impl;
 
 import java.util.List;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.LichTiemChungAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
+import org.vaccom.vcmgt.entity.CoSoYTe;
 import org.vaccom.vcmgt.entity.LichTiemChung;
 import org.vaccom.vcmgt.exception.ActionException;
+import org.vaccom.vcmgt.service.CoSoYTeService;
 import org.vaccom.vcmgt.service.LichTiemChungService;
 import org.vaccom.vcmgt.service.PhieuHenTiemService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -30,6 +33,9 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 
 	@Autowired
 	private PhieuHenTiemService phieuHenTiemService;
+
+	@Autowired
+	private CoSoYTeService coSoYTeService;
 
 	@Override
 	public long countAll() {
@@ -70,6 +76,32 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 				: StringPool.BLANK;
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
+
+		long uyBanNhanDanID = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
+				: 0;
+
+		String tenCoSo = null;
+
+		if(coSoYTeId > 0){
+			CoSoYTe coSoYTe = null;
+			try {
+				coSoYTe = coSoYTeService.findById(coSoYTeId);
+			} catch (Exception ex){
+				tenCoSo = bodyData.has(EntityConstant.TENCOSO)
+						? bodyData.get(EntityConstant.TENCOSO).textValue()
+						: StringPool.BLANK;
+			}
+			if(Validator.isNotNull(coSoYTe)){
+				tenCoSo = coSoYTe.getTenCoSo();
+			}
+
+
+		} else {
+			tenCoSo = bodyData.has(EntityConstant.TENCOSO)
+					? bodyData.get(EntityConstant.TENCOSO).textValue()
+					: StringPool.BLANK;
+		}
+
 		int tongSoMuiTiem = bodyData.has(EntityConstant.TONGSOMUITIEM)
 				? bodyData.get(EntityConstant.TONGSOMUITIEM).intValue()
 				: 2;
@@ -85,6 +117,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		String soDienThoai = bodyData.has(EntityConstant.SODIENTHOAI)
 				? bodyData.get(EntityConstant.SODIENTHOAI).textValue()
 				: StringPool.BLANK;
+
 
 		// TODO Validate fields
 
@@ -106,6 +139,8 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setSoMuiMotCa(soMuiMotCa);
 		lichTiemChung.setSoCaTiem(soCaTiem);
 		lichTiemChung.setMaQR(VaccomUtil.generateQRCode("ltc", 6));
+		lichTiemChung.setUyBanNhanDanID(uyBanNhanDanID);
+		lichTiemChung.setTenCoSo(tenCoSo);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}

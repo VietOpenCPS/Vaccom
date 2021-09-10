@@ -545,4 +545,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);
 	}
 
+	@Override
+	public NguoiTiemChung findByCMTCCCD(String cmtcccd) {
+		return nguoiTiemChungRepository.findByCMTCCCD(cmtcccd);
+	}
+
 }

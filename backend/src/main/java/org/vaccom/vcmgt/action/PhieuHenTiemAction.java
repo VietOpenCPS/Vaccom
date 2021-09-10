@@ -14,6 +14,8 @@ import org.vaccom.vcmgt.entity.PhieuHenTiem;
 public interface PhieuHenTiemAction {
 
 	public PhieuHenTiem addPhieuHenTiem(String reqBody) throws Exception;
+
+	public PhieuHenTiem addPhieuHenTiem(PhieuHenTiem phieuHenTiem);
 	
 	public long countPhieuHenTiem(long lichTiemChungId, long caTiemChungId, int tinhTrangXacNhan);
 

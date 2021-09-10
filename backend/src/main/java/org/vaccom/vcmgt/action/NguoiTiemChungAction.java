@@ -51,4 +51,6 @@ public interface NguoiTiemChungAction {
 	public NguoiTiemChung findByMaQR(String MaQR);
 
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
+
+	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
 }
