@@ -76,7 +76,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 
 
     @Override
-    public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow, int endRow, long lichTiemChung_ID, String gioHenTiem, int lanTiem) throws Exception {
+    public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow, int endRow, long lichTiemChung_ID, int lanTiem) throws Exception {
         HSSFWorkbook workbook = null;
         try {
 
@@ -141,54 +141,60 @@ public class ImportDataActionImpl implements ImportDataAction {
                     cellNumber++;
 
 
+
+
                 }
+                if(Validator.isNotNull(rowData[7])){
+					switch (table) {
+
+						case "phieuhentiem":
+							NguoiTiemChung nguoiTiemChung = null;
+							LichTiemChung lichTiemChung = null;
+							String CMTCCCD = rowData[7];
+							System.out.println(CMTCCCD);
+
+							if(Validator.isNotNull(CMTCCCD) || !CMTCCCD.isEmpty() || CMTCCCD != ""){
+								try {
+									nguoiTiemChung = nguoiTiemChungAction.findByCMTCCCD(CMTCCCD);
+									lichTiemChung = lichTiemChungAction.findById(lichTiemChung_ID);
+								} catch (Exception ex){
+									System.out.println(ex.getMessage());
+								}
+								if(Validator.isNotNull(nguoiTiemChung) && Validator.isNotNull(lichTiemChung)){
+									PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
+									phieuHenTiem.setGioHenTiem(lichTiemChung.getGioHenTiem());
+									phieuHenTiem.setLichTiemChungId(lichTiemChung_ID);
+									phieuHenTiem.setCaTiemChungId(0);
+									phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
+									phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
+									phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 6));
+									phieuHenTiem.setLanTiem(lanTiem);
+									phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
+									phieuHenTiem.setNgayCheckin(StringPool.BLANK);
+									phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
+									phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
+									phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
+									phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
+									phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+								}
+							} else {
+								break exit_loop;
+							}
+							break;
+
+						default:
+							break;
+					}
+				}
 
 
-                switch (table) {
 
-                    case "phieuhentiem":
-                        NguoiTiemChung nguoiTiemChung = null;
-                        LichTiemChung lichTiemChung = null;
-                        String CMTCCCD = rowData[7];
-                        System.out.println("CMTCCCD  123123123: " + rowData[7]);
-                        if(Validator.isNotNull(CMTCCCD) || !CMTCCCD.isEmpty() || CMTCCCD != ""){
-                            try {
-                                nguoiTiemChung = nguoiTiemChungAction.findByCMTCCCD(CMTCCCD);
-                                lichTiemChung = lichTiemChungAction.findById(lichTiemChung_ID);
-                                System.out.println(nguoiTiemChung);
-                            } catch (Exception ex){
-                                System.out.println(ex.getMessage());
-                            }
-                            if(Validator.isNotNull(nguoiTiemChung) && Validator.isNotNull(lichTiemChung)){
-                                PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
-                                phieuHenTiem.setGioHenTiem(gioHenTiem);
-                                phieuHenTiem.setLichTiemChungId(lichTiemChung_ID);
-                                phieuHenTiem.setCaTiemChungId(0);
-                                phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
-                                phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
-                                phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 6));
-                                phieuHenTiem.setLanTiem(lanTiem);
-                                phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
-                                phieuHenTiem.setNgayCheckin(StringPool.BLANK);
-                                phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
-                                phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
-                                phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
-                                phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
-                                phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
-                            } else {
-                                break exit_loop;
-                            }
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
             }
 
 
             workbook.close();
         } catch (Exception e) {
+			System.out.println(e);
             throw new Exception(e);
         } finally {
             if (workbook != null) {

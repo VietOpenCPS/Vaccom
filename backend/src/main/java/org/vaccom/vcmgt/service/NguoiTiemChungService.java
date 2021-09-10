@@ -50,4 +50,5 @@ public interface NguoiTiemChungService {
 	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
 
 
+
 }

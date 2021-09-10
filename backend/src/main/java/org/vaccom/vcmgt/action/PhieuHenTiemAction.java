@@ -42,4 +42,5 @@ public interface PhieuHenTiemAction {
 
 	public PhieuHenTiem findByMaQR(String maQr);
 
+	public List<PhieuHenTiem> findByLichTiemChungID(long lichTiemChungId);
 }

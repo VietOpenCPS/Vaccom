@@ -409,5 +409,10 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 		return phieuHenTiemService.findByMaQR(maQr);
 	}
 
+	@Override
+	public List<PhieuHenTiem> findByLichTiemChungID(long lichTiemChungId) {
+		return phieuHenTiemService.findByLichTiemChungID(lichTiemChungId);
+	}
+
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);
 }

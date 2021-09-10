@@ -29,6 +29,7 @@ public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, 
 	
 	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
 
+
 	@Query(value="SELECT * FROM " + DBConstant._NGUOITIEMCHUNG_TABLE_NAME + " WHERE MaQR = :maQr", nativeQuery = true)
 	public NguoiTiemChung findByMaQR(@Param(value = "maQr") String maQr);
 

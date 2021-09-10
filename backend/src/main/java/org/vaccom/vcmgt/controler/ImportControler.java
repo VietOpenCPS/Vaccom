@@ -79,7 +79,7 @@ public class ImportControler {
 										   @RequestParam("startCol") int startCol, @RequestParam("endCol") int endCol,
 										   @RequestParam("startRow") int startRow, @RequestParam("endRow") int endRow,
 										   @RequestParam("table") String table, @RequestParam("lichTiemChung_ID") long lichTiemChung_ID,
-												@RequestParam("gioHenTiem") String gioHenTiem, @RequestParam("lanTiem") int lanTiem) {
+												@RequestParam("lanTiem") int lanTiem) {
 		try {
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
@@ -92,7 +92,7 @@ public class ImportControler {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.import.permission_error"));
 			}
-			importDataAction.importData(vaiTro, table, file, sheetAt, startCol, endCol, startRow, endRow, lichTiemChung_ID, gioHenTiem, lanTiem);
+			importDataAction.importData(vaiTro, table, file, sheetAt, startCol, endCol, startRow, endRow, lichTiemChung_ID, lanTiem);
 			String msg = MessageUtil.getVNMessageText("data.import." + table + ".success");
 
 			return ResponseEntity.status(HttpStatus.OK).body(msg);

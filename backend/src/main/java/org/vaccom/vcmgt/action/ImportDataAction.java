@@ -10,5 +10,5 @@ public interface ImportDataAction {
 	public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
 						   int endRow) throws Exception;
 	public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
-						   int endRow, long lichTiemChung_ID, String gioHenTiem, int lanTiem) throws Exception;
+						   int endRow, long lichTiemChung_ID, int lanTiem) throws Exception;
 }
