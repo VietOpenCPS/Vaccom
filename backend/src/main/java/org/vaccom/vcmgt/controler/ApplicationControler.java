@@ -3432,47 +3432,49 @@ public class ApplicationControler {
                 phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.HENDAXACNHAN);
                 PhieuHenTiem phieuHenTiemNew = phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
                 int newTinhTrangXacNhan = phieuHenTiemNew.getTinhTrangXacNhan();
-                if(Validator.isNotNull(phieuHenTiemNew)){
-                    if(oldTinhTrangXacNhan!=VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan==VaccomUtil.HENDAXACNHAN){
-                        if(Validator.isNotNull(phieuHenTiem)){
-                            LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
-                            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
-                            UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
+                if(oldTinhTrangXacNhan < newTinhTrangXacNhan){
+                    if(Validator.isNotNull(phieuHenTiemNew)){
+                        if(oldTinhTrangXacNhan!=VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan==VaccomUtil.HENDAXACNHAN){
+                            if(Validator.isNotNull(phieuHenTiem)){
+                                LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+                                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                                UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-                            CoSoYTe coSoYTe = null;
-                            String TenCoSo = null;
-                            String DiaDiem = null;
+                                CoSoYTe coSoYTe = null;
+                                String TenCoSo = null;
+                                String DiaDiem = null;
 
-                            if(Validator.isNotNull(lichTiemChung.getCoSoYTeId())){
-                                coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
-                                if(Validator.isNotNull(coSoYTe)){
-                                    TenCoSo = coSoYTe.getTenCoSo();
-                                    DiaDiem = coSoYTe.getDiaChiCoSo();
+                                if(Validator.isNotNull(lichTiemChung.getCoSoYTeId())){
+                                    coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+                                    if(Validator.isNotNull(coSoYTe)){
+                                        TenCoSo = coSoYTe.getTenCoSo();
+                                        DiaDiem = coSoYTe.getDiaChiCoSo();
+                                    }
+                                } else {
+                                    TenCoSo = lichTiemChung.getTenCoSo();
+                                    DiaDiem = lichTiemChung.getDiaDiemTiemChung();
                                 }
-                            } else {
-                                TenCoSo = lichTiemChung.getTenCoSo();
-                                DiaDiem = lichTiemChung.getDiaDiemTiemChung();
+
+
+                                long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
+
+                                //Json
+                                ObjectNode template_data = mapper.createObjectNode();
+
+                                template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+                                template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
+                                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
+                                template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                                template_data.put(ZaloConstant.DonViTiem, TenCoSo);
+                                template_data.put(ZaloConstant.DiaDiem, DiaDiem);
+                                template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+                                template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
+                                template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
+                                template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+
+
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
                             }
-
-
-                            long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
-
-                            //Json
-                            ObjectNode template_data = mapper.createObjectNode();
-
-                            template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-                            template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
-                            template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
-                            template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
-                            template_data.put(ZaloConstant.DonViTiem, TenCoSo);
-                            template_data.put(ZaloConstant.DiaDiem, DiaDiem);
-                            template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
-                            template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-                            template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
-                            template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
-
-
-                            hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
                         }
                     }
                 }
