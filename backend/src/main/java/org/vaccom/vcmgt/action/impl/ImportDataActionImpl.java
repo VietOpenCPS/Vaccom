@@ -151,7 +151,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 							NguoiTiemChung nguoiTiemChung = null;
 							LichTiemChung lichTiemChung = null;
 							String CMTCCCD = rowData[7];
-							System.out.println(CMTCCCD);
+
 
 							if(Validator.isNotNull(CMTCCCD) || !CMTCCCD.isEmpty() || CMTCCCD != ""){
 								try {
