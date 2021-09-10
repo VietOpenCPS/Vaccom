@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
+import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.entity.PhieuHenTiem;
 import org.vaccom.vcmgt.repository.NguoiTiemChungRepository;
@@ -463,6 +464,101 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
 		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
 		
+		int offset = page * size;
+
+		long total = typedQuery.getResultList().size();
+		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
+		em.close();
+
+		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);
+	}
+
+	@Override
+	public ResultSearchDto<NguoiTiemChung> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+
+		CriteriaQuery<NguoiTiemChung> criteriaQuery = builder.createQuery(NguoiTiemChung.class);
+
+		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
+		Root<MuiTiemChung>   muiTiemChungRoot   = criteriaQuery.from(MuiTiemChung.class);
+
+		criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), muiTiemChungRoot.get("nguoiTiemChungId")));
+
+		if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
+		}
+
+		if (nguoiTiemChungDto.nhomdoituong > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.ngaydangki) && !nguoiTiemChungDto.ngaydangki.isEmpty()) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("ngayDangKi"), nguoiTiemChungDto.ngaydangki));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.hovaten) && !nguoiTiemChungDto.hovaten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + nguoiTiemChungDto.hovaten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhma) && !nguoiTiemChungDto.tinhthanhma.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + nguoiTiemChungDto.tinhthanhma + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhten) && !nguoiTiemChungDto.tinhthanhten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + nguoiTiemChungDto.tinhthanhten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenma) && !nguoiTiemChungDto.quanhuyenma.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + nguoiTiemChungDto.quanhuyenma + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenten) && !nguoiTiemChungDto.quanhuyenten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + nguoiTiemChungDto.quanhuyenten + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.phuongxama) && !nguoiTiemChungDto.phuongxama.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + nguoiTiemChungDto.phuongxama + "%"));
+		}
+
+		if (Validator.isNotNull(nguoiTiemChungDto.phuongxaten) && !nguoiTiemChungDto.phuongxaten.isEmpty()) {
+			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + nguoiTiemChungDto.phuongxaten + "%"));
+		}
+
+		if (nguoiTiemChungDto.diabancosoid > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("diaBanCoSoId"), nguoiTiemChungDto.diabancosoid));
+		}
+
+		if (nguoiTiemChungDto.cosoyteid > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("CoSoYTeId"), nguoiTiemChungDto.cosoyteid));
+		}
+
+		if (nguoiTiemChungDto.nhomdoituong > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
+		}
+
+		if (nguoiTiemChungDto.tinhtrangdangki > 0) {
+			predicates.add(builder.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), nguoiTiemChungDto.tinhtrangdangki));
+		}
+
+
+		if (!predicates.isEmpty()) {
+			Predicate[] pdc = new Predicate[predicates.size()];
+			int count = 0;
+			for (Predicate predicate : predicates) {
+				pdc[count] = predicate;
+				count++;
+			}
+
+			Predicate allPredicate = builder.and(pdc);
+			criteriaQuery.where(allPredicate);
+		}
+
+		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
+
 		int offset = page * size;
 
 		long total = typedQuery.getResultList().size();

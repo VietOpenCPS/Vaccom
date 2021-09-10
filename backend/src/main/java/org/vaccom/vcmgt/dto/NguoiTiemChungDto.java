@@ -79,6 +79,7 @@ public class NguoiTiemChungDto {
     public int typeGet;
 
     public boolean isSearchOr = false;
+    public boolean isSearchDaTiem = false;
 
     public List<MuiTiemChungDto> listMuiTieuChungDto;
 
