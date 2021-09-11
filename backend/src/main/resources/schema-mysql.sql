@@ -296,6 +296,7 @@ create table IF NOT EXISTS t_hangchothongbao (
     `toTelNo` varchar(255),
     `UyBanNhanDanID` bigint(20) DEFAULT 0,
     `status` bigint(10) DEFAULT 0,
+    `mappingKey` bigint(10) DEFAULT 0,
     primary key (ID)
 );
 

@@ -374,7 +374,12 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
-										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
+										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+												nguoiTiemChung.getSoDienThoai(),
+												nguoiTiemChung.getEmail(),
+												true, ZaloConstant.Loai_Hen_TiemChung,
+												uyBanNhanDanId,
+												phieuHenTiem.getId());
 									}
 								}
 							}

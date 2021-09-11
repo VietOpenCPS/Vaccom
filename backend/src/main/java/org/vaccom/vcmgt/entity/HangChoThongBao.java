@@ -44,6 +44,17 @@ public class HangChoThongBao implements Serializable {
     @Column(name = "status")
     private long status;
 
+    @Column(name = "mappingKey")
+    private long mappingKey;
+
+    public long getMappingKey() {
+        return mappingKey;
+    }
+
+    public void setMappingKey(long mappingKey) {
+        this.mappingKey = mappingKey;
+    }
+
     public long getStatus() {
         return status;
     }

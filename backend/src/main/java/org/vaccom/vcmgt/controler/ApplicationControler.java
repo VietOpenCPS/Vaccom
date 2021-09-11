@@ -1,6 +1,7 @@
 package org.vaccom.vcmgt.controler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -1128,6 +1129,8 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
+
+
                 List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
@@ -1136,13 +1139,17 @@ public class ApplicationControler {
 
                 node.put("muiTiemChung", jsonArrayObj);
 
+
+
                 List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
                 if (nguoiTiemChungDto.lichTiemChungId > 0) {
-                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
+                            phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
                 }
 
                 if(nguoiTiemChungDto.caTiemChungId > 0) {
-                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
+                            phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
                 }
 
                 if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
@@ -1151,6 +1158,14 @@ public class ApplicationControler {
                 }
 
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+                // Thêm status phiếu gửi :
+                for (JsonNode jsonNode: jsonArrayObj) {
+                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(jsonNode.get("id").asLong(), ZaloConstant.Loai_Hen_TiemChung);
+                    if(Validator.isNotNull(hangChoThongBao)){
+                        ((ObjectNode) jsonNode).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                    }
+                }
 
                 node.put("phieuHenTiem", jsonArrayObj);
 
@@ -2857,7 +2872,22 @@ public class ApplicationControler {
             total = giayDiDuongAction.countByUyBanNhanDanIdAndStatus((int) vaiTro.getUyBanNhanDanId(), trangthai);
             lstGiayDiDuong = giayDiDuongAction.findByUyBanNhanDanIdAndStatus((int) vaiTro.getUyBanNhanDanId(), trangthai, page, size);
 
-            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstGiayDiDuong));
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode arrayNode = mapper.createArrayNode();
+
+            for (GiayDiDuong giayDiDuong : lstGiayDiDuong) {
+                String json = mapper.writeValueAsString(giayDiDuong);
+                JsonNode phieuHenTiemJson = mapper.readTree(json);
+                HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(phieuHenTiemJson.get("id").asLong(), ZaloConstant.Loai_Giay_Di_Duong);
+                if(Validator.isNotNull(hangChoThongBao)){
+                    ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                }
+                arrayNode.add(phieuHenTiemJson);
+            }
+
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, arrayNode));
 
         } catch (Exception e) {
             _log.error(e);
@@ -3091,7 +3121,12 @@ public class ApplicationControler {
                                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
 
-                                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
+                                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                                ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
+                                                giayDiDuongNew.getEmail(), true,
+                                                ZaloConstant.Loai_Giay_Di_Duong,
+                                                uyBanNhanDan.getId(),
+                                                giayDiDuongNew.getId());
 
                                     }
                                 }
@@ -3136,7 +3171,11 @@ public class ApplicationControler {
                         hangChoThongBaoAction.addHangChoThongBao(
                                 template_data.toString(),
                                 ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
-                                giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
+                                giayDiDuongNew.getEmail(),
+                                true,
+                                ZaloConstant.Loai_Giay_Di_Duong,
+                                uyBanNhanDan.getId(),
+                                giayDiDuongNew.getId());
 
                     }
                 }
@@ -3474,7 +3513,13 @@ public class ApplicationControler {
                                 template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
-                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                        nguoiTiemChung.getSoDienThoai(),
+                                        nguoiTiemChung.getEmail(),
+                                        true,
+                                        ZaloConstant.Loai_Hen_TiemChung,
+                                        uyBanNhanDanId,
+                                        phieuHenTiem.getId());
                             }
                         }
                     }

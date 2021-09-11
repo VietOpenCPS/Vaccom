@@ -26,4 +26,7 @@ public interface HangChoThongBaoRepository extends JpaRepository<HangChoThongBao
     @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE toTelNo = :toTelNo and LoaiThongBao = :loaiThongBao", nativeQuery = true)
     HangChoThongBao findByPhone_LoaiThongBao(@Param("toTelNo") String toTelNo, @Param("loaiThongBao") String loaiThongBao);
 
+    @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE mappingKey = :mappingKey and LoaiThongBao = :loaiThongBao", nativeQuery = true)
+    HangChoThongBao findByLoaiThongBao_mappingKey(@Param("mappingKey") long mappingKey, @Param("loaiThongBao") String loaiThongBao);
+
 }

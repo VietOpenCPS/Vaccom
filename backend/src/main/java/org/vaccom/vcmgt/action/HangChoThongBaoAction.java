@@ -8,9 +8,9 @@ import java.util.List;
 
 @Service
 public interface HangChoThongBaoAction {
-    public HangChoThongBao addHangChoThongBao(String jsonObject, NguoiDung nguoiDung, boolean isReady, String loaiThongBao, long uyBanNhanDanID) throws Exception;
+    public HangChoThongBao addHangChoThongBao(String jsonObject, NguoiDung nguoiDung, boolean isReady, String loaiThongBao, long uyBanNhanDanID, long mappingKey) throws Exception;
 
-    public HangChoThongBao addHangChoThongBao(String jsonObject, String SoDienThoai, String Email, boolean isReady, String loaiThongBao, long uyBanNhanDanID) throws Exception;
+    public HangChoThongBao addHangChoThongBao(String jsonObject, String SoDienThoai, String Email, boolean isReady, String loaiThongBao, long uyBanNhanDanID, long mappingKey) throws Exception;
 
     public HangChoThongBao updateReadyForHangCho(String LoaiThongBao, boolean isSent, boolean isReady);
 
@@ -21,5 +21,7 @@ public interface HangChoThongBaoAction {
     public List<HangChoThongBao> findByIsSentIsReady(boolean isSent, boolean isReady);
 
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String LoaiThongBao);
+
+    public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao);
 
 }

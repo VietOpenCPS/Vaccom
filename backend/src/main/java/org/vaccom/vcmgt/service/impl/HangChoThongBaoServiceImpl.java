@@ -55,5 +55,10 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
         return hangChoThongBaoRepository.findByPhone_LoaiThongBao(toTelNo, loaiThongBao);
     }
 
+    @Override
+    public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao) {
+        return hangChoThongBaoRepository.findByLoaiThongBao_mappingKey(mappingKey, loaiThongBao);
+    }
+
 
 }
