@@ -314,6 +314,10 @@ public class ImportDataActionImpl implements ImportDataAction {
 					if(rowData[1] == null || rowData[1].isEmpty()) {
 						continue;
 					}
+					
+					if(rowData[8] == null || rowData[8].isEmpty()) {
+						continue;
+					}
 
 					NguoiTiemChungDto nguoiTiemChungDto = new NguoiTiemChungDto();
 					nguoiTiemChungDto.diabancosoid  = GetterUtil.getLong(rowData[0], 0);
@@ -335,7 +339,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 					nguoiTiemChungDto.phuongxaten = rowData[11];
 					nguoiTiemChungDto.quanhuyenten = rowData[12];
 					nguoiTiemChungDto.tinhthanhten = rowData[13];
-					nguoiTiemChungDto.tinhtrangdangki = VaccomUtil.DANGKYCHINHTHUC;
+					nguoiTiemChungDto.tinhtrangdangki = VaccomUtil.DATIEM;
 
 					List<MuiTiemChungDto> listMuiTiemChung = new ArrayList<>();
 

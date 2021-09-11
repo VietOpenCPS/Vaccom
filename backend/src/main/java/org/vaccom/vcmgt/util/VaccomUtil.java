@@ -16,6 +16,7 @@ public class VaccomUtil {
 	
 	public static final int MOIDANGKY = 0;
 	public static final int DANGKYCHINHTHUC = 1;
+	public static final int DATIEM = 3;
 	public static final int XOADANGKY = 2;
 	
 	public static final int CHUAKIEMTRA = 0;
