@@ -595,7 +595,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 								}
 
 								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
-
+								/*
 								if (Validator.isNotNull(nguoiTiemChung.getCmtcccd())) {
 									NguoiDung nguoiDung = nguoiDungService
 											.findByTenDanNhap(nguoiTiemChung.getCmtcccd());
@@ -613,6 +613,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 										}
 									}
 								}
+								*/
 
 							} catch (Exception e) {
 								_log.warn(e.getMessage());
@@ -744,6 +745,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 							try {
 								nguoiTiemChung.setTinhTrangDangKi(tinhTrangDangKi);
 								nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+								/*
 								if (Validator.isNotNull(nguoiTiemChung.getCmtcccd())) {
 									NguoiDung nguoiDung = nguoiDungService
 											.findByTenDanNhap(nguoiTiemChung.getCmtcccd());
@@ -767,6 +769,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 										}
 									}
 								}
+								*/
 								return nguoiTiemChung;
 							} catch (Exception e) {
 								_log.warn(e.getMessage());
