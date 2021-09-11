@@ -82,8 +82,16 @@ public class ZaloNotificationUtil {
             return build.toString();
         } else if (phoneNumber.startsWith("84")){
             return phoneNumber;
+        } else if (phoneNumber.startsWith("9")){
+            StringBuilder build = new StringBuilder(phoneNumber);
+            phoneNumber = "84" + build;
+            return phoneNumber;
+        } else if (phoneNumber.startsWith("3")){
+            StringBuilder build = new StringBuilder(phoneNumber);
+            phoneNumber = "84" + build;
+            return phoneNumber;
         } else {
-            return null;
+            return phoneNumber;
         }
     }
 }

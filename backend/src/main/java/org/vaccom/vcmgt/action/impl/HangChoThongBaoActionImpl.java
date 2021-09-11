@@ -27,6 +27,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(nguoiDung.getSoDienThoai()));
         hangChoThongBao.setReady(isReady);
         hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
+        hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
@@ -42,6 +43,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setToTelNo(ZaloNotificationUtil.convertPhoneNumber(SoDienThoai));
         hangChoThongBao.setReady(isReady);
         hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
+        hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }

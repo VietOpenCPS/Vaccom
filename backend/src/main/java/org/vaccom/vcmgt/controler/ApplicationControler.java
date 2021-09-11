@@ -1124,6 +1124,7 @@ public class ApplicationControler {
 
             List<NguoiTiemChung> lstNguoiTiemChung = result.datas;
 
+
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 

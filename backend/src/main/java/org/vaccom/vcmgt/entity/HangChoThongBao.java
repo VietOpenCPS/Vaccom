@@ -41,6 +41,16 @@ public class HangChoThongBao implements Serializable {
     @Column(name = "isSent")
     private boolean isSent;
 
+    @Column(name = "status")
+    private long status;
+
+    public long getStatus() {
+        return status;
+    }
+
+    public void setStatus(long status) {
+        this.status = status;
+    }
 
     public long getId() {
         return id;

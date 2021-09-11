@@ -53,5 +53,11 @@ public class ZaloConstant {
     public final static String account = "account";
     public final static String password = "password";
 
+    // Status gui tin
+    public final static long CHUA_GUI = 0;
+    public final static long GUI_ZALO_THANH_CONG = 1;
+    public final static long GUI_SMS_THANH_CONG = 2;
+    public final static long GUI_THAT_BAI = 3;
+
 
 }

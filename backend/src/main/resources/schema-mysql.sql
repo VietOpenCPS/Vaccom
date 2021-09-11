@@ -295,6 +295,7 @@ create table IF NOT EXISTS t_hangchothongbao (
     `toEmail` varchar(255),
     `toTelNo` varchar(255),
     `UyBanNhanDanID` bigint(20) DEFAULT 0,
+    `status` bigint(10) DEFAULT 0,
     primary key (ID)
 );
 
