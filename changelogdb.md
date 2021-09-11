@@ -136,3 +136,6 @@ ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAU
 ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `TenCoSo` varchar(256) DEFAULT NULL;
 ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `GioHenTiem` varchar(6) DEFAULT NULL;
 delete from t_nguoidung where chucdanh='citizen';
+
+#update 11/09/2021
+ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `status` bigint(10) DEFAULT 0;
