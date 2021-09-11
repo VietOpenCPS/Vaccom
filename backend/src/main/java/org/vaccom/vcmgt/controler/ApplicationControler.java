@@ -3462,7 +3462,7 @@ public class ApplicationControler {
                                 //Json
                                 ObjectNode template_data = mapper.createObjectNode();
 
-                                template_data.put("HovaTen", nguoiTiemChung.getHoVaTen());
+                                template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
                                 template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
                                 template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
                                 template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
