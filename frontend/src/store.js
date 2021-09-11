@@ -1098,6 +1098,31 @@ export default new Vuex.Store({
         })
       })
     },
+    getThongTinPhieuHen ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+            maQr: filter.maQr
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        console.log('filter', filter)
+        let url = '/rest/v1/app/get/phieuhentiem-maqr'
+        axios.get(url, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject([])
+        })
+      })
+    },
     getNguoiTiemChung ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -1216,6 +1241,12 @@ export default new Vuex.Store({
         }
         let dataPost = {
           ids: filter['data']['ids']
+        }
+        if (filter['data'].hasOwnProperty('syncAll')) {
+          dataPost = {
+            isAutoAccept: true,
+            countAccept: 0
+          }
         }
         axios.put(url, dataPost, param).then(function (response) {
           let serializable = response.data
@@ -1455,6 +1486,30 @@ export default new Vuex.Store({
           reject(xhr)
         })
       })
-    }
+    },
+    importDanhSachPhieu ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {}
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = new FormData()
+        for (let key in filter) {
+          dataPost.append(key, filter[key])
+        }
+        axios.post('/rest/v1/import/phieuhentiem/exceldata', dataPost, param).then(function (response) {
+          resolve(response)
+        }).catch(xhr => {
+          reject(xhr)
+        })
+      })
+    },
   },
 })

@@ -23,22 +23,21 @@
           <v-row>
             <v-col
               cols="12"
-              class="pb-0"
+              class="pb-0 mb-3"
             >
-              <div><span style="color: red">(*) </span>Chọn lịch tiêm và ca tiêm</div>
+              <div><span style="color: red">(*) </span>Chọn lịch tiêm</div>
             </v-col>
           </v-row>
           <v-row>
             <v-col
               cols="12"
-              md="6"
+              md="12"
               class="pb-0"
             >
               <v-autocomplete
                 hide-no-data
                 :items="danhSachLichTiemChung"
                 v-model="lichTiemChungFilter"
-                @change="getCaTiem('search')"
                 item-text="diaDiemTiemChung"
                 item-value="id"
                 outlined
@@ -48,14 +47,14 @@
                 clearable
             >
               <template v-slot:selection="data">
-                <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.ngayBatDau}})</span>
               </template>
               <template v-slot:item="data">
-                <span>{{ data.item.diaDiemTiemChung }} ({{data.item.ngayBatDau}} - {{data.item.ngayKetThuc}})</span>
+                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.ngayBatDau}})</span>
               </template>
             </v-autocomplete>
             </v-col>
-            <v-col
+            <!-- <v-col
               cols="12"
               md="6"
               class="pb-0"
@@ -79,10 +78,10 @@
                   <span>{{data.item.gioHenTiem}} - {{data.item.ngayHenTiem}}</span>
                 </template>
               </v-autocomplete>
-            </v-col>
+            </v-col> -->
             <v-col
               cols="12"
-              md="6"
+              md="12"
               class="pb-0 mt-2"
             >
               <v-autocomplete
@@ -123,7 +122,7 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span>
             </span>
-            <v-btn v-if="selected.length" color="green" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 2, 'multiple')">
+            <!-- <v-btn v-if="selected.length" color="green" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 2, 'multiple')">
               Xác nhận lịch hẹn
             </v-btn>
             <v-btn v-if="selected.length" color="blue" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 2, 'multiple')">
@@ -143,6 +142,12 @@
                 mdi-export
               </v-icon>
               Xuất danh sách
+            </v-btn> -->
+            <v-btn v-if="trangThaiFilter == 0" color="#0072bc" small class="mr-0" @click.stop="guiThongBao" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-export
+              </v-icon>
+              Gửi thông báo hẹn tiêm
             </v-btn>
           </div>
           <v-data-table
@@ -423,12 +428,13 @@
         items: [],
         coSoYTe: '',
         ngayCheckinFomarted: '',
-        trangThaiFilter: '',
+        trangThaiFilter: 0,
         danhSachLichTiemChung: [],
         danhSachCaTiemChungFilte: [],
         danhSachCaTiemChung: [],
         danhSachNguoiTiemChung: [],
         danhSachTinhTrangXacNhan: [
+          {name: 'Chờ gửi thông báo', value: 0},
           {name: 'Chờ xác nhận', value: 1},
           {name: 'Đã xác nhận', value: 2},
           {name: 'Đã check-in', value: 3},
@@ -507,20 +513,25 @@
     created () {
       let vm = this
       vm.$store.commit('SET_INDEXTAB', 2)
-      let isSigned = this.$store.getters.getIsSigned
-      if (!isSigned) {
-        vm.$router.push({ path: '/login?redirect=/pages/lich-tiem-chung' })
-        return
+      let query = vm.$router.history.current.query
+      console.log('query', query)
+      if (query.hasOwnProperty('lichTiemId') && query.lichTiemId) {
+        vm.lichTiemChungFilter = Number(query.lichTiemId)
       }
       vm.getLichTiem()
-      vm.getDanhSachPhieuHenTiem(0)
+      // vm.getDanhSachPhieuHenTiem(0)
     },
     watch: {
-      caTiemChungFilter (val) {
+      lichTiemChungFilter (val) {
         if (val) {
           this.getDanhSachPhieuHenTiem(0)
         }
       },
+      // caTiemChungFilter (val) {
+      //   if (val) {
+      //     this.getDanhSachPhieuHenTiem(0)
+      //   }
+      // },
       trangThaiFilter (val) {
         this.getDanhSachPhieuHenTiem(0)
       }
@@ -564,46 +575,84 @@
       },
       getDanhSachPhieuHenTiem (pageIn) {
         let vm = this
-        let param = {
-        headers: {
-        },
-        params: {
-            page: pageIn,
-            size: vm.itemsPerPage
-        }
-        }
-        try {
-        if (Vue.$cookies.get('Token')) {
-            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
-        }
-        } catch (error) {
-        }
-        let dataPost = {
-            typeGet: 1,
-            lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
-            caTiemChungId: vm.caTiemChungFilter ? vm.caTiemChungFilter : '',
-            tinhtrangxacnhan: vm.trangThaiFilter
-        }
-        vm.loading = true
-        axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
-            vm.loading = false
-            if (response.data.data && response.data.data.length) {
-              vm.items = vm.handleArrPhieu(response.data.data)
-              // vm.items = response.data.data
-              vm.totalItem = response.data.hasOwnProperty('total') ? response.data.total : 0
-              vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-            } else {
+        if (vm.lichTiemChungFilter) {
+          let param = {
+            headers: {
+            },
+            params: {
+                page: pageIn,
+                size: vm.itemsPerPage
+            }
+          }
+          try {
+          if (Vue.$cookies.get('Token')) {
+              param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+          } catch (error) {
+          }
+          let dataPost = {
+              typeGet: 1,
+              lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
+              // caTiemChungId: vm.caTiemChungFilter ? vm.caTiemChungFilter : '',
+              // tinhtrangxacnhan: 0
+              tinhtrangxacnhan: vm.trangThaiFilter
+          }
+          vm.loading = true
+          axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
+              vm.loading = false
+              if (response.data.data && response.data.data.length) {
+                vm.items = vm.handleArrPhieu(response.data.data)
+                // vm.items = response.data.data
+                vm.totalItem = response.data.hasOwnProperty('total') ? response.data.total : 0
+                vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+              } else {
+                vm.items = []
+                vm.totalItem = 0
+                vm.pageCount = 0
+              }
+              
+          }).catch(function (error) {
+              vm.loading = false
               vm.items = []
               vm.totalItem = 0
               vm.pageCount = 0
+          })
+        }
+      },
+      guiThongBao () {
+        let vm = this
+        if (vm.lichTiemChungFilter) {
+          let param = {
+            headers: {
+            },
+            params: {
             }
-            
-        }).catch(function (error) {
-            vm.loading = false
-            vm.items = []
-            vm.totalItem = 0
-            vm.pageCount = 0
-        })
+          }
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+          let textConfirm = 'Bạn có chắc chắn muốn gửi thông báo hẹn tiêm?'
+          let x = confirm(textConfirm)
+          if (x) {
+            vm.processingAction = true
+            axios.get('/rest/v1/app/update/phieuhentiem/guiThongBao/' + vm.lichTiemChungFilter, param).then(function (response) {
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Đã gửi thông báo thành công',
+                color: 'success',
+              })
+              vm.processingAction = false   
+            }).catch(function (error) {
+              vm.processingAction = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Gửi thông báo thất bại',
+                color: 'error',
+              })
+            })
+          }
+        }
+        
       },
       getLichTiem () {
         let vm = this
@@ -614,10 +663,10 @@
         vm.$store.dispatch('getLichTiem', filter).then(function (result) {
           vm.danhSachLichTiemChung = result.hasOwnProperty('data') ? result.data : []
           if (vm.danhSachLichTiemChung.length) {
-            vm.danhSachLichTiemChung = vm.danhSachLichTiemChung.filter(function (item) {
-              return item.tinhTrangLich == 0
-            })
-            vm.getCaTiem('created')
+            // vm.danhSachLichTiemChung = vm.danhSachLichTiemChung.filter(function (item) {
+            //   return item.tinhTrangLich == 0
+            // })
+            // vm.getCaTiem('created')
           }
         })
       },

@@ -334,13 +334,11 @@
                   md="12"
                   class="pb-0"
                 >
-                  <div class="mb-2">Cơ sở y tế <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Cơ sở y tế</div>
                   <v-autocomplete
                       hide-no-data
                       :items="listCoSoYTe"
                       v-model="coSoYTe"
-                      :rules="required"
-                      required
                       item-text="tenCoSo"
                       item-value="maCoSo"
                       outlined
@@ -377,7 +375,7 @@
                   md="6"
                   class="pb-0"
                 >
-                  <div class="mb-2">Nhóm đối tượng <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Nhóm đối tượng</div>
                   <v-autocomplete
                       ref="chondoituong"
                       :items="listDoiTuong"
@@ -386,8 +384,6 @@
                       item-text="doiTuongMoTa"
                       item-value="id"
                       hide-no-data
-                      :rules="required"
-                      required
                       outlined
                       dense
                       hide-details="auto"    
