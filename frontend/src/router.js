@@ -54,7 +54,7 @@ export default new Router({
           props: true,
         },
         {
-          path: '/pages/chung-nhan-tiem-chung',
+          path: '/pages/danh-sach-da-tiem-chung',
           name: 'DanhSachMuiTiemChung',
           component: () => import('@/views/dashboard/pages/DanhSachMuiTiem'),
           props: true,
@@ -99,6 +99,12 @@ export default new Router({
           path: '/pages/dang-ky-di-duong/:uid',
           name: 'DangKyDiDuong',
           component: () => import('@/views/dashboard/pages/DangKyDiDuong'),
+          props: true,
+        },
+        {
+          path: '/pages/hen-tiem-chung/:uid',
+          name: 'PhieuHenTiem',
+          component: () => import('@/views/dashboard/pages/MauPhieuHenTiem'),
           props: true,
         },
         {

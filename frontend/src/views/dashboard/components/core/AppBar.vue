@@ -237,7 +237,7 @@
       let vm = this
       try {
         let currentQuery = vm.$router.history.current
-        if (currentQuery.name === 'MauGiayDiDuong' && (vm.breakpointName === 'xs' || breakpointName === 'sm')) {
+        if ((currentQuery.name === 'MauGiayDiDuong' || currentQuery.name === 'PhieuHenTiem') && (vm.breakpointName === 'xs' || breakpointName === 'sm')) {
           vm.showLogin = false
         } else {
           vm.showLogin = true
@@ -260,26 +260,32 @@
             childItems: [
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký mới',
+                title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký chính thức',
+                title: 'Danh sách đăng ký ban đầu',
+                to: '/pages/danh-sach-dang-ky-tiem-moi',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký đã rút',
+                title: 'Danh sách đăng ký đã rút',
                 to: '/pages/danh-sach-dang-ky-da-rut',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Chứng nhận tiêm chủng',
-                to: '/pages/chung-nhan-tiem-chung',
+                title: 'Danh sách đã tiêm',
+                to: '/pages/danh-sach-da-tiem-chung',
                 id: 'search',
               }
             ]
@@ -295,12 +301,12 @@
                 to: '/pages/lich-tiem-chung',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách dự kiến tiêm',
-                to: '/pages/danh-sach-du-kien-tiem',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách dự kiến tiêm',
+              //   to: '/pages/danh-sach-du-kien-tiem',
+              //   id: 'search',
+              // },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách gọi tiêm',
@@ -400,26 +406,32 @@
             childItems: [
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký mới',
+                title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký chính thức',
+                title: 'Danh sách đăng ký ban đầu',
+                to: '/pages/danh-sach-dang-ky-tiem-moi',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký đã rút',
+                title: 'Danh sách đăng ký đã rút',
                 to: '/pages/danh-sach-dang-ky-da-rut',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Chứng nhận tiêm chủng',
-                to: '/pages/chung-nhan-tiem-chung',
+                title: 'Danh sách đã tiêm',
+                to: '/pages/danh-sach-da-tiem-chung',
                 id: 'search',
               }
             ]
@@ -435,12 +447,12 @@
                 to: '/pages/lich-tiem-chung',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách dự kiến tiêm',
-                to: '/pages/danh-sach-du-kien-tiem',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách dự kiến tiêm',
+              //   to: '/pages/danh-sach-du-kien-tiem',
+              //   id: 'search',
+              // },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách gọi tiêm',
@@ -532,14 +544,26 @@
             childItems: [
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký mới',
+                title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký chính thức',
+                title: 'Danh sách đăng ký ban đầu',
+                to: '/pages/danh-sach-dang-ky-tiem-moi',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký đã rút',
+                to: '/pages/danh-sach-dang-ky-da-rut',
                 id: 'search',
               },
               {
@@ -550,8 +574,8 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Chứng nhận tiêm chủng',
-                to: '/pages/chung-nhan-tiem-chung',
+                title: 'Danh sách đã tiêm',
+                to: '/pages/danh-sach-da-tiem-chung',
                 id: 'search',
               }
             ]
@@ -567,12 +591,12 @@
                 to: '/pages/lich-tiem-chung',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách dự kiến tiêm',
-                to: '/pages/danh-sach-du-kien-tiem',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách dự kiến tiêm',
+              //   to: '/pages/danh-sach-du-kien-tiem',
+              //   id: 'search',
+              // },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách gọi tiêm',
@@ -610,16 +634,28 @@
             childItems: [
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký mới',
+                title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
                 id: 'search',
               },
               {
                 icon: 'mdi-shield-plus-outline',
-                title: 'Đăng ký chính thức',
+                title: 'Danh sách đăng ký ban đầu',
+                to: '/pages/danh-sach-dang-ky-tiem-moi',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký chính thức',
                 to: '/pages/danh-sach-dang-ky-chinh-thuc',
                 id: 'search',
               },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Danh sách đăng ký đã rút',
+                to: '/pages/danh-sach-dang-ky-da-rut',
+                id: 'search',
+              }
             ]
           },
           {
@@ -633,12 +669,12 @@
                 to: '/pages/lich-tiem-chung',
                 id: 'search',
               },
-              {
-                icon: 'mdi-shield-plus-outline',
-                title: 'Danh sách dự kiến tiêm',
-                to: '/pages/danh-sach-du-kien-tiem',
-                id: 'search',
-              },
+              // {
+              //   icon: 'mdi-shield-plus-outline',
+              //   title: 'Danh sách dự kiến tiêm',
+              //   to: '/pages/danh-sach-du-kien-tiem',
+              //   id: 'search',
+              // },
               {
                 icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách gọi tiêm',
