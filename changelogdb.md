@@ -128,3 +128,10 @@ ALTER TABLE t_uybannhandan ADD COLUMN  `NotificationConfig` varchar(2048) DEFAUL
 #update 09/09/2021
 ALTER TABLE t_hangchothongbao MODIFY `UyBanNhanDanID` bigint(20) DEFAULT 0;
 update t_hangchothongbao set UyBanNhanDanID = 0;
+
+#update 10/09/2021
+ALTER TABLE t_lichtiemchung ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT 0;
+update t_lichtiemchung set UyBanNhanDanID = 0;
+ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `UyBanNhanDanID` bigint(20) DEFAULT 0;
+ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `TenCoSo` varchar(256) DEFAULT NULL;
+ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN  `GioHenTiem` varchar(6) DEFAULT NULL;

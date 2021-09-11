@@ -76,6 +76,15 @@ public class LichTiemChung implements Serializable {
 	@Column(name = "SoDienThoai")
 	private String soDienThoai;
 
+	@Column(name = "UyBanNhanDanID")
+	private long UyBanNhanDanID;
+
+	@Column(name = "TenCoSo")
+	private String tenCoSo;
+
+	@Column(name = "GioHenTiem")
+	private String gioHenTiem;
+
 	public long getId() {
 		return id;
 	}
@@ -212,4 +221,27 @@ public class LichTiemChung implements Serializable {
 		this.soDienThoai = soDienThoai;
 	}
 
+	public long getUyBanNhanDanID() {
+		return UyBanNhanDanID;
+	}
+
+	public void setUyBanNhanDanID(long uyBanNhanDanID) {
+		UyBanNhanDanID = uyBanNhanDanID;
+	}
+
+	public String getTenCoSo() {
+		return tenCoSo;
+	}
+
+	public void setTenCoSo(String tenCoSo) {
+		this.tenCoSo = tenCoSo;
+	}
+
+	public String getGioHenTiem() {
+		return gioHenTiem;
+	}
+
+	public void setGioHenTiem(String gioHenTiem) {
+		this.gioHenTiem = gioHenTiem;
+	}
 }

@@ -801,6 +801,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	}
 
 	@Override
+	public NguoiTiemChung findByCMTCCCD(String cmtcccd) {
+		return nguoiTiemChungService.findByCMTCCCD(cmtcccd);
+	}
+
+	@Override
 	public NguoiTiemChung addNguoiTiemChung(String hoVaTen, String ngaySinh, int gioiTinh, String cmtcccd,
 			int nhomDoiTuong, String donViCongTac, String soDienThoai, String email, String soTheBHYT,
 			String diaChiNoiO, String tinhThanhMa, String tinhThanhTen, String quanHuyenMa, String quanHuyenTen,

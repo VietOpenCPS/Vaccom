@@ -63,6 +63,11 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	@Autowired
 	private HangChoThongBaoAction hangChoThongBaoAction;
 
+	@Autowired
+	private UyBanNhanDanAction uyBanNhanDanAction;
+
+
+
 	@Override
 	public long countByLichTiemChungId(long id) {
 		return phieuHenTiemService.countByLichTiemChungId(id);
@@ -71,6 +76,10 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	@Override
 	public long countPhieuHenTiem(long lichTiemChungId, long caTiemChungId, int tinhTrangXacNhan) {
 		return phieuHenTiemService.countPhieuHenTiem(lichTiemChungId, caTiemChungId, tinhTrangXacNhan);
+	}
+	@Override
+	public PhieuHenTiem addPhieuHenTiem(PhieuHenTiem phieuHenTiem){
+		return phieuHenTiemService.updatePhieuHenTiem(phieuHenTiem);
 	}
 
 	@Override
@@ -328,22 +337,40 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 									if(Validator.isNotNull(phieuHenTiem)){
 										LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
 										NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
-										CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+										UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-										long uyBanNhanDanId = coSoYTe.getUyBanNhanDanId();
+										CoSoYTe coSoYTe = null;
+										String TenCoSo = null;
+										String DiaDiem = null;
+
+										if(Validator.isNotNull(lichTiemChung.getCoSoYTeId())){
+											coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+											if(Validator.isNotNull(coSoYTe)){
+												TenCoSo = coSoYTe.getTenCoSo();
+												DiaDiem = coSoYTe.getDiaChiCoSo();
+											}
+										} else {
+											TenCoSo = lichTiemChung.getTenCoSo();
+											DiaDiem = lichTiemChung.getDiaDiemTiemChung();
+										}
+
+
+
+
+										long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
 
 										//Json
 										ObjectNode template_data = mapper.createObjectNode();
 
 										template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-										template_data.put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+										template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
 										template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
-										template_data.put(ZaloConstant.DonViCap, coSoYTe.getTenCoSo());
-										template_data.put(ZaloConstant.DonViTiem, coSoYTe.getTenCoSo());
-										template_data.put(ZaloConstant.DiaDiem, coSoYTe.getDiaChiCoSo());
+										template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+										template_data.put(ZaloConstant.DonViTiem, TenCoSo);
+										template_data.put(ZaloConstant.DiaDiem, DiaDiem);
 										template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
 										template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-										template_data.put(ZaloConstant.SoDonViCap, coSoYTe.getSoDienThoai());
+										template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
 										template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
@@ -380,6 +407,11 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	@Override
 	public PhieuHenTiem findByMaQR(String maQr) {
 		return phieuHenTiemService.findByMaQR(maQr);
+	}
+
+	@Override
+	public List<PhieuHenTiem> findByLichTiemChungID(long lichTiemChungId) {
+		return phieuHenTiemService.findByLichTiemChungID(lichTiemChungId);
 	}
 
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);

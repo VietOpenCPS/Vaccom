@@ -45,6 +45,11 @@ public interface NguoiTiemChungService {
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 	public ResultSearchDto<NguoiTiemChung> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 	public ResultSearchDto<NguoiTiemChung> searchOr(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
+
 	public List<NguoiTiemChung> searchListChuyenDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto);
+
+	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
+
+
 
 }

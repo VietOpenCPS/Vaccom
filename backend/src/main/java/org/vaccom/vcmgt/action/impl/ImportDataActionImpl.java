@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+import com.liferay.portal.kernel.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +27,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
 import org.vaccom.vcmgt.dto.LichLamViecDto;
+import org.vaccom.vcmgt.entity.LichTiemChung;
+import org.vaccom.vcmgt.entity.NguoiTiemChung;
+import org.vaccom.vcmgt.entity.PhieuHenTiem;
+
 import org.vaccom.vcmgt.dto.MuiTiemChungDto;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.entity.VaiTro;
@@ -33,33 +39,169 @@ import org.vaccom.vcmgt.util.VaccomUtil;
 
 @Service
 public class ImportDataActionImpl implements ImportDataAction {
+
 	private final Log _log = LogFactory.getLog(ImportDataActionImpl.class);
 	@Autowired
 	private FileStorageAction fileStorageAction;
 
-	@Autowired
-	private QuocGiaAction quocGiaAction;
+    @Autowired
+    private QuocGiaAction quocGiaAction;
 
-	@Autowired
-	private DanTocAction danTocAction;
+    @Autowired
+    private DanTocAction danTocAction;
 
-	@Autowired
-	private DoiTuongAction doiTuongAction;
+    @Autowired
+    private DoiTuongAction doiTuongAction;
 
-	@Autowired
-	private CoSoYTeAction coSoYTeAction;
+    @Autowired
+    private CoSoYTeAction coSoYTeAction;
 
-	@Autowired
-	private DiaBanCoSoAction diaBanCoSoAction;
+    @Autowired
+    private DiaBanCoSoAction diaBanCoSoAction;
 
-	@Autowired
-	private NguoiTiemChungAction nguoiTiemChungAction;
+    @Autowired
+    private NguoiTiemChungAction nguoiTiemChungAction;
 
-	@Autowired
-	private DonViHanhChinhAction donViHanhChinhAction;
+    @Autowired
+    private DonViHanhChinhAction donViHanhChinhAction;
 
-	@Autowired
-	private GiayDiDuongAction giayDiDuongAction;
+    @Autowired
+    private GiayDiDuongAction giayDiDuongAction;
+
+    @Autowired
+    private PhieuHenTiemAction phieuHenTiemAction;
+
+    @Autowired
+    private LichTiemChungAction lichTiemChungAction;
+
+
+    @Override
+    public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow, int endRow, long lichTiemChung_ID, int lanTiem) throws Exception {
+        HSSFWorkbook workbook = null;
+        try {
+
+            File tmp = fileStorageAction.storeFile(file, String.valueOf(System.currentTimeMillis()));
+
+            workbook = new HSSFWorkbook(new FileInputStream(tmp));
+            Sheet sheet = workbook.getSheetAt(sheetAt);
+            Iterator<Row> rows = sheet.iterator();
+            int rowNumber = 0;
+            exit_loop:
+            while (rows.hasNext()) {
+                Row currentRow = rows.next();
+
+                // skip header
+                if (rowNumber < startRow) {
+                    rowNumber++;
+                    continue;
+                }
+
+                if (rowNumber > endRow) {
+                    break;
+                }
+
+                rowNumber++;
+
+                Iterator<Cell> cellsInRow = currentRow.iterator();
+
+                int cellNumber = 0;
+
+                String[] rowData = new String[endCol - startCol + 1];
+
+                while (cellsInRow.hasNext()) {
+
+                    if (cellNumber < startCol) {
+
+                        cellNumber++;
+
+                        continue;
+                    }
+
+                    if (cellNumber > endCol) {
+                        break;
+                    }
+
+                    Cell cell = cellsInRow.next();
+
+                    String value = StringPool.BLANK;
+
+                    if (cell.getCellType().getCode() == CellType.NUMERIC.getCode()) {
+                        value = String.format("%d", (long) cell.getNumericCellValue());
+                    } else if (cell.getCellType().getCode() == CellType.BOOLEAN.getCode()) {
+                        value = String.valueOf(cell.getBooleanCellValue());
+                    } else if (cell.getCellType().getCode() == CellType.ERROR.getCode()) {
+                        value = StringPool.BLANK;
+                    } else {
+                        value = cell.getStringCellValue();
+                    }
+
+//                    System.out.println(cell.getCellType().getCode() + "|" + value);
+                    rowData[cell.getColumnIndex()] = value;
+
+                    cellNumber++;
+
+
+
+
+                }
+                if(Validator.isNotNull(rowData[7])){
+					switch (table) {
+
+						case "phieuhentiem":
+							NguoiTiemChung nguoiTiemChung = null;
+							LichTiemChung lichTiemChung = null;
+							String CMTCCCD = rowData[7];
+
+
+							if(Validator.isNotNull(CMTCCCD) || !CMTCCCD.isEmpty() || CMTCCCD != ""){
+								try {
+									nguoiTiemChung = nguoiTiemChungAction.findByCMTCCCD(CMTCCCD);
+									lichTiemChung = lichTiemChungAction.findById(lichTiemChung_ID);
+								} catch (Exception ex){
+									System.out.println(ex.getMessage());
+								}
+								if(Validator.isNotNull(nguoiTiemChung) && Validator.isNotNull(lichTiemChung)){
+									PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
+									phieuHenTiem.setGioHenTiem(lichTiemChung.getGioHenTiem());
+									phieuHenTiem.setLichTiemChungId(lichTiemChung_ID);
+									phieuHenTiem.setCaTiemChungId(0);
+									phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
+									phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
+									phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 6));
+									phieuHenTiem.setLanTiem(lanTiem);
+									phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
+									phieuHenTiem.setNgayCheckin(StringPool.BLANK);
+									phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
+									phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
+									phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
+									phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
+									phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+								}
+							} else {
+								break exit_loop;
+							}
+							break;
+
+						default:
+							break;
+					}
+				}
+
+
+
+            }
+
+
+            workbook.close();
+        } catch (Exception e) {
+			System.out.println(e);
+            throw new Exception(e);
+        } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+        }
+    }
 
 	@Override
 	public void importData(VaiTro vaiTro, String table, MultipartFile file, int sheetAt, int startCol, int endCol, int startRow,
@@ -327,5 +469,6 @@ public class ImportDataActionImpl implements ImportDataAction {
 			}
 		}
 	}
+
 
 }

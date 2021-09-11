@@ -33,4 +33,7 @@ public interface PhieuHenTiemService {
 	
 	public List<PhieuHenTiem> searchPhieuHenTiem(Long lichTiemChungId, Long caTiemChungId, int tinhTrangXacNhan,
 			Integer page, Integer size);
+
+	public List<PhieuHenTiem> findByLichTiemChungID(long lichTiemChungId);
+
 }
