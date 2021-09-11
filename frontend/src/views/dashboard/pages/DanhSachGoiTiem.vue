@@ -591,11 +591,11 @@
           } catch (error) {
           }
           let dataPost = {
-              typeGet: 1,
+              // typeGet: 1,
               lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
               // caTiemChungId: vm.caTiemChungFilter ? vm.caTiemChungFilter : '',
               // tinhtrangxacnhan: 0
-              tinhtrangxacnhan: vm.trangThaiFilter
+              listtinhtrangxacnhan: [vm.trangThaiFilter]
           }
           vm.loading = true
           axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
