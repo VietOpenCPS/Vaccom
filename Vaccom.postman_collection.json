@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2b00e119-de62-477c-aff6-e77158f4c107",
+		"_postman_id": "40f10a08-3a09-48a2-86ae-10f770f24ed0",
 		"name": "Vaccom",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -3980,6 +3980,83 @@
 							"key": "maQr",
 							"value": "pht-owzjhn-sc39xq-rjlbdh-p4du6t-yfnbby"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin] Lấy danh sách hàng chờ thông báo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ0MDg3MSwiZXhwIjoxNjMxNDQ0NDcxfQ.pnnzZTqh_pAZ8_K8SDuqBM_QBmwX8nJkeJF6zwnbcuBzRE2OMaLUlX3fzabACZ8Om9IZjG3lbIxoXhGuBWAYYQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/get/hangchothongbao?isSent=true&isReady=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"get",
+						"hangchothongbao"
+					],
+					"query": [
+						{
+							"key": "isSent",
+							"value": "true"
+						},
+						{
+							"key": "isReady",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[admin] Thực hiện gửi lại tin nhắn đã lỗi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ0MDg3MSwiZXhwIjoxNjMxNDQ0NDcxfQ.pnnzZTqh_pAZ8_K8SDuqBM_QBmwX8nJkeJF6zwnbcuBzRE2OMaLUlX3fzabACZ8Om9IZjG3lbIxoXhGuBWAYYQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8686/rest/v1/app/update/hangchothongbao/resetSendMessage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8686",
+					"path": [
+						"rest",
+						"v1",
+						"app",
+						"update",
+						"hangchothongbao",
+						"resetSendMessage"
 					]
 				}
 			},
