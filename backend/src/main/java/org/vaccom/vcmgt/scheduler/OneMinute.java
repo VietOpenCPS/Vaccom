@@ -23,7 +23,6 @@ import org.vaccom.vcmgt.util.SMSUtil;
 import org.vaccom.vcmgt.util.VNCharacterUtils;
 import org.vaccom.vcmgt.util.ZaloNotificationUtil;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -52,7 +51,6 @@ public class OneMinute {
 
 
         log.info("VACCOM SCHEDULER SEND NOTIFICATION START: " + dateFormat.format(new Date()));
-
 
         List<HangChoThongBao> ThongBaoChuaGui = hangChoThongBaoAction.findByIsSentIsReady(false, true);
         for (HangChoThongBao hangChoThongBao : ThongBaoChuaGui) {
@@ -158,11 +156,20 @@ public class OneMinute {
                                                 hangChoThongBaoAction.update(hangChoThongBao);
                                             }
                                         }
+                                    } else {
+                                        hangChoThongBao.setSent(true);
+                                        hangChoThongBao.setReady(false);
+                                        hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                        hangChoThongBaoAction.update(hangChoThongBao);
                                     }
                                 }
                             }
                         }
+                    } else {
+                        log.error("Không tìm thấy cấu hình của UBND có ID = " + hangChoThongBao.getUyBanNhanDanId());
                     }
+                } else {
+                    log.error("Không có số điện thoại hoặc UBND ID < 0 bản ghi : " + hangChoThongBao.getId());
                 }
             } catch (Exception ex) {
                 log.error(ex.getMessage());
