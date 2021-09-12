@@ -17,6 +17,9 @@ public interface HangChoThongBaoRepository extends JpaRepository<HangChoThongBao
     @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE isSent = :isSent", nativeQuery = true)
     List<HangChoThongBao> findByIsSent(@Param("isSent") Boolean isSent);
 
+    @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE status = :status", nativeQuery = true)
+    List<HangChoThongBao> findByStatus(@Param("status") long status);
+
     @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE isSent = :isSent and isReady = :isReady", nativeQuery = true)
     List<HangChoThongBao> findByIsSentIsReady(@Param("isSent") Boolean isSent, @Param("isReady") Boolean isReady);
 

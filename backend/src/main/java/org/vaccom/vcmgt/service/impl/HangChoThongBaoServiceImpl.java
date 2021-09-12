@@ -31,6 +31,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     }
 
     @Override
+    public List<HangChoThongBao> findByStatus(long status) {
+        return hangChoThongBaoRepository.findByStatus(status);
+    }
+
+    @Override
     public void deleteById(long id) {
         hangChoThongBaoRepository.deleteById(id);
     }

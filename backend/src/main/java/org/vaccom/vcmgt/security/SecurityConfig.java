@@ -75,7 +75,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/rest/v1/security/login", "/rest/v1/captcha/image",
-						"/rest/v1/app/update/phieuhentiem/checkin/*", "/rest/v1/app/get/giaydiduong-maqr", "/rest/v1/app/get/dangkymoi-maqr", "/rest/v1/app/get/phieuhen-maqr", "/rest/v1/app/get/chung-nhan-tiem-chung-maqr").permitAll().anyRequest()
+						"/rest/v1/app/update/phieuhentiem/checkin/*",
+						"/rest/v1/app/get/giaydiduong-maqr",
+						"/rest/v1/app/get/dangkymoi-maqr",
+						"/rest/v1/app/get/phieuhen-maqr",
+						"/rest/v1/app/get/chung-nhan-tiem-chung-maqr").permitAll().anyRequest()
 				.authenticated();
 
 		// Add our custom JWT security filter

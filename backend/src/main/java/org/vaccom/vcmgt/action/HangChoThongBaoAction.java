@@ -16,6 +16,8 @@ public interface HangChoThongBaoAction {
 
     public List<HangChoThongBao> findByIsSent(boolean isSent);
 
+    public List<HangChoThongBao> findByStatus(long status);
+
     public HangChoThongBao update(HangChoThongBao hangChoThongBao);
 
     public List<HangChoThongBao> findByIsSentIsReady(boolean isSent, boolean isReady);

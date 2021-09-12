@@ -63,6 +63,11 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     }
 
     @Override
+    public List<HangChoThongBao> findByStatus(long status) {
+        return hangChoThongBaoService.findByStatus(status);
+    }
+
+    @Override
     public HangChoThongBao update(HangChoThongBao hangChoThongBao) {
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }

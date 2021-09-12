@@ -9,6 +9,7 @@ import java.util.List;
 public interface HangChoThongBaoService {
 
     public List<HangChoThongBao> findByIsSent(boolean isSent);
+    public List<HangChoThongBao> findByStatus(long status);
 
     public void deleteById(long id);
     public HangChoThongBao updateHangChoThongBao(HangChoThongBao hangChoThongBao);

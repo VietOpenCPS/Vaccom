@@ -49,7 +49,7 @@ public class OneMinute {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private static final int hourStart = 6;
-    private static final int minuteStart = 0;
+    private static final int minuteStart = 1;
     private static final int hourEnd = 21;
     private static final int minuteEnd = 59;
 
@@ -187,7 +187,7 @@ public class OneMinute {
                     }
                 } catch (Exception ex) {
                     log.error(ex.getMessage());
-                    log.error("Lỗi khi thực hiện gửi tin nhắn bản ghi hàng đợi : " + hangChoThongBao);
+                    log.error("Lỗi khi thực hiện gửi tin nhắn bản ghi hàng đợi : " + hangChoThongBao.getId());
                 }
             }
         }

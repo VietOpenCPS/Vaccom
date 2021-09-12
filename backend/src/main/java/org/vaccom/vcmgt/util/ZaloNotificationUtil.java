@@ -5,6 +5,7 @@ package org.vaccom.vcmgt.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liferay.petra.string.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,7 @@ public class ZaloNotificationUtil {
             return null;
         }
         phoneNumber = phoneNumber.trim();
+        phoneNumber = phoneNumber.replace(StringPool.SPACE, StringPool.BLANK);
         if (phoneNumber.startsWith("0")){
             StringBuilder build = new StringBuilder(phoneNumber);
             build.deleteCharAt(0);
@@ -91,12 +93,24 @@ public class ZaloNotificationUtil {
             StringBuilder build = new StringBuilder(phoneNumber);
             phoneNumber = "84" + build;
             return phoneNumber;
+        } else if (phoneNumber.startsWith("8")){
+            StringBuilder build = new StringBuilder(phoneNumber);
+            phoneNumber = "84" + build;
+            return phoneNumber;
+        } else if (phoneNumber.startsWith("7")){
+            StringBuilder build = new StringBuilder(phoneNumber);
+            phoneNumber = "84" + build;
+            return phoneNumber;
+        } else if (phoneNumber.startsWith("5")){
+            StringBuilder build = new StringBuilder(phoneNumber);
+            phoneNumber = "84" + build;
+            return phoneNumber;
         } else if (phoneNumber.startsWith("3")){
             StringBuilder build = new StringBuilder(phoneNumber);
             phoneNumber = "84" + build;
             return phoneNumber;
         } else {
-            return phoneNumber;
+            return null;
         }
     }
 }

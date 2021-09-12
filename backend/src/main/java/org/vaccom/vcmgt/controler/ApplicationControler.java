@@ -2907,13 +2907,24 @@ public class ApplicationControler {
     public ResponseEntity<?> getPhieuHenMaQr(@RequestParam("maQr") String maQr) {
 
         try {
-            PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findByMaQR(maQr);
+            PhieuHenTiem phieuHenTiem = null;
+            LichTiemChung lichTiemChung = null;
+            NguoiTiemChung nguoiTiemChung = null;
+            UyBanNhanDan uyBanNhanDan = null;
 
-            LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+            try {
+                phieuHenTiem = phieuHenTiemAction.findByMaQR(maQr);
 
-            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
 
-            CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+                nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+
+                uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
+            } catch (Exception ex){
+                _log.error(ex.getMessage());
+            }
+
+
 
             if (phieuHenTiem == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -2927,9 +2938,9 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
             }
-            if (Validator.isNull(coSoYTe)) {
+            if (Validator.isNull(uyBanNhanDan)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(MessageUtil.getVNMessageText("coSoYTe.not_found"));
+                        .body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
             }
 
             ObjectMapper mapper = new ObjectMapper();
@@ -2937,9 +2948,13 @@ public class ApplicationControler {
             JsonNode phieuHenTiemJson = mapper.readTree(json);
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/hen-tiem-chung/" + phieuHenTiem.getMaQR());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, lichTiemChung.getTenCoSo());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.DiaDiem, lichTiemChung.getDiaDiemTiemChung());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CMTCCCD, nguoiTiemChung.getCmtcccd());
+
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan() + " - " + uyBanNhanDan.getQuanHuyenTen() + " - " + uyBanNhanDan.getTinhThanhTen());
 
             return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiemJson);
 
@@ -3559,6 +3574,33 @@ public class ApplicationControler {
             total = hangChoThongBaos.size();
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, hangChoThongBaos));
+        } catch (Exception e) {
+
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+        }
+    }
+    @RequestMapping(value = "/update/hangchothongbao/resetSendMessage", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> updateGuiLaiTinNhan(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<HangChoThongBao> hangChoThongBaoList = hangChoThongBaoAction.findByStatus(ZaloConstant.GUI_THAT_BAI);
+            for (HangChoThongBao hangChoThongBao: hangChoThongBaoList) {
+                hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
+                hangChoThongBao.setReady(true);
+                hangChoThongBao.setSent(false);
+                hangChoThongBaoAction.update(hangChoThongBao);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(hangChoThongBaoList.size(), hangChoThongBaoList));
         } catch (Exception e) {
 
             _log.error(e);
