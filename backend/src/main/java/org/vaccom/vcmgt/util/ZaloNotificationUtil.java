@@ -5,8 +5,11 @@ package org.vaccom.vcmgt.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaccom.vcmgt.constant.ZaloConstant;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ZaloNotificationUtil {
+    private static final Logger _log = LoggerFactory.getLogger(ZaloNotificationUtil.class);
 
 
     public static final String urlPattern = "https://business.openapi.zalo.me/message/template";
@@ -57,6 +61,7 @@ public class ZaloNotificationUtil {
             if(error == 0 && message.equals("Success")){
                 return HttpResult;
             } else {
+                _log.error("Response Zalo : " + sb.toString());
                 return HttpURLConnection.HTTP_INTERNAL_ERROR;
             }
 
