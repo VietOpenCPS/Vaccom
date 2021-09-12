@@ -43,11 +43,17 @@
                 Địa chỉ nơi ở/ cư trú: 
               </p>
               <p style="font-weight: 500;" class="mb-2">
-                {{ dataInfo.noiODiaChi}}, {{dataInfo.noiOPhuongXaTen}} - {{dataInfo.noiOQuanHuyenTen}} - {{dataInfo.noiOTinhThanhTen}}
+                {{ dataInfo.noiODiaChi}}
+                <span v-if="dataInfo.noiOPhuongXaTen">, {{dataInfo.noiOPhuongXaTen}}</span>
+                <span v-if="dataInfo.noiOQuanHuyenTen"> - {{dataInfo.noiOQuanHuyenTen}}</span>
+                <span v-if="dataInfo.noiOTinhThanhTen"> - {{dataInfo.noiOTinhThanhTen}}</span>
               </p>
               <p class="mb-2" style="color:#0054a6;">Địa điểm làm việc: </p>
               <p style="font-weight: 500;" class="mb-2">
-                {{ dataInfo.noiCtDiaChi }}, {{dataInfo.noiCtPhuongXaTen}} - {{dataInfo.noiCtQuanHuyenTen}} - {{dataInfo.noiCtTinhThanhTen}}
+                {{ dataInfo.noiCtDiaChi }}
+                <span v-if="dataInfo.noiCtPhuongXaTen">, {{dataInfo.noiCtPhuongXaTen}}</span>
+                <span v-if="dataInfo.noiCtQuanHuyenTen"> - {{dataInfo.noiCtQuanHuyenTen}}</span>
+                <span v-if="dataInfo.noiCtTinhThanhTen"> - {{dataInfo.noiCtTinhThanhTen}}</span>
               </p>
               <p class="mb-2"><span style="color:#0054a6;">Số CCCD/CMTND:</span> <span style="font-weight: 500">{{dataInfo.cmtcccd}}</span></p>
               <p class="mb-2"><span style="color:#0054a6;">Đơn vị/cty:</span> <span class="mb-2" style="font-weight: 500;">
@@ -133,6 +139,11 @@
       vm.getThongTinDiDuong()
     },
     watch: {
+      uid (val) {
+        if (val) {
+          this.getThongTinDiDuong()
+        }
+      }
     },
     computed: {
       breakpointName () {
@@ -150,7 +161,10 @@
           vm.dataInfo = dataInfo
           vm.urlQr = dataInfo['LinkQrCode']
           vm.checkHieuLuc(vm.dataInfo)
-          vm.scopePhamVi = vm.dataInfo['Donvicap'].split('-')[1] + ' - ' + vm.dataInfo['Donvicap'].split('-')[2]
+          try {
+            vm.scopePhamVi = vm.dataInfo['Donvicap'].split('-')[1] + ' - ' + vm.dataInfo['Donvicap'].split('-')[2]
+          } catch (error) {
+          }
         }).catch (function () {
           vm.conHieuLuc = false
         })
@@ -199,6 +213,7 @@
       },
       checkHieuLuc (dataInfo) {
         let vm = this
+        vm.conHieuLuc = true
         if (!dataInfo) {
           vm.conHieuLuc = false
           return
