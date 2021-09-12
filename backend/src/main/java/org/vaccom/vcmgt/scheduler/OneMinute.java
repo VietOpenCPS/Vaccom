@@ -97,7 +97,7 @@ public class OneMinute {
                                     payloadJson = mapper.readTree(payload);
                                     if (loaiThongBao.equals(ZaloConstant.Loai_Hen_TiemChung)) {
                                         template_id = zalo.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText();
-                                    } else {
+                                    } else if(loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)){
                                         template_id = zalo.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText();
                                     }
                                 } catch (Exception ex) {
@@ -152,7 +152,7 @@ public class OneMinute {
                                                         + StringPool.AMPERSAND + "param3" + StringPool.EQUAL + LinkGiayDiDuong;
                                             }
                                             String smsAccessToken = sms.get(ZaloConstant.Access_Token.toLowerCase()).asText();
-                                            if (Validator.isNotNull(smsAccessToken)) {
+                                            if (Validator.isNotNull(smsAccessToken) && Validator.isNotNull(paramSMS)) {
                                                 String status = null;
                                                 try {
                                                     status = SMSUtil.sendSMSMessage(paramSMS, smsAccessToken);
@@ -177,6 +177,8 @@ public class OneMinute {
                                             hangChoThongBaoAction.update(hangChoThongBao);
                                         }
                                     }
+                                } else {
+                                    log.error("template_id  "+template_id+" - oaid_access_token "+oaid_access_token+"- payloadJson " + payloadJson);
                                 }
                             }
                         } else {

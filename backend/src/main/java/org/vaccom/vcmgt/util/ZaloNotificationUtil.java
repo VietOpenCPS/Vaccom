@@ -78,6 +78,7 @@ public class ZaloNotificationUtil {
         }
         phoneNumber = phoneNumber.trim();
         phoneNumber = phoneNumber.replace(StringPool.SPACE, StringPool.BLANK);
+
         if (phoneNumber.startsWith("0")){
             StringBuilder build = new StringBuilder(phoneNumber);
             build.deleteCharAt(0);
