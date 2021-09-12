@@ -1,5 +1,7 @@
 package org.vaccom.vcmgt.service;
 
+import org.vaccom.vcmgt.dto.GiayDiDuongDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.entity.GiayDiDuong;
 
 import java.util.List;
@@ -30,4 +32,5 @@ public interface GiayDiDuongService {
     //Delete
     public void delete(GiayDiDuong giayDiDuong);
 
+    public ResultSearchDto<GiayDiDuong> search(GiayDiDuongDto giayDiDuongDto);
 }

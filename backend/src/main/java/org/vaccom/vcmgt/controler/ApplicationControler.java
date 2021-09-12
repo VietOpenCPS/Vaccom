@@ -21,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -2825,10 +2826,10 @@ public class ApplicationControler {
         }
     }
 
-    @RequestMapping(value = "/get/giaydiduong/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/get/giaydiduong/{id}", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> getDsGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
                                               @PathVariable(value = "id") int id,
-                                              @RequestParam("status") int trangthai,
+                                              @RequestBody GiayDiDuongDto giayDiDuongDto,
                                               @RequestParam("page") int page, @RequestParam("size") int size) {
 
         try {
@@ -2853,9 +2854,13 @@ public class ApplicationControler {
             }
 
             long total = 0;
+            giayDiDuongDto.uyBanNhanDanID = (int) vaiTro.getUyBanNhanDanId();
+            giayDiDuongDto.size = size;
+            giayDiDuongDto.page = page;
 
-            total = giayDiDuongAction.countByUyBanNhanDanIdAndStatus((int) vaiTro.getUyBanNhanDanId(), trangthai);
-            lstGiayDiDuong = giayDiDuongAction.findByUyBanNhanDanIdAndStatus((int) vaiTro.getUyBanNhanDanId(), trangthai, page, size);
+            ResultSearchDto<GiayDiDuong> result = giayDiDuongAction.search(giayDiDuongDto);
+            total = result.total;
+            lstGiayDiDuong = result.datas;
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstGiayDiDuong));
 
@@ -3056,6 +3061,68 @@ public class ApplicationControler {
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
+        }
+    }
+
+    @RequestMapping(value = "/update/all/giaydiduong", method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity<?> updateGiayDiDuong(HttpServletRequest request, HttpServletResponse response,
+                                               @RequestParam("statusUpdate") int statusUpdate,
+                                               @RequestBody GiayDiDuongDto giayDiDuongDto) {
+        try {
+            VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+            giayDiDuongDto.size = -1;
+            ResultSearchDto<GiayDiDuong> result = giayDiDuongAction.search(giayDiDuongDto);
+            List<GiayDiDuong> giayDiDuongs = result.datas;
+            int statusOld;
+
+            for(GiayDiDuong giayDiDuongUpdate: giayDiDuongs) {
+                try {
+
+                    if (giayDiDuongUpdate.getUyBanNhanDanID() != (int) vaiTro.getUyBanNhanDanId()) {
+                        continue;
+                    }
+
+                    statusOld = giayDiDuongUpdate.getStatus();
+                    GiayDiDuong giayDiDuongNew = giayDiDuongAction.updateStatus(giayDiDuongUpdate, statusUpdate);
+
+                    if (Validator.isNotNull(giayDiDuongUpdate) && Validator.isNotNull(giayDiDuongNew)) {
+                        if (statusOld != VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET) {
+                            UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
+
+                            if (Validator.isNotNull(uyBanNhanDan)) {
+                                ObjectMapper mapper = new ObjectMapper();
+                                ObjectNode template_data = mapper.createObjectNode();
+
+                                template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
+                                template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                                template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
+                                template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
+
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
+
+                            }
+                        }
+
+                    }
+                } catch (Exception e) {
+                    _log.error("error update with giay di duong id: " + giayDiDuongUpdate.getId());
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(MessageUtil.getVNMessageText("giaydiduong.update.success"));
+
+        } catch (Exception e) {
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
         }
     }
 
