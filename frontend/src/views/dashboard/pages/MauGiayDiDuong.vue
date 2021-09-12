@@ -33,7 +33,7 @@
         <v-card-text class="px-0 py-0" style="max-width: 750px; margin: 0px auto;background: #fff;">
           <div class="pt-0" style="border: 1px solid #dedede;border-radius: 10px;">
             <div style="text-align: center;">
-              <qrcode :value="urlQr" :options="{ width: 150 }" style="border-radius: 10px;"></qrcode>
+              <qrcode v-if="urlQr" :value="urlQr" :options="{ width: 150 }" style="border-radius: 10px;"></qrcode>
             </div>
             <h4 class="my-3" style="text-align: center;text-transform: uppercase;color: #0054a6;">{{dataInfo.Donvicap}}</h4>
             <p style="text-align: center;" class="mb-2">Xác nhận: Ông /bà:</p>

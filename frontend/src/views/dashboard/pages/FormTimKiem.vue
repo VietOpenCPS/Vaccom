@@ -410,7 +410,7 @@
               let obj = vm.listDiaBan.find(function (item) {
                 return item.id == diaBanUser
               })
-              if (diaBanUser) {
+              if (obj && obj['tinhThanhMa']) {
                 vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
                 vm.tinhThanh= obj['tinhThanhMa']
                 vm.quanHuyen = obj['quanHuyenMa']
@@ -428,7 +428,7 @@
               let obj = vm.listDiaBan.find(function (item) {
                 return item.id == diaBanUser
               })
-              if (obj) {
+              if (obj && obj['tinhThanhMa']) {
                 vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
                 vm.tinhThanh= obj['tinhThanhMa']
                 vm.quanHuyen = obj['quanHuyenMa']

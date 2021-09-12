@@ -39,7 +39,7 @@
               <v-icon left size="20">
                 mdi-backup-restore
               </v-icon>
-              Rút đăng ký
+              Chuyển về đăng ký ban đầu
             </v-btn>  
           </div>
           <v-flex xs12 style="text-align: right;">
@@ -96,15 +96,19 @@
             <template v-slot:item.muiTiemChung="{ item, index }">
               <div style="width: 250px;height: 100%;">
                 <v-layout wrap style="height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
-                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2">
-                    <p class="py-2 mb-0" v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1" style="text-align: left;">
+                  <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
+                    v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1"
+                  >
+                    <p class="py-2 mb-0" style="text-align: left;">
                       <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
                       <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
                       <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
                     </p>
                   </v-flex>
-                  <v-flex class="xs12 md6" v-for="(item2, index2) in item.muiTiemChung" :key="index2">
-                    <p class="py-2 mb-0 pl-2" v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 2" style="text-align: left;">
+                  <v-flex class="xs12 md6" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
+                    v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 2"
+                  >
+                    <p class="py-2 mb-0 pl-2" style="text-align: left;">
                       <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
                       <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
                       <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
@@ -133,7 +137,7 @@
                       <v-icon size="22">mdi-backup-restore</v-icon>
                     </v-btn>
                   </template>
-                  <span>Rút đăng ký</span>
+                  <span>Chuyển về đăng ký ban đầu</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -143,14 +147,14 @@
                   </template>
                   <span>Thông tin chi tiết</span>
                 </v-tooltip>
-                <v-tooltip top v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'">
+                <!-- <v-tooltip top v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="addMuiTiem(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-plus</v-icon>
                     </v-btn>
                   </template>
                   <span>Thêm thông tin mũi tiêm</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </div>
               
             </template>
@@ -827,7 +831,7 @@
           if (vm.selected.length === 0) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Vui lòng chọn người muốn rút đăng ký',
+              text: 'Vui lòng chọn người muốn chuyển về đăng ký ban đầu',
               color: 'success',
             })
             return
@@ -851,7 +855,7 @@
           vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Rút đăng ký thành công',
+              text: 'Chuyển đăng ký thành công',
               color: 'success',
             })
             vm.getDanhSachDangKyChinhThuc(0)
@@ -859,7 +863,7 @@
           }).catch(function () {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Rút đăng ký thất bại',
+              text: 'Chuyển đăng ký thất bại',
               color: 'error',
             })
           })

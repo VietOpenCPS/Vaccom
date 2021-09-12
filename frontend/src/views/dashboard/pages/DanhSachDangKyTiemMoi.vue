@@ -48,11 +48,17 @@
               </v-icon>
               Xóa đăng ký
             </v-btn>  
-            <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+            <!-- <v-btn color="green" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-transfer
               </v-icon>
               Chuyển đăng ký chính thức
+            </v-btn> -->
+            <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong'" color="green" small class="mx-0" @click.stop="syncStatus()" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-transfer
+              </v-icon>
+              Đồng bộ sang danh sách chính thức
             </v-btn>
             <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
@@ -121,14 +127,14 @@
                   </template>
                   <span>Xóa đăng ký</span>
                 </v-tooltip>
-                <v-tooltip top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="translateStatus(item)" color="green" text icon class="" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-transfer</v-icon>
                     </v-btn>
                   </template>
                   <span>Chuyển chính thức</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </div>
               
             </template>
@@ -427,6 +433,34 @@
           })
         }
         
+      },
+      syncStatus () {
+        let vm = this
+        let filter = {
+          data: {
+            TinhTrangDangKi: 1,
+            syncAll: true
+          }
+        }
+        let textConfirm = 'Bạn có chắc chắn muốn đồng bộ tất cả danh sách'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Đồng bộ thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDangKyMoi(0)
+            vm.selected = []
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Đồng bộ thất bại',
+              color: 'error',
+            })
+          })
+        }
       },
       removeRegistrationStatus (item) {
         let vm = this
