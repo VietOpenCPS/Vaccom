@@ -59,4 +59,9 @@ public class GiayDiDuongDto {
     public List<Integer> listIdUpdate;
     public List<Integer> listIdDelete;
 
+    public boolean isSearchAll;
+
+    public int page;
+    public int size;
+
 }
