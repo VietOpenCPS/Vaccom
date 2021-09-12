@@ -31,6 +31,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     }
 
     @Override
+    public List<HangChoThongBao> findByStatus(long status) {
+        return hangChoThongBaoRepository.findByStatus(status);
+    }
+
+    @Override
     public void deleteById(long id) {
         hangChoThongBaoRepository.deleteById(id);
     }
@@ -53,6 +58,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     @Override
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String loaiThongBao) {
         return hangChoThongBaoRepository.findByPhone_LoaiThongBao(toTelNo, loaiThongBao);
+    }
+
+    @Override
+    public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao) {
+        return hangChoThongBaoRepository.findByLoaiThongBao_mappingKey(mappingKey, loaiThongBao);
     }
 
 
