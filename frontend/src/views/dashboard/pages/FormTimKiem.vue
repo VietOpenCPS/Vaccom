@@ -242,7 +242,7 @@
                 item-text="tenCoQuan"
                 item-value="id"
                 outlined
-                label="Cán bộ ủy ban nhân dân"
+                label="Ủy ban nhân dân cấp giấy"
                 dense
                 clearable
             ></v-autocomplete>
@@ -347,6 +347,10 @@
       }
     },
     methods: {
+      getDataOutPut () {
+        let vm = this
+        return vm.dataSearch
+      },
       cancelSearch () {
         let vm = this
         vm.dataSearch = {

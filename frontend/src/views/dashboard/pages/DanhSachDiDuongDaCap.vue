@@ -43,6 +43,12 @@
               </v-icon>
               Rút giấy đi đường
             </v-btn>
+            <!-- <v-btn color="orange" small class="mx-0" @click.stop="showRutGiayDiDuong('all')" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-text-box-check-outline
+              </v-icon>
+              Rút tất cả
+            </v-btn> -->
             <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'CanBoUBND'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
           
@@ -129,6 +135,14 @@
                   </template>
                   <span>Rút giấy đi đường</span>
                 </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="xemGiayDiduong(item)" color="blue" text icon class="" v-bind="attrs" v-on="on">
+                      <v-icon size="22">mdi-account-eye-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xem giấy đi đường</span>
+                </v-tooltip>
               </div>
               
             </template>
@@ -195,6 +209,41 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog
+        max-width="750"
+        v-model="dialogGiayDiDuong"
+      >
+        <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title >THÔNG TIN GIẤY ĐI ĐƯỜNG</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogGiayDiDuong = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text class="mx-0 my-0 py-0 px-0">
+            <giay-di-duong :uid="zaloUid"></giay-di-duong>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            
+            <v-btn color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="dialogGiayDiDuong = false">
+              <v-icon left>
+                mdi-close
+              </v-icon>
+              Thoát
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
     
   </div>
@@ -205,14 +254,17 @@
   import $ from 'jquery'
   import Search from './FormTimKiem.vue'
   import Pagination from './Pagination'
+  import GiayDiDuong from './MauGiayDiDuong.vue'
   export default {
     name: 'Customers',
     components: {
     'tim-kiem': Search,
+    'giay-di-duong': GiayDiDuong,
     'pagination': Pagination
     },
     data () {
       return {
+        zaloUid: '',
         loading: false,
         loadingData: false,
         processingAction: false,
@@ -238,6 +290,8 @@
         typeAction: '',
         giayDiDuongRut: '',
         lyDoRut: '',
+        dataSearchOutPut: '',
+        dialogGiayDiDuong: false,
         required: [
           v => !!v || 'Thông tin bắt buộc'
         ],
@@ -446,6 +500,11 @@
         })
         
       },
+      xemGiayDiduong (item) {
+        let vm = this
+        vm.zaloUid = item.maQR
+        vm.dialogGiayDiDuong = true
+      },
       showRutGiayDiDuong (type, item) {
         let vm = this
         vm.typeAction = type
@@ -460,6 +519,17 @@
             return
           }
           vm.dialog = true
+        } else if (type === 'all') {
+          if (!vm.totalItem) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Không có giấy đi đường',
+              color: 'error',
+            })
+            return
+          } else {
+            vm.dialog = true
+          }
         } else {
           vm.giayDiDuongRut = item
           vm.dialog = true
@@ -470,9 +540,46 @@
         if (vm.$refs.formRut.validate()) {
           if (vm.typeAction === 'multiple') {
             vm.translateStatusMultiple()
+          } else if (vm.typeAction === 'all') {
+            vm.translateStatusAll()
           } else {
             vm.translateStatus(vm.giayDiDuongRut)
           }
+        }
+      },
+      translateStatusAll () {
+        let vm = this
+        if (vm.showAdvanceSearch) {
+          vm.dataSearchOutPut = vm.$refs.timkiem.getDataOutPut()
+          console.log('dataSearch', vm.dataSearchOutPut)     
+        }
+          
+        let filter = {
+          data: {
+            // ids: arrIds,
+            status: 2,
+            ghiChu: vm.lyDoRut
+          }
+        }
+        let textConfirm = 'Bạn có chắc chắn rút tất cả ' + vm.totalItem + ' giấy đi đường?'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('duyetNhieuGiayDiDuong', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Rút thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDaCap(0)
+            vm.selected = []
+            vm.dialog = false
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Rút thất bại',
+              color: 'error',
+            })
+          })
         }
       },
       translateStatusMultiple () {
