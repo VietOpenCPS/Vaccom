@@ -128,6 +128,10 @@ public class OneMinute {
                                         // Gửi thất bại ZNS - chuyển đổi sang gửi SMS
                                         if (Validator.isNotNull(sms)) {
                                             String paramSMS = null;
+                                            String toTelNo = hangChoThongBao.getToTelNo();
+                                            StringBuilder build = new StringBuilder(toTelNo);
+                                            build.delete(0, 2);
+                                            String phoneNumber = build.toString();
                                             // Thực hiện gửi tin nhắn SMS
                                             if (loaiThongBao.equals(ZaloConstant.Loai_Hen_TiemChung)) {
                                                 String ngayGioSplit = payloadJson.get(ZaloConstant.NgayTiemChung).asText();
@@ -135,7 +139,7 @@ public class OneMinute {
                                                 String ngayHen = URLEncoder.encode(splitArray[0], "UTF-8");
                                                 String gioHen = URLEncoder.encode(splitArray[1], "UTF-8");
 
-                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + hangChoThongBao.getToTelNo().replace("84", StringPool.BLANK) + StringPool.AMPERSAND +
+                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
                                                         SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText() + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.HoVaTen).asText(), "UTF-8") + StringPool.AMPERSAND +
                                                         "param2" + StringPool.EQUAL + payloadJson.get(ZaloConstant.LanTiem).asText() + StringPool.AMPERSAND +
@@ -145,7 +149,7 @@ public class OneMinute {
                                             } else if (loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)) {
                                                 String LinkGiayDiDuong = URLEncoder.encode(domainUrl + "/#/pages/giay-di-duong/" + payloadJson.get(ZaloConstant.QrCodeID).asText(), "UTF-8");
 
-                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + hangChoThongBao.getToTelNo().replace("84", StringPool.BLANK) + StringPool.AMPERSAND +
+                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
                                                         SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText() + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get(ZaloConstant.DonViCap).asText()), "UTF-8")
                                                         + StringPool.AMPERSAND + "param2" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get("HovaTen").asText()), "UTF-8")
