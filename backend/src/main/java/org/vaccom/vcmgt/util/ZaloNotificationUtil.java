@@ -88,13 +88,13 @@ public class ZaloNotificationUtil {
             StringBuilder build = new StringBuilder(phoneNumber);
             build.deleteCharAt(0);
             return build.toString();
-        } else if (phoneNumber.startsWith("84")){
+        } else if (phoneNumber.startsWith("84") && phoneNumber.length() == 11){
             return phoneNumber;
         } else if (phoneNumber.startsWith("9")){
             StringBuilder build = new StringBuilder(phoneNumber);
             phoneNumber = "84" + build;
             return phoneNumber;
-        } else if (phoneNumber.startsWith("8")){
+        } else if (phoneNumber.startsWith("8") && phoneNumber.length() == 9){
             StringBuilder build = new StringBuilder(phoneNumber);
             phoneNumber = "84" + build;
             return phoneNumber;

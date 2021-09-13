@@ -1,8 +1,11 @@
 package org.vaccom.vcmgt.util;
 
 import com.liferay.petra.string.StringPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaccom.vcmgt.constant.SMSConstant;
+import org.vaccom.vcmgt.scheduler.OneMinute;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SMSUtil {
+
+    private static final Logger _log = LoggerFactory.getLogger(SMSUtil.class);
 
 
     public static String keepAccessToken(String session_id) throws IOException {
@@ -129,6 +134,7 @@ public class SMSUtil {
                     return "SUCCESS";
                 }
             }
+            _log.error("Có lôi khi gửi SMS : " + responseString);
         }
         return null;
     }
