@@ -142,4 +142,5 @@ ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `status` bigint(10) DEFAULT 0;
 ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `mappingKey` bigint(10) DEFAULT 0;
 #update 13/09/2021
 ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `errorCodeZalo` bigint(3) DEFAULT 1;
+ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 

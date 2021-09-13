@@ -298,6 +298,7 @@ create table IF NOT EXISTS t_hangchothongbao (
     `status` bigint(10) DEFAULT 0,
     `mappingKey` bigint(10) DEFAULT 0,
     `errorCodeZalo` bigint(3) DEFAULT 1,
+    `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (ID)
 );
 

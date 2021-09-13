@@ -32,4 +32,7 @@ public interface HangChoThongBaoRepository extends JpaRepository<HangChoThongBao
     @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE mappingKey = :mappingKey and LoaiThongBao = :loaiThongBao", nativeQuery = true)
     HangChoThongBao findByLoaiThongBao_mappingKey(@Param("mappingKey") long mappingKey, @Param("loaiThongBao") String loaiThongBao);
 
+    @Query(value="SELECT * FROM " + DBConstant._HANGCHO_THONGBAO_TABLE_NAME + " WHERE isSent = :isSent and isReady = :isReady and DATE(createDate) = :createDate", nativeQuery = true)
+    List<HangChoThongBao> findByIsSentIsReadyCreateDate(@Param("isSent") Boolean isSent, @Param("isReady") Boolean isReady, @Param("createDate") String createDate);
+
 }

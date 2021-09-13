@@ -9,6 +9,7 @@ import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.service.HangChoThongBaoService;
 import org.vaccom.vcmgt.util.ZaloNotificationUtil;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,6 +48,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
         hangChoThongBao.setMappingKey(mappingKey);
         hangChoThongBao.setErrorCodeZalo(1);
+        hangChoThongBao.setCreateDate(new Date());
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
@@ -76,6 +78,11 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     @Override
     public List<HangChoThongBao> findByIsSentIsReady(boolean isSent, boolean isReady) {
         return hangChoThongBaoService.findByIsSentIsReady(isSent, isReady);
+    }
+
+    @Override
+    public List<HangChoThongBao> findByIsSentIsReadyCreateDate(boolean isSent, boolean isReady, String createDate) {
+        return hangChoThongBaoService.findByIsSentIsReadyCreateDate(isSent, isReady, createDate);
     }
 
     @Override

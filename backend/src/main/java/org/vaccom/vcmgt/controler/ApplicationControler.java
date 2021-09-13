@@ -3635,14 +3635,16 @@ public class ApplicationControler {
 
     @RequestMapping(value = "/get/hangchothongbao", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getHangChoThongBao(HttpServletRequest request, HttpServletResponse response,
-                                                @RequestParam("isSent") String isSent, @RequestParam("isReady") String isReady){
+                                                @RequestParam("isSent") String isSent,
+                                                @RequestParam("isReady") String isReady,
+                                                @RequestParam("createDate") String createDate){
         try {
             boolean isSentBoolean = Boolean.parseBoolean(isSent);
             boolean isReadyBoolean = Boolean.parseBoolean(isReady);
 
             long total = 0;
             List<HangChoThongBao> hangChoThongBaos = new ArrayList<>();
-            hangChoThongBaos = hangChoThongBaoAction.findByIsSentIsReady(isSentBoolean, isReadyBoolean);
+            hangChoThongBaos = hangChoThongBaoAction.findByIsSentIsReadyCreateDate(isSentBoolean, isReadyBoolean, createDate);
             total = hangChoThongBaos.size();
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, hangChoThongBaos));

@@ -56,6 +56,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     }
 
     @Override
+    public List<HangChoThongBao> findByIsSentIsReadyCreateDate(boolean isSent, boolean isReady, String createDate) {
+        return hangChoThongBaoRepository.findByIsSentIsReadyCreateDate(isSent, isReady, createDate);
+    }
+
+    @Override
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String loaiThongBao) {
         return hangChoThongBaoRepository.findByPhone_LoaiThongBao(toTelNo, loaiThongBao);
     }
