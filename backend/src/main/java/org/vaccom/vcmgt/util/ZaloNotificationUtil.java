@@ -57,14 +57,8 @@ public class ZaloNotificationUtil {
             br.close();
             ObjectMapper mapper = new ObjectMapper();
             JsonNode response = mapper.readTree(sb.toString());
-            Long error = response.get(ZaloConstant.error).asLong();
-            String message = response.get(ZaloConstant.message).asText();
-            if(error == 0 && message.equals("Success")){
-                return HttpResult;
-            } else {
-                _log.error("Response Zalo : " + sb.toString());
-                return HttpURLConnection.HTTP_INTERNAL_ERROR;
-            }
+            int error = response.get(ZaloConstant.error).asInt();
+            return error;
 
         } else {
             return HttpURLConnection.HTTP_INTERNAL_ERROR;

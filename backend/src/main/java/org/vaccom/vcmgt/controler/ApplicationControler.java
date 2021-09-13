@@ -3144,7 +3144,13 @@ public class ApplicationControler {
                                 template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                 template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
 
-                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId(), giayDiDuongNew.getId());
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                        ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
+                                        giayDiDuongNew.getEmail(),
+                                        true,
+                                        ZaloConstant.Loai_Giay_Di_Duong,
+                                        uyBanNhanDan.getId(),
+                                        giayDiDuongNew.getId());
                             }
                         }
 

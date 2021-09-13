@@ -47,6 +47,17 @@ public class HangChoThongBao implements Serializable {
     @Column(name = "mappingKey")
     private long mappingKey;
 
+    @Column(name = "errorCodeZalo")
+    private int errorCodeZalo;
+
+    public int getErrorCodeZalo() {
+        return errorCodeZalo;
+    }
+
+    public void setErrorCodeZalo(int errorCodeZalo) {
+        this.errorCodeZalo = errorCodeZalo;
+    }
+
     public long getMappingKey() {
         return mappingKey;
     }

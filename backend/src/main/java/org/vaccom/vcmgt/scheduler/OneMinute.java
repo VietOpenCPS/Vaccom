@@ -113,18 +113,20 @@ public class OneMinute {
 
                                     JsonNode template_data_json = mapper.readTree(payload);
                                     body.put(ZaloConstant.template_data, template_data_json);
-                                    Integer code = null;
+                                    Integer code = 1;
                                     try {
                                         code = ZaloNotificationUtil.sendNotification(body.toString(), oaid_access_token);
                                     } catch (Exception ex) {
                                         log.error(ex.getMessage());
                                     }
                                     // Gửi thành công ZALO ZNS
-                                    if (code == HttpURLConnection.HTTP_OK) {
+                                    if (code == 0) {
                                         hangChoThongBao.setSent(true);
                                         hangChoThongBao.setStatus(ZaloConstant.GUI_ZALO_THANH_CONG);
+                                        hangChoThongBao.setErrorCodeZalo(code);
                                         hangChoThongBaoAction.update(hangChoThongBao);
                                     } else {
+
                                         // Gửi thất bại ZNS - chuyển đổi sang gửi SMS
                                         if (Validator.isNotNull(sms)) {
                                             String paramSMS = null;
@@ -166,11 +168,13 @@ public class OneMinute {
                                                 if (Validator.isNotNull(status) && status.equals("SUCCESS")) {
                                                     hangChoThongBao.setSent(true);
                                                     hangChoThongBao.setStatus(ZaloConstant.GUI_SMS_THANH_CONG);
+                                                    hangChoThongBao.setErrorCodeZalo(code);
                                                     hangChoThongBaoAction.update(hangChoThongBao);
                                                 } else {
                                                     hangChoThongBao.setSent(true);
                                                     hangChoThongBao.setReady(false);
                                                     hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                                    hangChoThongBao.setErrorCodeZalo(code);
                                                     hangChoThongBaoAction.update(hangChoThongBao);
                                                 }
                                             }
@@ -178,6 +182,7 @@ public class OneMinute {
                                             hangChoThongBao.setSent(true);
                                             hangChoThongBao.setReady(false);
                                             hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                            hangChoThongBao.setErrorCodeZalo(code);
                                             hangChoThongBaoAction.update(hangChoThongBao);
                                         }
                                     }

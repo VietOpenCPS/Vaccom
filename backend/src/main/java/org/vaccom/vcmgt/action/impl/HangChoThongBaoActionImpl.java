@@ -46,6 +46,7 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
         hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
         hangChoThongBao.setMappingKey(mappingKey);
+        hangChoThongBao.setErrorCodeZalo(1);
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }

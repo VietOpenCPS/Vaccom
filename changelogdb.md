@@ -140,3 +140,6 @@ ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `status` bigint(10) DEFAULT 0;
 
 #update 11/09/2021
 ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `mappingKey` bigint(10) DEFAULT 0;
+#update 13/09/2021
+ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `errorCodeZalo` bigint(3) DEFAULT 1;
+
