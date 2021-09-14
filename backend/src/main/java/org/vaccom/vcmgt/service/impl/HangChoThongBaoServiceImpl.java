@@ -56,6 +56,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     }
 
     @Override
+    public List<HangChoThongBao> findByIsSentIsReadyCreateDate(boolean isSent, boolean isReady, String createDate) {
+        return hangChoThongBaoRepository.findByIsSentIsReadyCreateDate(isSent, isReady, createDate);
+    }
+
+    @Override
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String loaiThongBao) {
         return hangChoThongBaoRepository.findByPhone_LoaiThongBao(toTelNo, loaiThongBao);
     }
@@ -63,6 +68,11 @@ public class HangChoThongBaoServiceImpl implements HangChoThongBaoService {
     @Override
     public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao) {
         return hangChoThongBaoRepository.findByLoaiThongBao_mappingKey(mappingKey, loaiThongBao);
+    }
+
+    @Override
+    public List<HangChoThongBao> findByStatus_LoaiThongBao(long status, String loaiThongBao, long uyBanNhanDanId) {
+        return hangChoThongBaoRepository.findByStatus_LoaiThongBao(status, loaiThongBao, uyBanNhanDanId);
     }
 
 

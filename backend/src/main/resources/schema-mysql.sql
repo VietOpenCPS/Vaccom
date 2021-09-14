@@ -297,6 +297,8 @@ create table IF NOT EXISTS t_hangchothongbao (
     `UyBanNhanDanID` bigint(20) DEFAULT 0,
     `status` bigint(10) DEFAULT 0,
     `mappingKey` bigint(10) DEFAULT 0,
+    `errorCodeZalo` bigint(3) DEFAULT 1,
+    `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (ID)
 );
 

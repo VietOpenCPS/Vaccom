@@ -4,7 +4,7 @@ import org.vaccom.vcmgt.constant.DBConstant;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = DBConstant._HANGCHO_THONGBAO_TABLE_NAME)
@@ -46,6 +46,28 @@ public class HangChoThongBao implements Serializable {
 
     @Column(name = "mappingKey")
     private long mappingKey;
+
+    @Column(name = "errorCodeZalo")
+    private int errorCodeZalo;
+
+    @Column(name = "createDate")
+    private Date createDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public int getErrorCodeZalo() {
+        return errorCodeZalo;
+    }
+
+    public void setErrorCodeZalo(int errorCodeZalo) {
+        this.errorCodeZalo = errorCodeZalo;
+    }
 
     public long getMappingKey() {
         return mappingKey;

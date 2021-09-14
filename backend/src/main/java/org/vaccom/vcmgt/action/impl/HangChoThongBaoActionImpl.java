@@ -9,6 +9,7 @@ import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.service.HangChoThongBaoService;
 import org.vaccom.vcmgt.util.ZaloNotificationUtil;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,6 +47,8 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         hangChoThongBao.setUyBanNhanDanId(uyBanNhanDanID);
         hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
         hangChoThongBao.setMappingKey(mappingKey);
+        hangChoThongBao.setErrorCodeZalo(1);
+        hangChoThongBao.setCreateDate(new Date());
 
         return hangChoThongBaoService.updateHangChoThongBao(hangChoThongBao);
     }
@@ -78,6 +81,11 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     }
 
     @Override
+    public List<HangChoThongBao> findByIsSentIsReadyCreateDate(boolean isSent, boolean isReady, String createDate) {
+        return hangChoThongBaoService.findByIsSentIsReadyCreateDate(isSent, isReady, createDate);
+    }
+
+    @Override
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String LoaiThongBao) {
         return hangChoThongBaoService.findByPhone_LoaiThongBao(toTelNo, LoaiThongBao);
     }
@@ -85,6 +93,11 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
     @Override
     public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao) {
         return hangChoThongBaoService.findByLoaiThongBao_mappingKey(mappingKey, loaiThongBao);
+    }
+
+    @Override
+    public List<HangChoThongBao> findByStatus_LoaiThongBao(long status, String loaiThongBao, long uyBanNhanDanId) {
+        return hangChoThongBaoService.findByStatus_LoaiThongBao(status, loaiThongBao, uyBanNhanDanId);
     }
 
 
