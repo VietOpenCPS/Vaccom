@@ -1012,6 +1012,7 @@ export default new Vuex.Store({
           hoVaTen: filter.hasOwnProperty('hoVaTen') ? filter.hoVaTen : '',
           noiCtTenCoQuan: filter.hasOwnProperty('noiCtTenCoQuan') ? filter.noiCtTenCoQuan : '',
           uyBanNhanDanID: filter.hasOwnProperty('uyBanNhanDanID') ? filter.uyBanNhanDanID : '',
+          statusGuiTinNhan: filter.hasOwnProperty('statusGuiTinNhan') ? filter.statusGuiTinNhan : -1,
           status: filter.hasOwnProperty('status') ? filter.status : ''
         }
         let url = '/rest/v1/app/get/' + filter.typeSearch + '/0'

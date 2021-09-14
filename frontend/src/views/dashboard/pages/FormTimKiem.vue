@@ -117,6 +117,7 @@
             cols="12"
             md="4"
             class="pb-0"
+            v-if="!typeGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -153,6 +154,7 @@
             cols="12"
             md="4"
             class="pb-0"
+            v-if="!typeGoiTiem"
           >
             <v-text-field
               label="Ngày đăng ký tiêm"
@@ -168,6 +170,7 @@
             cols="12"
             md="4"
             class="pb-0"
+            v-if="!typeGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -245,9 +248,28 @@
                 label="Ủy ban nhân dân cấp giấy"
                 dense
                 clearable
+                hide-details="auto"
             ></v-autocomplete>
           </v-col>
-          
+          <v-col
+            cols="12"
+            md="6"
+            class="pb-0"
+          >
+            <v-autocomplete
+                class="flex xs12 md12"
+                hide-no-data
+                :items="listTrangThaiGuiTinNhan"
+                v-model="dataSearch['statusGuiTinNhan']"
+                item-text="name"
+                item-value="value"
+                outlined
+                label="Trạng thái gửi tin nhắn"
+                dense
+                clearable
+                hide-details="auto"
+            ></v-autocomplete>
+          </v-col>
         </v-row>
         <v-row class="justify-end">
           <v-btn color="red" small class="mt-3 mx-3" @click="cancelSearch">
@@ -272,13 +294,19 @@
 <script>
   export default {
     name: 'Search',
-    props: ['form','diabanid'],
+    props: ['form','diabanid','typegiaydiduong','typeGoiTiem'],
     data () {
       return {
         listUyBanNhanDan: [],
         listDoiTuong: [],
         listDiaBan: [],
         listCoSoYTe: [],
+        listTrangThaiGuiTinNhan: [
+          {name: 'Chưa gửi', value: 0},
+          {name: 'Gửi Zalo thành công', value: 1},
+          {name: 'Gửi SMS thành công', value: 2},
+          {name: 'Gửi thất bại', value: 3}
+        ],
         listTinhThanh: [],
         tinhThanh: '',
         listQuanHuyen: [],
@@ -296,7 +324,8 @@
           KiemTraTrung: -1,
           TinhThanh_Ma: '',
           QuanHuyen_Ma: '',
-          PhuongXa_Ma: ''
+          PhuongXa_Ma: '',
+          statusGuiTinNhan: -1
         },
         listTrangThaiTrung: [
           {name: 'Chưa kiểm tra', value: 0},
@@ -363,7 +392,8 @@
           KiemTraTrung: -1,
           TinhThanh_Ma: '',
           QuanHuyen_Ma: '',
-          PhuongXa_Ma: ''
+          PhuongXa_Ma: '',
+          statusGuiTinNhan: -1
         },
         vm.$emit('trigger-cancel', vm.dataSearch)
       },
