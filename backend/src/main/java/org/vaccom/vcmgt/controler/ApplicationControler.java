@@ -884,7 +884,7 @@ public class ApplicationControler {
                 }
             }
 
-            nguoiTiemChungAction.duyetDangKyMoi(reqBody);
+            int total = nguoiTiemChungAction.duyetDangKyMoi(reqBody);
 
             String msg = MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.success");
 
@@ -914,7 +914,7 @@ public class ApplicationControler {
 //            }
 
 
-            return ResponseEntity.status(HttpStatus.OK).body(msg);
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, null));
 
         } catch (Exception e) {
 

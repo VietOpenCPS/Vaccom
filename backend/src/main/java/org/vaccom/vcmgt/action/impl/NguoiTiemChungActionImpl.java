@@ -517,7 +517,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	}
 
 	@Override
-	public void duyetDangKyMoi(String reqBody) {
+	public int duyetDangKyMoi(String reqBody) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -528,7 +528,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			if(isAutoAccept) {
 				int countAccept = bodyData.has(EntityConstant.COUNT_ACCEPT) ? bodyData.get(EntityConstant.COUNT_ACCEPT).intValue()  : -1;
 				if(countAccept < 0) {
-					return ;
+					return 0;
 				}
 
 				NguoiTiemChungDto dto = new NguoiTiemChungDto();
@@ -537,10 +537,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 				List<NguoiTiemChung> listNguoiTiemChungDangCho = nguoiTiemChungService.searchListChuyenDangKyChinhThuc(dto);
 
 				if(listNguoiTiemChungDangCho == null) {
-					return;
+					return 0;
 				}
 
 				long id;
+				int count = 0;
 				for(NguoiTiemChung nguoiTiemChung: listNguoiTiemChungDangCho) {
 					id = nguoiTiemChung.getId();
 					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByNguoiTiemChungId(id);
@@ -551,9 +552,10 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					}
 					nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
 					nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+					count ++;
 				}
 
-				return;
+				return count;
 			}
 
 			String ids = bodyData.has(EntityConstant.IDS) ? bodyData.get(EntityConstant.IDS).textValue()
@@ -623,9 +625,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 				}
 			}
+			return 0;
 		} catch (Exception e) {
 			_log.error(e);
 		}
+		return 0;
 	}
 
 	@Override
