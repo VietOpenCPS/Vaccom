@@ -6,10 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.vaccom.vcmgt.constant.ZaloConstant;
 import org.vaccom.vcmgt.dto.GiayDiDuongDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
 import org.vaccom.vcmgt.entity.GiayDiDuong;
+import org.vaccom.vcmgt.entity.HangChoThongBao;
 import org.vaccom.vcmgt.repository.GiayDiDuongRepository;
+import org.vaccom.vcmgt.repository.HangChoThongBaoRepository;
 import org.vaccom.vcmgt.service.GiayDiDuongService;
 
 import javax.persistence.EntityManager;
@@ -25,6 +28,9 @@ import java.util.List;
 public class GiayDiDuongServiceImpl implements GiayDiDuongService {
     @Autowired
     GiayDiDuongRepository giayDiDuongRepository;
+
+    @Autowired
+    HangChoThongBaoRepository hangChoThongBaoRepository;
 
     @Autowired
     private EntityManager em;
@@ -100,6 +106,14 @@ public class GiayDiDuongServiceImpl implements GiayDiDuongService {
 
     @Override
     public ResultSearchDto<GiayDiDuong> search(GiayDiDuongDto giayDiDuongDto) {
+
+        if(giayDiDuongDto.statusGuiTinNhan >= 0){
+            int status = giayDiDuongDto.statusGuiTinNhan;
+            int uyBanNhanDanID = giayDiDuongDto.uyBanNhanDanID;
+            List<HangChoThongBao> hangChoThongBaoList = hangChoThongBaoRepository.findByStatus_LoaiThongBao(status, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDanID);
+        }
+
+
         CriteriaBuilder builder = em.getCriteriaBuilder();
 
         CriteriaQuery<GiayDiDuong> criteriaQuery = builder.createQuery(GiayDiDuong.class);
@@ -121,6 +135,20 @@ public class GiayDiDuongServiceImpl implements GiayDiDuongService {
 
         if (Validator.isNotNull(giayDiDuongDto.noiCtTenCoQuan) && !giayDiDuongDto.noiCtTenCoQuan.isEmpty()) {
             predicates.add(builder.like(giayDiDuongRoot.get("noiCtTenCoQuan"), "%" + giayDiDuongDto.noiCtTenCoQuan + "%"));
+        }
+
+        if(giayDiDuongDto.statusGuiTinNhan >= 0) {
+            int status = giayDiDuongDto.statusGuiTinNhan;
+            int uyBanNhanDanID = giayDiDuongDto.uyBanNhanDanID;
+            List<HangChoThongBao> hangChoThongBaoList = hangChoThongBaoRepository.findByStatus_LoaiThongBao(status, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDanID);
+            List<Integer> mappingKeyList = new ArrayList<Integer>();
+            for (HangChoThongBao hangChoThongBao : hangChoThongBaoList) {
+                Long valueLong = new Long(hangChoThongBao.getMappingKey());
+                Integer value = valueLong.intValue();
+                mappingKeyList.add(value);
+            }
+            predicates.add((giayDiDuongRoot.get("id").in(mappingKeyList)));
+
         }
 
         if(giayDiDuongDto.uyBanNhanDanID > 0) {
@@ -156,6 +184,8 @@ public class GiayDiDuongServiceImpl implements GiayDiDuongService {
         }
 
         em.close();
+
+
 
         return new ResultSearchDto<GiayDiDuong>(lstGiayDiDuong, total);
     }

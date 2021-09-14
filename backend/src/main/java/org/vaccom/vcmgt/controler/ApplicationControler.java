@@ -877,8 +877,8 @@ public class ApplicationControler {
             JsonNode bodyData = mapper.readTree(reqBody);
             boolean isAutoAccept = bodyData.has(EntityConstant.IS_AUTO_ACCEPT) ? bodyData.get(EntityConstant.IS_AUTO_ACCEPT).booleanValue() : false;
 
-            if(isAutoAccept) {
-                if(!RoleUtil.isQuanTriHeThong(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro)) {
+            if (isAutoAccept) {
+                if (!RoleUtil.isQuanTriHeThong(vaiTro) && !RoleUtil.isQuanTriCoSo(vaiTro)) {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN)
                             .body(MessageUtil.getVNMessageText("nguoitiemchung.duyetdangky.permission_error"));
                 }
@@ -1104,7 +1104,7 @@ public class ApplicationControler {
     public ResponseEntity<?> searchNguoiTiemChungNew(HttpServletRequest request, HttpServletResponse response,
                                                      @RequestBody NguoiTiemChungDto nguoiTiemChungDto,
                                                      @RequestParam(name = "page", defaultValue = "0") int page,
-                                                     @RequestParam(name = "size", defaultValue = "30") int size)  {
+                                                     @RequestParam(name = "size", defaultValue = "30") int size) {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
@@ -1114,11 +1114,11 @@ public class ApplicationControler {
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
 
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
-                nguoiTiemChungDto.cosoyteid    = 0;
+                nguoiTiemChungDto.cosoyteid = 0;
                 nguoiTiemChungDto.diabancosoid = 0;
             } else {
                 //todo set cosoyteId
-                nguoiTiemChungDto.cosoyteid    = 0;
+                nguoiTiemChungDto.cosoyteid = 0;
                 nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
             }
 
@@ -1131,7 +1131,6 @@ public class ApplicationControler {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
 
-
                 List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
@@ -1141,19 +1140,18 @@ public class ApplicationControler {
                 node.put("muiTiemChung", jsonArrayObj);
 
 
-
                 List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
                 if (nguoiTiemChungDto.lichTiemChungId > 0) {
                     lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
                             phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
                 }
 
-                if(nguoiTiemChungDto.caTiemChungId > 0) {
+                if (nguoiTiemChungDto.caTiemChungId > 0) {
                     lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
                             phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
                 }
 
-                if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
+                if (nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
                     List<Integer> listTinhTrang = nguoiTiemChungDto.listtinhtrangxacnhan;
                     lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(p -> listTinhTrang.contains(p.getTinhTrangXacNhan())).collect(Collectors.toList());
                 }
@@ -1161,9 +1159,9 @@ public class ApplicationControler {
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
 
                 // Thêm status phiếu gửi :
-                for (JsonNode jsonNode: jsonArrayObj) {
+                for (JsonNode jsonNode : jsonArrayObj) {
                     HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(jsonNode.get("id").asLong(), ZaloConstant.Loai_Hen_TiemChung);
-                    if(Validator.isNotNull(hangChoThongBao)){
+                    if (Validator.isNotNull(hangChoThongBao)) {
                         ((ObjectNode) jsonNode).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
                     }
                 }
@@ -1233,10 +1231,10 @@ public class ApplicationControler {
 
             List<NguoiTiemChung> lstNguoiTiemChung = new ArrayList<NguoiTiemChung>();
 
-                if (RoleUtil.isQuanTriHeThong(vaiTro)) {
-                    total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
-                            diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, tinhthanhma,  tinhthanhten,  quanhuyenma
-                            ,   quanhuyenten,  phuongxama,  phuongxaten);
+            if (RoleUtil.isQuanTriHeThong(vaiTro)) {
+                total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
+                        diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma
+                        , quanhuyenten, phuongxama, phuongxaten);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size
@@ -2816,7 +2814,7 @@ public class ApplicationControler {
             giayDiDuongDto.uyBanNhanDanID = (int) vaiTro.getUyBanNhanDanId();
             GiayDiDuong giayDiDuong = giayDiDuongAction.create(giayDiDuongDto);
 
-            if(giayDiDuong == null) {
+            if (giayDiDuong == null) {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageUtil.getVNMessageText("giaydiduong.add.error"));
             }
 
@@ -2880,16 +2878,18 @@ public class ApplicationControler {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode arrayNode = mapper.createArrayNode();
 
+
             for (GiayDiDuong giayDiDuong : lstGiayDiDuong) {
                 String json = mapper.writeValueAsString(giayDiDuong);
-                JsonNode phieuHenTiemJson = mapper.readTree(json);
-                HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(phieuHenTiemJson.get("id").asLong(), ZaloConstant.Loai_Giay_Di_Duong);
-                if(Validator.isNotNull(hangChoThongBao)){
-                    ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                JsonNode giaydiduongJson = mapper.readTree(json);
+                HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(giaydiduongJson.get("id").asLong(), ZaloConstant.Loai_Giay_Di_Duong);
+                if (Validator.isNotNull(hangChoThongBao)) {
+                    ((ObjectNode) giaydiduongJson).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                } else {
+                    ((ObjectNode) giaydiduongJson).put(ZaloConstant.statusGuiTinNhan, -1);
                 }
-                arrayNode.add(phieuHenTiemJson);
+                arrayNode.add(giaydiduongJson);
             }
-
 
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, arrayNode));
@@ -2925,10 +2925,9 @@ public class ApplicationControler {
                 nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 
                 uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 _log.error(ex.getMessage());
             }
-
 
 
             if (phieuHenTiem == null) {
@@ -3014,7 +3013,6 @@ public class ApplicationControler {
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
-
 
 
             return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiemJson);
@@ -3121,7 +3119,7 @@ public class ApplicationControler {
             List<GiayDiDuong> giayDiDuongs = result.datas;
             int statusOld;
 
-            for(GiayDiDuong giayDiDuongUpdate: giayDiDuongs) {
+            for (GiayDiDuong giayDiDuongUpdate : giayDiDuongs) {
                 try {
 
                     if (giayDiDuongUpdate.getUyBanNhanDanID() != (int) vaiTro.getUyBanNhanDanId()) {
@@ -3546,23 +3544,24 @@ public class ApplicationControler {
             }
         }
     }
-    @RequestMapping(value="/update/phieuhentiem/guiThongBao/{id}", method = RequestMethod.GET, produces = "application/json")
+
+    @RequestMapping(value = "/update/phieuhentiem/guiThongBao/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> thucHienGuiThongBao(HttpServletRequest request, HttpServletResponse response,
-                                                 @PathVariable(value = "id") long lichTiemId){
+                                                 @PathVariable(value = "id") long lichTiemId) {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
             List<PhieuHenTiem> phieuHenTiemList = phieuHenTiemAction.findByLichTiemChungID(lichTiemId);
             _log.info("phieuHenTiemList : " + phieuHenTiemList.size());
-            for (PhieuHenTiem phieuHenTiem: phieuHenTiemList) {
+            for (PhieuHenTiem phieuHenTiem : phieuHenTiemList) {
                 int oldTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
                 phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.HENDAXACNHAN);
                 PhieuHenTiem phieuHenTiemNew = phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
                 int newTinhTrangXacNhan = phieuHenTiemNew.getTinhTrangXacNhan();
-                if(oldTinhTrangXacNhan < newTinhTrangXacNhan){
-                    if(Validator.isNotNull(phieuHenTiemNew)){
-                        if(oldTinhTrangXacNhan!=VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan==VaccomUtil.HENDAXACNHAN){
-                            if(Validator.isNotNull(phieuHenTiem)){
+                if (oldTinhTrangXacNhan < newTinhTrangXacNhan) {
+                    if (Validator.isNotNull(phieuHenTiemNew)) {
+                        if (oldTinhTrangXacNhan != VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan == VaccomUtil.HENDAXACNHAN) {
+                            if (Validator.isNotNull(phieuHenTiem)) {
                                 LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
                                 NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
                                 UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
@@ -3571,9 +3570,9 @@ public class ApplicationControler {
                                 String TenCoSo = null;
                                 String DiaDiem = null;
 
-                                if(Validator.isNotNull(lichTiemChung.getCoSoYTeId())){
+                                if (Validator.isNotNull(lichTiemChung.getCoSoYTeId())) {
                                     coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
-                                    if(Validator.isNotNull(coSoYTe)){
+                                    if (Validator.isNotNull(coSoYTe)) {
                                         TenCoSo = coSoYTe.getTenCoSo();
                                         DiaDiem = coSoYTe.getDiaChiCoSo();
                                     }
@@ -3590,7 +3589,7 @@ public class ApplicationControler {
 
                                 template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
                                 template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
-                                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() +" "+ phieuHenTiem.getGioHenTiem());
+                                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() + " " + phieuHenTiem.getGioHenTiem());
                                 template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                 template_data.put(ZaloConstant.DonViTiem, TenCoSo);
                                 template_data.put(ZaloConstant.DiaDiem, DiaDiem);
@@ -3637,7 +3636,7 @@ public class ApplicationControler {
     public ResponseEntity<?> getHangChoThongBao(HttpServletRequest request, HttpServletResponse response,
                                                 @RequestParam("isSent") String isSent,
                                                 @RequestParam("isReady") String isReady,
-                                                @RequestParam("createDate") String createDate){
+                                                @RequestParam("createDate") String createDate) {
         try {
             boolean isSentBoolean = Boolean.parseBoolean(isSent);
             boolean isReadyBoolean = Boolean.parseBoolean(isReady);
@@ -3663,11 +3662,12 @@ public class ApplicationControler {
 
         }
     }
+
     @RequestMapping(value = "/update/hangchothongbao/resetSendMessage", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<?> updateGuiLaiTinNhan(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> updateGuiLaiTinNhan(HttpServletRequest request, HttpServletResponse response) {
         try {
             List<HangChoThongBao> hangChoThongBaoList = hangChoThongBaoAction.findByStatus(ZaloConstant.GUI_THAT_BAI);
-            for (HangChoThongBao hangChoThongBao: hangChoThongBaoList) {
+            for (HangChoThongBao hangChoThongBao : hangChoThongBaoList) {
                 hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
                 hangChoThongBao.setReady(true);
                 hangChoThongBao.setSent(false);
@@ -3690,5 +3690,6 @@ public class ApplicationControler {
 
         }
     }
+
 
 }

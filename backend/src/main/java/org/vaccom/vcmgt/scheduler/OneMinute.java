@@ -195,6 +195,11 @@ public class OneMinute {
                         }
                     } else {
                         log.error("Không có số điện thoại hoặc UBND ID < 0 bản ghi : " + hangChoThongBao.getId());
+                        hangChoThongBao.setSent(true);
+                        hangChoThongBao.setReady(false);
+                        hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                        hangChoThongBao.setErrorCodeZalo(-1);
+                        hangChoThongBaoAction.update(hangChoThongBao);
                     }
                 } catch (Exception ex) {
                     log.error(ex.getMessage());

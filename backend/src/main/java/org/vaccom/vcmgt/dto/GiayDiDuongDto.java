@@ -55,9 +55,11 @@ public class GiayDiDuongDto {
     public String ghiChu;
 
     public int status;
+    public int statusGuiTinNhan = -1;
 
     public List<Integer> listIdUpdate;
     public List<Integer> listIdDelete;
+
 
     public boolean isSearchAll;
 

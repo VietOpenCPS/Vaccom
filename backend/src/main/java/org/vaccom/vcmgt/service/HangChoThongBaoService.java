@@ -19,5 +19,6 @@ public interface HangChoThongBaoService {
     public HangChoThongBao findByPhone_LoaiThongBao(String toTelNo, String loaiThongBao);
 
     public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao);
+    public List<HangChoThongBao> findByStatus_LoaiThongBao(long status, String loaiThongBao, long uyBanNhanDanId);
 
 }

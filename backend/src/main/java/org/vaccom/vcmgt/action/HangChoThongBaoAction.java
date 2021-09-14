@@ -28,6 +28,8 @@ public interface HangChoThongBaoAction {
 
     public HangChoThongBao findByLoaiThongBao_mappingKey(long mappingKey, String loaiThongBao);
 
+    public List<HangChoThongBao> findByStatus_LoaiThongBao(long status, String loaiThongBao, long uyBanNhanDanId);
+
 
 
 }

@@ -95,5 +95,10 @@ public class HangChoThongBaoActionImpl implements HangChoThongBaoAction {
         return hangChoThongBaoService.findByLoaiThongBao_mappingKey(mappingKey, loaiThongBao);
     }
 
+    @Override
+    public List<HangChoThongBao> findByStatus_LoaiThongBao(long status, String loaiThongBao, long uyBanNhanDanId) {
+        return hangChoThongBaoService.findByStatus_LoaiThongBao(status, loaiThongBao, uyBanNhanDanId);
+    }
+
 
 }
