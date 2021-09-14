@@ -12,13 +12,15 @@
         title="DANH SÁCH GỌI TIÊM"
         class="px-5 py-3"
       >
-      
-        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn> -->
+        </v-btn>
+        <v-card-text v-if="showAdvanceSearch">
+          <tim-kiem ref="timkiem" typeGoiTiem='true' v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
+        </v-card-text>
         <v-card-text>
           <v-row>
             <v-col
@@ -404,10 +406,11 @@
   import axios from 'axios'
   import Vue from 'vue'
   import Pagination from './Pagination'
+  import Search from './FormTimKiem.vue'
   export default {
     name: 'DanhSachGoiTiem',
     components: {
-    // 'tim-kiem': Search,
+    'tim-kiem': Search,
     'pagination': Pagination
     },
     data () {
@@ -573,7 +576,26 @@
         const [day, month, year] = date.split('/')
         return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
       },
-      getDanhSachPhieuHenTiem (pageIn) {
+      searchDangKyTiem (data) {
+        let vm = this
+        vm.searchAll = true
+        console.log('dataSearch', data)
+        vm.dataInputSearch = data
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
+        vm.getDanhSachPhieuHenTiem(0, data)
+      },
+      cancelSearchDangKyTiem (data) {
+        let vm = this
+        vm.showAdvanceSearch = false
+        vm.dataInputSearch = data
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
+        vm.getDanhSachPhieuHenTiem(0, data)
+      },
+      getDanhSachPhieuHenTiem (pageIn, dataSearch) {
         let vm = this
         if (vm.lichTiemChungFilter) {
           let param = {
@@ -591,10 +613,13 @@
           } catch (error) {
           }
           let dataPost = {
-              // typeGet: 1,
               lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
-              // caTiemChungId: vm.caTiemChungFilter ? vm.caTiemChungFilter : '',
-              // tinhtrangxacnhan: 0
+              cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
+              hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
+              diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
+              tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
+              quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
+              phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
               listtinhtrangxacnhan: [vm.trangThaiFilter]
           }
           vm.loading = true

@@ -457,6 +457,7 @@
           hoVaTen: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
           noiCtTenCoQuan: dataSearch && dataSearch['NoiCtTenCoQuan'] ? dataSearch['NoiCtTenCoQuan'] : '',
           uyBanNhanDanID: dataSearch && dataSearch.hasOwnProperty('UyBanNhanDanID') ? dataSearch['UyBanNhanDanID'] : '',
+          statusGuiTinNhan: dataSearch && dataSearch.hasOwnProperty('statusGuiTinNhan') ? dataSearch['statusGuiTinNhan'] : -1,
           status: 1,
           typeSearch: 'giaydiduong'
         }
