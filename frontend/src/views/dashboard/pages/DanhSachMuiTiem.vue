@@ -12,14 +12,14 @@
         title="DANH SÁCH ĐÃ TIÊM CHỦNG"
         class="px-5 py-3"
       >
-        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn> -->
+        </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchMuiTiem" v-on:trigger-cancel="cancelSearchMuiTiem"></tim-kiem>
+          <tim-kiem ref="timkiem" typeGoiTiem='true' v-on:trigger-search="searchMuiTiem" v-on:trigger-cancel="cancelSearchMuiTiem"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -467,7 +467,13 @@
           size: vm.itemsPerPage,
           data: {
             tinhtrangdangki: 3,
-            isSearchDaTiem: true
+            isSearchDaTiem: true,
+            cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
+            hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
+            diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
+            tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
+            quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
+            phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
           }
           
         }
