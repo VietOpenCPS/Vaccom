@@ -464,9 +464,9 @@
               })
               if (obj && obj['tinhThanhMa']) {
                 vm.dataSearch['DiaBanCoSo_ID'] = obj['id']
-                vm.tinhThanh= obj['tinhThanhMa']
-                vm.quanHuyen = obj['quanHuyenMa']
-                vm.xaPhuong = obj['phuongXaMa']
+                // vm.tinhThanh= obj['tinhThanhMa']
+                // vm.quanHuyen = obj['quanHuyenMa']
+                // vm.xaPhuong = obj['phuongXaMa']
               } else {
                 vm.dataSearch['DiaBanCoSo_ID'] = ''
               }

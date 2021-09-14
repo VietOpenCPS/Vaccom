@@ -12,15 +12,15 @@
         title="DANH SÁCH GỌI TIÊM"
         class="px-5 py-3"
       >
-        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn>
-        <v-card-text v-if="showAdvanceSearch">
+        </v-btn> -->
+        <!-- <v-card-text v-if="showAdvanceSearch">
           <tim-kiem ref="timkiem" typeGoiTiem='true' v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
-        </v-card-text>
+        </v-card-text> -->
         <v-card-text>
           <v-row>
             <v-col
