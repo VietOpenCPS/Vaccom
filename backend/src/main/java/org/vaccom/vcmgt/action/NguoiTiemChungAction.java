@@ -41,7 +41,7 @@ public interface NguoiTiemChungAction {
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
 			,  String quanhuyenten, String phuongxama, String phuongxaten);
 	
-	public void duyetDangKyMoi(String reqBody);
+	public int duyetDangKyMoi(String reqBody);
 	
 	public void huyDangKyChinhThuc(String reqBody);
 	
