@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" form="giaydiduong" v-on:trigger-search="searchGiayDiDuong" v-on:trigger-cancel="cancelSearchGiayDiDuong"></tim-kiem>
+          <tim-kiem ref="timkiem" form="giaydiduong" typegiaydiduong="dacap" v-on:trigger-search="searchGiayDiDuong" v-on:trigger-cancel="cancelSearchGiayDiDuong"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -54,11 +54,17 @@
               </v-icon>
               Xóa đăng ký
             </v-btn>
-            <v-btn color="green" small class="mx-0" @click.stop="translateStatusMultiple()" :loading="processingAction" :disabled="processingAction">
+            <v-btn color="green" small class="mr-4" @click.stop="translateStatusMultiple()" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-text-box-check-outline
               </v-icon>
               Duyệt giấy đi đường
+            </v-btn>
+            <v-btn color="orange" small class="mx-0" @click.stop="translateStatusAll()" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-text-box-check-outline
+              </v-icon>
+              Duyệt tất cả
             </v-btn>
             <input v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'CanBoUBND'" type="file" id="fileImport" @input="uploadFileImport($event)" style="display:none">
           </div>
@@ -103,10 +109,18 @@
                 <p class="mb-2">{{ item.soDienThoai }}</p>
             </template>
             <template v-slot:item.noiODiaChi="{ item, index }">
-                <p class="mb-2">{{ item.noiODiaChi}}, {{item.noiOPhuongXaTen}} - {{item.noiOQuanHuyenTen}} - {{item.noiOTinhThanhTen}}</p>
+                <p class="mb-2">{{ item.noiODiaChi}}
+                  <span v-if="item.noiOPhuongXaTen">, {{item.noiOPhuongXaTen}}</span>
+                  <span v-if="item.noiOQuanHuyenTen"> - {{item.noiOQuanHuyenTen}}</span>
+                  <span v-if="item.noiOTinhThanhTen"> - {{item.noiOTinhThanhTen}}</span>
+                </p>
             </template>
             <template v-slot:item.noiCtDiaChi="{ item, index }">
-                <p class="mb-2">{{ item.noiCtDiaChi }}, {{item.noiCtPhuongXaTen}} - {{item.noiCtQuanHuyenTen}} - {{item.noiCtTinhThanhTen}}</p>
+                <p class="mb-2">{{ item.noiCtDiaChi }}
+                  <span v-if="item.noiCtPhuongXaTen">, {{item.noiCtPhuongXaTen}}</span>
+                  <span v-if="item.noiCtQuanHuyenTen"> - {{item.noiCtQuanHuyenTen}}</span>
+                  <span v-if="item.noiCtTinhThanhTen"> - {{item.noiCtTinhThanhTen}}</span>
+                </p>
             </template>
             <template v-slot:item.noiCtTenCoQuan="{ item, index }">
                 <p class="mb-2">{{ item.noiCtTenCoQuan }}</p>
@@ -234,6 +248,7 @@
         showAdvanceSearch: false,
         selected: [],
         dataInputSearch: '',
+        dataSearchOutPut: '',
         headers: [
           {
             sortable: false,
@@ -466,6 +481,43 @@
         let x = confirm(textConfirm)
         if (x) {
           vm.$store.dispatch('duyetNhieuGiayDiDuong', filter).then(function (result) {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Duyệt thành công',
+              color: 'success',
+            })
+            vm.getDanhSachDangKyMoi(0)
+            vm.selected = []
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Duyệt thất bại',
+              color: 'error',
+            })
+          })
+        }
+      },
+      translateStatusAll () {
+        let vm = this
+        if (vm.showAdvanceSearch) {
+          vm.dataSearchOutPut = vm.$refs.timkiem.getDataOutPut()
+          console.log('dataSearch', vm.dataSearchOutPut)     
+        }
+        let filter = {
+          statusUpdate: 1,
+          cmtcccd: vm.dataSearchOutPut && vm.dataSearchOutPut['CMTCCCD'] ? vm.dataSearchOutPut['CMTCCCD'] : '',
+          hoVaTen: vm.dataSearchOutPut && vm.dataSearchOutPut['HoVaTen'] ? vm.dataSearchOutPut['HoVaTen'] : '',
+          noiCtTenCoQuan: vm.dataSearchOutPut && vm.dataSearchOutPut['NoiCtTenCoQuan'] ? vm.dataSearchOutPut['NoiCtTenCoQuan'] : '',
+          uyBanNhanDanID: vm.dataSearchOutPut && vm.dataSearchOutPut.hasOwnProperty('UyBanNhanDanID') ? vm.dataSearchOutPut['UyBanNhanDanID'] : '',
+          status: 0
+        }
+        if (!vm.totalItem) {
+          return
+        }
+        let textConfirm = 'Bạn có chắc chắn duyệt tất cả ' + vm.totalItem + ' giấy đi đường?'
+        let x = confirm(textConfirm)
+        if (x) {
+          vm.$store.dispatch('updateAllGiayDiDuong', filter).then(function (result) {
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
               text: 'Duyệt thành công',

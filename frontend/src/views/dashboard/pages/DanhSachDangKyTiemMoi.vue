@@ -445,15 +445,22 @@
         let textConfirm = 'Bạn có chắc chắn muốn đồng bộ tất cả danh sách'
         let x = confirm(textConfirm)
         if (x) {
+          vm.processingAction = true
           vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
+            let text = 0
+            if (result.total) {
+              text = result.total
+            }
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
-              text: 'Đồng bộ thành công',
+              text: 'Đồng bộ thành công ' + text + ' đăng ký',
               color: 'success',
             })
+            vm.processingAction = false
             vm.getDanhSachDangKyMoi(0)
             vm.selected = []
           }).catch(function () {
+            vm.processingAction = false
             vm.$store.commit('SHOW_SNACKBAR', {
               show: true,
               text: 'Đồng bộ thất bại',
