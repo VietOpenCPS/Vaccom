@@ -1,6 +1,7 @@
 package org.vaccom.vcmgt.controler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -1129,6 +1130,8 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
+
+
                 List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
@@ -1137,13 +1140,17 @@ public class ApplicationControler {
 
                 node.put("muiTiemChung", jsonArrayObj);
 
+
+
                 List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
                 if (nguoiTiemChungDto.lichTiemChungId > 0) {
-                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
+                            phieuHenTiem -> nguoiTiemChungDto.lichTiemChungId == phieuHenTiem.getLichTiemChungId()).collect(Collectors.toList());
                 }
 
                 if(nguoiTiemChungDto.caTiemChungId > 0) {
-                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
+                    lstPhieuHenTiem = lstPhieuHenTiem.stream().filter(
+                            phieuHenTiem -> nguoiTiemChungDto.caTiemChungId == phieuHenTiem.getCaTiemChungId()).collect(Collectors.toList());
                 }
 
                 if(nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
@@ -1152,6 +1159,14 @@ public class ApplicationControler {
                 }
 
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+                // Thêm status phiếu gửi :
+                for (JsonNode jsonNode: jsonArrayObj) {
+                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(jsonNode.get("id").asLong(), ZaloConstant.Loai_Hen_TiemChung);
+                    if(Validator.isNotNull(hangChoThongBao)){
+                        ((ObjectNode) jsonNode).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                    }
+                }
 
                 node.put("phieuHenTiem", jsonArrayObj);
 
@@ -2862,7 +2877,22 @@ public class ApplicationControler {
             total = result.total;
             lstGiayDiDuong = result.datas;
 
-            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstGiayDiDuong));
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode arrayNode = mapper.createArrayNode();
+
+            for (GiayDiDuong giayDiDuong : lstGiayDiDuong) {
+                String json = mapper.writeValueAsString(giayDiDuong);
+                JsonNode phieuHenTiemJson = mapper.readTree(json);
+                HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(phieuHenTiemJson.get("id").asLong(), ZaloConstant.Loai_Giay_Di_Duong);
+                if(Validator.isNotNull(hangChoThongBao)){
+                    ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
+                }
+                arrayNode.add(phieuHenTiemJson);
+            }
+
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, arrayNode));
 
         } catch (Exception e) {
             _log.error(e);
@@ -2882,13 +2912,24 @@ public class ApplicationControler {
     public ResponseEntity<?> getPhieuHenMaQr(@RequestParam("maQr") String maQr) {
 
         try {
-            PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findByMaQR(maQr);
+            PhieuHenTiem phieuHenTiem = null;
+            LichTiemChung lichTiemChung = null;
+            NguoiTiemChung nguoiTiemChung = null;
+            UyBanNhanDan uyBanNhanDan = null;
 
-            LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+            try {
+                phieuHenTiem = phieuHenTiemAction.findByMaQR(maQr);
 
-            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
 
-            CoSoYTe coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
+                nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+
+                uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
+            } catch (Exception ex){
+                _log.error(ex.getMessage());
+            }
+
+
 
             if (phieuHenTiem == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -2902,9 +2943,9 @@ public class ApplicationControler {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
             }
-            if (Validator.isNull(coSoYTe)) {
+            if (Validator.isNull(uyBanNhanDan)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(MessageUtil.getVNMessageText("coSoYTe.not_found"));
+                        .body(MessageUtil.getVNMessageText("uyBanNhanDan.not_found"));
             }
 
             ObjectMapper mapper = new ObjectMapper();
@@ -2912,9 +2953,13 @@ public class ApplicationControler {
             JsonNode phieuHenTiemJson = mapper.readTree(json);
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LinkQrCode, domainUrl + "/#/pages/hen-tiem-chung/" + phieuHenTiem.getMaQR());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, coSoYTe.getTenCoSo());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CoSoYTe, lichTiemChung.getTenCoSo());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
             ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.SoLo, lichTiemChung.getSoLoThuoc());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.DiaDiem, lichTiemChung.getDiaDiemTiemChung());
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.CMTCCCD, nguoiTiemChung.getCmtcccd());
+
+            ((ObjectNode) phieuHenTiemJson).put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan() + " - " + uyBanNhanDan.getQuanHuyenTen() + " - " + uyBanNhanDan.getTinhThanhTen());
 
             return ResponseEntity.status(HttpStatus.OK).body(phieuHenTiemJson);
 
@@ -3099,8 +3144,7 @@ public class ApplicationControler {
                                 template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                 template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
 
-                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
-
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId(), giayDiDuongNew.getId());
                             }
                         }
 
@@ -3158,7 +3202,12 @@ public class ApplicationControler {
                                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
 
-                                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()), giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
+                                        hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                                ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
+                                                giayDiDuongNew.getEmail(), true,
+                                                ZaloConstant.Loai_Giay_Di_Duong,
+                                                uyBanNhanDan.getId(),
+                                                giayDiDuongNew.getId());
 
                                     }
                                 }
@@ -3203,7 +3252,11 @@ public class ApplicationControler {
                         hangChoThongBaoAction.addHangChoThongBao(
                                 template_data.toString(),
                                 ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
-                                giayDiDuongNew.getEmail(), true, ZaloConstant.Loai_Giay_Di_Duong, uyBanNhanDan.getId());
+                                giayDiDuongNew.getEmail(),
+                                true,
+                                ZaloConstant.Loai_Giay_Di_Duong,
+                                uyBanNhanDan.getId(),
+                                giayDiDuongNew.getId());
 
                     }
                 }
@@ -3541,7 +3594,13 @@ public class ApplicationControler {
                                 template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
-                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(), nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getEmail(), true, ZaloConstant.Loai_Hen_TiemChung, uyBanNhanDanId);
+                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                        nguoiTiemChung.getSoDienThoai(),
+                                        nguoiTiemChung.getEmail(),
+                                        true,
+                                        ZaloConstant.Loai_Hen_TiemChung,
+                                        uyBanNhanDanId,
+                                        phieuHenTiem.getId());
                             }
                         }
                     }
@@ -3581,6 +3640,33 @@ public class ApplicationControler {
             total = hangChoThongBaos.size();
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, hangChoThongBaos));
+        } catch (Exception e) {
+
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+        }
+    }
+    @RequestMapping(value = "/update/hangchothongbao/resetSendMessage", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> updateGuiLaiTinNhan(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<HangChoThongBao> hangChoThongBaoList = hangChoThongBaoAction.findByStatus(ZaloConstant.GUI_THAT_BAI);
+            for (HangChoThongBao hangChoThongBao: hangChoThongBaoList) {
+                hangChoThongBao.setStatus(ZaloConstant.CHUA_GUI);
+                hangChoThongBao.setReady(true);
+                hangChoThongBao.setSent(false);
+                hangChoThongBaoAction.update(hangChoThongBao);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(hangChoThongBaoList.size(), hangChoThongBaoList));
         } catch (Exception e) {
 
             _log.error(e);
