@@ -113,21 +113,27 @@ public class OneMinute {
 
                                     JsonNode template_data_json = mapper.readTree(payload);
                                     body.put(ZaloConstant.template_data, template_data_json);
-                                    Integer code = null;
+                                    Integer code = 1;
                                     try {
                                         code = ZaloNotificationUtil.sendNotification(body.toString(), oaid_access_token);
                                     } catch (Exception ex) {
                                         log.error(ex.getMessage());
                                     }
                                     // Gửi thành công ZALO ZNS
-                                    if (code == HttpURLConnection.HTTP_OK) {
+                                    if (code == 0) {
                                         hangChoThongBao.setSent(true);
                                         hangChoThongBao.setStatus(ZaloConstant.GUI_ZALO_THANH_CONG);
+                                        hangChoThongBao.setErrorCodeZalo(code);
                                         hangChoThongBaoAction.update(hangChoThongBao);
                                     } else {
+
                                         // Gửi thất bại ZNS - chuyển đổi sang gửi SMS
                                         if (Validator.isNotNull(sms)) {
                                             String paramSMS = null;
+                                            String toTelNo = hangChoThongBao.getToTelNo();
+                                            StringBuilder build = new StringBuilder(toTelNo);
+                                            build.delete(0, 2);
+                                            String phoneNumber = build.toString();
                                             // Thực hiện gửi tin nhắn SMS
                                             if (loaiThongBao.equals(ZaloConstant.Loai_Hen_TiemChung)) {
                                                 String ngayGioSplit = payloadJson.get(ZaloConstant.NgayTiemChung).asText();
@@ -135,7 +141,7 @@ public class OneMinute {
                                                 String ngayHen = URLEncoder.encode(splitArray[0], "UTF-8");
                                                 String gioHen = URLEncoder.encode(splitArray[1], "UTF-8");
 
-                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + hangChoThongBao.getToTelNo().replace("84", StringPool.BLANK) + StringPool.AMPERSAND +
+                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
                                                         SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText() + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.HoVaTen).asText(), "UTF-8") + StringPool.AMPERSAND +
                                                         "param2" + StringPool.EQUAL + payloadJson.get(ZaloConstant.LanTiem).asText() + StringPool.AMPERSAND +
@@ -145,7 +151,7 @@ public class OneMinute {
                                             } else if (loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)) {
                                                 String LinkGiayDiDuong = URLEncoder.encode(domainUrl + "/#/pages/giay-di-duong/" + payloadJson.get(ZaloConstant.QrCodeID).asText(), "UTF-8");
 
-                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + hangChoThongBao.getToTelNo().replace("84", StringPool.BLANK) + StringPool.AMPERSAND +
+                                                paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
                                                         SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText() + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get(ZaloConstant.DonViCap).asText()), "UTF-8")
                                                         + StringPool.AMPERSAND + "param2" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get("HovaTen").asText()), "UTF-8")
@@ -162,11 +168,13 @@ public class OneMinute {
                                                 if (Validator.isNotNull(status) && status.equals("SUCCESS")) {
                                                     hangChoThongBao.setSent(true);
                                                     hangChoThongBao.setStatus(ZaloConstant.GUI_SMS_THANH_CONG);
+                                                    hangChoThongBao.setErrorCodeZalo(code);
                                                     hangChoThongBaoAction.update(hangChoThongBao);
                                                 } else {
                                                     hangChoThongBao.setSent(true);
                                                     hangChoThongBao.setReady(false);
                                                     hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                                    hangChoThongBao.setErrorCodeZalo(code);
                                                     hangChoThongBaoAction.update(hangChoThongBao);
                                                 }
                                             }
@@ -174,6 +182,7 @@ public class OneMinute {
                                             hangChoThongBao.setSent(true);
                                             hangChoThongBao.setReady(false);
                                             hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                            hangChoThongBao.setErrorCodeZalo(code);
                                             hangChoThongBaoAction.update(hangChoThongBao);
                                         }
                                     }
@@ -186,6 +195,11 @@ public class OneMinute {
                         }
                     } else {
                         log.error("Không có số điện thoại hoặc UBND ID < 0 bản ghi : " + hangChoThongBao.getId());
+                        hangChoThongBao.setSent(true);
+                        hangChoThongBao.setReady(false);
+                        hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                        hangChoThongBao.setErrorCodeZalo(-1);
+                        hangChoThongBaoAction.update(hangChoThongBao);
                     }
                 } catch (Exception ex) {
                     log.error(ex.getMessage());
