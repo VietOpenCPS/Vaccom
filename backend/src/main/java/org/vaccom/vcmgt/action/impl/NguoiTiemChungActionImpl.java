@@ -101,13 +101,13 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			return ;
 		}
 
-		long idNguoiTiem = nguoiTiemChungCreated.getId();
+		long idCongDanNguoiTiem = nguoiTiemChungCreated.getCongDanID();
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
 
 		if(listTiemChungDto == null || listTiemChungDto.size() == 0) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
-			muiTiemChung.setNguoiTiemChungId(idNguoiTiem);
+			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
 			muiTiemChung.setLanTiem(1);
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -118,7 +118,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		int lanTiem = 1;
 		for(MuiTiemChungDto muiTiemChungDto: listTiemChungDto) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
-			muiTiemChung.setNguoiTiemChungId(idNguoiTiem);
+			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setLanTiem(lanTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -543,8 +543,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 				long id;
 				int count = 0;
 				for(NguoiTiemChung nguoiTiemChung: listNguoiTiemChungDangCho) {
-					id = nguoiTiemChung.getId();
-					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByNguoiTiemChungId(id);
+					id = nguoiTiemChung.getCongDanID();
+					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(id);
 					if(lstMuiTiemChung != null ) {
 						if(lstMuiTiemChung.size() > countAccept) {
 							continue;
@@ -573,7 +573,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
-								List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByNguoiTiemChungId(nguoiTiemChung.getId());
+								List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 								if(lstMuiTiemChung != null ) {
 									if(lstMuiTiemChung.size() == 1) {
 										if(lstMuiTiemChung.get(0).getLanTiem() > 1) {

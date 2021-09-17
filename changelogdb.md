@@ -164,14 +164,15 @@ create table IF NOT EXISTS t_congdan (
 primary key (ID)
 )
 ---
-ALTER TABLE vaccom.t_nguoitiemchung ADD COLUMN  `CongDan_ID` varchar(10) DEFAULT NULL;
+ALTER TABLE vaccom.t_nguoitiemchung ADD COLUMN  `CongDan_ID` bigint(20) DEFAULT 0;
 ALTER TABLE vaccom.t_nguoitiemchung ADD COLUMN  `SoMuiTiem` tinyint(4) DEFAULT 0;
 ALTER TABLE vaccom.t_nguoitiemchung ADD COLUMN  `NgayTiemCuoi` varchar(20) DEFAULT NULL;
 ---
-ALTER TABLE vaccom.t_muitiemchung ADD COLUMN  `CongDan_ID` varchar(10) DEFAULT NULL;
-ALTER TABLE vaccom.t_nguoidung ADD COLUMN  `CongDan_ID` varchar(10) DEFAULT NULL;
-ALTER TABLE vaccom.t_giaydiduong ADD COLUMN  `CongDan_ID` varchar(10) DEFAULT NULL;
+ALTER TABLE vaccom.t_muitiemchung ADD COLUMN  `CongDan_ID` bigint(20) DEFAULT 0;
+ALTER TABLE vaccom.t_nguoidung ADD COLUMN  `CongDan_ID` bigint(20) DEFAULT 0;
+ALTER TABLE vaccom.t_giaydiduong ADD COLUMN  `CongDan_ID` bigint(20) DEFAULT 0;
 
+ALTER TABLE vaccom.t_muitiemchung DROP COLUMN `NguoiTiemChungID`;
 
 
 

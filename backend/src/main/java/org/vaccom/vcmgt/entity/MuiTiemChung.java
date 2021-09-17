@@ -28,8 +28,6 @@ public class MuiTiemChung implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@Column(name = "NguoiTiemChungID")
-	private long nguoiTiemChungId;
 
 	@Column(name = "CoSoYTeID")
 	private long coSoYTeId;
@@ -74,16 +72,15 @@ public class MuiTiemChung implements Serializable {
 	private String hanSuDung;
 
 	@Column(name = "CongDan_ID")
-	private String congDanID;
+	private Long congDanID;
 
-	public String getCongDanID() {
+	public Long getCongDanID() {
 		return congDanID;
 	}
 
-	public void setCongDanID(String congDanID) {
+	public void setCongDanID(Long congDanID) {
 		this.congDanID = congDanID;
 	}
-
 
 	public long getId() {
 		return id;
@@ -197,13 +194,6 @@ public class MuiTiemChung implements Serializable {
 		this.hanSuDung = hanSuDung;
 	}
 
-	public long getNguoiTiemChungId() {
-		return nguoiTiemChungId;
-	}
-
-	public void setNguoiTiemChungId(long nguoiTiemChungId) {
-		this.nguoiTiemChungId = nguoiTiemChungId;
-	}
 
 	public long getCoSoYTeId() {
 		return coSoYTeId;

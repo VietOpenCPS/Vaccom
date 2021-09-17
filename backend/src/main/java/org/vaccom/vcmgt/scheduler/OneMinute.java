@@ -187,6 +187,13 @@ public class OneMinute {
                                                     hangChoThongBao.setErrorCodeZalo(code);
                                                     hangChoThongBaoAction.update(hangChoThongBao);
                                                 }
+                                            } else {
+                                                log.error("Lỗi :smsAccessToken :" + smsAccessToken + " - paramSMS :" + paramSMS);
+                                                hangChoThongBao.setSent(true);
+                                                hangChoThongBao.setReady(false);
+                                                hangChoThongBao.setStatus(ZaloConstant.GUI_THAT_BAI);
+                                                hangChoThongBao.setErrorCodeZalo(code);
+                                                hangChoThongBaoAction.update(hangChoThongBao);
                                             }
                                         } else {
                                             hangChoThongBao.setSent(true);

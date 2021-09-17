@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoidung` (
   `NguoiTiemChungID` bigint(20) DEFAULT 0,
   `UyBanNhanDanID` bigint(20) DEFAULT 0,
   `QuanTriHeThong` tinyint(4) DEFAULT 0,
-  `CongDan_ID` varchar(10) DEFAULT NULL,
+  `CongDan_ID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 
@@ -131,10 +131,9 @@ CREATE TABLE IF NOT EXISTS `t_muitiemchung` (
   `SoLoThuoc` varchar(64) DEFAULT NULL,
   `HanSuDung` varchar(10) DEFAULT NULL,
   `CoSoYTeID` bigint(20) DEFAULT 0,
-  `NguoiTiemChungID` bigint(20) NOT NULL,
-  `CongDan_ID` varchar(10) DEFAULT NULL,
+  `CongDan_ID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
-) ;
+);
 
 CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -169,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `MaQR` varchar(128) NOT NULL,
   `KiemTraTrung` tinyint(4) DEFAULT 0,
   `KetQuaKiemTra` longtext DEFAULT NULL,
-  `CongDan_ID` varchar(10) DEFAULT NULL,
+  `CongDan_ID` bigint(20) DEFAULT 0,
   `SoMuiTiem` tinyint(4) DEFAULT 0,
   `NgayTiemCuoi` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`ID`)
@@ -204,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   `CheckSum` text DEFAULT NULL,
   `GhiChu` text DEFAULT NULL,
   `Status` tinyint(1) DEFAULT 0,
-  `CongDan_ID` varchar(10) DEFAULT NULL,
+  `CongDan_ID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 

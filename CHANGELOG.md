@@ -68,3 +68,11 @@
 * Quản trị danh sách địa bàn cơ sở
 * Quản trị danh sách người dùng (cán bộ y tế, cán bộ đia bàn)
 
+
+* Tạo d/s gọi tiêm chuyển t_nguoitiemchung sang 4, tạo phiếu tiem
+* Danh sách goi tiêm: t_nguoitiemchung join t_phieutiem, t_lichtiem(lọc theo các trạng thái của phiếu tiêm)
+* Chuyển d/s gọi tiêm khi chưa gửi tin nhắn(trạng thái phiếu bằng 0) về d/s chính thức(cập nhật lại trạng thái đk = 1, và xóa phiếu)
+* Chuyển d/s người chưa được tiêm về chính thức(trạng thái phiếu !=4 && !=0) về d/s chính thức(cập nhật lại trạng thái đk = 1, và xóa phiếu)
+* Tích hợp thêm mẫu thông báo Sửa giấy đi đường khi cập nhật giấy đi đường đã cấp
+* Chỉnh sửa lại payload cho hệ thống gửi tin nhắn phù hợp với Zalo Template
+

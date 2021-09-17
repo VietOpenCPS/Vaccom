@@ -419,5 +419,15 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 		return phieuHenTiemService.findByLichTiemChungID(lichTiemChungId);
 	}
 
+	@Override
+	public List<PhieuHenTiem> findByTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
+		return phieuHenTiemService.findByTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
+	}
+
+	@Override
+	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
+		return phieuHenTiemService.findByKhacTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
+	}
+
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);
 }
