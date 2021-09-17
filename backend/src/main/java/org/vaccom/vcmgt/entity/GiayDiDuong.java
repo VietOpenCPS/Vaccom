@@ -100,6 +100,17 @@ public class GiayDiDuong implements Serializable {
     @Column(name = "Status")
     private int status;
 
+    @Column(name = "CongDan_ID")
+    private String congDanID;
+
+    public String getCongDanID() {
+        return congDanID;
+    }
+
+    public void setCongDanID(String congDanID) {
+        this.congDanID = congDanID;
+    }
+
     public long getId() {
         return id;
     }

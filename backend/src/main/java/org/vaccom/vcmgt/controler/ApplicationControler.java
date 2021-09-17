@@ -2005,7 +2005,7 @@ public class ApplicationControler {
 
                     phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
 
-                    nguoiTiemChung.setTinhTrangDangKi(4);
+                    nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DACHUYENSANGPHIEUHEN);
                     nguoiTiemChungAction.update(nguoiTiemChung);
 
                 }
@@ -2314,6 +2314,9 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("lichtiemchung.update.permission_error"));
 			}
 			*/
+
+
+
             lichTiemChungAction.dongLichTiemChung(id);
 
             String msg = MessageUtil.getVNMessageText("lichtiemchung.donglichtiem.success");
