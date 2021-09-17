@@ -1,3 +1,14 @@
+### Release v0.4.2
+* Thêm chức năng lưu lại thông tin mã lỗi của Zalo để tiện việc tra cứu debug của thông báo
+* Sửa lỗi và tối ưu tính năng gửi tin nhắn
+* Sửa lỗi và Tối ưu chức năng chuyển đổi số điện thoại (11 số cho zalo, 9 số cho sms)
+* Thêm api quản lý hàng đợi để quản lý
+* Chỉnh sửa thời gian cho Scheduler chạy từ 6h -> 22h
+* Thêm tính năng Import Excel cho lịch tiêm
+* Thêm tính năng màn hình chờ khi người dùng thao tác ấn đồng bộ
+* Hiển thị thông báo số người đăng kí tiêm được đồng bộ
+* Thêm bộ lọc cho danh sách người đã tiêm
+
 ### Release v0.4.1
 * Thêm tính năng lọc danh sách dữ liệu không chuẩn(thiếu các trường bắt buộc khi import từ excel) - issue #85 
 * Thêm danh mục loại thuốc
