@@ -73,6 +73,18 @@ public class MuiTiemChung implements Serializable {
 	@Column(name = "HanSuDung")
 	private String hanSuDung;
 
+	@Column(name = "CongDan_ID")
+	private String congDanID;
+
+	public String getCongDanID() {
+		return congDanID;
+	}
+
+	public void setCongDanID(String congDanID) {
+		this.congDanID = congDanID;
+	}
+
+
 	public long getId() {
 		return id;
 	}

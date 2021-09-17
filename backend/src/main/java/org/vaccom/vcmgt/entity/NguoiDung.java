@@ -68,6 +68,17 @@ public class NguoiDung implements Serializable {
 	@Column(name = "UyBanNhanDanID ")
 	private long uyBanNhanDanId;
 
+	@Column(name = "CongDan_ID")
+	private String congDanID;
+
+	public String getCongDanID() {
+		return congDanID;
+	}
+
+	public void setCongDanID(String congDanID) {
+		this.congDanID = congDanID;
+	}
+
 	public long getId() {
 		return id;
 	}
