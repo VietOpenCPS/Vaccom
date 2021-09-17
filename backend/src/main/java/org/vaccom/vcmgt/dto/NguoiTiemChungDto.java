@@ -83,4 +83,8 @@ public class NguoiTiemChungDto {
 
     public List<MuiTiemChungDto> listMuiTieuChungDto;
 
+    public String loaiThuocTiem;
+
+    public int soMuiTiem;
+
 }

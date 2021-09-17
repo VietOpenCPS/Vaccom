@@ -124,7 +124,7 @@ public class NguoiTiemChung implements Serializable {
 	private String ketQuaKiemTra;
 
 	@Column(name = "CongDan_ID")
-	private String congDanID;
+	private long congDanID;
 
 	@Column(name = "SoMuiTiem")
 	private int soMuiTiem;
@@ -148,11 +148,11 @@ public class NguoiTiemChung implements Serializable {
 		this.ngayTiemCuoi = ngayTiemCuoi;
 	}
 
-	public String getCongDanID() {
+	public long getCongDanID() {
 		return congDanID;
 	}
 
-	public void setCongDanID(String congDanID) {
+	public void setCongDanID(long congDanID) {
 		this.congDanID = congDanID;
 	}
 

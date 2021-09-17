@@ -15,8 +15,9 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CongDanRepository extends JpaRepository<CongDan, Long> {
+    CongDan findById(long ID);
 
+    CongDan findBySoDienThoaiOrCmtcccd(String sdt, String cmt);
 
-    @Query(value="SELECT * FROM " + DBConstant._CONGDAN_TABLE_NAME + " WHERE id = :ID", nativeQuery = true)
-    CongDan findByCongDanId(@Param("ID") long ID);
+    int countBySoDienThoaiAndCmtcccd(String sdt, String cmt);
 }

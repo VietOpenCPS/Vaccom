@@ -101,13 +101,13 @@ public class GiayDiDuong implements Serializable {
     private int status;
 
     @Column(name = "CongDan_ID")
-    private String congDanID;
+    private long congDanID;
 
-    public String getCongDanID() {
+    public long getCongDanID() {
         return congDanID;
     }
 
-    public void setCongDanID(String congDanID) {
+    public void setCongDanID(long congDanID) {
         this.congDanID = congDanID;
     }
 
