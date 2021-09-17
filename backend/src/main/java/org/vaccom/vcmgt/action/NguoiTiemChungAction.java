@@ -54,4 +54,6 @@ public interface NguoiTiemChungAction {
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 
 	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
+
+	public NguoiTiemChung update(NguoiTiemChung nguoiTiemChung);
 }

@@ -202,6 +202,8 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   PRIMARY KEY (`ID`)
 ) ;
 
+
+
 CREATE TABLE IF NOT EXISTS `t_thuoc` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `TenThuoc` varchar(256) NOT NULL,
@@ -301,4 +303,25 @@ create table IF NOT EXISTS t_hangchothongbao (
     `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key (ID)
 );
+
+create table IF NOT EXISTS t_congdan (
+    `ID` bigint not null auto_increment,
+    `HoVaTen` varchar(128) NOT NULL,
+    `NgaySinh` varchar(10) DEFAULT NULL,
+    `GioiTinh` tinyint(4) DEFAULT 0,
+    `DiaChiThuongTru` varchar(512) DEFAULT NULL,
+    `TinhThanh_Ma` varchar(30) DEFAULT NULL,
+    `TinhThanh_Ten` varchar(128) DEFAULT NULL,
+    `QuanHuyen_Ma` varchar(30) DEFAULT NULL,
+    `QuanHuyen_Ten` varchar(128) DEFAULT NULL,
+    `PhuongXa_Ma` varchar(30) DEFAULT NULL,
+    `PhuongXa_Ten` varchar(128) DEFAULT NULL,
+    `CMTCCCD` varchar(20) DEFAULT NULL,
+    `NoiCap` varchar(128) DEFAULT NULL,
+    `NgayCap` varchar(20) DEFAULT NULL,
+    `SoMuiTiem` tinyint(4) DEFAULT 0,
+    primary key (ID)
+)
+
+
 

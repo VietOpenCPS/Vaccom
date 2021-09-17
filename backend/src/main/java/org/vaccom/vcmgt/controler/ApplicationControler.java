@@ -34,10 +34,7 @@ import org.vaccom.vcmgt.action.*;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.constant.MethodConstant;
 import org.vaccom.vcmgt.constant.ZaloConstant;
-import org.vaccom.vcmgt.dto.GiayDiDuongDto;
-import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
-import org.vaccom.vcmgt.dto.ResultSearchDto;
-import org.vaccom.vcmgt.dto.UyBanNhanDanDto;
+import org.vaccom.vcmgt.dto.*;
 import org.vaccom.vcmgt.entity.*;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.response.DataResponeBody;
@@ -1970,6 +1967,75 @@ public class ApplicationControler {
 
         }
     }
+    @RequestMapping(value = "/add/phieuhentiem/list", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> addPhieuHenTiemList(HttpServletRequest request, HttpServletResponse response,
+                                                 @RequestBody PhieuHenTiemDto phieuHenTiemDto) {
+        try {
+            VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
+
+            if (phieuHenTiemDto.NguoiTiemChungIDs != null && phieuHenTiemDto.NguoiTiemChungIDs.size() > 0) {
+                List<Integer> NguoiTiemChungIdList = phieuHenTiemDto.NguoiTiemChungIDs;
+                LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiemDto.LichTiemChungID);
+
+                if(Validator.isNull(lichTiemChung)){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.not_found"));
+                }
+                for (Integer nguoiTiemChungID: NguoiTiemChungIdList) {
+                    NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
+                    if(Validator.isNull(nguoiTiemChung)){
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(MessageUtil.getVNMessageText("nguoiTiemChung.chitiet.not_found"));
+                    }
+                    PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
+
+                    phieuHenTiem.setGioHenTiem(lichTiemChung.getGioHenTiem());
+                    phieuHenTiem.setLichTiemChungId(lichTiemChung.getId());
+                    phieuHenTiem.setCaTiemChungId(0);
+                    phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
+                    phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
+                    phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 6));
+                    phieuHenTiem.setLanTiem(phieuHenTiemDto.LanTiem);
+                    phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
+                    phieuHenTiem.setNgayCheckin(StringPool.BLANK);
+                    phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
+                    phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
+                    phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
+                    phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
+
+                    phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+
+                    nguoiTiemChung.setTinhTrangDangKi(4);
+                    nguoiTiemChungAction.update(nguoiTiemChung);
+
+                }
+
+                String msg = MessageUtil.getVNMessageText("phieuhentiem.list.add.success");
+
+                return ResponseEntity.status(HttpStatus.OK).body(msg);
+            }
+
+            String msg = MessageUtil.getVNMessageText("NguoiTiemChungIDs.not_found");
+
+            return ResponseEntity.status(HttpStatus.OK).body(msg);
+        } catch (Exception e) {
+
+            _log.error(e);
+
+            if (e instanceof ActionException) {
+                String msg = e.getMessage();
+                int status = ((ActionException) e).getStatus();
+                return ResponseEntity.status(status).body(msg);
+
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+        }
+
+
+    }
+
 
     @RequestMapping(value = "/update/phieuhentiem/{id}", method = RequestMethod.PUT, produces = "application/json")
     public ResponseEntity<?> updatePhieuHenTiem(HttpServletRequest request, HttpServletResponse response,
@@ -3137,7 +3203,7 @@ public class ApplicationControler {
                                 ObjectMapper mapper = new ObjectMapper();
                                 ObjectNode template_data = mapper.createObjectNode();
 
-                                template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
+                                
                                 template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                 template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                 template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
@@ -3201,7 +3267,7 @@ public class ApplicationControler {
                                         ObjectMapper mapper = new ObjectMapper();
                                         ObjectNode template_data = mapper.createObjectNode();
 
-                                        template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
+                                        
                                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
@@ -3248,7 +3314,6 @@ public class ApplicationControler {
                         ObjectMapper mapper = new ObjectMapper();
                         ObjectNode template_data = mapper.createObjectNode();
 
-                        template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
@@ -3259,6 +3324,28 @@ public class ApplicationControler {
                                 giayDiDuongNew.getEmail(),
                                 true,
                                 ZaloConstant.Loai_Giay_Di_Duong,
+                                uyBanNhanDan.getId(),
+                                giayDiDuongNew.getId());
+
+                    }
+                } else if(statusOld == VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET){
+
+                    UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
+                    if (Validator.isNotNull(uyBanNhanDan)) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ObjectNode template_data = mapper.createObjectNode();
+
+                        template_data.put(ZaloConstant.NgayCap, giayDiDuongNew.getNgayCap());
+                        template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                        template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
+                        template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
+
+                        hangChoThongBaoAction.addHangChoThongBao(
+                                template_data.toString(),
+                                ZaloNotificationUtil.convertPhoneNumber(giayDiDuongNew.getSoDienThoai()),
+                                giayDiDuongNew.getEmail(),
+                                true,
+                                ZaloConstant.Loai_Sua_Giay_Di_Duong,
                                 uyBanNhanDan.getId(),
                                 giayDiDuongNew.getId());
 
@@ -3552,7 +3639,7 @@ public class ApplicationControler {
 
             ObjectMapper mapper = new ObjectMapper();
             List<PhieuHenTiem> phieuHenTiemList = phieuHenTiemAction.findByLichTiemChungID(lichTiemId);
-            _log.info("phieuHenTiemList : " + phieuHenTiemList.size());
+
             for (PhieuHenTiem phieuHenTiem : phieuHenTiemList) {
                 int oldTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
                 phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.HENDAXACNHAN);
@@ -3595,7 +3682,7 @@ public class ApplicationControler {
                                 template_data.put(ZaloConstant.DiaDiem, DiaDiem);
                                 template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
                                 template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-                                template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
+                                
                                 template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
