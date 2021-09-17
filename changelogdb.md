@@ -144,3 +144,26 @@ ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `mappingKey` bigint(10) DEFAULT
 ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `errorCodeZalo` bigint(3) DEFAULT 1;
 ALTER TABLE vaccom.t_hangchothongbao ADD COLUMN  `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
+#update 17/09/2021
+create table IF NOT EXISTS t_congdan (
+`ID` bigint not null auto_increment,
+`HoVaTen` varchar(128) NOT NULL,
+`NgaySinh` varchar(10) DEFAULT NULL,
+`GioiTinh` tinyint(4) DEFAULT 0,
+`DiaChiThuongTru` varchar(512) DEFAULT NULL,
+`TinhThanh_Ma` varchar(30) DEFAULT NULL,
+`TinhThanh_Ten` varchar(128) DEFAULT NULL,
+`QuanHuyen_Ma` varchar(30) DEFAULT NULL,
+`QuanHuyen_Ten` varchar(128) DEFAULT NULL,
+`PhuongXa_Ma` varchar(30) DEFAULT NULL,
+`PhuongXa_Ten` varchar(128) DEFAULT NULL,
+`CMTCCCD` varchar(20) DEFAULT NULL,
+`NoiCap` varchar(128) DEFAULT NULL,
+`NgayCap` varchar(20) DEFAULT NULL,
+`SoMuiTiem` tinyint(4) DEFAULT 0,
+primary key (ID)
+)
+
+
+
+

@@ -99,6 +99,8 @@ public class OneMinute {
                                         template_id = zalo.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText();
                                     } else if(loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)){
                                         template_id = zalo.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText();
+                                    } else if(loaiThongBao.equals(ZaloConstant.Loai_Sua_Giay_Di_Duong)){
+                                        template_id = zalo.get(ZaloConstant.Loai_Sua_Giay_Di_Duong.toLowerCase()).asText();
                                     }
                                 } catch (Exception ex) {
                                     log.error(ex.getMessage());
@@ -114,11 +116,13 @@ public class OneMinute {
                                     JsonNode template_data_json = mapper.readTree(payload);
                                     body.put(ZaloConstant.template_data, template_data_json);
                                     Integer code = 1;
+
                                     try {
                                         code = ZaloNotificationUtil.sendNotification(body.toString(), oaid_access_token);
                                     } catch (Exception ex) {
                                         log.error(ex.getMessage());
                                     }
+
                                     // Gửi thành công ZALO ZNS
                                     if (code == 0) {
                                         hangChoThongBao.setSent(true);
@@ -134,15 +138,17 @@ public class OneMinute {
                                             StringBuilder build = new StringBuilder(toTelNo);
                                             build.delete(0, 2);
                                             String phoneNumber = build.toString();
+                                            String template_sms_id = null;
                                             // Thực hiện gửi tin nhắn SMS
                                             if (loaiThongBao.equals(ZaloConstant.Loai_Hen_TiemChung)) {
                                                 String ngayGioSplit = payloadJson.get(ZaloConstant.NgayTiemChung).asText();
                                                 String[] splitArray = ngayGioSplit.split(StringPool.SPACE);
                                                 String ngayHen = URLEncoder.encode(splitArray[0], "UTF-8");
                                                 String gioHen = URLEncoder.encode(splitArray[1], "UTF-8");
+                                                template_sms_id = sms.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText();
 
                                                 paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
-                                                        SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Hen_TiemChung.toLowerCase()).asText() + StringPool.AMPERSAND +
+                                                        SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + template_sms_id + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.HoVaTen).asText(), "UTF-8") + StringPool.AMPERSAND +
                                                         "param2" + StringPool.EQUAL + payloadJson.get(ZaloConstant.LanTiem).asText() + StringPool.AMPERSAND +
                                                         "param3" + StringPool.EQUAL + gioHen + StringPool.AMPERSAND +
@@ -151,13 +157,17 @@ public class OneMinute {
                                             } else if (loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)) {
                                                 String LinkGiayDiDuong = URLEncoder.encode(domainUrl + "/#/pages/giay-di-duong/" + payloadJson.get(ZaloConstant.QrCodeID).asText(), "UTF-8");
 
+                                                template_sms_id = sms.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText();
+
                                                 paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
-                                                        SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + sms.get(ZaloConstant.Loai_Giay_Di_Duong.toLowerCase()).asText() + StringPool.AMPERSAND +
-                                                        "param1" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get(ZaloConstant.DonViCap).asText()), "UTF-8")
+                                                        SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + template_sms_id + StringPool.AMPERSAND
+                                                        + "param1" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get(ZaloConstant.DonViCap).asText()), "UTF-8")
                                                         + StringPool.AMPERSAND + "param2" + StringPool.EQUAL + URLEncoder.encode(VNCharacterUtils.removeAccent(payloadJson.get("HovaTen").asText()), "UTF-8")
                                                         + StringPool.AMPERSAND + "param3" + StringPool.EQUAL + LinkGiayDiDuong;
                                             }
+
                                             String smsAccessToken = sms.get(ZaloConstant.Access_Token.toLowerCase()).asText();
+
                                             if (Validator.isNotNull(smsAccessToken) && Validator.isNotNull(paramSMS)) {
                                                 String status = null;
                                                 try {

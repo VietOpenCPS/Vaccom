@@ -25,11 +25,13 @@ public class ZaloConstant {
     public final static String SoDonViCap = "sodonvicap";
     public final static String CMTCCCD = "cmtcccd";
 
+    public final static String NgayCap = "ngaycap";
 
 
     public final static String Loai_XacNhan_NguoiTiemChung = "AUTH_ACC";
     public final static String Loai_Giay_Di_Duong = "GIAY_DI_DUONG";
     public final static String Loai_Hen_TiemChung = "HEN_TIEM_CHUNG";
+    public final static String Loai_Sua_Giay_Di_Duong = "SUA_GIAY_DI_DUONG";
     public final static String Access_Token = "ACCESS_TOKEN";
 
 
