@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
+import org.vaccom.vcmgt.entity.CongDan;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 
 @Service
@@ -43,7 +44,7 @@ public interface NguoiTiemChungService {
 			,  String quanhuyenten, String phuongxama, String phuongxaten);
 
 	public ResultSearchDto<NguoiTiemChung> search(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
-	public ResultSearchDto<NguoiTiemChung> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
+	public ResultSearchDto<CongDan> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 	public ResultSearchDto<NguoiTiemChung> searchOr(NguoiTiemChungDto nguoiTiemChungDto, int page, int size);
 
 	public List<NguoiTiemChung> searchListChuyenDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto);

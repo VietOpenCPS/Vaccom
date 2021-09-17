@@ -1,6 +1,7 @@
 package org.vaccom.vcmgt.entity;
 
 import org.vaccom.vcmgt.constant.DBConstant;
+import org.vaccom.vcmgt.dto.CongDanDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,24 @@ public class CongDan implements Serializable {
 
     public CongDan() {
 
+    }
+
+    public CongDan(CongDanDto congDanDto) {
+        this.hoVaTen = congDanDto.hoVaTen;
+        this.ngaySinh = congDanDto.ngaySinh;
+        this.gioiTinh = congDanDto.gioiTinh;
+        this.diaChiThuongTru = congDanDto.diaChiThuongTru;
+        this.tinhThanhMa = congDanDto.tinhThanhMa;
+        this.tinhThanhTen = congDanDto.tinhThanhTen;
+        this.quanHuyenMa = congDanDto.quanHuyenMa;
+        this.quanHuyenTen = congDanDto.quanHuyenTen;
+        this.phuongXaMa = congDanDto.phuongXaMa;
+        this.phuongXaTen = congDanDto.phuongXaTen;
+        this.cmtcccd = congDanDto.cmtcccd;
+        this.noiCap = congDanDto.noiCap;
+        this.ngayCap = congDanDto.ngayCap;
+        this.soMuiTiem = congDanDto.soMuiTiem;
+        this.soDienThoai = congDanDto.soDienThoai;
     }
 
     @Id
@@ -58,8 +77,19 @@ public class CongDan implements Serializable {
     @Column(name = "NgayCap")
     private String ngayCap;
 
+    @Column(name = "SoDienThoai")
+    private String soDienThoai;
+
     @Column(name = "SoMuiTiem")
     private int soMuiTiem;
+
+    public String getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
+    }
 
     public int getSoMuiTiem() {
         return soMuiTiem;
