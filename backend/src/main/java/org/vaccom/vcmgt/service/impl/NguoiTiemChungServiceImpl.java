@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
+import org.vaccom.vcmgt.entity.CongDan;
 import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.entity.PhieuHenTiem;
@@ -474,76 +475,59 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 	}
 
 	@Override
-	public ResultSearchDto<NguoiTiemChung> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
+	public ResultSearchDto<CongDan> searchDaTiem(NguoiTiemChungDto nguoiTiemChungDto, int page, int size) {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 
-		CriteriaQuery<NguoiTiemChung> criteriaQuery = builder.createQuery(NguoiTiemChung.class);
+		CriteriaQuery<CongDan> criteriaQuery = builder.createQuery(CongDan.class);
 
-		Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
-		Root<MuiTiemChung>   muiTiemChungRoot   = criteriaQuery.from(MuiTiemChung.class);
+		Root<CongDan> congdanRoot    = criteriaQuery.from(CongDan.class);
+		Root<MuiTiemChung> muiTiemChungRoot = criteriaQuery.from(MuiTiemChung.class);
 
-		criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
+		criteriaQuery.select(congdanRoot).distinct(true);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), muiTiemChungRoot.get("nguoiTiemChungId")));
+		predicates.add(builder.equal(congdanRoot.get("id"), muiTiemChungRoot.get("congDanID")));
 
 		if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
-		}
-
-		if (nguoiTiemChungDto.nhomdoituong > 0) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
-		}
-
-		if (Validator.isNotNull(nguoiTiemChungDto.ngaydangki) && !nguoiTiemChungDto.ngaydangki.isEmpty()) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("ngayDangKi"), nguoiTiemChungDto.ngaydangki));
+			predicates.add(builder.equal(congdanRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.hovaten) && !nguoiTiemChungDto.hovaten.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("hoVaTen"), "%" + nguoiTiemChungDto.hovaten + "%"));
+			predicates.add(builder.like(congdanRoot.get("hoVaTen"), "%" + nguoiTiemChungDto.hovaten + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhma) && !nguoiTiemChungDto.tinhthanhma.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhMa"), "%" + nguoiTiemChungDto.tinhthanhma + "%"));
+			predicates.add(builder.like(congdanRoot.get("tinhThanhMa"), "%" + nguoiTiemChungDto.tinhthanhma + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.tinhthanhten) && !nguoiTiemChungDto.tinhthanhten.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("tinhThanhTen"), "%" + nguoiTiemChungDto.tinhthanhten + "%"));
+			predicates.add(builder.like(congdanRoot.get("tinhThanhTen"), "%" + nguoiTiemChungDto.tinhthanhten + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenma) && !nguoiTiemChungDto.quanhuyenma.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenMa"), "%" + nguoiTiemChungDto.quanhuyenma + "%"));
+			predicates.add(builder.like(congdanRoot.get("quanHuyenMa"), "%" + nguoiTiemChungDto.quanhuyenma + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.quanhuyenten) && !nguoiTiemChungDto.quanhuyenten.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("quanHuyenTen"), "%" + nguoiTiemChungDto.quanhuyenten + "%"));
+			predicates.add(builder.like(congdanRoot.get("quanHuyenTen"), "%" + nguoiTiemChungDto.quanhuyenten + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.phuongxama) && !nguoiTiemChungDto.phuongxama.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaMa"), "%" + nguoiTiemChungDto.phuongxama + "%"));
+			predicates.add(builder.like(congdanRoot.get("phuongXaMa"), "%" + nguoiTiemChungDto.phuongxama + "%"));
 		}
 
 		if (Validator.isNotNull(nguoiTiemChungDto.phuongxaten) && !nguoiTiemChungDto.phuongxaten.isEmpty()) {
-			predicates.add(builder.like(nguoiTiemChungRoot.get("phuongXaTen"), "%" + nguoiTiemChungDto.phuongxaten + "%"));
+			predicates.add(builder.like(congdanRoot.get("phuongXaTen"), "%" + nguoiTiemChungDto.phuongxaten + "%"));
 		}
 
-		if (nguoiTiemChungDto.diabancosoid > 0) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("diaBanCoSoId"), nguoiTiemChungDto.diabancosoid));
+		if (Validator.isNotNull(nguoiTiemChungDto.loaiThuocTiem) && !nguoiTiemChungDto.loaiThuocTiem.isEmpty()) {
+			predicates.add(builder.like(muiTiemChungRoot.get("loaiThuocTiem"), "%" + nguoiTiemChungDto.loaiThuocTiem + "%"));
 		}
 
-		if (nguoiTiemChungDto.cosoyteid > 0) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("CoSoYTeId"), nguoiTiemChungDto.cosoyteid));
+		if (Validator.isNotNull(nguoiTiemChungDto.soMuiTiem) && nguoiTiemChungDto.soMuiTiem > 0) {
+			predicates.add(builder.equal(congdanRoot.get("soMuiTiem"),  nguoiTiemChungDto.soMuiTiem));
 		}
-
-		if (nguoiTiemChungDto.nhomdoituong > 0) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nguoiTiemChungDto.nhomdoituong));
-		}
-
-		if (nguoiTiemChungDto.tinhtrangdangki > 0) {
-			predicates.add(builder.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), nguoiTiemChungDto.tinhtrangdangki));
-		}
-
 
 		if (!predicates.isEmpty()) {
 			Predicate[] pdc = new Predicate[predicates.size()];
@@ -557,15 +541,15 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 			criteriaQuery.where(allPredicate);
 		}
 
-		TypedQuery<NguoiTiemChung> typedQuery = em.createQuery(criteriaQuery);
+		TypedQuery<CongDan> typedQuery = em.createQuery(criteriaQuery);
 
 		int offset = page * size;
 
 		long total = typedQuery.getResultList().size();
-		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
+		List<CongDan> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 		em.close();
 
-		return new ResultSearchDto<NguoiTiemChung>(lstNguoiTiemChung, total);
+		return new ResultSearchDto<CongDan>(lstNguoiTiemChung, total);
 	}
 
 	@Override

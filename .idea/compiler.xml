@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="frontend" target="1.8" />
+      <module name="frontend.main" target="1.8" />
+      <module name="frontend.test" target="1.8" />
+      <module name="org.vaccom.vcmgt" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

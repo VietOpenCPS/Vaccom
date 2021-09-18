@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.MuiTiemChungAction;
+import org.vaccom.vcmgt.action.NguoiTiemChungAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.MuiTiemChung;
+import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -24,6 +26,9 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 
 	@Autowired
 	private MuiTiemChungService muiTiemChungService;
+
+	@Autowired
+	private NguoiTiemChungAction nguoiTiemChungAction;
 
 	@Override
 	public long countByCoSoYTeId(long id) {
@@ -93,11 +98,21 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setLanTiem(lanTiem);
 		muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
 		muiTiemChung.setNgaySinh(ngaySinh);
+<<<<<<< HEAD
 		muiTiemChung.setCongDanID(congDanId);
+=======
+>>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 		muiTiemChung.setNgayTiemChung(ngayTiemChung);
 		muiTiemChung.setNoiSanXuat(noiSanXuat);
 		muiTiemChung.setSoLoThuoc(soLoThuoc);
 		muiTiemChung.setCoSoYTeId(coSoYTeId);
+
+		if(nguoiTiemChungId > 0) {
+			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findById(nguoiTiemChungId);
+			if(nguoiTiemChungFind != null) {
+				muiTiemChung.setCongDanID(nguoiTiemChungFind.getCongDanID());
+			}
+		}
 
 		return muiTiemChungService.updateMuiTiemChung(muiTiemChung);
 	}

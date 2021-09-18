@@ -28,8 +28,14 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	}
 	
 	@Override
+<<<<<<< HEAD
 	public long countByCongDan_ID(long id) {
 		return muiTiemChungRepository.countBycongDanID(id);
+=======
+	public long countByNguoiTiemChungId(long id) {
+//		return muiTiemChungRepository.countByNguoiTiemChungId(id);
+		return 0;
+>>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 	}
 
 	@Override
@@ -59,10 +65,21 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd) {
 		return muiTiemChungRepository.findByCmtcccd(cmtcccd);
 	}
-	
+
 	@Override
 	public List<MuiTiemChung> findByCongDan_ID(long id) {
+		return muiTiemChungRepository.findByCongDanID(id);
+	}
+
+	@Override
+<<<<<<< HEAD
+	public List<MuiTiemChung> findByCongDan_ID(long id) {
 		return muiTiemChungRepository.findBycongDanID(id);
+=======
+	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
+//		return muiTiemChungRepository.findByNguoiTiemChungId(id);
+		return null;
+>>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 	}
 
 	@Override

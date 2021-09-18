@@ -1119,6 +1119,16 @@ public class ApplicationControler {
                 nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
             }
 
+            if(nguoiTiemChungDto.isSearchDaTiem) {
+                ResultSearchDto<CongDan> result = nguoiTiemChungAction.searchDaTiem(nguoiTiemChungDto, page, size);
+                List<CongDan> lstCongdan = result.datas;
+
+                lstCongdan.forEach(congDan -> {
+                    List<MuiTiemChung>
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, lstCongdan));
+            }
+
             ResultSearchDto<NguoiTiemChung> result = nguoiTiemChungAction.search(nguoiTiemChungDto, page, size);
 
             List<NguoiTiemChung> lstNguoiTiemChung = result.datas;

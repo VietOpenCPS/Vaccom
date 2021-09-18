@@ -69,6 +69,7 @@ public class NguoiDung implements Serializable {
 	private long uyBanNhanDanId;
 
 	@Column(name = "CongDan_ID")
+<<<<<<< HEAD
 	private Long congDanID;
 
 	public Long getCongDanID() {
@@ -76,6 +77,15 @@ public class NguoiDung implements Serializable {
 	}
 
 	public void setCongDanID(Long congDanID) {
+=======
+	private long congDanID;
+
+	public long getCongDanID() {
+		return congDanID;
+	}
+
+	public void setCongDanID(long congDanID) {
+>>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 		this.congDanID = congDanID;
 	}
 
