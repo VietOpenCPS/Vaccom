@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="Cho phép chỉnh sửa khi đã duyệt giấy đi đường" />
+    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="Cho phép chỉnh sửa khi đã duyệt giấy đi đường">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/MuiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/MuiTiemChungActionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/GiayDiDuong.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/GiayDiDuong.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/MuiTiemChung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/MuiTiemChung.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiDung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiDung.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiTiemChung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiTiemChung.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/MuiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/MuiTiemChungRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/MuiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/MuiTiemChungService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/MuiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/MuiTiemChungServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

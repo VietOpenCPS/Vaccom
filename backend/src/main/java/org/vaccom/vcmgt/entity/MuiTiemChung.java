@@ -28,10 +28,6 @@ public class MuiTiemChung implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 	@Column(name = "CoSoYTeID")
 	private long coSoYTeId;
 
@@ -75,7 +71,6 @@ public class MuiTiemChung implements Serializable {
 	private String hanSuDung;
 
 	@Column(name = "CongDan_ID")
-<<<<<<< HEAD
 	private Long congDanID;
 
 	public Long getCongDanID() {
@@ -83,15 +78,6 @@ public class MuiTiemChung implements Serializable {
 	}
 
 	public void setCongDanID(Long congDanID) {
-=======
-	private long congDanID;
-
-	public long getCongDanID() {
-		return congDanID;
-	}
-
-	public void setCongDanID(long congDanID) {
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 		this.congDanID = congDanID;
 	}
 
@@ -207,10 +193,6 @@ public class MuiTiemChung implements Serializable {
 		this.hanSuDung = hanSuDung;
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 	public long getCoSoYTeId() {
 		return coSoYTeId;
 	}

@@ -98,17 +98,14 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setLanTiem(lanTiem);
 		muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
 		muiTiemChung.setNgaySinh(ngaySinh);
-<<<<<<< HEAD
 		muiTiemChung.setCongDanID(congDanId);
-=======
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 		muiTiemChung.setNgayTiemChung(ngayTiemChung);
 		muiTiemChung.setNoiSanXuat(noiSanXuat);
 		muiTiemChung.setSoLoThuoc(soLoThuoc);
 		muiTiemChung.setCoSoYTeId(coSoYTeId);
 
-		if(nguoiTiemChungId > 0) {
-			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findById(nguoiTiemChungId);
+		if(congDanId > 0) {
+			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findBycongDanID(congDanId);
 			if(nguoiTiemChungFind != null) {
 				muiTiemChung.setCongDanID(nguoiTiemChungFind.getCongDanID());
 			}

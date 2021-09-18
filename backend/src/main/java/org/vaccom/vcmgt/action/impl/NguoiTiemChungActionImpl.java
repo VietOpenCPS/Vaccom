@@ -102,9 +102,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			return ;
 		}
 
-<<<<<<< HEAD
 		long idCongDanNguoiTiem = nguoiTiemChungCreated.getCongDanID();
-=======
 		//Add cong dan
 		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
 		CongDan congDannew = null;
@@ -127,8 +125,6 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			nguoiTiemChungCreated.setCongDanID(oldCongDan.getId());
 			nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungCreated);
 		}
-
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
 
@@ -144,10 +140,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		if(listTiemChungDto == null || listTiemChungDto.size() == 0) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
-<<<<<<< HEAD
 			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
-=======
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 			muiTiemChung.setLanTiem(1);
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -173,10 +166,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		int lanTiem = 1;
 		for(MuiTiemChungDto muiTiemChungDto: listTiemChungDto) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
-<<<<<<< HEAD
 			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
-=======
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setLanTiem(lanTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -653,13 +643,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 				long id;
 				int count = 0;
 				for(NguoiTiemChung nguoiTiemChung: listNguoiTiemChungDangCho) {
-<<<<<<< HEAD
-					id = nguoiTiemChung.getCongDanID();
-					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(id);
-=======
 					id = nguoiTiemChung.getId();
 					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(nguoiTiemChung.getCongDanID());
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 					if(lstMuiTiemChung != null ) {
 						if(lstMuiTiemChung.size() > countAccept) {
 							continue;
@@ -931,6 +916,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public NguoiTiemChung update(NguoiTiemChung nguoiTiemChung) {
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+	}
+
+	@Override
+	public NguoiTiemChung findBycongDanID(long id) {
+		return nguoiTiemChungService.findBycongDanID(id);
 	}
 
 	@Override

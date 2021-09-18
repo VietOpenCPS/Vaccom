@@ -124,19 +124,7 @@ public class NguoiTiemChung implements Serializable {
 	private String ketQuaKiemTra;
 
 	@Column(name = "CongDan_ID")
-<<<<<<< HEAD
-	private Long congDanID;
-
-	public Long getCongDanID() {
-		return congDanID;
-	}
-
-	public void setCongDanID(Long congDanID) {
-		this.congDanID = congDanID;
-	}
-=======
 	private long congDanID;
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 
 	@Column(name = "SoMuiTiem")
 	private int soMuiTiem;
@@ -160,8 +148,6 @@ public class NguoiTiemChung implements Serializable {
 		this.ngayTiemCuoi = ngayTiemCuoi;
 	}
 
-<<<<<<< HEAD
-=======
 	public long getCongDanID() {
 		return congDanID;
 	}
@@ -170,7 +156,6 @@ public class NguoiTiemChung implements Serializable {
 		this.congDanID = congDanID;
 	}
 
->>>>>>> c77610a423fd162f2c6330b12ab2549c1cf645d0
 	public long getId() {
 		return id;
 	}

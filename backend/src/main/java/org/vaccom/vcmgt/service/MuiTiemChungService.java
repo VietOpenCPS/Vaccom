@@ -26,8 +26,6 @@ public interface MuiTiemChungService {
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd);
 
 	public List<MuiTiemChung> findByCongDan_ID(long id);
-	
-	public List<MuiTiemChung> findByCongDan_ID(long id);
 
 	public List<MuiTiemChung> findByCoSoYTeId(long id, int page, int size);
 	

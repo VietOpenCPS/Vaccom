@@ -1123,9 +1123,6 @@ public class ApplicationControler {
                 ResultSearchDto<CongDan> result = nguoiTiemChungAction.searchDaTiem(nguoiTiemChungDto, page, size);
                 List<CongDan> lstCongdan = result.datas;
 
-                lstCongdan.forEach(congDan -> {
-                    List<MuiTiemChung>
-                }
                 return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, lstCongdan));
             }
 

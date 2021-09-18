@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.vaccom.vcmgt.constant.DBConstant;
+import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.entity.PhieuHenTiem;
 
@@ -29,6 +30,7 @@ public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, 
 	
 	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
 
+	public NguoiTiemChung findBycongDanID(long id);
 
 	@Query(value="SELECT * FROM " + DBConstant._NGUOITIEMCHUNG_TABLE_NAME + " WHERE MaQR = :maQr", nativeQuery = true)
 	public NguoiTiemChung findByMaQR(@Param(value = "maQr") String maQr);
