@@ -71,13 +71,13 @@ public class MuiTiemChung implements Serializable {
 	private String hanSuDung;
 
 	@Column(name = "CongDan_ID")
-	private long congDanID;
+	private Long congDanID;
 
-	public long getCongDanID() {
+	public Long getCongDanID() {
 		return congDanID;
 	}
 
-	public void setCongDanID(long congDanID) {
+	public void setCongDanID(Long congDanID) {
 		this.congDanID = congDanID;
 	}
 

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Vaccom.iml" filepath="$PROJECT_DIR$/.idea/Vaccom.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/org.vaccom.vcmgt.iml" filepath="$PROJECT_DIR$/backend/org.vaccom.vcmgt.iml" />
     </modules>
   </component>
 </project>

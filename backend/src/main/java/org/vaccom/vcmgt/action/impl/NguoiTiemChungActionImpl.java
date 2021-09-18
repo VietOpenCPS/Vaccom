@@ -102,6 +102,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			return ;
 		}
 
+		long idCongDanNguoiTiem = nguoiTiemChungCreated.getCongDanID();
 		//Add cong dan
 		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
 		CongDan congDannew = null;
@@ -124,7 +125,6 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			nguoiTiemChungCreated.setCongDanID(oldCongDan.getId());
 			nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungCreated);
 		}
-
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
 
@@ -140,6 +140,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		if(listTiemChungDto == null || listTiemChungDto.size() == 0) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
+			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
 			muiTiemChung.setLanTiem(1);
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -165,6 +166,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		int lanTiem = 1;
 		for(MuiTiemChungDto muiTiemChungDto: listTiemChungDto) {
 			MuiTiemChung muiTiemChung = new MuiTiemChung();
+			muiTiemChung.setCongDanID(idCongDanNguoiTiem);
 			muiTiemChung.setHoVaTen(tenNguoiTiem);
 			muiTiemChung.setLanTiem(lanTiem);
 			muiTiemChung.setCmtcccd(cmt);
@@ -914,6 +916,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public NguoiTiemChung update(NguoiTiemChung nguoiTiemChung) {
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+	}
+
+	@Override
+	public NguoiTiemChung findBycongDanID(long id) {
+		return nguoiTiemChungService.findBycongDanID(id);
 	}
 
 	@Override

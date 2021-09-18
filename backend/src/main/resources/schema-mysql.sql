@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `t_muitiemchung` (
   `CoSoYTeID` bigint(20) DEFAULT 0,
   `CongDan_ID`  bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
-) ;
+);
 
 CREATE TABLE IF NOT EXISTS `t_nguoitiemchung` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `t_giaydiduong` (
   `CheckSum` text DEFAULT NULL,
   `GhiChu` text DEFAULT NULL,
   `Status` tinyint(1) DEFAULT 0,
-  `CongDan_ID`  bigint(20) DEFAULT 0,
+  `CongDan_ID` bigint(20) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ;
 

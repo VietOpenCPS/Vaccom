@@ -1062,7 +1062,7 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1123,9 +1123,6 @@ public class ApplicationControler {
                 ResultSearchDto<CongDan> result = nguoiTiemChungAction.searchDaTiem(nguoiTiemChungDto, page, size);
                 List<CongDan> lstCongdan = result.datas;
 
-                lstCongdan.forEach(congDan -> {
-                    List<MuiTiemChung>
-                }
                 return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(result.total, lstCongdan));
             }
 
@@ -1138,7 +1135,7 @@ public class ApplicationControler {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1276,7 +1273,7 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1385,7 +1382,7 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1494,7 +1491,7 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1603,7 +1600,7 @@ public class ApplicationControler {
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
                 ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
@@ -1957,6 +1954,13 @@ public class ApplicationControler {
 			}
 			*/
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.addPhieuHenTiem(reqBody);
+            long nguoiTiemChungID = phieuHenTiem.getNguoiTiemChungId();
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
+            if(Validator.isNotNull(nguoiTiemChung)){
+                nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DACHUYENSANGPHIEUHEN);
+                nguoiTiemChungAction.update(nguoiTiemChung);
+            }
+
 
             String msg = MessageUtil.getVNMessageText("phieuhentiem.add.success");
 
@@ -2212,6 +2216,20 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("phieuhentiem.delete.permission_error"));
 			}
 			*/
+
+            PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(id);
+            if(Validator.isNull(phieuHenTiem)){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(MessageUtil.getVNMessageText("phieuHenTiem.chitiet.not_found"));
+            }
+            long nguoiTiemChungID = phieuHenTiem.getNguoiTiemChungId();
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
+            if(Validator.isNotNull(nguoiTiemChung)){
+                nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
+                nguoiTiemChungAction.update(nguoiTiemChung);
+            }
+
+            //Xóa phiếu hẹn
             boolean result = phieuHenTiemAction.deleteById(id);
 
             if (result) {
@@ -2325,9 +2343,21 @@ public class ApplicationControler {
 			}
 			*/
 
+            List<PhieuHenTiem> listPhieuHenChuaTiem = phieuHenTiemAction.findByKhacTinhTrangXacNhan_LichTiemChungID(VaccomUtil.DATIEMXONG, id);
+            for (PhieuHenTiem phieuHenTiem: listPhieuHenChuaTiem) {
+                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                if(Validator.isNotNull(nguoiTiemChung)){
+                    nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
+                    nguoiTiemChungAction.update(nguoiTiemChung);
+                }
+                phieuHenTiemAction.deleteById(phieuHenTiem.getId());
+            }
 
 
             lichTiemChungAction.dongLichTiemChung(id);
+
+
+
 
             String msg = MessageUtil.getVNMessageText("lichtiemchung.donglichtiem.success");
 
@@ -2614,11 +2644,8 @@ public class ApplicationControler {
 
     @RequestMapping(value = "/get/muitiemchung/nguoitiemchung/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getDSMuiTiemChung(HttpServletRequest request, HttpServletResponse response,
-
                                                @PathVariable("id") long id) {
-
         try {
-
             VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
             //TODO check permission
 			/*
@@ -2627,9 +2654,16 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("muitiemchung.danhsach.permission_error"));
 			}
 			*/
-            long total = muiTiemChungAction.countByNguoiTiemChungId(id);
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
 
-            List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByNguoiTiemChungId(id);
+            if(Validator.isNull(nguoiTiemChung)){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
+            }
+
+            long total = muiTiemChungAction.countByCongDan_ID(nguoiTiemChung.getCongDanID());
+
+            List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, lstMuiTiemChung));
 

@@ -190,4 +190,14 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 	public List<PhieuHenTiem> findByLichTiemChungID(long lichTiemChungId) {
 		return phieuHenTiemRepository.findByLichTiemChungID(lichTiemChungId);
 	}
+
+	@Override
+	public List<PhieuHenTiem> findByTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
+		return phieuHenTiemRepository.findByTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
+	}
+
+	@Override
+	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
+		return phieuHenTiemRepository.findByKhacTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
+	}
 }

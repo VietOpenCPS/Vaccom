@@ -36,8 +36,8 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	}
 
 	@Override
-	public long countByNguoiTiemChungId(long id) {
-		return muiTiemChungService.countByNguoiTiemChungId(id);
+	public long countByCongDan_ID(long id) {
+		return muiTiemChungService.countByCongDan_ID(id);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
 
-		long nguoiTiemChungId = bodyData.has(EntityConstant.NGUOITIEMCHUNG_ID)
-				? bodyData.get(EntityConstant.NGUOITIEMCHUNG_ID).longValue()
+		long congDanId = bodyData.has(EntityConstant.CONGDAN_ID)
+				? bodyData.get(EntityConstant.CONGDAN_ID).longValue()
 				: 0;
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
@@ -98,13 +98,14 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setLanTiem(lanTiem);
 		muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
 		muiTiemChung.setNgaySinh(ngaySinh);
+		muiTiemChung.setCongDanID(congDanId);
 		muiTiemChung.setNgayTiemChung(ngayTiemChung);
 		muiTiemChung.setNoiSanXuat(noiSanXuat);
 		muiTiemChung.setSoLoThuoc(soLoThuoc);
 		muiTiemChung.setCoSoYTeId(coSoYTeId);
 
-		if(nguoiTiemChungId > 0) {
-			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findById(nguoiTiemChungId);
+		if(congDanId > 0) {
+			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findBycongDanID(congDanId);
 			if(nguoiTiemChungFind != null) {
 				muiTiemChung.setCongDanID(nguoiTiemChungFind.getCongDanID());
 			}
@@ -210,7 +211,7 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	}
 
 	@Override
-	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
-		return muiTiemChungService.findByNguoiTiemChungId(id);
+	public List<MuiTiemChung> findByCongDan_ID(long id) {
+		return muiTiemChungService.findByCongDan_ID(id);
 	}
 }

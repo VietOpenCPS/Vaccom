@@ -175,7 +175,7 @@ public class ExportDataActionImpl implements ExportDataAction {
 					cell.setCellValue(nguoiTiemChung.getDiaChiNoiO());
 
 					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService
-							.findByNguoiTiemChungId(nguoiTiemChung.getId());
+							.findByCongDan_ID(nguoiTiemChung.getCongDanID());
 					//Cell cell17 = row.createCell(17);
 					//cell17.setCellValue((lstMuiTiemChung != null && lstMuiTiemChung.size() >= 1)
 					//		? lstMuiTiemChung.get(0).getLoaiThuocTiem()

@@ -28,9 +28,10 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	}
 	
 	@Override
-	public long countByNguoiTiemChungId(long id) {
-//		return muiTiemChungRepository.countByNguoiTiemChungId(id);
-		return 0;
+
+	public long countByCongDan_ID(long id) {
+		return muiTiemChungRepository.countBycongDanID(id);
+
 	}
 
 	@Override
@@ -66,11 +67,6 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 		return muiTiemChungRepository.findByCongDanID(id);
 	}
 
-	@Override
-	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
-//		return muiTiemChungRepository.findByNguoiTiemChungId(id);
-		return null;
-	}
 
 	@Override
 	public List<MuiTiemChung> findByCoSoYTeId(long coSoYTeId, int page, int size) {

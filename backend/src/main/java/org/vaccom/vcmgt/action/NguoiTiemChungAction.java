@@ -59,4 +59,6 @@ public interface NguoiTiemChungAction {
 	public NguoiTiemChung findByCMTCCCD(String cmtcccd);
 
 	public NguoiTiemChung update(NguoiTiemChung nguoiTiemChung);
+
+	public NguoiTiemChung findBycongDanID(long id);
 }
