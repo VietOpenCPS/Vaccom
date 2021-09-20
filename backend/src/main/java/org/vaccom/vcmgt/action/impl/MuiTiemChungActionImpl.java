@@ -83,6 +83,7 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 				? bodyData.get(EntityConstant.CONGDAN_ID).longValue()
 				: 0;
 
+
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
 		// TODO Validate fields

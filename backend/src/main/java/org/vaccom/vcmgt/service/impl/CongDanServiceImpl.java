@@ -38,4 +38,9 @@ public class CongDanServiceImpl implements CongDanService {
     public int countBySoDienThoaiAndCmtcccd(String sdt, String cmt) {
         return congDanRepository.countBySoDienThoaiAndCmtcccd(sdt, cmt);
     }
+
+    @Override
+    public CongDan update(CongDan congDan) {
+        return congDanRepository.save(congDan);
+    }
 }

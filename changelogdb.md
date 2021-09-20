@@ -161,6 +161,7 @@ create table IF NOT EXISTS t_congdan (
 `NoiCap` varchar(128) DEFAULT NULL,
 `NgayCap` varchar(20) DEFAULT NULL,
 `SoMuiTiem` tinyint(4) DEFAULT 0,
+`SoDienThoai` varchar(20) DEFAULT NULL,
 primary key (ID)
 )
 ---
