@@ -200,4 +200,9 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
 		return phieuHenTiemRepository.findByKhacTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
 	}
+
+	@Override
+	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem) {
+		return phieuHenTiemRepository.save(phieuHenTiem);
+	}
 }

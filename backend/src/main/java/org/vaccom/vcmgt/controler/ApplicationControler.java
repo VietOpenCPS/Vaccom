@@ -2566,8 +2566,15 @@ private CongDanAction congDanAction;
                     ? bodyData.get(EntityConstant.CONGDAN_ID).longValue()
                     : 0;
 
+            long maPhieuHen = bodyData.has(EntityConstant.MAPHIEUHEN)? bodyData.get(EntityConstant.MAPHIEUHEN).longValue()
+                    : 0;
+
+            PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(maPhieuHen);
             CongDan congDan = congDanAction.findByCongDanId(congDanId);
             NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findBycongDanID(congDanId);
+            if (Validator.isNull(phieuHenTiem)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("phieuHenTiem.not.found"));
+            }
             if (Validator.isNull(congDan)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("congDan.not.found"));
             }
@@ -2584,6 +2591,11 @@ private CongDanAction congDanAction;
             nguoiTiemChung.setSoMuiTiem(soMuiTiem);
             nguoiTiemChung.setNgayTiemCuoi(DatetimeUtil.dateToString(new Date(), DatetimeUtil._VN_DATE_FORMAT));
             nguoiTiemChungAction.update(nguoiTiemChung);
+
+            phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DATIEMXONG);
+            phieuHenTiemAction.update(phieuHenTiem);
+
+
 
             String msg = MessageUtil.getVNMessageText("muitiemchung.add.success");
 
@@ -3739,21 +3751,8 @@ private CongDanAction congDanAction;
                                 NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
                                 UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-                                CoSoYTe coSoYTe = null;
-                                String TenCoSo = null;
-                                String DiaDiem = null;
-
-                                if (Validator.isNotNull(lichTiemChung.getCoSoYTeId())) {
-                                    coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
-                                    if (Validator.isNotNull(coSoYTe)) {
-                                        TenCoSo = coSoYTe.getTenCoSo();
-                                        DiaDiem = coSoYTe.getDiaChiCoSo();
-                                    }
-                                } else {
-                                    TenCoSo = lichTiemChung.getTenCoSo();
-                                    DiaDiem = lichTiemChung.getDiaDiemTiemChung();
-                                }
-
+                                String TenCoSo = lichTiemChung.getTenCoSo();
+                                String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
 
                                 long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
 

@@ -46,5 +46,7 @@ public interface PhieuHenTiemAction {
 
 	public List<PhieuHenTiem> findByTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID);
 	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID);
+
+	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem);
 }
 
