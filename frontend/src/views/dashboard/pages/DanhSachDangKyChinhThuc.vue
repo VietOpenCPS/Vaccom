@@ -29,13 +29,13 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
-            <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="!addLichTiem" color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="!addLichTiem" color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-backup-restore
               </v-icon>
@@ -93,7 +93,7 @@
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
-            <template v-slot:item.muiTiemChung="{ item, index }">
+            <!-- <template v-slot:item.muiTiemChung="{ item, index }">
               <div style="width: 250px;height: 100%;">
                 <v-layout wrap style="height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
@@ -120,8 +120,8 @@
                   <v-flex class="xs12 md6"></v-flex>
                 </v-layout>
               </div>
-            </template>
-            <template v-slot:item.action="{ item }">
+            </template> -->
+            <template v-if="!addLichTiem" v-slot:item.action="{ item }">
               <div style="width: 150px">
                 <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -139,14 +139,14 @@
                   </template>
                   <span>Chuyển về đăng ký ban đầu</span>
                 </v-tooltip>
-                <v-tooltip top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="viewDetail(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-account-details-outline</v-icon>
                     </v-btn>
                   </template>
                   <span>Thông tin chi tiết</span>
-                </v-tooltip>
+                </v-tooltip> -->
                 <!-- <v-tooltip top v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="addMuiTiem(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
@@ -544,6 +544,7 @@
   import Pagination from './Pagination'
   export default {
     name: 'Customers',
+    props: ['addLichTiem'],
     components: {
     'tim-kiem': Search,
     'pagination': Pagination
@@ -640,13 +641,13 @@
             align: 'left',
             value: 'diaChiNoiO'
           },
-          {
-            sortable: false,
-            text: 'Thông tin mũi tiêm',
-            align: 'center',
-            value: 'muiTiemChung',
-            class: 'px-0'
-          },
+          // {
+          //   sortable: false,
+          //   text: 'Thông tin mũi tiêm',
+          //   align: 'center',
+          //   value: 'muiTiemChung',
+          //   class: 'px-0'
+          // },
           {
             sortable: false,
             text: 'Thao tác',
@@ -670,7 +671,7 @@
     computed: {
       breakpointName () {
         return this.$store.getters.getBreakpointName
-      },
+      }
     },
     watch: {
       dangkythieuthongtin (val) {
@@ -681,6 +682,49 @@
           if (!this.searchAll) {
             this.getDanhSachDangKyChinhThuc(0)
           }
+        }
+      },
+      addLichTiem (val) {
+        if (val) {
+          let vm = this
+          vm.headers = [
+            {
+              sortable: false,
+              text: 'STT',
+              align: 'center',
+              value: 'index'
+            },
+            {
+              sortable: false,
+              text: 'Họ tên',
+              align: 'left',
+              value: 'hoVaTen'
+            },
+            {
+              sortable: false,
+              text: 'Số CMND/ CCCD',
+              align: 'left',
+              value: 'cmtcccd'
+            },
+            {
+              sortable: false,
+              text: 'Mã nhóm đối tượng',
+              align: 'left',
+              value: 'nhomDoiTuong'
+            },
+            {
+              sortable: false,
+              text: 'Số điện thoại',
+              align: 'left',
+              value: 'soDienThoai'
+            },
+            {
+              sortable: false,
+              text: 'Địa chỉ',
+              align: 'left',
+              value: 'diaChiNoiO'
+            }
+          ]
         }
       }
     },
@@ -1039,6 +1083,14 @@
             return String(date).slice(6,8) + '/' + String(date).slice(4,6) + '/' + String(date).slice(0,4)
           }
         }
+      },
+      getSelected () {
+        let vm = this
+        return vm.selected
+      },
+      resetSelected () {
+        let vm = this
+        vm.selected = []
       }
     },
   }

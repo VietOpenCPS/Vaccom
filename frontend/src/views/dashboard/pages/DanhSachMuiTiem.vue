@@ -74,8 +74,8 @@
             <template v-slot:item.nhomDoiTuong="{ item, index }">
                 <div class="mb-2">{{ item.nhomDoiTuong}}</div>
             </template>
-            <template v-slot:item.diaChiNoiO="{ item, index }">
-                <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
+            <template v-slot:item.diaChiThuongTru="{ item, index }">
+                <p class="mb-2">{{ item.diaChiThuongTru}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
             <template v-slot:item.muiTiemChung="{ item, index }">
               <div style="width: 250px;height: 100%;">
@@ -398,21 +398,21 @@
             sortable: false,
             text: 'Địa chỉ',
             align: 'left',
-            value: 'diaChiNoiO'
+            value: 'diaChiThuongTru'
           },
-          {
-            sortable: false,
-            text: 'Thông tin mũi tiêm',
-            align: 'center',
-            value: 'muiTiemChung',
-            class: 'px-0'
-          },
-          {
-            sortable: false,
-            text: 'Thao tác',
-            align: 'center',
-            value: 'action'
-          },
+          // {
+          //   sortable: false,
+          //   text: 'Thông tin mũi tiêm',
+          //   align: 'center',
+          //   value: 'muiTiemChung',
+          //   class: 'px-0'
+          // },
+          // {
+          //   sortable: false,
+          //   text: 'Thao tác',
+          //   align: 'center',
+          //   value: 'action'
+          // },
         ],
       }
     },

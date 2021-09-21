@@ -12,15 +12,15 @@
         title="DANH SÁCH GỌI TIÊM"
         class="px-5 py-3"
       >
-        <!-- <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
+        <v-btn color="#0072bc" small class="mx-0" @click.stop="showTimKiem" style="position: absolute; right: 40px; top: 15px;">
           <v-icon left size="20">
             mdi-filter-plus-outline
           </v-icon>
           Lọc danh sách
-        </v-btn> -->
-        <!-- <v-card-text v-if="showAdvanceSearch">
+        </v-btn>
+        <v-card-text v-if="showAdvanceSearch">
           <tim-kiem ref="timkiem" typeGoiTiem='true' v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
-        </v-card-text> -->
+        </v-card-text>
         <v-card-text>
           <v-row>
             <v-col
@@ -172,6 +172,16 @@
             </template>
             <template v-slot:item.action="{ item }">
               <div class="text-center">
+                <v-tooltip v-if="item.tinhTrangXacNhan === 0" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="deletePhieuHen(item.idPhieu)" color="red" icon text class="mx-2" v-bind="attrs" v-on="on">
+                      <v-icon>
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Xóa phiếu hẹn</span>
+                </v-tooltip>
                 <v-tooltip v-if="item.tinhTrangXacNhan === 1" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="xacNhanTinhTrangPhieuHen(item.idPhieu, 2, 'only')" color="green" icon text class="mx-2" v-bind="attrs" v-on="on">
@@ -348,7 +358,7 @@
                       outlined
                       required
                     ></v-text-field>
-                    <v-text-field
+                    <!-- <v-text-field
                       label="Nơi sản xuất"
                       class="flex xs12 md6 px-2"
                       v-model="muiTiemChung.NoiSanXuat"
@@ -375,7 +385,7 @@
                       dense
                       outlined
                       required
-                    ></v-text-field>
+                    ></v-text-field> -->
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -446,7 +456,7 @@
           {name: 'Xác nhận không đến', value: 6}
         ],
         muiTiemChung: {
-          NguoiTiemChung_ID: '',
+          CongDan_ID: '',
           HoVaTen: '',
           NgaySinh: '',
           CMTCCCD: '',
@@ -460,7 +470,8 @@
           NoiSanXuat: '',
           SoLoThuoc: '',
           HanSuDung: '',
-          CoSoYTe_Id: ''
+          CoSoYTe_Id: '',
+          MaPhieuHen: ''
         },
         showAdvanceSearch: false,
         phieuHenTiemUpdate: '',
@@ -620,7 +631,8 @@
               tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
               quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
               phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
-              listtinhtrangxacnhan: [vm.trangThaiFilter]
+              listtinhtrangxacnhan: [vm.trangThaiFilter],
+              tinhtrangdangki: vm.trangThaiFilter == 4 ? 3 : 4
           }
           vm.loading = true
           axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
@@ -749,8 +761,12 @@
       },
       addMuiTiemChung (item) {
         let vm = this
-        vm.muiTiemChung.NguoiTiemChung_ID = item.nguoiTiemChungId
+        let lichTiemSelected = vm.danhSachLichTiemChung.find(function (item) {
+          return item.id == vm.lichTiemChungFilter
+        })
+        vm.muiTiemChung.CongDan_ID = item.congDanID
         vm.muiTiemChung.HoVaTen = item.hoVaTen
+        vm.muiTiemChung.CMTCCCD = item.cmtcccd
         vm.muiTiemChung.NgaySinh = item.ngaySinh
         vm.muiTiemChung.CoSoYTe_Id = item.coSoYTeId
         vm.muiTiemChung.CoSoYTe_Ma = item.coSoYTeMa
@@ -758,8 +774,9 @@
         vm.muiTiemChung.LanTiem = item.lanTiem
         vm.muiTiemChung.NgayTiemChung = item.ngayHenTiem
         vm.muiTiemChung.GioTiemChung = item.gioHenTiem
-        vm.muiTiemChung.DiaDiemTiemChung = ''
-        vm.muiTiemChung.LoaiThuocTiem = ''
+        vm.muiTiemChung.DiaDiemTiemChung = lichTiemSelected.diaDiemTiemChung
+        vm.muiTiemChung.LoaiThuocTiem = lichTiemSelected.loaiThuocTiem,
+        vm.muiTiemChung.MaPhieuHen = item.idPhieu
         vm.muiTiemChung.NoiSanXuat = ''
         vm.muiTiemChung.SoLoThuoc = ''
         vm.muiTiemChung.HanSuDung = ''
@@ -868,6 +885,42 @@
             })
         });
       },
+      deletePhieuHen (id) {
+        let vm = this
+        let textConfirm = 'Bạn có chắc chắn muốn xóa phiếu hẹn này'
+        let x = confirm(textConfirm)
+        if (x) {
+          let param = {
+            headers: {
+            },
+            params: {
+            }
+          }
+          try {
+            if (Vue.$cookies.get('Token')) {
+              param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+            }
+          } catch (error) {
+          }
+          vm.loading = true
+          axios.delete('/rest/v1/app/delete/phieuhentiem/' + id, param).then(function (response) {
+            vm.loading = false
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xóa thành công',
+              color: 'success',
+            })
+            vm.getDanhSachPhieuHenTiem(0)
+          }).catch(function (error) {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Xóa thất bại',
+                color: 'error',
+              })
+          })
+        }
+      },
       showTimKiem () {
         let vm = this
         vm.showAdvanceSearch = true
@@ -880,6 +933,8 @@
       },
       getTextTrangThai(trangThai) {
           switch (trangThai) {
+              case 0:
+                return 'Chờ gửi thông báo';
               case 1:
                   return 'Chờ xác nhận';
               case 2:
