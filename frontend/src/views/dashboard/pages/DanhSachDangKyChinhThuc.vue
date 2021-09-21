@@ -93,7 +93,7 @@
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
-            <template v-slot:item.muiTiemChung="{ item, index }">
+            <!-- <template v-slot:item.muiTiemChung="{ item, index }">
               <div style="width: 250px;height: 100%;">
                 <v-layout wrap style="height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
@@ -120,7 +120,7 @@
                   <v-flex class="xs12 md6"></v-flex>
                 </v-layout>
               </div>
-            </template>
+            </template> -->
             <template v-if="!addLichTiem" v-slot:item.action="{ item }">
               <div style="width: 150px">
                 <!-- <v-tooltip top>
@@ -139,14 +139,14 @@
                   </template>
                   <span>Chuyển về đăng ký ban đầu</span>
                 </v-tooltip>
-                <v-tooltip top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="viewDetail(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
                       <v-icon size="22">mdi-account-details-outline</v-icon>
                     </v-btn>
                   </template>
                   <span>Thông tin chi tiết</span>
-                </v-tooltip>
+                </v-tooltip> -->
                 <!-- <v-tooltip top v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo' || userLogin['role_name'] == 'CanBoYTe'">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="addMuiTiem(item)" color="blue" text icon class="ml-2" v-bind="attrs" v-on="on">
@@ -641,13 +641,13 @@
             align: 'left',
             value: 'diaChiNoiO'
           },
-          {
-            sortable: false,
-            text: 'Thông tin mũi tiêm',
-            align: 'center',
-            value: 'muiTiemChung',
-            class: 'px-0'
-          },
+          // {
+          //   sortable: false,
+          //   text: 'Thông tin mũi tiêm',
+          //   align: 'center',
+          //   value: 'muiTiemChung',
+          //   class: 'px-0'
+          // },
           {
             sortable: false,
             text: 'Thao tác',
