@@ -339,23 +339,8 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 										UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-										CoSoYTe coSoYTe = null;
-										String TenCoSo = null;
-										String DiaDiem = null;
-
-										if(Validator.isNotNull(lichTiemChung.getCoSoYTeId())){
-											coSoYTe = coSoYTeAction.findById(lichTiemChung.getCoSoYTeId());
-											if(Validator.isNotNull(coSoYTe)){
-												TenCoSo = coSoYTe.getTenCoSo();
-												DiaDiem = coSoYTe.getDiaChiCoSo();
-											}
-										} else {
-											TenCoSo = lichTiemChung.getTenCoSo();
-											DiaDiem = lichTiemChung.getDiaDiemTiemChung();
-										}
-
-
-
+										String TenCoSo = lichTiemChung.getTenCoSo();
+										String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
 
 										long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
 
@@ -427,6 +412,11 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	@Override
 	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID) {
 		return phieuHenTiemService.findByKhacTinhTrangXacNhan_LichTiemChungID(tinhTrangXacNhan, LichTiemChungID);
+	}
+
+	@Override
+	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem) {
+		return phieuHenTiemService.update(phieuHenTiem);
 	}
 
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);

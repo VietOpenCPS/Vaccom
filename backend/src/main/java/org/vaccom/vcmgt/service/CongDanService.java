@@ -13,4 +13,6 @@ public interface CongDanService {
     public CongDan findBySdtOrCmt(String sdt, String cmt);
 
     public int countBySoDienThoaiAndCmtcccd(String sdt, String cmt);
+
+    public CongDan update(CongDan congDan);
 }

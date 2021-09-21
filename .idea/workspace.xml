@@ -4,23 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="Cho phép chỉnh sửa khi đã duyệt giấy đi đường">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="Fix conflict">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/MuiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/MuiTiemChungActionImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/GiayDiDuong.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/GiayDiDuong.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/MuiTiemChung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/MuiTiemChung.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiDung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiDung.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiTiemChung.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/entity/NguoiTiemChung.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/MuiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/MuiTiemChungRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/MuiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/MuiTiemChungService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/MuiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/MuiTiemChungServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelogdb.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelogdb.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +89,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="F:/New folder/Vaccom" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -376,7 +362,14 @@
       <option name="project" value="LOCAL" />
       <updated>1631875524816</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Fix conflict">
+      <created>1631942465924</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1631942465924</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -392,7 +385,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="THêm cột UBNDID, TenCoSo cho lichtiemchung, cài đặt import excel cho giấy hẹn tiêm" />
     <MESSAGE value="Merge Code a Giao" />
     <MESSAGE value="Done import excel + gửi tin nhắn hàng loạt" />
     <MESSAGE value="NGăn việc update status lùi trong phần gửi tin nhắn hàng loạt" />
@@ -417,6 +409,7 @@
     <MESSAGE value="tạo liên kết giữa các bảng t_congdan" />
     <MESSAGE value="*Tạo d/s gọi tiêm chuyển t_nguoitiemchung sang 4, tạo phiếu tiem&#10;*Danh sách goi tiêm: t_nguoitiemchung join t_phieutiem, t_lichtiem(lọc theo các trạng thái của phiếu tiêm)&#10;*Chuyển d/s gọi tiêm khi chưa gửi tin nhắn(trạng thái phiếu bằng 0) về d/s chính thức(cập nhật lại trạng thái đk = 1, và xóa phiếu)&#10;*Chuyển d/s người chưa được tiêm về chính thức(trạng thái phiếu !=4 &amp;&amp; !=0) về d/s chính thức(cập nhật lại trạng thái đk = 1, và xóa phiếu)" />
     <MESSAGE value="Cho phép chỉnh sửa khi đã duyệt giấy đi đường" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cho phép chỉnh sửa khi đã duyệt giấy đi đường" />
+    <MESSAGE value="Fix conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix conflict" />
   </component>
 </project>
