@@ -98,9 +98,14 @@
                   <v-icon size="20">mdi-collapse-all-outline</v-icon> &nbsp;
                   Xem danh sách tiêm
                 </v-btn>
-                <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo'" @click="pickFileImport(item)" color="orange" small class="ml-3" :loading="processingAction" :disabled="processingAction">
+                <!-- <v-btn v-if="userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo'" @click="pickFileImport(item)" color="orange" small class="ml-3" :loading="processingAction" :disabled="processingAction">
                   <v-icon size="20">mdi-import</v-icon> &nbsp;
                   Import danh sách tiêm
+                </v-btn> -->
+
+                <v-btn v-if="(userLogin['role_name'] == 'QuanTriHeThong' || userLogin['role_name'] == 'QuanTriCoSo') && item.tinhTrangLich == 0" @click="addNguoiTiem(item)" color="orange" small class="ml-3" :loading="processingAction" :disabled="processingAction">
+                  <v-icon size="20">mdi-import</v-icon> &nbsp;
+                  Thêm người tiêm
                 </v-btn>
 
               </div>
@@ -286,6 +291,100 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog
+        max-width="600"
+        v-model="dialogChonLanTiem"
+      >
+        <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title>Chọn lần tiêm</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogChonLanTiem = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text class="mt-2 py-4">
+            <v-row>
+              <v-col
+                cols="12"
+                md="12"
+                class="pb-0"
+              >
+                <v-autocomplete
+                  hide-no-data
+                  :items="listLanTiem"
+                  v-model="lanTiem"
+                  item-text="name"
+                  item-value="value"
+                  outlined
+                  label="Lần tiêm"
+                  dense
+                  hide-details="auto"
+              >
+              </v-autocomplete>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions class="justify-end py-3">
+            <v-btn class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitAddNguoiTiem">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span>Xác nhận</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        max-width="1000"
+        fullscreen
+        v-model="dialogAddNguoiTiem"
+      >
+        <v-card>
+          <v-toolbar
+            dark
+            color="#0072bc"
+          >
+            <v-toolbar-title>Thêm người tiêm</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                icon
+                dark
+                @click="dialogAddNguoiTiem = false"
+              >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text class="mt-2 py-0" style="max-height: calc(100vh - 130px) !important;overflow: auto;">
+            <dang-ky-chinh-thuc ref="dangkychinhthuc" :addLichTiem="lichTiem"></dang-ky-chinh-thuc>
+          </v-card-text>
+          <v-card-actions class="justify-end" style="max-width: 1366px!important;margin: 0 auto;">
+            <v-btn small color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="cancelAddNguoiTiem">
+              <v-icon left>
+                mdi-close
+              </v-icon>
+              Thoát
+            </v-btn>
+            <v-btn small class="mr-2" color="#0072bc" :loading="loading" :disabled="loading" @click="submitAddNguoiTiem">
+              <v-icon left>
+                mdi-content-save
+              </v-icon>
+              <span>Thêm người tiêm</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
     
   </div>
@@ -295,15 +394,25 @@
 <script>
   // import Search from './FormTimKiem.vue'
   import $ from 'jquery'
+  import DanhSachChinhThuc from './DanhSachDangKyChinhThuc.vue'
   import Pagination from './Pagination'
   export default {
     name: 'Customers',
     components: {
     // 'tim-kiem': Search,
-    'pagination': Pagination
+    'pagination': Pagination,
+    'dang-ky-chinh-thuc': DanhSachChinhThuc
     },
     data () {
       return {
+        lichTiem: true,
+        listLanTiem: [
+          {name: 'Lần tiêm 1', value: 1},
+          {name: 'Lần tiêm 2', value: 2}
+        ],
+        lanTiem: 2,
+        dialogChonLanTiem: false,
+        dialogAddNguoiTiem: false,
         validFormAdd: true,
         processingAction: false,
         lichTiemSelected: '',
@@ -519,6 +628,16 @@
         document.getElementById('fileImport').value = ''
         document.getElementById('fileImport').click()
       },
+      addNguoiTiem (item) {
+        let vm = this
+        vm.lichTiem = false
+        vm.lichTiemSelected = item
+        vm.dialogAddNguoiTiem = true
+        setTimeout(function () {
+          vm.lichTiem = true
+          vm.$refs.dangkychinhthuc.resetSelected()
+        }, 300)
+      },
       uploadFileImport () {
         let vm = this
         let files = $('#fileImport')[0].files
@@ -726,10 +845,72 @@
           })
         }
       },
+      showChonLanTiem () {
+        let vm = this
+        let selectNguoiTiem = vm.$refs.dangkychinhthuc.getSelected()
+        let arrIds = selectNguoiTiem.map(function(item) {
+          return item['id']
+        })
+        if (arrIds && arrIds.length) {
+          vm.dialogChonLanTiem = true
+        } else {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Vui lòng chọn người tiêm',
+            color: 'success',
+          })
+          return
+        }
+      },
+      submitAddNguoiTiem () {
+        let vm = this
+        let selectNguoiTiem = vm.$refs.dangkychinhthuc.getSelected()
+        let arrIds = selectNguoiTiem.map(function(item) {
+          return item['id']
+        })
+        if (arrIds && arrIds.length) {
+          console.log('nguoiTiem', arrIds)
+          let filter = {
+            "NguoiTiemChungIDs": arrIds,
+            "LichTiemChungID" : vm.lichTiemSelected['id'],
+            // "LanTiem" : vm.lanTiem
+          }
+          vm.loading = true
+          vm.$store.dispatch('addNguoiTiemVaoLich', filter).then(function () {
+            vm.loading = false
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Thêm người tiêm thành công',
+              color: 'success',
+            })
+            vm.dialogChonLanTiem = false
+            vm.dialogAddNguoiTiem = false
+            // vm.getLichTiem(0)
+          }).catch(function () {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Thêm người tiêm thất bại',
+              color: 'error',
+            })
+          })
+        } else {
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Vui lòng chọn người tiêm',
+            color: 'success',
+          })
+          return
+        }
+      },
       cancelAddMember () {
         let vm = this
         vm.dialogAddMember = false
       },
+      cancelAddNguoiTiem () {
+        let vm = this
+        vm.dialogAddNguoiTiem = false
+        vm.$refs.dangkychinhthuc.resetSelected()
+      }
     },
   }
 </script>

@@ -549,6 +549,29 @@ export default new Vuex.Store({
         })
       })
     },
+    addNguoiTiemVaoLich ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = filter
+        axios.post('/rest/v1/app/add/phieuhentiem/list', dataPost, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
     getLichTiem ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let param = {
@@ -1282,7 +1305,7 @@ export default new Vuex.Store({
         if (filter['data'].hasOwnProperty('syncAll')) {
           dataPost = {
             isAutoAccept: true,
-            countAccept: 0
+            countAccept: 1
           }
         }
         axios.put(url, dataPost, param).then(function (response) {
