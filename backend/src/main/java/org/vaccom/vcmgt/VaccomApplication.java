@@ -10,6 +10,8 @@ import org.vaccom.vcmgt.action.NguoiDungAction;
 import org.vaccom.vcmgt.action.impl.NguoiDungActionImpl;
 import org.vaccom.vcmgt.entity.NguoiDung;
 import org.vaccom.vcmgt.property.FileStorageProperties;
+import org.vaccom.vcmgt.repository.CongDanRepository;
+import org.vaccom.vcmgt.service.CongDanService;
 
 
 import java.io.IOException;

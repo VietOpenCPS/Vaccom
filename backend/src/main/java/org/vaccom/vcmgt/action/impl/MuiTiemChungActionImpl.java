@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.MuiTiemChungAction;
+import org.vaccom.vcmgt.action.NguoiTiemChungAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.MuiTiemChung;
+import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -25,14 +27,17 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	@Autowired
 	private MuiTiemChungService muiTiemChungService;
 
+	@Autowired
+	private NguoiTiemChungAction nguoiTiemChungAction;
+
 	@Override
 	public long countByCoSoYTeId(long id) {
 		return muiTiemChungService.countByCoSoYTeId(id);
 	}
 
 	@Override
-	public long countByNguoiTiemChungId(long id) {
-		return muiTiemChungService.countByNguoiTiemChungId(id);
+	public long countByCongDan_ID(long id) {
+		return muiTiemChungService.countByCongDan_ID(id);
 	}
 
 	@Override
@@ -74,9 +79,10 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		String hanSuDung = bodyData.has(EntityConstant.HANSUDUNG) ? bodyData.get(EntityConstant.HANSUDUNG).textValue()
 				: StringPool.BLANK;
 
-		long nguoiTiemChungId = bodyData.has(EntityConstant.NGUOITIEMCHUNG_ID)
-				? bodyData.get(EntityConstant.NGUOITIEMCHUNG_ID).longValue()
+		long congDanId = bodyData.has(EntityConstant.CONGDAN_ID)
+				? bodyData.get(EntityConstant.CONGDAN_ID).longValue()
 				: 0;
+
 
 		long coSoYTeId = bodyData.has(EntityConstant.COSOYTE_ID) ? bodyData.get(EntityConstant.COSOYTE_ID).longValue()
 				: 0;
@@ -93,11 +99,18 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setLanTiem(lanTiem);
 		muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
 		muiTiemChung.setNgaySinh(ngaySinh);
-		muiTiemChung.setNguoiTiemChungId(nguoiTiemChungId);
+		muiTiemChung.setCongDanID(congDanId);
 		muiTiemChung.setNgayTiemChung(ngayTiemChung);
 		muiTiemChung.setNoiSanXuat(noiSanXuat);
 		muiTiemChung.setSoLoThuoc(soLoThuoc);
 		muiTiemChung.setCoSoYTeId(coSoYTeId);
+
+		if(congDanId > 0) {
+			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findBycongDanID(congDanId);
+			if(nguoiTiemChungFind != null) {
+				muiTiemChung.setCongDanID(nguoiTiemChungFind.getCongDanID());
+			}
+		}
 
 		return muiTiemChungService.updateMuiTiemChung(muiTiemChung);
 	}
@@ -199,7 +212,7 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	}
 
 	@Override
-	public List<MuiTiemChung> findByNguoiTiemChungId(long id) {
-		return muiTiemChungService.findByNguoiTiemChungId(id);
+	public List<MuiTiemChung> findByCongDan_ID(long id) {
+		return muiTiemChungService.findByCongDan_ID(id);
 	}
 }

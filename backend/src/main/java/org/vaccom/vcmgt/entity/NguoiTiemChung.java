@@ -123,6 +123,39 @@ public class NguoiTiemChung implements Serializable {
 	@Column(name = "KetQuaKiemTra")
 	private String ketQuaKiemTra;
 
+	@Column(name = "CongDan_ID")
+	private long congDanID;
+
+	@Column(name = "SoMuiTiem")
+	private int soMuiTiem;
+
+	@Column(name = "NgayTiemCuoi")
+	private String ngayTiemCuoi;
+
+	public int getSoMuiTiem() {
+		return soMuiTiem;
+	}
+
+	public void setSoMuiTiem(int soMuiTiem) {
+		this.soMuiTiem = soMuiTiem;
+	}
+
+	public String getNgayTiemCuoi() {
+		return ngayTiemCuoi;
+	}
+
+	public void setNgayTiemCuoi(String ngayTiemCuoi) {
+		this.ngayTiemCuoi = ngayTiemCuoi;
+	}
+
+	public long getCongDanID() {
+		return congDanID;
+	}
+
+	public void setCongDanID(long congDanID) {
+		this.congDanID = congDanID;
+	}
+
 	public long getId() {
 		return id;
 	}

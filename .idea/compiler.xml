@@ -4,10 +4,11 @@
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="org.vaccom.vcmgt" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel>
+      <module name="frontend" target="1.8" />
+      <module name="frontend.main" target="1.8" />
+      <module name="frontend.test" target="1.8" />
+      <module name="org.vaccom.vcmgt" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

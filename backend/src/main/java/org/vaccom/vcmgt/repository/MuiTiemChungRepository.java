@@ -17,14 +17,14 @@ import org.vaccom.vcmgt.entity.MuiTiemChung;
 public interface MuiTiemChungRepository extends JpaRepository<MuiTiemChung, Long> {
 	
 	public long countByCoSoYTeId(long id);
-	
-	public long countByNguoiTiemChungId(long id);
-	
+
+	public long countBycongDanID(long id);
+
 	public MuiTiemChung findById(long id);
 
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd);
-	
-	public List<MuiTiemChung> findByNguoiTiemChungId(long id);
-	
+
 	public Page<MuiTiemChung> findByCoSoYTeId(long id, Pageable pageable);
+
+	public List<MuiTiemChung> findByCongDanID(long id);
 }
