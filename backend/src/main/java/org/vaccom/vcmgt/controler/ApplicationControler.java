@@ -2003,13 +2003,13 @@ private CongDanAction congDanAction;
                 for (Integer nguoiTiemChungID: NguoiTiemChungIdList) {
                     NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
 
-                    List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
-                    int lanTiem = 0;
-                    if(Validator.isNull(muiTiemChungList)){
-                        lanTiem = 1;
-                    } else {
-                        lanTiem = muiTiemChungList.size() + 1;
-                    }
+//                    List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+                    int lanTiem = nguoiTiemChung.getSoMuiTiem() + 1;
+//                    if(Validator.isNull(muiTiemChungList)){
+//                        lanTiem = 1;
+//                    } else {
+//                        lanTiem = muiTiemChungList.size() + 1;
+//                    }
 
                     if(Validator.isNull(nguoiTiemChung)){
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
