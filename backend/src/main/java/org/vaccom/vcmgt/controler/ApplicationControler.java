@@ -2004,12 +2004,13 @@ private CongDanAction congDanAction;
                     NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
                     CongDan congDan = congDanAction.findByCongDanId(nguoiTiemChung.getCongDanID());
 
-                    int lanTiem = congDan.getSoMuiTiem() + 1;
-
                     if(Validator.isNull(congDan)){
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(MessageUtil.getVNMessageText("congDan.chitiet.not_found"));
                     }
+
+                    int lanTiem = congDan.getSoMuiTiem() + 1;
+
                     if(Validator.isNull(nguoiTiemChung)){
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(MessageUtil.getVNMessageText("nguoiTiemChung.chitiet.not_found"));
