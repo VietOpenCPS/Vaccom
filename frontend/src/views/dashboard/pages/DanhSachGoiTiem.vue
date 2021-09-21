@@ -348,7 +348,7 @@
                       outlined
                       required
                     ></v-text-field>
-                    <v-text-field
+                    <!-- <v-text-field
                       label="Nơi sản xuất"
                       class="flex xs12 md6 px-2"
                       v-model="muiTiemChung.NoiSanXuat"
@@ -375,7 +375,7 @@
                       dense
                       outlined
                       required
-                    ></v-text-field>
+                    ></v-text-field> -->
                 </v-layout>
             </v-form>
           </v-card-text>
@@ -446,7 +446,7 @@
           {name: 'Xác nhận không đến', value: 6}
         ],
         muiTiemChung: {
-          NguoiTiemChung_ID: '',
+          CongDan_ID: '',
           HoVaTen: '',
           NgaySinh: '',
           CMTCCCD: '',
@@ -460,7 +460,8 @@
           NoiSanXuat: '',
           SoLoThuoc: '',
           HanSuDung: '',
-          CoSoYTe_Id: ''
+          CoSoYTe_Id: '',
+          MaPhieuHen: ''
         },
         showAdvanceSearch: false,
         phieuHenTiemUpdate: '',
@@ -620,7 +621,8 @@
               tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
               quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
               phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
-              listtinhtrangxacnhan: [vm.trangThaiFilter]
+              listtinhtrangxacnhan: [vm.trangThaiFilter],
+              tinhtrangdangki: 4
           }
           vm.loading = true
           axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
@@ -749,8 +751,12 @@
       },
       addMuiTiemChung (item) {
         let vm = this
-        vm.muiTiemChung.NguoiTiemChung_ID = item.nguoiTiemChungId
+        let lichTiemSelected = vm.danhSachLichTiemChung.find(function (item) {
+          return item.id == vm.lichTiemChungFilter
+        })
+        vm.muiTiemChung.CongDan_ID = item.nguoiTiemChungId
         vm.muiTiemChung.HoVaTen = item.hoVaTen
+        vm.muiTiemChung.CMTCCCD = item.cmtcccd
         vm.muiTiemChung.NgaySinh = item.ngaySinh
         vm.muiTiemChung.CoSoYTe_Id = item.coSoYTeId
         vm.muiTiemChung.CoSoYTe_Ma = item.coSoYTeMa
@@ -758,8 +764,9 @@
         vm.muiTiemChung.LanTiem = item.lanTiem
         vm.muiTiemChung.NgayTiemChung = item.ngayHenTiem
         vm.muiTiemChung.GioTiemChung = item.gioHenTiem
-        vm.muiTiemChung.DiaDiemTiemChung = ''
-        vm.muiTiemChung.LoaiThuocTiem = ''
+        vm.muiTiemChung.DiaDiemTiemChung = lichTiemSelected.diaDiemTiemChung
+        vm.muiTiemChung.LoaiThuocTiem = lichTiemSelected.loaiThuocTiem,
+        vm.muiTiemChung.MaPhieuHen = item.id
         vm.muiTiemChung.NoiSanXuat = ''
         vm.muiTiemChung.SoLoThuoc = ''
         vm.muiTiemChung.HanSuDung = ''
@@ -880,6 +887,8 @@
       },
       getTextTrangThai(trangThai) {
           switch (trangThai) {
+              case 0:
+                return 'Chờ gửi thông báo';
               case 1:
                   return 'Chờ xác nhận';
               case 2:

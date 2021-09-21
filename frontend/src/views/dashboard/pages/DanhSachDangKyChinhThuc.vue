@@ -29,13 +29,13 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span> người
             </span>
-            <v-btn color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="!addLichTiem" color="#0072bc" small class="mx-0 mr-4" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
               Xuất danh sách
             </v-btn>
-            <v-btn color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="!addLichTiem" color="orange" small class="mx-0" @click.stop="translateStatus('multiple')" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-backup-restore
               </v-icon>
@@ -121,7 +121,7 @@
                 </v-layout>
               </div>
             </template>
-            <template v-slot:item.action="{ item }">
+            <template v-if="!addLichTiem" v-slot:item.action="{ item }">
               <div style="width: 150px">
                 <!-- <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -544,6 +544,7 @@
   import Pagination from './Pagination'
   export default {
     name: 'Customers',
+    props: ['addLichTiem'],
     components: {
     'tim-kiem': Search,
     'pagination': Pagination
@@ -670,7 +671,7 @@
     computed: {
       breakpointName () {
         return this.$store.getters.getBreakpointName
-      },
+      }
     },
     watch: {
       dangkythieuthongtin (val) {
@@ -681,6 +682,49 @@
           if (!this.searchAll) {
             this.getDanhSachDangKyChinhThuc(0)
           }
+        }
+      },
+      addLichTiem (val) {
+        if (val) {
+          let vm = this
+          vm.headers = [
+            {
+              sortable: false,
+              text: 'STT',
+              align: 'center',
+              value: 'index'
+            },
+            {
+              sortable: false,
+              text: 'Họ tên',
+              align: 'left',
+              value: 'hoVaTen'
+            },
+            {
+              sortable: false,
+              text: 'Số CMND/ CCCD',
+              align: 'left',
+              value: 'cmtcccd'
+            },
+            {
+              sortable: false,
+              text: 'Mã nhóm đối tượng',
+              align: 'left',
+              value: 'nhomDoiTuong'
+            },
+            {
+              sortable: false,
+              text: 'Số điện thoại',
+              align: 'left',
+              value: 'soDienThoai'
+            },
+            {
+              sortable: false,
+              text: 'Địa chỉ',
+              align: 'left',
+              value: 'diaChiNoiO'
+            }
+          ]
         }
       }
     },
@@ -1039,6 +1083,14 @@
             return String(date).slice(6,8) + '/' + String(date).slice(4,6) + '/' + String(date).slice(0,4)
           }
         }
+      },
+      getSelected () {
+        let vm = this
+        return vm.selected
+      },
+      resetSelected () {
+        let vm = this
+        vm.selected = []
       }
     },
   }
