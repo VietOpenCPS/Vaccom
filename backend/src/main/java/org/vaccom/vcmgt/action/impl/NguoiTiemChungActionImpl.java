@@ -642,9 +642,32 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 				long id;
 				int count = 0;
+				long idCongDan;
+				String sdtCongDan;
+				String cmtCongDan;
+				CongDan oldCongDan;
+
 				for(NguoiTiemChung nguoiTiemChung: listNguoiTiemChungDangCho) {
 					id = nguoiTiemChung.getId();
-					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+					idCongDan = nguoiTiemChung.getCongDanID();
+
+					if(idCongDan == 0) {
+						oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getCmtcccd());
+
+						if(oldCongDan == null) {
+							CongDan congDannew = createCongDanByNguoiTiemChung(nguoiTiemChung);
+							if(congDannew == null) {
+								_log.warn("Cong dan new is null for cmt: " + nguoiTiemChung.getCmtcccd()
+										+ ", sdt: " + nguoiTiemChung.getSoDienThoai());
+							} else {
+								nguoiTiemChung.setCongDanID(congDannew.getId());
+							}
+						} else {
+							nguoiTiemChung.setCongDanID(oldCongDan.getId());
+						}
+					}
+
+					List<MuiTiemChung> lstMuiTiemChung = muiTiemChungService.findByCongDan_ID(idCongDan);
 					if(lstMuiTiemChung != null ) {
 						if(lstMuiTiemChung.size() > countAccept) {
 							continue;

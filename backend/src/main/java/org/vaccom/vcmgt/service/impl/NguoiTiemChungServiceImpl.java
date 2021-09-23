@@ -521,6 +521,10 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 			predicates.add(builder.like(congdanRoot.get("phuongXaTen"), "%" + nguoiTiemChungDto.phuongxaten + "%"));
 		}
 
+		if (Validator.isNotNull(nguoiTiemChungDto.diachinoio) && !nguoiTiemChungDto.diachinoio.isEmpty()) {
+			predicates.add(builder.like(congdanRoot.get("diaChiThuongTru"), "%" + nguoiTiemChungDto.diachinoio + "%"));
+		}
+
 		if (Validator.isNotNull(nguoiTiemChungDto.loaiThuocTiem) && !nguoiTiemChungDto.loaiThuocTiem.isEmpty()) {
 			predicates.add(builder.like(muiTiemChungRoot.get("loaiThuocTiem"), "%" + nguoiTiemChungDto.loaiThuocTiem + "%"));
 		}
