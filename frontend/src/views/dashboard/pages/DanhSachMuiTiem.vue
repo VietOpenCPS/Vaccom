@@ -382,12 +382,12 @@
             align: 'left',
             value: 'cmtcccd'
           },
-          {
-            sortable: false,
-            text: 'Mã nhóm đối tượng',
-            align: 'left',
-            value: 'nhomDoiTuong'
-          },
+          // {
+          //   sortable: false,
+          //   text: 'Mã nhóm đối tượng',
+          //   align: 'left',
+          //   value: 'nhomDoiTuong'
+          // },
           {
             sortable: false,
             text: 'Số điện thoại',
@@ -470,10 +470,13 @@
             isSearchDaTiem: true,
             cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
             hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
-            diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
+            // diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') && dataSearch['DiaBanCoSo_ID'] ? dataSearch['DiaBanCoSo_ID'] : '',
             tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
             quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
             phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
+            soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
+            loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
+            diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
           }
           
         }

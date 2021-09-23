@@ -4,7 +4,7 @@
         <v-row v-if="!form">
           <v-col
             cols="12"
-            md="4"
+            :md="!typeGoiTiem ? 4 : 8"
             class="pb-0"
           >
             <v-text-field
@@ -36,6 +36,7 @@
             cols="12"
             md="4"
             class="pb-0"
+            v-if="!typeGoiTiem"
           >
             <v-autocomplete
               :items="listDoiTuong"
@@ -136,6 +137,7 @@
             cols="12"
             md="4"
             class="pb-0"
+            v-if="!typeGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -149,6 +151,58 @@
               hide-details="auto"
               clearable
           ></v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+            v-if="typeGoiTiem"
+          >
+            <v-text-field
+              label="Địa chỉ nơi ở"
+              v-model="dataSearch['diachinoio']"
+              outlined
+              placeholder="Địa chỉ nơi ở"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+            v-if="typeGoiTiem"
+          >
+            <v-autocomplete
+              :items="listSoMuiTiem"
+              label="Số mũi tiêm"
+              v-model="dataSearch['soMuiTiem']"
+              item-text="name"
+              item-value="value"
+              hide-no-data
+              outlined
+              dense
+              hide-details="auto"
+              clearable
+            >
+            </v-autocomplete>
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+            v-if="typeGoiTiem"
+          >
+            <v-text-field
+              label="Loại vaccine tiêm"
+              v-model="dataSearch['loaiThuocTiem']"
+              outlined
+              placeholder="Loại vaccine tiêm"
+              dense
+              clearable
+              hide-details="auto"
+            ></v-text-field>
           </v-col>
           <v-col
             cols="12"
@@ -325,8 +379,15 @@
           TinhThanh_Ma: '',
           QuanHuyen_Ma: '',
           PhuongXa_Ma: '',
-          statusGuiTinNhan: -1
+          statusGuiTinNhan: -1,
+          soMuiTiem: '',
+          loaiThuocTiem: '',
+          diachinoio: ''
         },
+        listSoMuiTiem: [
+          {name: '1', value: 1},
+          {name: '2', value: 2}
+        ],
         listTrangThaiTrung: [
           {name: 'Chưa kiểm tra', value: 0},
           {name: 'Đã kiểm tra, không trùng lặp', value: 1},
