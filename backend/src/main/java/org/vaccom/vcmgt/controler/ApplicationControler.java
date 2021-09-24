@@ -2002,14 +2002,15 @@ private CongDanAction congDanAction;
                 }
                 for (Integer nguoiTiemChungID: NguoiTiemChungIdList) {
                     NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
-                    CongDan congDan = congDanAction.findByCongDanId(nguoiTiemChung.getCongDanID());
 
-                    int lanTiem = congDan.getSoMuiTiem() + 1;
-
-                    if(Validator.isNull(congDan)){
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                .body(MessageUtil.getVNMessageText("congDan.chitiet.not_found"));
+                    List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+                    int lanTiem = 0;
+                    if(Validator.isNull(muiTiemChungList)){
+                        lanTiem = 1;
+                    } else {
+                        lanTiem = muiTiemChungList.size() + 1;
                     }
+
                     if(Validator.isNull(nguoiTiemChung)){
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(MessageUtil.getVNMessageText("nguoiTiemChung.chitiet.not_found"));
