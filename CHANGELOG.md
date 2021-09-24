@@ -1,3 +1,14 @@
+### Release v0.4.3
+* Thêm tiêu chí tìm kiếm người đã tiêm
+* Tự động tạo tk công dân khi đồng bộ người đăng ký ban đầu sang đăng ký chính thức
+* Cài đặt chức năng gửi thông báo khi giấy đi đường được cập nhật 
+* Thêm đầu API thực hiện thêm giấy đi đường theo danh sách ID 
+* Thêm bảng t_congdan, thêm các cột liên kết với bảng t_nguoitiemchung, t_muitiemchung, 
+* Chỉnh sửa lại quy trình cập nhật trạng thái người tiêm chủng khi thêm vào phiếu hẹn 
+* Chỉnh sửa quy trình cập nhật trạng thái người tiêm chủng khi thêm mũi tiêm chủng
+* Chỉnh sửa quy trình đóng lịch tiêm chủng, đưa người tiêm chủng về danh sách chính thức theo điều kiện
+* Chỉnh sửa quy trình xóa phiếu hẹn
+
 ### Release v0.4.2
 * Thêm chức năng lưu lại thông tin mã lỗi của Zalo để tiện việc tra cứu debug của thông báo
 * Sửa lỗi và tối ưu tính năng gửi tin nhắn
