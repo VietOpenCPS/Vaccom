@@ -344,6 +344,12 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										muiTiemChung.setGioTiemChung(gioTiemChung);
 										muiTiemChungAction.create(muiTiemChung);
 
+										congDan.setSoMuiTiem(phieuHenTiem.getLanTiem());
+										congDanAction.update(congDan);
+
+										nguoiTiemChung.setSoMuiTiem(phieuHenTiem.getLanTiem());
+										nguoiTiemChung.setNgayTiemCuoi(DatetimeUtil.dateToString(new Date(), DatetimeUtil._VN_DATE_FORMAT));
+										nguoiTiemChungAction.update(nguoiTiemChung);
 									}
 								}
 							}

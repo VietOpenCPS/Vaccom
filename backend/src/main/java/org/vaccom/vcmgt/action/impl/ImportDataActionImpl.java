@@ -341,21 +341,31 @@ public class ImportDataActionImpl implements ImportDataAction {
 					nguoiTiemChungDto.tinhthanhten = rowData[13];
 					nguoiTiemChungDto.tinhtrangdangki = VaccomUtil.DATIEM;
 
+
 					List<MuiTiemChungDto> listMuiTiemChung = new ArrayList<>();
 
 					if(rowData[15] != null && !rowData[15].isEmpty()) {
+						nguoiTiemChungDto.ngayTiemCuoi = rowData[14];
+
 						MuiTiemChungDto muiTiem1 = new MuiTiemChungDto(rowData[14], rowData[15], rowData[16]);
 						listMuiTiemChung.add(muiTiem1);
+						nguoiTiemChungDto.soMuiTiem = 1;
 					}
 
 					if(rowData[18] != null && !rowData[18].isEmpty()) {
+						nguoiTiemChungDto.ngayTiemCuoi = rowData[17];
 						MuiTiemChungDto muiTiem2 = new MuiTiemChungDto(rowData[17], rowData[18], rowData[19]);
 						listMuiTiemChung.add(muiTiem2);
+						nguoiTiemChungDto.soMuiTiem = 2;
 					}
 
 					nguoiTiemChungDto.listMuiTieuChungDto = listMuiTiemChung;
 					try {
 						_log.info("Saving " + nguoiTiemChungDto.hovaten + "...");
+						nguoiTiemChungDto.tinhthanhma = "01";
+						nguoiTiemChungDto.quanhuyenma = "004";
+						nguoiTiemChungDto.phuongxama = "00148";
+
 						nguoiTiemChungAction.addNguoiTiemChung(nguoiTiemChungDto);
 					} catch (Exception e) {
 						_log.error("Error voi ho ten: " + nguoiTiemChungDto.hovaten + ", cmt: " + nguoiTiemChungDto.cmtcccd);

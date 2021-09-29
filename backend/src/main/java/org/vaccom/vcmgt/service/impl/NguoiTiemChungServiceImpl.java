@@ -373,10 +373,12 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
                 // JsonNode node = mapper.valueToTree(nguoiTiemChung);
                 List<MuiTiemChung> lstMuiTiemChung = muiTiemChungRepository.findByCongDanID(nguoiTiemChung.getCongDanID());
+
                 if (Validator.isNotNull(lstMuiTiemChung) && !lstMuiTiemChung.isEmpty() && lstMuiTiemChung.size() != 0) {
                     String loaiThuocTiem = lstMuiTiemChung.get(0).getLoaiThuocTiem();
                     if (loaiThuocTiem.toLowerCase().contains("astra")) {
                         String ngayTiemCuoi = nguoiTiemChung.getNgayTiemCuoi();
+
                         if (Validator.isNotNull(ngayTiemCuoi)) {
                             Date ngayTiemCuoiDate = DatetimeUtil.stringToDate(ngayTiemCuoi, DatetimeUtil._VN_DATE_FORMAT);
                             Date now = new Date();
@@ -461,12 +463,15 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
         Root<NguoiTiemChung> nguoiTiemChungRoot = criteriaQuery.from(NguoiTiemChung.class);
         Root<PhieuHenTiem> phieuHenTiemRoot = criteriaQuery.from(PhieuHenTiem.class);
+        Root<CongDan> congDanRoot = criteriaQuery.from(CongDan.class);
+
 
         criteriaQuery.select(nguoiTiemChungRoot).distinct(true);
 
         List<Predicate> predicates = new ArrayList<Predicate>();
 
         predicates.add(builder.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
+        predicates.add(builder.equal(nguoiTiemChungRoot.get("congDanID"), congDanRoot.get("id")));
 
         if (Validator.isNotNull(nguoiTiemChungDto.cmtcccd) && !nguoiTiemChungDto.cmtcccd.isEmpty()) {
             predicates.add(builder.equal(nguoiTiemChungRoot.get("cmtcccd"), nguoiTiemChungDto.cmtcccd));
@@ -495,7 +500,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         }
 
         if (nguoiTiemChungDto.soMuiTiem > 0) {
-            predicates.add(builder.equal(nguoiTiemChungRoot.get("soMuiTiem"), nguoiTiemChungDto.soMuiTiem));
+            predicates.add(builder.equal(congDanRoot.get("soMuiTiem"), nguoiTiemChungDto.soMuiTiem));
         }
         if (Validator.isNotNull(nguoiTiemChungDto.loaiThuocTiem)) {
 

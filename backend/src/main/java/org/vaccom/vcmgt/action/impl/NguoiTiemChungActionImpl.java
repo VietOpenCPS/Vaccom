@@ -77,8 +77,14 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setPhuongXaTen(nguoiTiemChungDto.phuongxaten);
 		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
 		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
+		nguoiTiemChung.setTinhThanhMa(nguoiTiemChungDto.tinhthanhma);
+		nguoiTiemChung.setQuanHuyenMa(nguoiTiemChungDto.quanhuyenma);
+		nguoiTiemChung.setPhuongXaMa(nguoiTiemChungDto.phuongxama);
 		nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
 		nguoiTiemChung.setMaQR(nguoiTiemChungDto.maqr);
+		nguoiTiemChung.setCongDanID(nguoiTiemChungDto.congDanId);
+		nguoiTiemChung.setNgayTiemCuoi(nguoiTiemChungDto.ngayTiemCuoi);
+		nguoiTiemChung.setSoMuiTiem(nguoiTiemChungDto.soMuiTiem);
 
 		nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
 	}
@@ -113,6 +119,12 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
 		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
 		nguoiTiemChung.setTinhTrangDangKi(nguoiTiemChungDto.tinhtrangdangki);
+		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
+		nguoiTiemChung.setTinhThanhMa(nguoiTiemChungDto.tinhthanhma);
+		nguoiTiemChung.setQuanHuyenMa(nguoiTiemChungDto.quanhuyenma);
+		nguoiTiemChung.setNgayTiemCuoi(nguoiTiemChungDto.ngayTiemCuoi);
+		nguoiTiemChung.setSoMuiTiem(nguoiTiemChungDto.soMuiTiem);
+
 		String maQr = VaccomUtil.generateQRCode("ntc", 6);
 		nguoiTiemChungDto.maqr = maQr;
 		nguoiTiemChung.setMaQR(maQr);
@@ -125,8 +137,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			return ;
 		}
 
-		//Add nguoi tiem chung chinh thuc
-		addNguoiDangKyChinhThuc(nguoiTiemChungDto);
+
 
 		//Add cong dan
 		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
@@ -150,6 +161,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			nguoiTiemChungCreated.setCongDanID(oldCongDan.getId());
 			nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungCreated);
 		}
+
+		//Add nguoi tiem chung chinh thuc
+		nguoiTiemChungDto.congDanId = nguoiTiemChungCreated.getCongDanID();
+		addNguoiDangKyChinhThuc(nguoiTiemChungDto);
+
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
 

@@ -6,6 +6,9 @@ import javax.persistence.Column;
 import java.util.List;
 
 public class NguoiTiemChungDto {
+
+
+
     public String hovaten;
 
     public String maqr;
@@ -23,6 +26,8 @@ public class NguoiTiemChungDto {
     public int lichTiemChungId;
 
     public String donvicongtac;
+
+    public long congDanId;
 
     public String sodienthoai;
 
@@ -86,5 +91,7 @@ public class NguoiTiemChungDto {
     public String loaiThuocTiem;
 
     public int soMuiTiem;
+
+    public String ngayTiemCuoi;
 
 }
