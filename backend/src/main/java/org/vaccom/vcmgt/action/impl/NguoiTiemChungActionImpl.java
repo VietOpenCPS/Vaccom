@@ -61,6 +61,28 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		return nguoiTiemChungService.countAll();
 	}
 
+	private void addNguoiDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto) {
+		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
+		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
+		nguoiTiemChung.setDiaBanCoSoId(nguoiTiemChungDto.diabancosoid);
+		nguoiTiemChung.setHoVaTen(nguoiTiemChungDto.hovaten);
+		nguoiTiemChung.setNgaySinh(nguoiTiemChungDto.ngaysinh);
+		nguoiTiemChung.setGioiTinh(nguoiTiemChungDto.gioitinh);
+		nguoiTiemChung.setNhomDoiTuong(nguoiTiemChungDto.nhomdoituong);
+		nguoiTiemChung.setDonViCongTac(nguoiTiemChungDto.donvicongtac);
+		nguoiTiemChung.setSoDienThoai(nguoiTiemChungDto.sodienthoai);
+		nguoiTiemChung.setCmtcccd(nguoiTiemChungDto.cmtcccd);
+		nguoiTiemChung.setSoTheBHYT(nguoiTiemChungDto.sothebhyt);
+		nguoiTiemChung.setDiaChiNoiO(nguoiTiemChungDto.diachinoio);
+		nguoiTiemChung.setPhuongXaTen(nguoiTiemChungDto.phuongxaten);
+		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
+		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
+		nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
+		nguoiTiemChung.setMaQR(nguoiTiemChungDto.maqr);
+
+		nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+	}
+
 	@Override
 	public void addNguoiTiemChung(NguoiTiemChungDto nguoiTiemChungDto) throws Exception {
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
@@ -71,7 +93,6 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		if(countUser == 0 && nguoiTiemChungDto.cmtcccd.isEmpty()) {
 			countUser = nguoiTiemChungService.countBySoDienThoai(nguoiTiemChungDto.sodienthoai);
 		}
-		boolean userHasButNotMuiTiem = false;
 
 		if (countUser > 0) {
 			return;
@@ -92,7 +113,9 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
 		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
 		nguoiTiemChung.setTinhTrangDangKi(nguoiTiemChungDto.tinhtrangdangki);
-		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
+		String maQr = VaccomUtil.generateQRCode("ntc", 6);
+		nguoiTiemChungDto.maqr = maQr;
+		nguoiTiemChung.setMaQR(maQr);
 
 		List<MuiTiemChungDto> listTiemChungDto = nguoiTiemChungDto.listMuiTieuChungDto;
 		NguoiTiemChung nguoiTiemChungCreated = nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
@@ -101,6 +124,9 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			_log.error("Loi khong tao duoc nguoi dung voi cmt: " + nguoiTiemChungDto.cmtcccd);
 			return ;
 		}
+
+		//Add nguoi tiem chung chinh thuc
+		addNguoiDangKyChinhThuc(nguoiTiemChungDto);
 
 		//Add cong dan
 		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
