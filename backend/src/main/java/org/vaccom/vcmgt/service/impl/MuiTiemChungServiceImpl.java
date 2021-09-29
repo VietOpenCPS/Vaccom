@@ -47,6 +47,11 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	}
 
 	@Override
+	public MuiTiemChung create(MuiTiemChung muiTiemChung) {
+		return muiTiemChungRepository.save(muiTiemChung);
+	}
+
+	@Override
 	public MuiTiemChung updateMuiTiemChung(MuiTiemChung muiTiemChung) {
 
 		return muiTiemChungRepository.save(muiTiemChung);

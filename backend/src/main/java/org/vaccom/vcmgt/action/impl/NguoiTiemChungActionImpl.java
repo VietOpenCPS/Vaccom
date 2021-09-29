@@ -274,6 +274,16 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		int tinhTrangDangKi = bodyData.has(EntityConstant.TINHTRANGDANGKI)
 				? bodyData.get(EntityConstant.TINHTRANGDANGKI).intValue()
 				: 0;
+		int lanTiem = bodyData.has(EntityConstant.LANTIEM)
+				? bodyData.get(EntityConstant.LANTIEM).intValue()
+				: 0;
+		String ngayTiem = bodyData.has(EntityConstant.NGAYTIEMCHUNG)
+				? bodyData.get(EntityConstant.NGAYTIEMCHUNG).textValue()
+				: StringPool.BLANK;
+
+
+
+
 
 		// TODO Validate fields
 
@@ -282,10 +292,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
 
-		if (Validator.isNull(cmtcccd)) {
-			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.cmtcccd.empty"),
-					HttpStatus.METHOD_NOT_ALLOWED.value());
-		}
+
 
 		if (Validator.isNull(ngaySinh)) {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.ngaysinh.empty"),
@@ -327,6 +334,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setGhiChu(ghiChu);
 		nguoiTiemChung.setGioiTinh(gioiTinh);
 		nguoiTiemChung.setHoVaTen(hoVaTen);
+		nguoiTiemChung.setSoMuiTiem(lanTiem);
+		nguoiTiemChung.setNgayTiemCuoi(ngayTiem);
 		// nguoiTiemChung.setMaSoBHXH(maSoBHXH);
 		nguoiTiemChung.setNgayDangKi(ngayDangKi);
 		nguoiTiemChung.setNgaySinh(ngaySinh);
@@ -364,6 +373,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		}
 
 
+
+
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungNew);
 	}
 
@@ -382,6 +393,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		congDanDto.tinhThanhMa = nguoiTiemChungCreated.getTinhThanhMa();
 		congDanDto.tinhThanhTen = nguoiTiemChungCreated.getTinhThanhTen();
 		congDanDto.gioiTinh = nguoiTiemChungCreated.getGioiTinh();
+		congDanDto.soMuiTiem = nguoiTiemChungCreated.getSoMuiTiem();
 
 		CongDan congDannew = congDanService.addCongDan(congDanDto);
 		return  congDannew;
@@ -607,10 +619,10 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
 			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan) {
 		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung, page, size,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan);
 	}
 
 	@Override

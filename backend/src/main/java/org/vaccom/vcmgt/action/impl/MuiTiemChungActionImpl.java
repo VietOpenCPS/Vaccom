@@ -202,6 +202,17 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 	}
 
 	@Override
+	public MuiTiemChung update(MuiTiemChung muiTiemChung) {
+		return muiTiemChungService.updateMuiTiemChung(muiTiemChung);
+	}
+
+	@Override
+	public MuiTiemChung create(MuiTiemChung muiTiemChung) {
+		return muiTiemChungService.create(muiTiemChung);
+
+	}
+
+	@Override
 	public List<MuiTiemChung> findByCmtcccd(String cmtcccd) {
 		return muiTiemChungService.findByCmtcccd(cmtcccd);
 	}

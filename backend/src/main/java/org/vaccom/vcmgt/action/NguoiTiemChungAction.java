@@ -36,7 +36,7 @@ public interface NguoiTiemChungAction {
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
 			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten);
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan);
 
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma

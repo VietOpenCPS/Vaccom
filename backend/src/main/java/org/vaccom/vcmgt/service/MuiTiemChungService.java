@@ -30,4 +30,6 @@ public interface MuiTiemChungService {
 	public List<MuiTiemChung> findByCoSoYTeId(long id, int page, int size);
 	
 	public List<MuiTiemChung> findAll();
+
+	public MuiTiemChung create(MuiTiemChung muiTiemChung);
 }

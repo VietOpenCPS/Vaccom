@@ -113,8 +113,8 @@ public class ApplicationControler {
     @Autowired
     private ThuocTiemAction thuocTiemAction;
 
-@Autowired
-private CongDanAction congDanAction;
+    @Autowired
+    private CongDanAction congDanAction;
 
 
     @RequestMapping(value = "/add/nguoidung", method = RequestMethod.POST, produces = "application/json")
@@ -718,11 +718,40 @@ private CongDanAction congDanAction;
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.add.permission_error"));
 			}
 			*/
-            nguoiTiemChungAction.addNguoiTiemChung(reqBody);
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.addNguoiTiemChung(reqBody);
 
-            String msg = MessageUtil.getVNMessageText("nguoitiemchung.add.success");
+            if (Validator.isNotNull(nguoiTiemChung)) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode bodyData = mapper.readTree(reqBody);
+                int lanTiem = bodyData.has(EntityConstant.LANTIEM)
+                        ? bodyData.get(EntityConstant.LANTIEM).intValue()
+                        : 0;
 
-            return ResponseEntity.status(HttpStatus.OK).body(msg);
+                if (lanTiem > 0) {
+                    String loaiThuocTiem = bodyData.has(EntityConstant.LOAITHUOCTIEM)
+                            ? bodyData.get(EntityConstant.LOAITHUOCTIEM).textValue()
+                            : StringPool.BLANK;
+
+                    String ngayTiem = bodyData.has(EntityConstant.NGAYTIEMCHUNG)
+                            ? bodyData.get(EntityConstant.NGAYTIEMCHUNG).textValue()
+                            : StringPool.BLANK;
+                    MuiTiemChung muiTiemChung = new MuiTiemChung();
+                    muiTiemChung.setLoaiThuocTiem(loaiThuocTiem);
+                    muiTiemChung.setNgayTiemChung(ngayTiem);
+                    muiTiemChung.setCmtcccd(nguoiTiemChung.getCmtcccd());
+                    muiTiemChung.setCongDanID(nguoiTiemChung.getCongDanID());
+                    muiTiemChung.setLanTiem(lanTiem);
+                    muiTiemChung.setHoVaTen(nguoiTiemChung.getHoVaTen());
+                    muiTiemChung.setCoSoYTeMa(nguoiTiemChung.getCoSoYTeMa());
+                    muiTiemChung.setNgaySinh(nguoiTiemChung.getNgaySinh());
+                    muiTiemChung.setCoSoYTeTen(nguoiTiemChung.getCoSoYTeTen());
+                    muiTiemChung.setDiaDiemTiemChung(nguoiTiemChung.getCoSoYTeTen());
+
+                    muiTiemChungAction.create(muiTiemChung);
+                }
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(nguoiTiemChung);
 
         } catch (Exception e) {
 
@@ -1124,7 +1153,7 @@ private CongDanAction congDanAction;
                 nguoiTiemChungDto.diabancosoid = vaiTro.getDiaBanCoSoId();
             }
 
-            if(nguoiTiemChungDto.isSearchDaTiem) {
+            if (nguoiTiemChungDto.isSearchDaTiem) {
                 ResultSearchDto<CongDan> result = nguoiTiemChungAction.searchDaTiem(nguoiTiemChungDto, page, size);
                 List<CongDan> lstCongdan = result.datas;
 
@@ -1247,7 +1276,7 @@ private CongDanAction congDanAction;
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size
-                        , tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        , tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1271,7 +1300,7 @@ private CongDanAction congDanAction;
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         tinhtrangdangky, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
 
             }
 
@@ -1356,7 +1385,7 @@ private CongDanAction congDanAction;
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1381,7 +1410,7 @@ private CongDanAction congDanAction;
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
-                        quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenten, phuongxama, phuongxaten, false);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1434,6 +1463,7 @@ private CongDanAction congDanAction;
                                                            @RequestParam("phuongxaten") String phuongxaten,
                                                            @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                            @RequestParam("cosoytema") String cosoytema,
+                                                           @RequestParam(value = "isDatTieuChuan", defaultValue = "0") Boolean isDatTieuChuan,
                                                            @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
                                                            @RequestParam(name = "page", defaultValue = "0") int page,
                                                            @RequestParam(name = "size", defaultValue = "30") int size) {
@@ -1465,7 +1495,7 @@ private CongDanAction congDanAction;
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size,
-                        tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1490,28 +1520,59 @@ private CongDanAction congDanAction;
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan);
             }
 
-            lstNguoiTiemChung.forEach(nguoiTiemChung -> {
-                // JsonNode node = mapper.valueToTree(nguoiTiemChung);
+            if(isDatTieuChuan){
+                int offset = page * size;
+                int maxSize = page*size+size;
+                if(isDatTieuChuan){
+                    total = lstNguoiTiemChung.size();
+                }
 
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+                for (int i=offset; i< lstNguoiTiemChung.size() && i < maxSize; i++){
 
-                ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
+                    // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
-                ObjectNode node = mapper.convertValue(nguoiTiemChung, ObjectNode.class);
+                    List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(lstNguoiTiemChung.get(i).getCongDanID());
 
-                node.put("muiTiemChung", jsonArrayObj);
+                    ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
 
-                List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+                    ObjectNode node = mapper.convertValue(lstNguoiTiemChung.get(i), ObjectNode.class);
 
-                jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+                    node.put("muiTiemChung", jsonArrayObj);
 
-                node.put("phieuHenTiem", jsonArrayObj);
+                    List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(lstNguoiTiemChung.get(i).getId());
 
-                data.add(node);
-            });
+                    jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+                    node.put("phieuHenTiem", jsonArrayObj);
+
+                    data.add(node);
+
+                }
+            } else {
+                lstNguoiTiemChung.forEach(nguoiTiemChung -> {
+                    // JsonNode node = mapper.valueToTree(nguoiTiemChung);
+
+                    List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+
+                    ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
+
+                    ObjectNode node = mapper.convertValue(nguoiTiemChung, ObjectNode.class);
+
+                    node.put("muiTiemChung", jsonArrayObj);
+
+                    List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(nguoiTiemChung.getId());
+
+                    jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
+
+                    node.put("phieuHenTiem", jsonArrayObj);
+
+                    data.add(node);
+                });
+            }
+
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, data));
 
@@ -1574,7 +1635,7 @@ private CongDanAction congDanAction;
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma,
-                        tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1599,7 +1660,7 @@ private CongDanAction congDanAction;
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
-                        quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenten, phuongxama, phuongxaten, false);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1961,7 +2022,7 @@ private CongDanAction congDanAction;
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.addPhieuHenTiem(reqBody);
             long nguoiTiemChungID = phieuHenTiem.getNguoiTiemChungId();
             NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
-            if(Validator.isNotNull(nguoiTiemChung)){
+            if (Validator.isNotNull(nguoiTiemChung)) {
                 nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DACHUYENSANGPHIEUHEN);
                 nguoiTiemChungAction.update(nguoiTiemChung);
             }
@@ -1986,6 +2047,7 @@ private CongDanAction congDanAction;
 
         }
     }
+
     @RequestMapping(value = "/add/phieuhentiem/list", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> addPhieuHenTiemList(HttpServletRequest request, HttpServletResponse response,
                                                  @RequestBody PhieuHenTiemDto phieuHenTiemDto) {
@@ -1996,22 +2058,22 @@ private CongDanAction congDanAction;
                 List<Integer> NguoiTiemChungIdList = phieuHenTiemDto.NguoiTiemChungIDs;
                 LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiemDto.LichTiemChungID);
 
-                if(Validator.isNull(lichTiemChung)){
+                if (Validator.isNull(lichTiemChung)) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(MessageUtil.getVNMessageText("lichtiemchung.chitiet.not_found"));
                 }
-                for (Integer nguoiTiemChungID: NguoiTiemChungIdList) {
+                for (Integer nguoiTiemChungID : NguoiTiemChungIdList) {
                     NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
 
                     List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
                     int lanTiem = 0;
-                    if(Validator.isNull(muiTiemChungList)){
+                    if (Validator.isNull(muiTiemChungList)) {
                         lanTiem = 1;
                     } else {
                         lanTiem = muiTiemChungList.size() + 1;
                     }
 
-                    if(Validator.isNull(nguoiTiemChung)){
+                    if (Validator.isNull(nguoiTiemChung)) {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(MessageUtil.getVNMessageText("nguoiTiemChung.chitiet.not_found"));
                     }
@@ -2232,13 +2294,13 @@ private CongDanAction congDanAction;
 			*/
 
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(id);
-            if(Validator.isNull(phieuHenTiem)){
+            if (Validator.isNull(phieuHenTiem)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("phieuHenTiem.chitiet.not_found"));
             }
             long nguoiTiemChungID = phieuHenTiem.getNguoiTiemChungId();
             NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
-            if(Validator.isNotNull(nguoiTiemChung)){
+            if (Validator.isNotNull(nguoiTiemChung)) {
                 nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
                 nguoiTiemChungAction.update(nguoiTiemChung);
             }
@@ -2358,9 +2420,9 @@ private CongDanAction congDanAction;
 			*/
 
             List<PhieuHenTiem> listPhieuHenChuaTiem = phieuHenTiemAction.findByKhacTinhTrangXacNhan_LichTiemChungID(VaccomUtil.DATIEMXONG, id);
-            for (PhieuHenTiem phieuHenTiem: listPhieuHenChuaTiem) {
+            for (PhieuHenTiem phieuHenTiem : listPhieuHenChuaTiem) {
                 NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
-                if(Validator.isNotNull(nguoiTiemChung)){
+                if (Validator.isNotNull(nguoiTiemChung)) {
                     nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
                     nguoiTiemChungAction.update(nguoiTiemChung);
                 }
@@ -2369,8 +2431,6 @@ private CongDanAction congDanAction;
 
 
             lichTiemChungAction.dongLichTiemChung(id);
-
-
 
 
             String msg = MessageUtil.getVNMessageText("lichtiemchung.donglichtiem.success");
@@ -2566,7 +2626,7 @@ private CongDanAction congDanAction;
                     ? bodyData.get(EntityConstant.CONGDAN_ID).longValue()
                     : 0;
 
-            long maPhieuHen = bodyData.has(EntityConstant.MAPHIEUHEN)? bodyData.get(EntityConstant.MAPHIEUHEN).longValue()
+            long maPhieuHen = bodyData.has(EntityConstant.MAPHIEUHEN) ? bodyData.get(EntityConstant.MAPHIEUHEN).longValue()
                     : 0;
 
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(maPhieuHen);
@@ -2594,7 +2654,6 @@ private CongDanAction congDanAction;
 
             phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DATIEMXONG);
             phieuHenTiemAction.update(phieuHenTiem);
-
 
 
             String msg = MessageUtil.getVNMessageText("muitiemchung.add.success");
@@ -2707,7 +2766,7 @@ private CongDanAction congDanAction;
 			*/
             NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
 
-            if(Validator.isNull(nguoiTiemChung)){
+            if (Validator.isNull(nguoiTiemChung)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(MessageUtil.getVNMessageText("nguoiTiemChung.not_found"));
             }
@@ -3301,7 +3360,7 @@ private CongDanAction congDanAction;
                                 ObjectMapper mapper = new ObjectMapper();
                                 ObjectNode template_data = mapper.createObjectNode();
 
-                                
+
                                 template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                 template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                 template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
@@ -3365,7 +3424,7 @@ private CongDanAction congDanAction;
                                         ObjectMapper mapper = new ObjectMapper();
                                         ObjectNode template_data = mapper.createObjectNode();
 
-                                        
+
                                         template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
                                         template_data.put("HovaTen", giayDiDuongNew.getHoVaTen());
                                         template_data.put(ZaloConstant.QrCodeID, giayDiDuongNew.getMaQR());
@@ -3426,7 +3485,7 @@ private CongDanAction congDanAction;
                                 giayDiDuongNew.getId());
 
                     }
-                } else if(statusOld == VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET){
+                } else if (statusOld == VaccomUtil.DADUYET && giayDiDuongNew.getStatus() == VaccomUtil.DADUYET) {
 
                     UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(giayDiDuongNew.getUyBanNhanDanID());
                     if (Validator.isNotNull(uyBanNhanDan)) {
@@ -3730,59 +3789,112 @@ private CongDanAction congDanAction;
         }
     }
 
-    @RequestMapping(value = "/update/phieuhentiem/guiThongBao/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/update/phieuhentiem/guiThongBao/{type}", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> thucHienGuiThongBao(HttpServletRequest request, HttpServletResponse response,
-                                                 @PathVariable(value = "id") long lichTiemId) {
+                                                 @PathVariable(value = "type") long type, @RequestBody PhieuHenTiemDto phieuHenTiemDto) {
         try {
-
             ObjectMapper mapper = new ObjectMapper();
-            List<PhieuHenTiem> phieuHenTiemList = phieuHenTiemAction.findByLichTiemChungID(lichTiemId);
+            if (type > 0) {
+                List<Integer> ids = phieuHenTiemDto.PhieuHenTiems;
+                for (Integer id : ids) {
+                    PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(id);
+                    if (Validator.isNotNull(phieuHenTiem) && phieuHenTiem.getLichTiemChungId() == phieuHenTiemDto.LichTiemChungID) {
+                        int oldTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
+                        phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.HENDAXACNHAN);
+                        PhieuHenTiem phieuHenTiemNew = phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+                        int newTinhTrangXacNhan = phieuHenTiemNew.getTinhTrangXacNhan();
+                        if (Validator.isNotNull(phieuHenTiemNew)) {
+                            if (oldTinhTrangXacNhan != VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan == VaccomUtil.HENDAXACNHAN) {
+                                if (Validator.isNotNull(phieuHenTiem)) {
+                                    LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+                                    NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                                    UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
+                                    String TenCoSo = lichTiemChung.getTenCoSo();
+                                    String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
+
+                                    long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
+
+                                    //Json
+                                    ObjectNode template_data = mapper.createObjectNode();
+
+                                    template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+                                    template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
+                                    template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() + " " + phieuHenTiem.getGioHenTiem());
+                                    template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                                    template_data.put(ZaloConstant.DonViTiem, TenCoSo);
+                                    template_data.put(ZaloConstant.DiaDiem, DiaDiem);
+                                    template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+                                    template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
+
+                                    template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+
+
+                                    hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                            nguoiTiemChung.getSoDienThoai(),
+                                            nguoiTiemChung.getEmail(),
+                                            true,
+                                            ZaloConstant.Loai_Hen_TiemChung,
+                                            uyBanNhanDanId,
+                                            phieuHenTiem.getId());
+
+                                }
+                            }
+                        }
+                    }
+                }
+                String msg = MessageUtil.getVNMessageText("phieuhentiem.update.trangthai.success");
+
+                return ResponseEntity.status(HttpStatus.OK).body(msg);
+            }
+
+            List<PhieuHenTiem> phieuHenTiemList = phieuHenTiemAction.findByLichTiemChungID(phieuHenTiemDto.LichTiemChungID);
             for (PhieuHenTiem phieuHenTiem : phieuHenTiemList) {
                 int oldTinhTrangXacNhan = phieuHenTiem.getTinhTrangXacNhan();
                 phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.HENDAXACNHAN);
                 PhieuHenTiem phieuHenTiemNew = phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
                 int newTinhTrangXacNhan = phieuHenTiemNew.getTinhTrangXacNhan();
-                if (oldTinhTrangXacNhan < newTinhTrangXacNhan) {
-                    if (Validator.isNotNull(phieuHenTiemNew)) {
-                        if (oldTinhTrangXacNhan != VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan == VaccomUtil.HENDAXACNHAN) {
-                            if (Validator.isNotNull(phieuHenTiem)) {
-                                LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
-                                NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
-                                UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-                                String TenCoSo = lichTiemChung.getTenCoSo();
-                                String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
+                if (Validator.isNotNull(phieuHenTiemNew)) {
+                    if (oldTinhTrangXacNhan != VaccomUtil.HENDAXACNHAN && newTinhTrangXacNhan == VaccomUtil.HENDAXACNHAN) {
+                        if (Validator.isNotNull(phieuHenTiem)) {
+                            LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
+                            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+                            UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
-                                long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
+                            String TenCoSo = lichTiemChung.getTenCoSo();
+                            String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
 
-                                //Json
-                                ObjectNode template_data = mapper.createObjectNode();
+                            long uyBanNhanDanId = lichTiemChung.getUyBanNhanDanID();
 
-                                template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
-                                template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
-                                template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() + " " + phieuHenTiem.getGioHenTiem());
-                                template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
-                                template_data.put(ZaloConstant.DonViTiem, TenCoSo);
-                                template_data.put(ZaloConstant.DiaDiem, DiaDiem);
-                                template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
-                                template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
-                                
-                                template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+                            //Json
+                            ObjectNode template_data = mapper.createObjectNode();
+
+                            template_data.put(ZaloConstant.HoVaTen, nguoiTiemChung.getHoVaTen());
+                            template_data.put(ZaloConstant.CoSoYTe, TenCoSo);
+                            template_data.put(ZaloConstant.NgayTiemChung, phieuHenTiem.getNgayHenTiem() + " " + phieuHenTiem.getGioHenTiem());
+                            template_data.put(ZaloConstant.DonViCap, uyBanNhanDan.getTenCoQuan());
+                            template_data.put(ZaloConstant.DonViTiem, TenCoSo);
+                            template_data.put(ZaloConstant.DiaDiem, DiaDiem);
+                            template_data.put(ZaloConstant.LoaiThuocTiem, lichTiemChung.getLoaiThuocTiem());
+                            template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
+
+                            template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
 
-                                hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
-                                        nguoiTiemChung.getSoDienThoai(),
-                                        nguoiTiemChung.getEmail(),
-                                        true,
-                                        ZaloConstant.Loai_Hen_TiemChung,
-                                        uyBanNhanDanId,
-                                        phieuHenTiem.getId());
-                            }
+                            hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
+                                    nguoiTiemChung.getSoDienThoai(),
+                                    nguoiTiemChung.getEmail(),
+                                    true,
+                                    ZaloConstant.Loai_Hen_TiemChung,
+                                    uyBanNhanDanId,
+                                    phieuHenTiem.getId());
                         }
                     }
                 }
+
             }
+
 
             String msg = MessageUtil.getVNMessageText("phieuhentiem.update.trangthai.success");
 
