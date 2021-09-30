@@ -1,9 +1,6 @@
 package org.vaccom.vcmgt.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -161,7 +158,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     @Override
     public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
                                     Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
-            , String quanhuyenten, String phuongxama, String phuongxaten) {
+            , String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -222,6 +219,10 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             predicates.add(cb.equal(nguoiTiemChungRoot.get("diaBanCoSoId"), diabancosoid));
         }
 
+        if(Validator.isNotNull(diachinoio)){
+            predicates.add(cb.like(nguoiTiemChungRoot.get("diaChiNoiO"), "%" + diachinoio + "%"));
+        }
+
         if (Validator.isNotNull(cosoytema)) {
             // ParameterExpression<String> p = cb.parameter(String.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("coSoYTeMa"), cosoytema));
@@ -241,6 +242,24 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("kiemTraTrung"), kiemtratrung));
         }
+        if(isDatTieuChuan && Validator.isNotNull(loaiThuocTiem)){
+            int soNgayTiem = 0;
+            if(loaiThuocTiem.toLowerCase().contains("astra")){
+                soNgayTiem = 8*7;
+            } else if(loaiThuocTiem.toLowerCase().contains("moderna")){
+                soNgayTiem = 8*7;
+            } else if(loaiThuocTiem.toLowerCase().contains("vero")){
+                soNgayTiem = 3*7;
+            } else {
+                soNgayTiem = 8*7;
+            }
+            List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%",soNgayTiem );
+            List<Long> listCongDan = new ArrayList<>();
+            for (MuiTiemChung muitiemchung:muiTiemChungs) {
+                listCongDan.add(muitiemchung.getCongDanID());
+            }
+            predicates.add((nguoiTiemChungRoot.get("congDanID").in(listCongDan)));
+        }
 
         if (!predicates.isEmpty()) {
             Predicate[] pdc = new Predicate[predicates.size()];
@@ -258,6 +277,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
         em.close();
 
+
+
         return typedQuery.getSingleResult();
     }
 
@@ -265,7 +286,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
                                                      String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung,
                                                      Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma,
-                                                     String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan) {
+                                                     String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -342,10 +363,44 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), tinhtrangdangki));
         }
+        if(Validator.isNotNull(diachinoio)){
+            predicates.add(cb.like(nguoiTiemChungRoot.get("diaChiNoiO"), "%"+diachinoio+"%"));
+        }
 
         if (kiemtratrung != null && kiemtratrung >= 0) {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("kiemTraTrung"), kiemtratrung));
+        }
+        if(isDatTieuChuan){
+            int soNgayTiem = 0;
+            loaiThuocTiem = loaiThuocTiem.toLowerCase();
+            List<MuiTiemChung> listMuiDatDieuKien = new ArrayList<>();
+            List<MuiTiemChung> list2 = new ArrayList<>();
+            if(loaiThuocTiem.toLowerCase().contains("astra")){
+                soNgayTiem = 8*7;
+                listMuiDatDieuKien= muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+                list2 = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+"pfizer"+"%", soNgayTiem);
+                listMuiDatDieuKien.addAll(list2);
+            } else if(loaiThuocTiem.toLowerCase().contains("moderna")){
+                soNgayTiem = 8*7;
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+            } else if(loaiThuocTiem.toLowerCase().contains("vero")){
+                soNgayTiem = 3*7;
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+            } else {
+                soNgayTiem = 8*7;
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+            }
+
+            if(Validator.isNotNull(listMuiDatDieuKien)){
+                List<Long> congDanDatDieuKien = new ArrayList<>();
+                for (MuiTiemChung muiTiemChung: listMuiDatDieuKien) {
+                    congDanDatDieuKien.add(muiTiemChung.getCongDanID());
+                }
+                if(Validator.isNotNull(congDanDatDieuKien)){
+                    predicates.add((nguoiTiemChungRoot.get("congDanID").in(congDanDatDieuKien)));
+                }
+            }
         }
 
 
@@ -372,85 +427,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
         int offset = page * size;
         List<NguoiTiemChung> result = new ArrayList<>();
-        if (isDatTieuChuan) {
-            ObjectMapper mapper = new ObjectMapper();
-            List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.getResultList();
-            int total = lstNguoiTiemChung.size();
-            for (NguoiTiemChung nguoiTiemChung : lstNguoiTiemChung) {
-
-                // JsonNode node = mapper.valueToTree(nguoiTiemChung);
-                List<MuiTiemChung> lstMuiTiemChung = muiTiemChungRepository.findByCongDanID(nguoiTiemChung.getCongDanID());
-
-                if (Validator.isNotNull(lstMuiTiemChung) && !lstMuiTiemChung.isEmpty() && lstMuiTiemChung.size() != 0) {
-                    String loaiThuocTiem = lstMuiTiemChung.get(0).getLoaiThuocTiem();
-                    if (loaiThuocTiem.toLowerCase().contains("astra")) {
-                        String ngayTiemCuoi = nguoiTiemChung.getNgayTiemCuoi();
-
-                        if (Validator.isNotNull(ngayTiemCuoi)) {
-                            Date ngayTiemCuoiDate = DatetimeUtil.stringToDate(ngayTiemCuoi, DatetimeUtil._VN_DATE_FORMAT);
-                            Date now = new Date();
-                            long getDiff = now.getTime() - ngayTiemCuoiDate.getTime();
-                            long getDaysDiff = getDiff / (24 * 60 * 60 * 1000);
-
-                            if (getDaysDiff >= 8 * 7) {
-                                result.add(nguoiTiemChung);
-                            } else {
-                                total = total - 1;
-                            }
-                        } else {
-                            total = total - 1;
-
-                        }
-
-                    } else if (loaiThuocTiem.toLowerCase().contains("vero")) {
-                        String ngayTiemCuoi = nguoiTiemChung.getNgayTiemCuoi();
-                        if (Validator.isNotNull(ngayTiemCuoi)) {
-                            Date ngayTiemCuoiDate = DatetimeUtil.stringToDate(ngayTiemCuoi, DatetimeUtil._VN_DATE_FORMAT);
-                            Date now = new Date();
-                            long getDiff = now.getTime() - ngayTiemCuoiDate.getTime();
-                            long getDaysDiff = getDiff / (24 * 60 * 60 * 1000);
-                            if (getDaysDiff >= 3 * 7) {
-                                result.add(nguoiTiemChung);
-                            } else {
-                                total = total - 1;
-                                ;
-                            }
-                        } else {
-                            total = total - 1;
-
-                        }
-                    } else if (loaiThuocTiem.toLowerCase().contains("moderna")) {
-                        String ngayTiemCuoi = nguoiTiemChung.getNgayTiemCuoi();
-                        if (Validator.isNotNull(ngayTiemCuoi)) {
-                            Date ngayTiemCuoiDate = DatetimeUtil.stringToDate(ngayTiemCuoi, DatetimeUtil._VN_DATE_FORMAT);
-                            Date now = new Date();
-                            long getDiff = now.getTime() - ngayTiemCuoiDate.getTime();
-                            long getDaysDiff = getDiff / (24 * 60 * 60 * 1000);
-                            if (getDaysDiff >= 4 * 7) {
-                                result.add(nguoiTiemChung);
-                            } else {
-                                total = total - 1;
-
-                            }
-                        } else {
-                            total = total - 1;
-
-                        }
-
-                    } else {
-                        total = total - 1;
-                    }
-                } else {
-                    total = total - 1;
-
-                }
-
-
-            }
-
-        } else {
-            result = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
-        }
+        result = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 
 
 

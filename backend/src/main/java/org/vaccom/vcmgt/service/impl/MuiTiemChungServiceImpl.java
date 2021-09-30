@@ -52,6 +52,11 @@ public class MuiTiemChungServiceImpl implements MuiTiemChungService {
 	}
 
 	@Override
+	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(String loaiThuocTiem, int soNgayTiem) {
+		return muiTiemChungRepository.findMuiTiemChungDatDieuKien(loaiThuocTiem, soNgayTiem);
+	}
+
+	@Override
 	public MuiTiemChung updateMuiTiemChung(MuiTiemChung muiTiemChung) {
 
 		return muiTiemChungRepository.save(muiTiemChung);
