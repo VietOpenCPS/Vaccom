@@ -118,8 +118,8 @@
         vm.$store.dispatch('getThongTinPhieuHen', filter).then(function(dataInfo) {
           console.log('dataInfo', dataInfo)
           vm.dataInfo = dataInfo
-          // vm.urlQr = dataInfo['LinkQrCode']
-          vm.urlQr = "http://119.17.200.69:8030/vac/index.html#" + dataInfo['LinkQrCode'].split('#')[1]
+          vm.urlQr = dataInfo['LinkQrCode']
+          // vm.urlQr = "http://119.17.200.69:8030/vac/index.html#" + dataInfo['LinkQrCode'].split('#')[1]
         }).catch (function () {
         })
       },
