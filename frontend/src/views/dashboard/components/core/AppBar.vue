@@ -237,7 +237,7 @@
       let vm = this
       try {
         let currentQuery = vm.$router.history.current
-        if ((currentQuery.name === 'MauGiayDiDuong' || currentQuery.name === 'PhieuHenTiem') && (vm.breakpointName === 'xs' || breakpointName === 'sm')) {
+        if ((currentQuery.name === 'MauGiayDiDuong' || currentQuery.name === 'PhieuHenTiem' || currentQuery.name === 'DangKyTiemMoi') && (vm.breakpointName === 'xs' || breakpointName === 'sm')) {
           vm.showLogin = false
         } else {
           vm.showLogin = true
@@ -262,6 +262,12 @@
                 icon: 'mdi-shield-plus-outline',
                 title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Thêm đăng ký chính thức',
+                to: '/pages/dang-ky-chinh-thuc/0',
                 id: 'search',
               },
               {
@@ -412,6 +418,12 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
+                title: 'Thêm đăng ký chính thức',
+                to: '/pages/dang-ky-chinh-thuc/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách đăng ký ban đầu',
                 to: '/pages/danh-sach-dang-ky-tiem-moi',
                 id: 'search',
@@ -550,6 +562,12 @@
               },
               {
                 icon: 'mdi-shield-plus-outline',
+                title: 'Thêm đăng ký chính thức',
+                to: '/pages/dang-ky-chinh-thuc/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
                 title: 'Danh sách đăng ký ban đầu',
                 to: '/pages/danh-sach-dang-ky-tiem-moi',
                 id: 'search',
@@ -636,6 +654,12 @@
                 icon: 'mdi-shield-plus-outline',
                 title: 'Thêm đăng ký mới',
                 to: '/pages/dang-ky-tiem-moi/0',
+                id: 'search',
+              },
+              {
+                icon: 'mdi-shield-plus-outline',
+                title: 'Thêm đăng ký chính thức',
+                to: '/pages/dang-ky-chinh-thuc/0',
                 id: 'search',
               },
               {

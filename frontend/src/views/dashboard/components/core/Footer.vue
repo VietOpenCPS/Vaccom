@@ -52,7 +52,7 @@
       let vm = this
       try {
         let currentQuery = vm.$router.history.current
-        if ((currentQuery.name === 'MauGiayDiDuong' || currentQuery.name === 'PhieuHenTiem') && (vm.breakpointName === 'xs' || vm.breakpointName === 'sm')) {
+        if ((currentQuery.name === 'MauGiayDiDuong' || currentQuery.name === 'PhieuHenTiem' || currentQuery.name === 'DangKyTiemMoi') && (vm.breakpointName === 'xs' || vm.breakpointName === 'sm')) {
           vm.isTempDiDuong = true
         } else {
           vm.isTempDiDuong = false

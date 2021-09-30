@@ -26,7 +26,7 @@
     >
       <v-list-item class="px-0">
         <v-img
-          src="/images/logo.png"
+          src="/images/logo_banner.png"
         />
       </v-list-item>
     </v-list>

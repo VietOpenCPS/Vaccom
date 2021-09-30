@@ -1205,6 +1205,9 @@ export default new Vuex.Store({
             phuongxaten: filter.hasOwnProperty('phuongxaten') ? filter.phuongxaten : ''
           }
         }
+        if (filter.hasOwnProperty('isDatTieuChuan')) {
+          param.params['isDatTieuChuan'] = filter.isDatTieuChuan
+        }
         if (filter.hasOwnProperty('page')) {
           param.params['page'] = filter.page
           param.params['size'] = filter.size

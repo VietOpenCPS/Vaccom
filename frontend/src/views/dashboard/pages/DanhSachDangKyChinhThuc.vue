@@ -93,16 +93,15 @@
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
-            <!-- <template v-slot:item.muiTiemChung="{ item, index }">
-              <div style="width: 250px;height: 100%;">
-                <v-layout wrap style="height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
+            <template v-slot:item.muiTiemChung="{ item, index }">
+              <div style="width: 250px;height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
+                <v-layout wrap style="height: 100%;" >
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
                     v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1"
                   >
                     <p class="py-2 mb-0" style="text-align: left;">
-                      <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
-                      <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
-                      <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
+                      <span>Ngày tiêm: <span style="font-weight: bold">{{item.muiTiemChung[index2]['ngayTiemChung']}}</span></span><br>
+                      <span>Loại thuốc: <span style="font-weight: bold">{{item.muiTiemChung[index2]['loaiThuocTiem']}}</span></span><br>
                     </p>
                   </v-flex>
                   <v-flex class="xs12 md6" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
@@ -111,16 +110,17 @@
                     <p class="py-2 mb-0 pl-2" style="text-align: left;">
                       <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
                       <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
-                      <span>Địa điểm: {{item.muiTiemChung[index2]['diaDiemTiemChung']}}</span>
                     </p>
                   </v-flex>
                 </v-layout>
-                <v-layout wrap style="height: 100%;" v-else>
+              </div>
+              <div style="width: 250px;height: 100%;" v-else>
+                <v-layout wrap style="height: 100%;">
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;"></v-flex>
                   <v-flex class="xs12 md6"></v-flex>
                 </v-layout>
               </div>
-            </template> -->
+            </template>
             <template v-if="!addLichTiem" v-slot:item.action="{ item }">
               <div style="width: 150px">
                 <!-- <v-tooltip top>
@@ -319,10 +319,10 @@
                   <span style="font-weight: bold">MŨI TIÊM {{item['lanTiem']}}</span>
                 </div>
                 <p class="mb-2">Tên vắc xin: {{item['loaiThuocTiem']}}</p>
-                <p class="mb-2">Nơi sản xuất: {{item['noiSanXuat']}}</p>
-                <p class="mb-2">Lô vắc xin: {{item['soLoThuoc']}}</p>
+                <!-- <p class="mb-2">Nơi sản xuất: {{item['noiSanXuat']}}</p> -->
+                <!-- <p class="mb-2">Lô vắc xin: {{item['soLoThuoc']}}</p> -->
                 <p class="mb-2">Ngày tiêm: {{item['ngayTiemChung']}}</p>
-                <p class="mb-2">Địa điểm tiêm: {{item['diaDiemTiemChung']}}</p>
+                <!-- <p class="mb-2">Địa điểm tiêm: {{item['diaDiemTiemChung']}}</p> -->
               </v-card>
             </v-layout>
             <p v-else>Chưa có lịch sử tiêm chủng</p>
@@ -641,13 +641,13 @@
             align: 'left',
             value: 'diaChiNoiO'
           },
-          // {
-          //   sortable: false,
-          //   text: 'Thông tin mũi tiêm',
-          //   align: 'center',
-          //   value: 'muiTiemChung',
-          //   class: 'px-0'
-          // },
+          {
+            sortable: false,
+            text: 'Thông tin mũi tiêm',
+            align: 'center',
+            value: 'muiTiemChung',
+            class: 'px-0'
+          },
           {
             sortable: false,
             text: 'Thao tác',
@@ -706,12 +706,12 @@
               align: 'left',
               value: 'cmtcccd'
             },
-            {
-              sortable: false,
-              text: 'Mã nhóm đối tượng',
-              align: 'left',
-              value: 'nhomDoiTuong'
-            },
+            // {
+            //   sortable: false,
+            //   text: 'Mã nhóm đối tượng',
+            //   align: 'left',
+            //   value: 'nhomDoiTuong'
+            // },
             {
               sortable: false,
               text: 'Số điện thoại',
@@ -723,8 +723,16 @@
               text: 'Địa chỉ',
               align: 'left',
               value: 'diaChiNoiO'
+            },
+            {
+              sortable: false,
+              text: 'Thông tin mũi tiêm',
+              align: 'center',
+              value: 'muiTiemChung',
+              class: 'px-0'
             }
           ]
+          vm.getDanhSachDangKyChinhThuc(0)
         }
       }
     },
@@ -793,6 +801,9 @@
           quanhuyenten: '',
           phuongxaten: '',
           typeSearch: 'danhsachdangkychinhthuc'
+        }
+        if (vm.addLichTiem) {
+          filter['isDatTieuChuan'] = 1
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false

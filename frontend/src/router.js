@@ -30,6 +30,12 @@ export default new Router({
           props: true,
         },
         {
+          path: '/pages/dang-ky-chinh-thuc/:uid',
+          name: 'DangKyTiemChinhThuc',
+          component: () => import('@/views/dashboard/pages/DangKyTiemMoi'),
+          props: true,
+        },
+        {
           path: '/pages/danh-sach-dang-ky-chinh-thuc',
           name: 'DanhSachDangKyChinhThuc',
           component: () => import('@/views/dashboard/pages/DanhSachDangKyChinhThuc'),

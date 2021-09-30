@@ -354,7 +354,7 @@
             dark
             color="#0072bc"
           >
-            <v-toolbar-title>Thêm người tiêm</v-toolbar-title>
+            <v-toolbar-title>Thêm danh sách gọi tiêm</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn
@@ -380,7 +380,7 @@
               <v-icon left>
                 mdi-content-save
               </v-icon>
-              <span>Thêm người tiêm</span>
+              <span>Thêm vào danh sách gọi tiêm</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -870,29 +870,33 @@
         })
         if (arrIds && arrIds.length) {
           console.log('nguoiTiem', arrIds)
-          let filter = {
-            "NguoiTiemChungIDs": arrIds,
-            "LichTiemChungID" : vm.lichTiemSelected['id'],
-            // "LanTiem" : vm.lanTiem
+          let textConfirm = 'Tổng số ' + arrIds.length + ' người đăng ký được gọi tiêm'
+          let x = confirm(textConfirm)
+          if (x) {
+            let filter = {
+              "NguoiTiemChungIDs": arrIds,
+              "LichTiemChungID" : vm.lichTiemSelected['id'],
+              // "LanTiem" : vm.lanTiem
+            }
+            vm.loading = true
+            vm.$store.dispatch('addNguoiTiemVaoLich', filter).then(function () {
+              vm.loading = false
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm người tiêm thành công',
+                color: 'success',
+              })
+              vm.dialogChonLanTiem = false
+              vm.dialogAddNguoiTiem = false
+              // vm.getLichTiem(0)
+            }).catch(function () {
+              vm.$store.commit('SHOW_SNACKBAR', {
+                show: true,
+                text: 'Thêm người tiêm thất bại',
+                color: 'error',
+              })
+            })
           }
-          vm.loading = true
-          vm.$store.dispatch('addNguoiTiemVaoLich', filter).then(function () {
-            vm.loading = false
-            vm.$store.commit('SHOW_SNACKBAR', {
-              show: true,
-              text: 'Thêm người tiêm thành công',
-              color: 'success',
-            })
-            vm.dialogChonLanTiem = false
-            vm.dialogAddNguoiTiem = false
-            // vm.getLichTiem(0)
-          }).catch(function () {
-            vm.$store.commit('SHOW_SNACKBAR', {
-              show: true,
-              text: 'Thêm người tiêm thất bại',
-              color: 'error',
-            })
-          })
         } else {
           vm.$store.commit('SHOW_SNACKBAR', {
             show: true,

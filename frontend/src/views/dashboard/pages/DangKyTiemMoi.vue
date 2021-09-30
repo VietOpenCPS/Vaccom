@@ -4,7 +4,7 @@
     fluid
     tag="section"
     class="mt-3"
-    :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'padding-top: 75px' : ''"
+    :style="breakpointName === 'xs' || breakpointName === 'sm' ? 'padding-top: 5px' : ''"
   >
     <v-row justify="center">
       <v-col
@@ -13,10 +13,10 @@
         <base-material-card
           style="margin-top: 20px"
           icon="mdi-clipboard-text"
-          :title="String(uid) === '0' ? 'ĐĂNG KÝ TIÊM MỚI' : 'CẬP NHẬT THÔNG TIN NGƯỜI ĐĂNG KÝ'"
+          :title="String(uid) === '0' ? (formDangKyChinhThuc ? 'ĐĂNG KÝ TIÊM CHÍNH THỨC' : 'ĐĂNG KÝ TIÊM MỚI') : 'CẬP NHẬT THÔNG TIN NGƯỜI ĐĂNG KÝ'"
           class="px-5 py-3"
         >
-          <v-btn id="xemdanhsach" class="mx-0" dark color="#0072bc" @click.stop="showDanhSach" style="position: absolute; right: 20px; top: 15px;">
+          <v-btn v-if="breakpointName !== 'xs' && breakpointName !== 'sm'" id="xemdanhsach" class="mx-0" dark color="#0072bc" @click.stop="showDanhSach" style="position: absolute; right: 20px; top: 15px;">
             <v-icon dark class="mr-2">
               mdi-format-list-bulleted
             </v-icon>
@@ -132,8 +132,20 @@
                   md="3"
                   class="pb-0"
                 >
-                  <div class="mb-2">Số CMND/CCCD <span style="color:red">(*)</span></div>
+                  <div class="mb-2">Số CMND/CCCD <span v-if="!formDangKyChinhThuc" style="color:red">(*)</span></div>
                   <v-text-field
+                    v-if="formDangKyChinhThuc"
+                    v-model="applicantInfo['CMTCCCD']"
+                    :rules="!giayToLoaiKhac && applicantInfo['CMTCCCD'] ? requiredCredit : []"
+                    outlined
+                    placeholder="Số CMND/CCCD"
+                    dense
+                    id="cccd"
+                    hide-details="auto"
+                    @keyup.enter="nextFocus('bhyt')"
+                  ></v-text-field>
+                  <v-text-field
+                    v-else
                     v-model="applicantInfo['CMTCCCD']"
                     :rules="!giayToLoaiKhac ? requiredCredit : required"
                     required
@@ -346,11 +358,55 @@
                       dense
                       hide-details="auto"
                       id="cosoyte"
-                      @keyup.enter="nextFocus('nhomdoituong')"
+                      @keyup.enter="formDangKyChinhThuc ? nextFocus('thuoctiem') : nextFocus('nhomdoituong')"
                       clearable
                   ></v-autocomplete>
                 </v-col>
                 
+              </v-row>
+              <!-- Thông tin mũi tiêm cho đăng ký chính thức -->
+              <v-row v-if="formDangKyChinhThuc">
+                <v-col
+                  cols="12"
+                  class="pb-0"
+                >
+                  <div class="mb-0" style="font-weight: bold">THÔNG TIN TIÊM MŨI 1 <span style="color:red">(*)</span></div>
+                </v-col>
+                <v-col
+                  cols="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Loại vaccine tiêm <span style="color:red">(*)</span></div>
+                  <v-text-field
+                    v-model="applicantInfo['LoaiThuocTiem']"
+                    :rules="required"
+                    required
+                    outlined
+                    placeholder="Loại vaccine tiêm"
+                    dense
+                    id="thuoctiem"
+                    hide-details="auto"
+                    @keyup.enter="nextFocus('ngaytiemmui1')"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="6"
+                  class="pb-0"
+                >
+                  <div class="mb-2">Ngày tiêm mũi 1 <span style="color:red">(*)</span></div>
+                  <v-text-field
+                    v-model="ngayTiemMui1Formatted"
+                    placeholder="dd/mm/yyyy, ddmmyyyy"
+                    @blur="formatNgayTiemMui1"
+                    :rules="required"
+                    required
+                    outlined
+                    dense
+                    id="ngaytiemmui1"
+                    hide-details="auto"
+                    @keyup.enter="nextFocus('nhomdoituong')"
+                  ></v-text-field>
+                </v-col>
               </v-row>
               <!-- row 4 -->
               <v-row>
@@ -622,6 +678,7 @@
     props: ['uid'],
     data () {
       return {
+        formDangKyChinhThuc: false,
         loading: false,
         validFormAdd: true,
         giayToLoaiKhac: false,
@@ -658,7 +715,10 @@
           CacThuocDangDung: '',
           GhiChu: '',
           NgayDangKi: '',
-          TinhTrangDangKi: 0
+          TinhTrangDangKi: 0,
+          LanTiem: 1, 
+          LoaiThuocTiem: '', 
+          NgayTiemChung: ''
         },
         listGioiTinh: [{name: 'Nam', value: 0},{name: 'Nữ', value: 1},{name: 'Không xác định', value: 2}],
         listDoiTuong: [],
@@ -681,6 +741,7 @@
         birthDate: null,
         ngayDuKienFormatted: null,
         ngayDuKien: null,
+        ngayTiemMui1Formatted: '',
         dataHistory: '',
 
         required: [
@@ -753,7 +814,10 @@
     watch: {
       '$route': function (newRoute, oldRoute) {
         let vm = this
-        let currentQuery = newRoute.query
+        let currentQuery = newRoute
+        if (currentQuery.name === 'DangKyTiemChinhThuc') {
+          vm.formDangKyChinhThuc = true
+        }
         vm.getCoSoYTe()
         vm.getDiaBanCoSo()
         vm.getQuocGia()
@@ -802,6 +866,10 @@
     },
     created () {
       let vm = this
+      let currentQuery = vm.$router.history.current
+      if (currentQuery.name === 'DangKyTiemChinhThuc') {
+        vm.formDangKyChinhThuc = true
+      }
       vm.$store.commit('SET_INDEXTAB', 1)
       let isSigned = this.$store.getters.getIsSigned
       if (!isSigned) {
@@ -885,6 +953,9 @@
             }
             if (vm.typeAction === 'add') {
               vm.$store.dispatch('createRegistration', filter).then(function (result) {
+                if (vm.formDangKyChinhThuc) {
+                  vm.translateStatus(result)
+                }
                 vm.$store.commit('SHOW_SNACKBAR', {
                   show: true,
                   text: 'Đăng ký thành công',
@@ -986,6 +1057,9 @@
         vm.applicantInfo['CacThuocDangDung'] = vm.dataHistory['CacThuocDangDung']
         vm.ngayDuKienFormatted = vm.dataHistory['NgayDangKi']
         vm.applicantInfo['GhiChu'] = vm.dataHistory['GhiChu']
+        if (vm.formDangKyChinhThuc) {
+          vm.ngayTiemMui1Formatted = vm.dataHistory['NgayTiemChung']
+        }
       },
       huyDangKy () {
         let vm = this
@@ -1023,6 +1097,9 @@
         vm.applicantInfo.SoTheBHYT = vm.registrationUpdate.soTheBHYT
         vm.applicantInfo.TienSuDiUng = vm.registrationUpdate.tienSuDiUng
         vm.applicantInfo.TinhTrangDangKi = vm.registrationUpdate.tinhTrangDangKi
+        if (vm.formDangKyChinhThuc) {
+          vm.ngayTiemMui1Formatted = vm.registrationUpdate.NgayTiemChung
+        }
       },
       formatDataInput () {
         let vm = this
@@ -1066,6 +1143,9 @@
           // } else if (lengthDate && lengthDate > 4 && splitDate.length === 3) {
           //   vm.applicantInfo.NgaySinh = splitDate[2] + splitDate[1] + splitDate[0]
           // }
+          if (vm.formDangKyChinhThuc) {
+            vm.applicantInfo.NgayTiemChung = vm.ngayTiemMui1Formatted
+          }
           console.log('applicantInfo', vm.applicantInfo)
         } catch (error) {
           vm.processingAction = false
@@ -1232,9 +1312,25 @@
           vm.listXaPhuong = result ? result : []
         })
       },
+      translateStatus (item) {
+        let vm = this
+        let filter = {
+          data: {
+            ids: String(item.id),
+            TinhTrangDangKi: 1
+          }
+        }
+        vm.$store.dispatch('updateRegistrationStatus', filter).then(function (result) {
+        }).catch(function () {
+        })
+      },
       showDanhSach () {
         let vm = this
-        vm.$router.push({ path: '/pages/danh-sach-dang-ky-tiem-moi' })
+        if (vm.formDangKyChinhThuc) {
+          vm.$router.push({ path: '/pages/danh-sach-dang-ky-chinh-thuc' })
+        } else {
+          vm.$router.push({ path: '/pages/danh-sach-dang-ky-tiem-moi' })
+        }
       },
       nextFocus(id) {
         $("#"+id).focus()
@@ -1306,6 +1402,19 @@
           vm.ngayDuKienFormatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
         } else {
           vm.ngayDuKienFormatted = ''
+        }
+      },
+      formatNgayTiemMui1 () {
+        let vm = this
+        let lengthDate = String(vm.ngayTiemMui1Formatted).trim().length
+        let splitDate = String(vm.ngayTiemMui1Formatted).split('/')
+        if (lengthDate && lengthDate > 4 && splitDate.length === 3 && splitDate[2]) {
+          vm.ngayTiemMui1Formatted = vm.translateDate(vm.ngayTiemMui1Formatted)
+        } else if (lengthDate && lengthDate === 8) {
+          let date = String(vm.ngayTiemMui1Formatted)
+          vm.ngayTiemMui1Formatted = date.slice(0,2) + '/' + date.slice(2,4) + '/' + date.slice(4,8)
+        } else {
+          vm.ngayTiemMui1Formatted = ''
         }
       },
       translateDate (date) {

@@ -145,11 +145,17 @@
               </v-icon>
               Xuất danh sách
             </v-btn> -->
-            <v-btn v-if="trangThaiFilter == 0" color="#0072bc" small class="mr-0" @click.stop="guiThongBao" :loading="processingAction" :disabled="processingAction">
+            <v-btn v-if="trangThaiFilter == 0" color="#0072bc" small class="mr-0" @click.stop="guiThongBaoTatCa" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
-              Gửi thông báo hẹn tiêm
+              Gửi thông báo tất cả
+            </v-btn>
+            <v-btn v-if="trangThaiFilter == 0" color="orange" small class="mr-0 ml-3" @click.stop="guiThongBao" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-account-check-outline
+              </v-icon>
+              Gửi thông báo theo lựa chọn
             </v-btn>
           </div>
           <v-data-table
@@ -166,6 +172,9 @@
           >
             <template v-slot:item.index="{ item, index }">
               <span>{{ (page + 1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
+            </template>
+            <template v-slot:item.diaChiNoiO="{ item, index }">
+                <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
             <template v-slot:item.tinhTrangXacNhan="{ item }">
                 <span :class="getColorTrangThai(item.tinhTrangXacNhan)"> {{ getTextTrangThai(item.tinhTrangXacNhan) }}</span>
@@ -200,7 +209,7 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện check-in lịch hẹn</span>
+                  <span>Xác nhận đã đến tiêm</span>
                 </v-tooltip>
                 <v-tooltip v-if="item.tinhTrangXacNhan === 1" top>
                   <template v-slot:activator="{ on, attrs }">
@@ -210,9 +219,9 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện xác nhận không đến</span>
+                  <span>Xác nhận không đến tiêm</span>
                 </v-tooltip>
-                <v-tooltip v-if="item.tinhTrangXacNhan === 2" top>
+                <!-- <v-tooltip v-if="item.tinhTrangXacNhan === 2" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="amber" icon text class="mx-2" v-bind="attrs" v-on="on">
                       <v-icon>
@@ -221,7 +230,7 @@
                     </v-btn>
                   </template>
                   <span>In phiếu xác nhận hẹn gọi</span>
-                </v-tooltip>
+                </v-tooltip> -->
                 <v-tooltip v-if="item.tinhTrangXacNhan === 3" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="xacNhanTinhTrangPhieuHen(item.idPhieu, 5, 'only')" color="red" text icon class="mx-2" v-bind="attrs" v-on="on">
@@ -234,13 +243,13 @@
                 </v-tooltip>
                 <v-tooltip v-if="item.tinhTrangXacNhan === 3" top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="addMuiTiemChung(item)" color="indigo" text icon class="mx-2" v-bind="attrs" v-on="on">
+                    <v-btn @click="xacNhanTinhTrangPhieuHen(item.idPhieu, 4, 'only')" color="indigo" text icon class="mx-2" v-bind="attrs" v-on="on">
                       <v-icon>
                         mdi-file-check
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện nhập kết quả tiêm</span>
+                  <span>Xác nhận đã tiêm xong</span>
                 </v-tooltip>
 
               </div>
@@ -449,7 +458,7 @@
         danhSachTinhTrangXacNhan: [
           {name: 'Chờ gửi thông báo', value: 0},
           {name: 'Chờ xác nhận', value: 1},
-          {name: 'Đã xác nhận', value: 2},
+          {name: 'Đã gửi thông báo', value: 2},
           {name: 'Đã check-in', value: 3},
           {name: 'Đã tiêm xong', value: 4},
           {name: 'Chưa được tiêm', value: 5},
@@ -496,6 +505,12 @@
             text: 'Người tiêm chủng',
             align: 'center',
             value: 'hoVaTen'
+          },
+          {
+            sortable: false,
+            text: 'Địa chỉ',
+            align: 'center',
+            value: 'diaChiNoiO'
           },
           {
             sortable: false,
@@ -632,7 +647,10 @@
               quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
               phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
               listtinhtrangxacnhan: [vm.trangThaiFilter],
-              tinhtrangdangki: vm.trangThaiFilter == 4 ? 3 : 4
+              tinhtrangdangki: vm.trangThaiFilter == 4 ? 3 : 4,
+              soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
+              loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
+              diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
           }
           vm.loading = true
           axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
@@ -659,26 +677,83 @@
       guiThongBao () {
         let vm = this
         if (vm.lichTiemChungFilter) {
+          let arrIds = vm.selected.map(function(item) {
+            return item['idPhieu']
+          })
+          if (arrIds && arrIds.length) {
+            console.log('nguoiTiem', arrIds)
+            let param = {
+              headers: {
+              },
+              params: {
+              }
+            }
+            let dataPost = {
+              LichTiemChungID: vm.lichTiemChungFilter,
+              PhieuHenTiems: arrIds
+            }
+            if (Vue.$cookies.get('Token')) {
+              param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+            }
+            let textConfirm = 'Bạn có chắc chắn muốn gửi thông báo hẹn tiêm?'
+            let x = confirm(textConfirm)
+            if (x) {
+              vm.processingAction = true
+              axios.post('/rest/v1/app/update/phieuhentiem/guiThongBao/1', dataPost, param).then(function (response) {
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Đã gửi thông báo thành công',
+                  color: 'success',
+                })
+                vm.processingAction = false
+                vm.getDanhSachPhieuHenTiem(0)
+              }).catch(function (error) {
+                vm.processingAction = false
+                vm.$store.commit('SHOW_SNACKBAR', {
+                  show: true,
+                  text: 'Gửi thông báo thất bại',
+                  color: 'error',
+                })
+              })
+            }
+          } else {
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Vui lòng chọn người tiêm',
+              color: 'success',
+            })
+            return
+          }
+        }
+        
+      },
+      guiThongBaoTatCa () {
+        let vm = this
+        if (vm.lichTiemChungFilter) {
           let param = {
             headers: {
             },
             params: {
             }
           }
+          let dataPost = {
+            LichTiemChungID: vm.lichTiemChungFilter
+          }
           if (Vue.$cookies.get('Token')) {
             param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
           }
-          let textConfirm = 'Bạn có chắc chắn muốn gửi thông báo hẹn tiêm?'
+          let textConfirm = 'Bạn có chắc chắn muốn gửi thông báo cho tất cả?'
           let x = confirm(textConfirm)
           if (x) {
             vm.processingAction = true
-            axios.get('/rest/v1/app/update/phieuhentiem/guiThongBao/' + vm.lichTiemChungFilter, param).then(function (response) {
+            axios.post('/rest/v1/app/update/phieuhentiem/guiThongBao/0', dataPost, param).then(function (response) {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
                 text: 'Đã gửi thông báo thành công',
                 color: 'success',
               })
-              vm.processingAction = false   
+              vm.processingAction = false
+              vm.getDanhSachPhieuHenTiem(0)
             }).catch(function (error) {
               vm.processingAction = false
               vm.$store.commit('SHOW_SNACKBAR', {
@@ -689,7 +764,6 @@
             })
           }
         }
-        
       },
       getLichTiem () {
         let vm = this
@@ -938,7 +1012,7 @@
               case 1:
                   return 'Chờ xác nhận';
               case 2:
-                  return 'Đã xác nhận'
+                  return 'Đã gửi thông báo'
               case 3:
                   return 'Đã check-in'
               case 4:
