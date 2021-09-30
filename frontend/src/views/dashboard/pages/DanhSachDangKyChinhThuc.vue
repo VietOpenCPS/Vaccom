@@ -19,7 +19,7 @@
           Lọc danh sách
         </v-btn>
         <v-card-text v-if="showAdvanceSearch">
-          <tim-kiem ref="timkiem" v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
+          <tim-kiem ref="timkiem" :loaiVaccine="loaiVaccine" :addLichTiem="addLichTiem" :addGoiTiem="true" v-on:trigger-search="searchDangKyTiem" v-on:trigger-cancel="cancelSearchDangKyTiem"></tim-kiem>
         </v-card-text>
         <v-card-text :class="breakpointName !== 'lg' ? 'px-0' : 'pt-0'">
           <div :class="breakpointName === 'xs' ? 'mb-3' : 'd-flex my-3'">
@@ -43,7 +43,7 @@
             </v-btn>  
           </div>
           <v-flex xs12 style="text-align: right;">
-            <v-checkbox
+            <!-- <v-checkbox
               color="#0072bc"
               class="mt-0 checkboxCmt d-inline-block"
               v-model="dangkythieuthongtin"
@@ -51,7 +51,7 @@
               <template v-slot:label>
                 <span style="font-weight: 500;color: #0072bc">LỌC ĐĂNG KÝ THIẾU THÔNG TIN</span>
               </template>
-            </v-checkbox>
+            </v-checkbox> -->
           </v-flex>
           <v-data-table
             v-model="selected"
@@ -94,20 +94,20 @@
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
             <template v-slot:item.muiTiemChung="{ item, index }">
-              <div style="width: 250px;height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
+              <div style="width: 100%;height: 100%;" v-if="item.muiTiemChung && item.muiTiemChung.length">
                 <v-layout wrap style="height: 100%;" >
                   <v-flex class="xs12 md6" style="border-right: 1px solid #dedede;" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
-                    v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1"
+                    
                   >
-                    <p class="py-2 mb-0" style="text-align: left;">
+                    <p v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 1" class="py-2 mb-0" style="text-align: left;">
                       <span>Ngày tiêm: <span style="font-weight: bold">{{item.muiTiemChung[index2]['ngayTiemChung']}}</span></span><br>
                       <span>Loại thuốc: <span style="font-weight: bold">{{item.muiTiemChung[index2]['loaiThuocTiem']}}</span></span><br>
                     </p>
                   </v-flex>
                   <v-flex class="xs12 md6" v-for="(item2, index2) in item.muiTiemChung" :key="index2"
-                    v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 2"
+                    
                   >
-                    <p class="py-2 mb-0 pl-2" style="text-align: left;">
+                    <p v-if="item.muiTiemChung && item.muiTiemChung[index2]['lanTiem'] == 2" class="py-2 mb-0 pl-2" style="text-align: left;">
                       <span>Ngày tiêm: {{item.muiTiemChung[index2]['ngayTiemChung']}}</span><br>
                       <span>Loại thuốc: {{item.muiTiemChung[index2]['loaiThuocTiem']}}</span><br>
                     </p>
@@ -544,7 +544,7 @@
   import Pagination from './Pagination'
   export default {
     name: 'Customers',
-    props: ['addLichTiem'],
+    props: ['addLichTiem', 'loaiVaccine'],
     components: {
     'tim-kiem': Search,
     'pagination': Pagination
@@ -573,6 +573,7 @@
         itemsPerPage: 50,
         items: [],
         dangkythieuthongtin: false,
+        dangkydattieuchuan: true,
         searchAll: true,
         detaiInfo: '',
         advanceSearchData: {
@@ -684,6 +685,9 @@
           }
         }
       },
+      dangkydattieuchuan (val) {
+        this.getDanhSachDangKyChinhThuc(0)
+      },
       addLichTiem (val) {
         if (val) {
           let vm = this
@@ -737,6 +741,15 @@
       }
     },
     methods: {
+      initGetDanhSach () {
+        let vm = this
+        vm.searchAll = true
+        vm.dangkythieuthongtin = false
+        vm.page = 0
+        vm.totalItem = 0
+        vm.pageCount = 0
+        vm.getDanhSachDangKyChinhThuc(0, vm.dataInputSearch)
+      },
       searchDangKyTiem (data) {
         let vm = this
         vm.searchAll = true
@@ -800,10 +813,12 @@
           tinhthanhten: '',
           quanhuyenten: '',
           phuongxaten: '',
+          diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
+          loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
           typeSearch: 'danhsachdangkychinhthuc'
         }
         if (vm.addLichTiem) {
-          filter['isDatTieuChuan'] = 1
+          filter['isDatTieuChuan'] = dataSearch && dataSearch['isDatTieuChuan'] ? 1 : 0
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false

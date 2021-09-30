@@ -118,7 +118,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="!typeGoiTiem"
+            v-if="!typeGoiTiem && !addGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -137,7 +137,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="!typeGoiTiem"
+            v-if="!typeGoiTiem && !addGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -156,7 +156,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="typeGoiTiem"
+            v-if="typeGoiTiem || addGoiTiem"
           >
             <v-text-field
               label="Địa chỉ nơi ở"
@@ -192,7 +192,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="typeGoiTiem"
+            v-if="typeGoiTiem || addGoiTiem"
           >
             <v-text-field
               label="Loại vaccine tiêm"
@@ -208,7 +208,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="!typeGoiTiem"
+            v-if="!typeGoiTiem && !addGoiTiem"
           >
             <v-text-field
               label="Ngày đăng ký tiêm"
@@ -224,7 +224,7 @@
             cols="12"
             md="4"
             class="pb-0"
-            v-if="!typeGoiTiem"
+            v-if="!typeGoiTiem && !addGoiTiem"
           >
             <v-autocomplete
               hide-no-data
@@ -239,6 +239,23 @@
               clearable
           ></v-autocomplete>
           </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            class="pb-0"
+            v-if="addLichTiem"
+          >
+            <v-checkbox
+              color="#0072bc"
+              class="mt-0 checkboxCmt d-inline-block"
+              v-model="dataSearch['isDatTieuChuan']"
+            >
+              <template v-slot:label>
+                <span style="font-weight: 500;color: #0072bc">ĐĂNG KÝ ĐẠT TIÊU CHUẨN</span>
+              </template>
+            </v-checkbox>
+          </v-col>
+          
         </v-row>
         <v-row v-if="form === 'giaydiduong'">
           <v-col
@@ -348,7 +365,7 @@
 <script>
   export default {
     name: 'Search',
-    props: ['form','diabanid','typegiaydiduong','typeGoiTiem'],
+    props: ['form','diabanid','typegiaydiduong','typeGoiTiem', 'addGoiTiem', 'loaiVaccine', 'addLichTiem'],
     data () {
       return {
         listUyBanNhanDan: [],
@@ -382,7 +399,8 @@
           statusGuiTinNhan: -1,
           soMuiTiem: '',
           loaiThuocTiem: '',
-          diachinoio: ''
+          diachinoio: '',
+          isDatTieuChuan: false
         },
         listSoMuiTiem: [
           {name: '1', value: 1},
@@ -403,8 +421,15 @@
       vm.getNhomDoiTuong()
       vm.getUyBanNhanDan()
       vm.getTinhThanh()
+      try {
+        vm.dataSearch.loaiThuocTiem = vm.loaiVaccine
+      } catch (error) {
+      }
     },
     watch: {
+      loaiVaccine (val) {
+        this.dataSearch.loaiThuocTiem = val
+      },
       coSoYTe (val) {
         this.dataSearch.CoSoYTe_Ma = val
         this.getDiaBanCoSo(val)

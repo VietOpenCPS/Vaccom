@@ -1193,7 +1193,7 @@ export default new Vuex.Store({
             nhomdoituong: filter.hasOwnProperty('nhomdoituong') ? filter.nhomdoituong : -1,
             ngaydangki: filter.hasOwnProperty('ngaydangki') ? filter.ngaydangki : -1,
             hovaten: filter.hasOwnProperty('hovaten') ? filter.hovaten : -1,
-            diabancosoid: filter.hasOwnProperty('diabancosoid') ? filter.diabancosoid : -1,
+            // diabancosoid: filter.hasOwnProperty('diabancosoid') ? filter.diabancosoid : -1,
             cosoytema: filter.hasOwnProperty('cosoytema') ? filter.cosoytema : -1,
             tinhtrangdangky: filter.hasOwnProperty('tinhtrangdangky') ? filter.tinhtrangdangky : '',
             kiemtratrung: filter.hasOwnProperty('kiemtratrung') ? filter.kiemtratrung : '',
@@ -1202,7 +1202,9 @@ export default new Vuex.Store({
             phuongxama: filter.hasOwnProperty('phuongxama') ? filter.phuongxama : '',
             tinhthanhten: filter.hasOwnProperty('tinhthanhten') ? filter.tinhthanhten : '',
             quanhuyenten: filter.hasOwnProperty('quanhuyenten') ? filter.quanhuyenten : '',
-            phuongxaten: filter.hasOwnProperty('phuongxaten') ? filter.phuongxaten : ''
+            phuongxaten: filter.hasOwnProperty('phuongxaten') ? filter.phuongxaten : '',
+            diachinoio: filter.hasOwnProperty('diachinoio') ? filter.diachinoio : '',
+            loaiThuocTiem: filter.hasOwnProperty('loaiThuocTiem') ? filter.loaiThuocTiem : ''
           }
         }
         if (filter.hasOwnProperty('isDatTieuChuan')) {

@@ -367,7 +367,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text class="mt-2 py-0" style="max-height: calc(100vh - 130px) !important;overflow: auto;">
-            <dang-ky-chinh-thuc ref="dangkychinhthuc" :addLichTiem="lichTiem"></dang-ky-chinh-thuc>
+            <dang-ky-chinh-thuc :loaiVaccine="lichTiemSelected['loaiThuocTiem']" ref="dangkychinhthuc" :addLichTiem="lichTiem"></dang-ky-chinh-thuc>
           </v-card-text>
           <v-card-actions class="justify-end" style="max-width: 1366px!important;margin: 0 auto;">
             <v-btn small color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="cancelAddNguoiTiem">
@@ -876,6 +876,7 @@
             let filter = {
               "NguoiTiemChungIDs": arrIds,
               "LichTiemChungID" : vm.lichTiemSelected['id'],
+              "loaiThuocTiem": vm.lichTiemSelected['loaiThuocTiem'],
               // "LanTiem" : vm.lanTiem
             }
             vm.loading = true
@@ -886,9 +887,10 @@
                 text: 'Thêm người tiêm thành công',
                 color: 'success',
               })
-              vm.dialogChonLanTiem = false
-              vm.dialogAddNguoiTiem = false
+              // vm.dialogChonLanTiem = false
+              // vm.dialogAddNguoiTiem = false
               // vm.getLichTiem(0)
+              vm.$refs.dangkychinhthuc.initGetDanhSach()
             }).catch(function () {
               vm.$store.commit('SHOW_SNACKBAR', {
                 show: true,
