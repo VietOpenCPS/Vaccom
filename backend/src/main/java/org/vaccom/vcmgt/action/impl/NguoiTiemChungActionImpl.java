@@ -140,7 +140,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 
 		//Add cong dan
-		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
+		CongDan oldCongDan = congDanService.findByHoVaTenAndSoDienThoai(nguoiTiemChungCreated.getHoVaTen(), nguoiTiemChungCreated.getSoDienThoai());
 		CongDan congDannew = null;
 
 		if(oldCongDan == null) {
