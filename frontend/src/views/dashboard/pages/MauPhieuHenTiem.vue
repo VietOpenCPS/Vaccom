@@ -16,15 +16,15 @@
               {{dataInfo.Donvicap}}
             </h4>
             <p style="font-weight: 600;text-align: center;text-transform: uppercase;" class="mb-3">Thông báo lịch hẹn gọi tiêm chủng</p>
-            <p class="mb-2">
+            <!-- <p class="mb-2">
               <span>Kính gửi ông/bà: </span>
               <span style="font-weight: 600;text-transform: uppercase;">{{dataInfo.HoVaTen}}</span>
-            </p>
+            </p> -->
             <!-- <p class="mb-2">
               <span>Ngày tháng năm sinh: </span>
               <span style="font-weight: 600">{{dataInfo.Donvicap}}</span>
             </p> -->
-            <p class="mb-2">
+            <!-- <p class="mb-2">
               <span>Số CCCD/CMTND: </span>
               <span style="font-weight: 600;">{{dataInfo.cmtcccd}}</span>
             </p>
@@ -32,32 +32,45 @@
               <span>Ông/bà được </span>
               <span style="font-weight: 600;">{{dataInfo.CoSoYTe}}</span>
               <span> gọi tiêm chủng theo lịch như sau:</span>
-            </p>
+            </p> -->
             <p class="mb-2">
-              <span>Ngày hẹn tiêm: </span>
+              <span>Ngày tiêm: </span>
               <span style="font-weight: 600;">{{dataInfo.ngayHenTiem}}</span>
             </p>
             <p class="mb-2">
-              <span>Giờ hẹn tiêm (dự kiến): </span>
+              <span>Giờ dự kiến: </span>
               <span style="font-weight: 600;">{{dataInfo.gioHenTiem}}</span>
+            </p>
+            <p class="mb-2" style="text-align: justify;">
+              <span>Đơn vị tiêm: </span>
+              <span style="font-weight: 600;">{{dataInfo.CoSoYTe}}</span>
             </p>
             <p class="mb-2" style="text-align: justify;">
               <span>Địa điểm: </span>
               <span style="font-weight: 600;">{{dataInfo.DiaDiem}}</span>
             </p>
             <p class="mb-2">
-              <span>Mũi tiêm: </span>
-              <span style="font-weight: 600;">{{dataInfo.lanTiem}}</span>
-            </p>
-            <p class="mb-2">
               <span>Loại Vaccine: </span>
               <span style="font-weight: 500;">{{dataInfo.LoaiThuocTiem}}</span>
             </p>
-            <p class="my-2">
-              <span style="text-align: justify;">Xin vui lòng đến đúng giờ và địa điểm tiêm, mang theo: </span><br>
-              <span class="mb-2 pl-3">-	CCCD/CMTND (bắt buộc);</span><br>
-              <span class="mb-2 pl-3">-	Thẻ BHYT;</span><br>
-              <!-- <span class="mb-2 pl-3">-	Giấy xác nhận tiêm mũi 1 (với người tiêm mũi 2);</span> -->
+            <p class="mb-2">
+              <span>Mũi tiêm: </span>
+              <span style="font-weight: 600;">{{dataInfo.lanTiem}}</span>
+            </p>
+            <p style="font-weight: 600;" class="mb-2">Lưu ý:</p>
+            <div class="mb-2" style="text-align: justify;">
+              <span class="mb-2">-	Đến đúng giờ. Có thể chụp lại màn hình điện thoại để xuất trình mã QR code tại bàn đón tiếp tại điểm tiêm;</span><br>
+              <span class="mb-2">-	Mang theo: CMTND/CCCD, Giấy xác nhận tiêm mũi 1(nếu tiêm mũi 2); Thẻ bảo hiểm y tế (nếu có);</span><br>
+              <span class="mb-2">-	Khai báo đầy đủ các biểu mẫu tại điểm tiêm; (Để giảm ùn tắc tại điểm tiêm: Có thể tải và in ra giấy, điền đầy đủ thông tin trước khi đến điểm tiêm theo đường dẫn sau đây);</span><br>
+              <p class="my-2">
+                <v-icon size="20" color="blue" class="mr-2">mdi-file-word-outline</v-icon> 
+                <a style="color: #2196F3" href="https://drive.google.com/drive/folders/18Elo7z9-h58OVYFkWc1I1ProeawKBSup" target="_blank">Tải biểu mẫu khai báo</a>
+              </p>
+              
+              <span class="mb-2">-	Tải/ cài đặt “ Sổ sức khỏe điện tử” cập nhật đầy đủ, chính xác thông tin cá nhân để giảm thiểu các thủ tục kiểm soát tại điểm tiêm;</span><br>
+            </div>
+            <p class="mb-2">
+              Trường hợp đã tiêm mũi 2 hoặc không đến được điểm tiêm: Vui lòng thông tin lại ngay lý do cho tổ trưởng tổ dân phố.
             </p>
           </div>
           <div v-if="isSigned" class="pl-2">

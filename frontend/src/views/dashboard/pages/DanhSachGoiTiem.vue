@@ -209,7 +209,7 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện check-in lịch hẹn</span>
+                  <span>Xác nhận đã đến tiêm</span>
                 </v-tooltip>
                 <v-tooltip v-if="item.tinhTrangXacNhan === 1" top>
                   <template v-slot:activator="{ on, attrs }">
@@ -219,9 +219,9 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện xác nhận không đến</span>
+                  <span>Xác nhận không đến tiêm</span>
                 </v-tooltip>
-                <v-tooltip v-if="item.tinhTrangXacNhan === 2" top>
+                <!-- <v-tooltip v-if="item.tinhTrangXacNhan === 2" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="amber" icon text class="mx-2" v-bind="attrs" v-on="on">
                       <v-icon>
@@ -230,7 +230,7 @@
                     </v-btn>
                   </template>
                   <span>In phiếu xác nhận hẹn gọi</span>
-                </v-tooltip>
+                </v-tooltip> -->
                 <v-tooltip v-if="item.tinhTrangXacNhan === 3" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="xacNhanTinhTrangPhieuHen(item.idPhieu, 5, 'only')" color="red" text icon class="mx-2" v-bind="attrs" v-on="on">
@@ -243,13 +243,13 @@
                 </v-tooltip>
                 <v-tooltip v-if="item.tinhTrangXacNhan === 3" top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click="addMuiTiemChung(item)" color="indigo" text icon class="mx-2" v-bind="attrs" v-on="on">
+                    <v-btn @click="xacNhanTinhTrangPhieuHen(item.idPhieu, 4, 'only')" color="indigo" text icon class="mx-2" v-bind="attrs" v-on="on">
                       <v-icon>
                         mdi-file-check
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>Thực hiện nhập kết quả tiêm</span>
+                  <span>Xác nhận đã tiêm xong</span>
                 </v-tooltip>
 
               </div>
