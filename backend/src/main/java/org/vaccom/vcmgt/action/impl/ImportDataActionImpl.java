@@ -314,10 +314,6 @@ public class ImportDataActionImpl implements ImportDataAction {
 					if(rowData[1] == null || rowData[1].isEmpty()) {
 						continue;
 					}
-					
-					if(rowData[8] == null || rowData[8].isEmpty()) {
-						continue;
-					}
 
 					NguoiTiemChungDto nguoiTiemChungDto = new NguoiTiemChungDto();
 					nguoiTiemChungDto.diabancosoid  = GetterUtil.getLong(rowData[0], 0);
