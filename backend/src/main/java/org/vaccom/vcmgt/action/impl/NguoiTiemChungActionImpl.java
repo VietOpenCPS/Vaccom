@@ -399,7 +399,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setCoSoYTeId(coSoYTe != null ? coSoYTe.getId() : 0);
 
 		NguoiTiemChung nguoiTiemChungNew = nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
-		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungNew.getSoDienThoai(), nguoiTiemChungNew.getCmtcccd());
+		CongDan oldCongDan = congDanService.findByHoVaTenAndSoDienThoai(nguoiTiemChungNew.getHoVaTen(), nguoiTiemChungNew.getSoDienThoai());
+
 
 		if(oldCongDan == null) {
 			CongDan congDannew = null;
@@ -703,7 +704,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					idCongDan = nguoiTiemChung.getCongDanID();
 
 					if(idCongDan == 0) {
-						oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getCmtcccd());
+						oldCongDan = congDanService.findByHoVaTenAndSoDienThoai(nguoiTiemChung.getHoVaTen(), nguoiTiemChung.getSoDienThoai());
 
 						if(oldCongDan == null) {
 							CongDan congDannew = createCongDanByNguoiTiemChung(nguoiTiemChung);

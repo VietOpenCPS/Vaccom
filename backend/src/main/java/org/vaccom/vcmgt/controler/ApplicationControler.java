@@ -2628,18 +2628,22 @@ public class ApplicationControler {
 
             long maPhieuHen = bodyData.has(EntityConstant.MAPHIEUHEN) ? bodyData.get(EntityConstant.MAPHIEUHEN).longValue()
                     : 0;
-
             PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(maPhieuHen);
-            CongDan congDan = congDanAction.findByCongDanId(congDanId);
-            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findBycongDanID(congDanId);
+
             if (Validator.isNull(phieuHenTiem)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("phieuHenTiem.not.found"));
             }
-            if (Validator.isNull(congDan)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("congDan.not.found"));
-            }
+
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
+
             if (Validator.isNull(nguoiTiemChung)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("nguoiTiemChung.not.found"));
+            }
+
+            CongDan congDan = congDanAction.findByCongDanId(nguoiTiemChung.getCongDanID());
+
+            if (Validator.isNull(congDan)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("congDan.not.found"));
             }
 
             MuiTiemChung muiTiemChung = muiTiemChungAction.addMuiTiemChung(reqBody);

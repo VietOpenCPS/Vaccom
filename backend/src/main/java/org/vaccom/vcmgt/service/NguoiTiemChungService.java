@@ -21,6 +21,7 @@ public interface NguoiTiemChungService {
 
 	public long countAll();
 
+
 	public NguoiTiemChung findById(long id);
 
 	public NguoiTiemChung findByMaQR(String MaQR);

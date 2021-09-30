@@ -322,6 +322,7 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 							}
 							if(tinhTrangXacNhan == VaccomUtil.DATIEMXONG){
 								Date now = new Date();
+								System.out.println(phieuHenTiem.getNguoiTiemChungId());
 								LichTiemChung lichTiemChung = lichTiemChungAction.findById(phieuHenTiem.getLichTiemChungId());
 								NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 								if(Validator.isNotNull(nguoiTiemChung)){
@@ -348,6 +349,7 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										congDanAction.update(congDan);
 
 										nguoiTiemChung.setSoMuiTiem(phieuHenTiem.getLanTiem());
+										nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DATIEM);
 										nguoiTiemChung.setNgayTiemCuoi(DatetimeUtil.dateToString(new Date(), DatetimeUtil._VN_DATE_FORMAT));
 										nguoiTiemChungAction.update(nguoiTiemChung);
 									}

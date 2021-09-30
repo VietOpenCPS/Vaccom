@@ -61,4 +61,5 @@ public interface NguoiTiemChungAction {
 	public NguoiTiemChung update(NguoiTiemChung nguoiTiemChung);
 
 	public NguoiTiemChung findBycongDanID(long id);
+
 }

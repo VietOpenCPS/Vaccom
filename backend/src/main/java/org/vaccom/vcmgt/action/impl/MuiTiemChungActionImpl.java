@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.action.MuiTiemChungAction;
 import org.vaccom.vcmgt.action.NguoiTiemChungAction;
+import org.vaccom.vcmgt.action.PhieuHenTiemAction;
 import org.vaccom.vcmgt.constant.EntityConstant;
 import org.vaccom.vcmgt.entity.MuiTiemChung;
 import org.vaccom.vcmgt.entity.NguoiTiemChung;
+import org.vaccom.vcmgt.entity.PhieuHenTiem;
 import org.vaccom.vcmgt.exception.ActionException;
 import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.util.MessageUtil;
@@ -29,7 +31,8 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 
 	@Autowired
 	private NguoiTiemChungAction nguoiTiemChungAction;
-
+	@Autowired
+	private PhieuHenTiemAction phieuHenTiemAction;
 	@Override
 	public long countByCoSoYTeId(long id) {
 		return muiTiemChungService.countByCoSoYTeId(id);
@@ -106,7 +109,12 @@ public class MuiTiemChungActionImpl implements MuiTiemChungAction {
 		muiTiemChung.setCoSoYTeId(coSoYTeId);
 
 		if(congDanId > 0) {
-			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findBycongDanID(congDanId);
+			long maPhieuHen = bodyData.has(EntityConstant.MAPHIEUHEN) ? bodyData.get(EntityConstant.MAPHIEUHEN).longValue()
+					: 0;
+
+			PhieuHenTiem phieuHenTiem = phieuHenTiemAction.findById(maPhieuHen);
+
+			NguoiTiemChung nguoiTiemChungFind = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 			if(nguoiTiemChungFind != null) {
 				muiTiemChung.setCongDanID(nguoiTiemChungFind.getCongDanID());
 			}

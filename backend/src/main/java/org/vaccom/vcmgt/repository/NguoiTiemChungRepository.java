@@ -26,9 +26,11 @@ public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, 
 
 	public long countBySoDienThoai(String sdt);
 
-	public NguoiTiemChung findById(long id);
+//	public NguoiTiemChung findById(long id);
+
 	
 	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
+
 
 	public NguoiTiemChung findBycongDanID(long id);
 

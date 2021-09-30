@@ -3,6 +3,7 @@ package org.vaccom.vcmgt.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -111,8 +112,14 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     @Override
     public NguoiTiemChung findById(long id) {
 
-        return nguoiTiemChungRepository.findById(id);
+        Optional<NguoiTiemChung> result = nguoiTiemChungRepository.findById(id);
+        if(result.isPresent()) {
+            return result.get();
+        }
+
+        return null;
     }
+
 
     @Override
     public NguoiTiemChung findByMaQR(String MaQR) {
@@ -402,7 +409,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
                             Date now = new Date();
                             long getDiff = now.getTime() - ngayTiemCuoiDate.getTime();
                             long getDaysDiff = getDiff / (24 * 60 * 60 * 1000);
-                            if (getDaysDiff >= 4 * 7) {
+                            if (getDaysDiff >= 3 * 7) {
                                 result.add(nguoiTiemChung);
                             } else {
                                 total = total - 1;
@@ -770,8 +777,6 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         criteriaQuery.select(nguoiTiemChungRoot);
 
         List<Predicate> predicates = new ArrayList<Predicate>();
-        predicates.add(builder.notEqual(nguoiTiemChungRoot.get("cmtcccd"), ""));
-        predicates.add(builder.isNotNull(nguoiTiemChungRoot.get("cmtcccd")));
 
         predicates.add(builder.notEqual(nguoiTiemChungRoot.get("hoVaTen"), ""));
         predicates.add(builder.isNotNull(nguoiTiemChungRoot.get("hoVaTen")));
