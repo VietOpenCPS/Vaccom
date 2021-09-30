@@ -60,6 +60,18 @@
               <!-- <span class="mb-2 pl-3">-	Giấy xác nhận tiêm mũi 1 (với người tiêm mũi 2);</span> -->
             </p>
           </div>
+          <div v-if="isSigned" class="pl-2">
+            <span>Tình trạng đăng ký: </span>
+            <span style="font-weight: 500;color: red">{{getTextTrangThai(dataInfo.tinhTrangXacNhan)}}</span>
+          </div>
+          <v-flex v-if="isSigned && dataInfo.tinhTrangXacNhan == 2 || dataInfo.tinhTrangXacNhan == 3" class="text-center py-3">
+            <v-btn :color="dataInfo.tinhTrangXacNhan == 2 ? 'green' : 'orange'" class="mx-0" @click.stop="submitTranslate" :loading="processingAction" :disabled="processingAction">
+              <v-icon left size="20">
+                mdi-account-check-outline
+              </v-icon>
+              {{getTextAction(dataInfo.tinhTrangXacNhan)}}
+            </v-btn> 
+          </v-flex>
         </v-card-text>
       </v-card>
       
@@ -71,6 +83,7 @@
 
 <script>
   import Vue from 'vue'
+  import axios from 'axios'
   import VueQrcode from '@chenfengyuan/vue-qrcode'
   Vue.component(VueQrcode.name, VueQrcode)
   export default {
@@ -81,7 +94,8 @@
     data () {
       return {
         urlQr: '',
-        dataInfo: ''
+        dataInfo: '',
+        processingAction: false
       }
     },
     created () {
@@ -104,10 +118,95 @@
         vm.$store.dispatch('getThongTinPhieuHen', filter).then(function(dataInfo) {
           console.log('dataInfo', dataInfo)
           vm.dataInfo = dataInfo
-          vm.urlQr = dataInfo['LinkQrCode']
+          // vm.urlQr = dataInfo['LinkQrCode']
+          vm.urlQr = "http://119.17.200.69:8030/vac/index.html#" + dataInfo['LinkQrCode'].split('#')[1]
         }).catch (function () {
         })
-      },      
+      },
+      submitTranslate () {
+        let vm = this
+        try {
+          let data = localStorage.getItem('user')
+          let userInfo = JSON.parse(data)
+          vm.$store.dispatch('getUserInfo', userInfo).then(function(dataInfo) {
+            if (dataInfo && dataInfo['id']) {
+              vm.translateStatus()
+            } else {
+              vm.$router.push({ path: '/login?redirect=' + vm.dataInfo.LinkQrCode.split('#')[1] })
+            }
+          }).catch(function (error) {
+            vm.$router.push({ path: '/login?redirect=' + vm.dataInfo.LinkQrCode.split('#')[1] })
+          })
+        } catch (error) {
+          vm.$router.push({ path: '/login?redirect=' + vm.dataInfo.LinkQrCode.split('#')[1] })
+        }
+      },
+      translateStatus () {
+        let vm = this
+        let param = {
+          headers: {
+          },
+          params: {
+          }
+        }
+        try {
+          if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+          }
+        } catch (error) {
+        }
+        let dataPost = {
+          TinhTrangXacNhan: vm.dataInfo.tinhTrangXacNhan == 2 ? 3 : 4,
+          ids: String(vm.dataInfo.id)
+        }
+        vm.processingAction = true
+        axios.put('/rest/v1/app/update/phieuhentiem/tinhtrangxacnhan', dataPost, param).then(function (response) {
+          vm.processingAction = false
+          vm.$store.commit('SHOW_SNACKBAR', {
+            show: true,
+            text: 'Xác nhận thành công',
+            color: 'success',
+          })
+          setTimeout(function () {
+            vm.getThongTinPhieuHen()
+          }, 200)
+        }).catch(function (error) {
+            vm.processingAction = false
+            vm.$store.commit('SHOW_SNACKBAR', {
+              show: true,
+              text: 'Xác nhận thất bại',
+              color: 'error',
+            })
+        });
+      },
+      getTextTrangThai(trangThai) {
+        switch (trangThai) {
+            case 0:
+              return 'Chờ gửi thông báo';
+            case 1:
+                return 'Chờ xác nhận';
+            case 2:
+                return 'Đã gửi thông báo'
+            case 3:
+                return 'Đã check-in'
+            case 4:
+                return 'Đã tiêm xong'
+            case 5:
+                return 'Chưa được tiêm'
+            case 6:
+                return 'Xác nhận không đến'              
+        }
+        return ''
+      },
+      getTextAction(trangThai) {
+        switch (trangThai) {
+            case 2:
+                return 'Xác nhận đến tiêm'
+            case 3:
+                return 'Xác nhận đã tiêm'             
+        }
+        return ''
+      },
       formatDate (date) {
         if (!date) return null
         const [year, month, day] = date.split('-')
