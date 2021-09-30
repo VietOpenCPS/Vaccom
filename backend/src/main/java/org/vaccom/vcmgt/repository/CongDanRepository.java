@@ -19,5 +19,7 @@ public interface CongDanRepository extends JpaRepository<CongDan, Long> {
 
     CongDan findBySoDienThoaiOrCmtcccd(String sdt, String cmt);
 
+    CongDan findByHoVaTenAndSoDienThoai(String hoVaTen, String sdt);
+
     int countBySoDienThoaiAndCmtcccd(String sdt, String cmt);
 }

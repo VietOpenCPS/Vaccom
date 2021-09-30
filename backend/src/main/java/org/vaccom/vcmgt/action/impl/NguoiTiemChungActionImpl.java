@@ -61,6 +61,34 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		return nguoiTiemChungService.countAll();
 	}
 
+	private void addNguoiDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto) {
+		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
+		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
+		nguoiTiemChung.setDiaBanCoSoId(nguoiTiemChungDto.diabancosoid);
+		nguoiTiemChung.setHoVaTen(nguoiTiemChungDto.hovaten);
+		nguoiTiemChung.setNgaySinh(nguoiTiemChungDto.ngaysinh);
+		nguoiTiemChung.setGioiTinh(nguoiTiemChungDto.gioitinh);
+		nguoiTiemChung.setNhomDoiTuong(nguoiTiemChungDto.nhomdoituong);
+		nguoiTiemChung.setDonViCongTac(nguoiTiemChungDto.donvicongtac);
+		nguoiTiemChung.setSoDienThoai(nguoiTiemChungDto.sodienthoai);
+		nguoiTiemChung.setCmtcccd(nguoiTiemChungDto.cmtcccd);
+		nguoiTiemChung.setSoTheBHYT(nguoiTiemChungDto.sothebhyt);
+		nguoiTiemChung.setDiaChiNoiO(nguoiTiemChungDto.diachinoio);
+		nguoiTiemChung.setPhuongXaTen(nguoiTiemChungDto.phuongxaten);
+		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
+		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
+		nguoiTiemChung.setTinhThanhMa(nguoiTiemChungDto.tinhthanhma);
+		nguoiTiemChung.setQuanHuyenMa(nguoiTiemChungDto.quanhuyenma);
+		nguoiTiemChung.setPhuongXaMa(nguoiTiemChungDto.phuongxama);
+		nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DANGKYCHINHTHUC);
+		nguoiTiemChung.setMaQR(nguoiTiemChungDto.maqr);
+		nguoiTiemChung.setCongDanID(nguoiTiemChungDto.congDanId);
+		nguoiTiemChung.setNgayTiemCuoi(nguoiTiemChungDto.ngayTiemCuoi);
+		nguoiTiemChung.setSoMuiTiem(nguoiTiemChungDto.soMuiTiem);
+
+		nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
+	}
+
 	@Override
 	public void addNguoiTiemChung(NguoiTiemChungDto nguoiTiemChungDto) throws Exception {
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
@@ -71,7 +99,6 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		if(countUser == 0 && nguoiTiemChungDto.cmtcccd.isEmpty()) {
 			countUser = nguoiTiemChungService.countBySoDienThoai(nguoiTiemChungDto.sodienthoai);
 		}
-		boolean userHasButNotMuiTiem = false;
 
 		if (countUser > 0) {
 			return;
@@ -92,7 +119,15 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
 		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
 		nguoiTiemChung.setTinhTrangDangKi(nguoiTiemChungDto.tinhtrangdangki);
-		nguoiTiemChung.setMaQR(VaccomUtil.generateQRCode("ntc", 6));
+		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
+		nguoiTiemChung.setTinhThanhMa(nguoiTiemChungDto.tinhthanhma);
+		nguoiTiemChung.setQuanHuyenMa(nguoiTiemChungDto.quanhuyenma);
+		nguoiTiemChung.setNgayTiemCuoi(nguoiTiemChungDto.ngayTiemCuoi);
+		nguoiTiemChung.setSoMuiTiem(nguoiTiemChungDto.soMuiTiem);
+
+		String maQr = VaccomUtil.generateQRCode("ntc", 6);
+		nguoiTiemChungDto.maqr = maQr;
+		nguoiTiemChung.setMaQR(maQr);
 
 		List<MuiTiemChungDto> listTiemChungDto = nguoiTiemChungDto.listMuiTieuChungDto;
 		NguoiTiemChung nguoiTiemChungCreated = nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
@@ -101,6 +136,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			_log.error("Loi khong tao duoc nguoi dung voi cmt: " + nguoiTiemChungDto.cmtcccd);
 			return ;
 		}
+
+
 
 		//Add cong dan
 		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungCreated.getSoDienThoai(), nguoiTiemChungCreated.getCmtcccd());
@@ -124,6 +161,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 			nguoiTiemChungCreated.setCongDanID(oldCongDan.getId());
 			nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungCreated);
 		}
+
+		//Add nguoi tiem chung chinh thuc
+		nguoiTiemChungDto.congDanId = nguoiTiemChungCreated.getCongDanID();
+		addNguoiDangKyChinhThuc(nguoiTiemChungDto);
+
 		String tenNguoiTiem = nguoiTiemChungCreated.getHoVaTen();
 		String cmt = nguoiTiemChungCreated.getCmtcccd();
 
@@ -274,6 +316,16 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		int tinhTrangDangKi = bodyData.has(EntityConstant.TINHTRANGDANGKI)
 				? bodyData.get(EntityConstant.TINHTRANGDANGKI).intValue()
 				: 0;
+		int lanTiem = bodyData.has(EntityConstant.LANTIEM)
+				? bodyData.get(EntityConstant.LANTIEM).intValue()
+				: 0;
+		String ngayTiem = bodyData.has(EntityConstant.NGAYTIEMCHUNG)
+				? bodyData.get(EntityConstant.NGAYTIEMCHUNG).textValue()
+				: StringPool.BLANK;
+
+
+
+
 
 		// TODO Validate fields
 
@@ -282,10 +334,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					HttpStatus.METHOD_NOT_ALLOWED.value());
 		}
 
-		if (Validator.isNull(cmtcccd)) {
-			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.cmtcccd.empty"),
-					HttpStatus.METHOD_NOT_ALLOWED.value());
-		}
+
 
 		if (Validator.isNull(ngaySinh)) {
 			throw new ActionException(MessageUtil.getVNMessageText("nguoitiemchung.ngaysinh.empty"),
@@ -327,6 +376,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setGhiChu(ghiChu);
 		nguoiTiemChung.setGioiTinh(gioiTinh);
 		nguoiTiemChung.setHoVaTen(hoVaTen);
+		nguoiTiemChung.setSoMuiTiem(lanTiem);
+		nguoiTiemChung.setNgayTiemCuoi(ngayTiem);
 		// nguoiTiemChung.setMaSoBHXH(maSoBHXH);
 		nguoiTiemChung.setNgayDangKi(ngayDangKi);
 		nguoiTiemChung.setNgaySinh(ngaySinh);
@@ -348,7 +399,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setCoSoYTeId(coSoYTe != null ? coSoYTe.getId() : 0);
 
 		NguoiTiemChung nguoiTiemChungNew = nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChung);
-		CongDan oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChungNew.getSoDienThoai(), nguoiTiemChungNew.getCmtcccd());
+		CongDan oldCongDan = congDanService.findByHoVaTenAndSoDienThoai(nguoiTiemChungNew.getHoVaTen(), nguoiTiemChungNew.getSoDienThoai());
+
 
 		if(oldCongDan == null) {
 			CongDan congDannew = null;
@@ -362,6 +414,8 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		} else {
 			nguoiTiemChungNew.setCongDanID(oldCongDan.getId());
 		}
+
+
 
 
 		return nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungNew);
@@ -382,6 +436,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		congDanDto.tinhThanhMa = nguoiTiemChungCreated.getTinhThanhMa();
 		congDanDto.tinhThanhTen = nguoiTiemChungCreated.getTinhThanhTen();
 		congDanDto.gioiTinh = nguoiTiemChungCreated.getGioiTinh();
+		congDanDto.soMuiTiem = nguoiTiemChungCreated.getSoMuiTiem();
 
 		CongDan congDannew = congDanService.addCongDan(congDanDto);
 		return  congDannew;
@@ -607,10 +662,10 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
 			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan) {
 		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung, page, size,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan);
 	}
 
 	@Override
@@ -649,7 +704,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					idCongDan = nguoiTiemChung.getCongDanID();
 
 					if(idCongDan == 0) {
-						oldCongDan = congDanService.findBySdtOrCmt(nguoiTiemChung.getSoDienThoai(), nguoiTiemChung.getCmtcccd());
+						oldCongDan = congDanService.findByHoVaTenAndSoDienThoai(nguoiTiemChung.getHoVaTen(), nguoiTiemChung.getSoDienThoai());
 
 						if(oldCongDan == null) {
 							CongDan congDannew = createCongDanByNguoiTiemChung(nguoiTiemChung);

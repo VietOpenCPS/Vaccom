@@ -15,4 +15,6 @@ public interface CongDanService {
     public int countBySoDienThoaiAndCmtcccd(String sdt, String cmt);
 
     public CongDan update(CongDan congDan);
+
+    public CongDan findByHoVaTenAndSoDienThoai(String hoVaTen, String sdt);
 }

@@ -87,3 +87,19 @@
 * Tích hợp thêm mẫu thông báo Sửa giấy đi đường khi cập nhật giấy đi đường đã cấp
 * Chỉnh sửa lại payload cho hệ thống gửi tin nhắn phù hợp với Zalo Template
 
+#### New Features:
+* Cập nhật lại quy trình hệ thống
+* Bổ sung chức năng năng lọc trong danh sách gọi tiêm
++ Họ và tên
++ Tỉnh/Huyện/Xã
++ Loại Vaccine
++ Số Mũi Tiêm
+* Thêm chức năng lọc khi thêm người tiêm chủng vào danh sách gọi tiêm
++ Verocell : 4 tuần
++ Astra : 8 tuần
++ Moderna : 8 tuần
+* Bổ sung chức năng check-in, check-out trong trang QRCode
+* Tối ưu danh sách chính thức
++ Bổ sung nhập thông tin mũi tiêm chủng trong form tạo ds chính thức
++ Bổ sung import danh sách đã tiêm vào danh sách chính thức
++ Thêm sửa xóa theo ds gọi tiêm 
