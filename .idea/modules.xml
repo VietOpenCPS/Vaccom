@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/backend/org.vaccom.vcmgt.iml" filepath="$PROJECT_DIR$/backend/org.vaccom.vcmgt.iml" />
     </modules>
   </component>
 </project>

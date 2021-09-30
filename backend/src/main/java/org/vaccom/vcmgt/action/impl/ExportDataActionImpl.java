@@ -63,7 +63,7 @@ public class ExportDataActionImpl implements ExportDataAction {
 
 		List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong,
 				ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangki, kiemtratrung, 0, (int) total,
-				tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+				tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
 
 		if (lstNguoiTiemChung != null) {
 

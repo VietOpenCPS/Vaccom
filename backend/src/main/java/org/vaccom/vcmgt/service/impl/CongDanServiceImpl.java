@@ -43,4 +43,9 @@ public class CongDanServiceImpl implements CongDanService {
     public CongDan update(CongDan congDan) {
         return congDanRepository.save(congDan);
     }
+
+    @Override
+    public CongDan findByHoVaTenAndSoDienThoai(String hoVaTen, String sdt) {
+        return congDanRepository.findByHoVaTenAndSoDienThoai(hoVaTen, sdt);
+    }
 }

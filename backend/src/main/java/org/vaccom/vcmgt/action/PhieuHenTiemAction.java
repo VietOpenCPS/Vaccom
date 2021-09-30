@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
+import org.vaccom.vcmgt.dto.PhieuHenTiemDto;
+import org.vaccom.vcmgt.dto.ResultSearchDto;
+import org.vaccom.vcmgt.entity.NguoiTiemChung;
 import org.vaccom.vcmgt.entity.PhieuHenTiem;
 
 /**
@@ -48,5 +52,6 @@ public interface PhieuHenTiemAction {
 	public List<PhieuHenTiem> findByKhacTinhTrangXacNhan_LichTiemChungID(int tinhTrangXacNhan, long LichTiemChungID);
 
 	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem);
+
 }
 
