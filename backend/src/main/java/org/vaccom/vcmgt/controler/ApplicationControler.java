@@ -822,10 +822,25 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
 			*/
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
+            long congDanId = nguoiTiemChung.getCongDanID();
 
             boolean result = nguoiTiemChungAction.deleteNguoiTiemChung(id);
 
             if (result) {
+                List<MuiTiemChung> muiTiemChungs = muiTiemChungAction.findByCongDan_ID(congDanId);
+
+                if(Validator.isNotNull(muiTiemChungs)){
+                    for (MuiTiemChung muitiemchung: muiTiemChungs) {
+                        muiTiemChungAction.deleteById(muitiemchung.getId());
+                    }
+                };
+//                CongDan congDan = congDanAction.findByCongDanId(congDanId);
+//                _log.info("congDan :" + congDan);
+//                if(Validator.isNotNull(congDan)){
+//                    congDanAction.deleteById(congDan.getId());
+//                }
+
                 String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
 
                 return ResponseEntity.status(HttpStatus.OK).body(msg);
@@ -1046,7 +1061,9 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
 			*/
+
             nguoiTiemChungAction.deleteNguoiTiemChung(reqBody);
+
 
             String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
 
@@ -1196,14 +1213,6 @@ public class ApplicationControler {
 
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
 
-                // Thêm status phiếu gửi :
-                for (JsonNode jsonNode : jsonArrayObj) {
-                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(jsonNode.get("id").asLong(), ZaloConstant.Loai_Hen_TiemChung);
-                    if (Validator.isNotNull(hangChoThongBao)) {
-                        ((ObjectNode) jsonNode).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
-                    }
-                }
-
                 node.put("phieuHenTiem", jsonArrayObj);
 
                 data.add(node);
@@ -1272,11 +1281,11 @@ public class ApplicationControler {
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma
-                        , quanhuyenten, phuongxama, phuongxaten);
+                        , quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, tinhtrangdangky, kiemtratrung, page, size
-                        , tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
+                        , tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1295,12 +1304,13 @@ public class ApplicationControler {
 
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa, tinhtrangdangky,
-                        kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten,
+                        false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         tinhtrangdangky, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
             }
 
@@ -1381,11 +1391,11 @@ public class ApplicationControler {
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1405,12 +1415,12 @@ public class ApplicationControler {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.MOIDANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.MOIDANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
-                        quanhuyenten, phuongxama, phuongxaten, false);
+                        quanhuyenten, phuongxama, phuongxaten, false, null, null);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -1461,9 +1471,11 @@ public class ApplicationControler {
                                                            @RequestParam("quanhuyenten") String quanhuyenten,
                                                            @RequestParam("phuongxama") String phuongxama,
                                                            @RequestParam("phuongxaten") String phuongxaten,
+                                                           @RequestParam(name = "diachinoio", defaultValue = StringPool.BLANK) String diachinoio,
                                                            @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
                                                            @RequestParam("cosoytema") String cosoytema,
-                                                           @RequestParam(value = "isDatTieuChuan", defaultValue = "0") Boolean isDatTieuChuan,
+                                                           @RequestParam(name = "isDatTieuChuan", defaultValue = "0") Boolean isDatTieuChuan,
+                                                           @RequestParam(name = "loaiThuocTiem", defaultValue = StringPool.BLANK) String loaiThuocTiem,
                                                            @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
                                                            @RequestParam(name = "page", defaultValue = "0") int page,
                                                            @RequestParam(name = "size", defaultValue = "30") int size) {
@@ -1491,11 +1503,11 @@ public class ApplicationControler {
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, isDatTieuChuan,loaiThuocTiem, diachinoio);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size,
-                        tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan);
+                        tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan, loaiThuocTiem, diachinoio);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1515,43 +1527,15 @@ public class ApplicationControler {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.DANGKYCHINHTHUC, kiemtratrung, page, size, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten,isDatTieuChuan, loaiThuocTiem,diachinoio);
             }
 
-            if(isDatTieuChuan){
-                int offset = page * size;
-                int maxSize = page*size+size;
-                if(isDatTieuChuan){
-                    total = lstNguoiTiemChung.size();
-                }
 
-                for (int i=offset; i< lstNguoiTiemChung.size() && i < maxSize; i++){
-
-                    // JsonNode node = mapper.valueToTree(nguoiTiemChung);
-
-                    List<MuiTiemChung> lstMuiTiemChung = muiTiemChungAction.findByCongDan_ID(lstNguoiTiemChung.get(i).getCongDanID());
-
-                    ArrayNode jsonArrayObj = mapper.convertValue(lstMuiTiemChung, ArrayNode.class);
-
-                    ObjectNode node = mapper.convertValue(lstNguoiTiemChung.get(i), ObjectNode.class);
-
-                    node.put("muiTiemChung", jsonArrayObj);
-
-                    List<PhieuHenTiem> lstPhieuHenTiem = phieuHenTiemAction.findByNguoiTiemChungId(lstNguoiTiemChung.get(i).getId());
-
-                    jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
-
-                    node.put("phieuHenTiem", jsonArrayObj);
-
-                    data.add(node);
-
-                }
-            } else {
                 lstNguoiTiemChung.forEach(nguoiTiemChung -> {
                     // JsonNode node = mapper.valueToTree(nguoiTiemChung);
 
@@ -1571,7 +1555,7 @@ public class ApplicationControler {
 
                     data.add(node);
                 });
-            }
+
 
 
             return ResponseEntity.status(HttpStatus.OK).body(new DataResponeBody(total, data));
@@ -1631,11 +1615,11 @@ public class ApplicationControler {
             if (RoleUtil.isQuanTriHeThong(vaiTro)) {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, diabancosoid, cosoytema, VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma,
-                        tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false);
+                        tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
             } else {
                 NguoiDung nguoiDung = nguoiDungAction.findById(reqId);
@@ -1655,12 +1639,12 @@ public class ApplicationControler {
                 total = nguoiTiemChungAction.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten,
                         nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.XOADANGKY, kiemtratrung, tinhthanhma, tinhthanhten,
-                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+                        quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
 
                 lstNguoiTiemChung = nguoiTiemChungAction.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki,
                         hovaten, nguoiDung.getDiaBanCoSoId() > 0 ? nguoiDung.getDiaBanCoSoId() : -1, coSoYTeMa,
                         VaccomUtil.XOADANGKY, kiemtratrung, page, size, tinhthanhma, tinhthanhten, quanhuyenma,
-                        quanhuyenten, phuongxama, phuongxaten, false);
+                        quanhuyenten, phuongxama, phuongxaten, false, null, null);
             }
 
             lstNguoiTiemChung.forEach(nguoiTiemChung -> {
@@ -2645,6 +2629,11 @@ public class ApplicationControler {
             if (Validator.isNull(congDan)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageUtil.getVNMessageText("congDan.not.found"));
             }
+
+
+
+
+
 
             MuiTiemChung muiTiemChung = muiTiemChungAction.addMuiTiemChung(reqBody);
 

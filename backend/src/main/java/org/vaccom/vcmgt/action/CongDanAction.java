@@ -6,4 +6,6 @@ import org.vaccom.vcmgt.entity.CongDan;
 public interface CongDanAction {
     public CongDan findByCongDanId(long id);
     public CongDan update(CongDan congDan);
+
+    public void deleteById(long id);
 }

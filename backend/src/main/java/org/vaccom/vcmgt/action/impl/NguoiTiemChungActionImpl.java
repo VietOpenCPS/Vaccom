@@ -343,23 +343,29 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
-
-		if (countByCmtcccd > 0) {
-			/*
-			 * List<NguoiTiemChung> lstNguoiTiemChung =
-			 * nguoiTiemChungService.findByCmtcccd(cmtcccd); for (NguoiTiemChung
-			 * nguoiTiemChungTmp : lstNguoiTiemChung) {
-			 * if(nguoiTiemChungTmp.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
-			 * nguoiTiemChungTmp.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
-			 * nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp); }
-			 * 
-			 * }
-			 */
-			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
-		} else {
+		if(Validator.isNull(cmtcccd)){
 			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+		} else {
+			long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
+
+			if (countByCmtcccd > 0) {
+				/*
+				 * List<NguoiTiemChung> lstNguoiTiemChung =
+				 * nguoiTiemChungService.findByCmtcccd(cmtcccd); for (NguoiTiemChung
+				 * nguoiTiemChungTmp : lstNguoiTiemChung) {
+				 * if(nguoiTiemChungTmp.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
+				 * nguoiTiemChungTmp.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+				 * nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp); }
+				 *
+				 * }
+				 */
+				nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+			} else {
+				nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+			}
 		}
+
+
 
 		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
 
@@ -624,6 +630,18 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
 								nguoiTiemChungService.deleteNguoiTiemChung(id);
+								long congDanId = nguoiTiemChung.getCongDanID();
+								List<MuiTiemChung> muiTiemChungs = muiTiemChungService.findByCongDan_ID(congDanId);
+
+								if(Validator.isNotNull(muiTiemChungs)){
+									for (MuiTiemChung muitiemchung: muiTiemChungs) {
+										muiTiemChungService.deleteById(muitiemchung.getId());
+									}
+								};
+//								CongDan congDan = congDanService.findByCongDanId(congDanId);
+//								if(Validator.isNotNull(congDan)){
+//									congDanService.deleteById(congDan.getId());
+//								}
 							} catch (Exception e) {
 								_log.warn(e.getMessage());
 							}
@@ -652,20 +670,20 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
 		return nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio);
 	}
 
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
 			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
 		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung, page, size,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio);
 	}
 
 	@Override

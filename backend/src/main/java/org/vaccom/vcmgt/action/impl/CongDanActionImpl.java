@@ -20,4 +20,9 @@ public class CongDanActionImpl implements CongDanAction {
     public CongDan update(CongDan congDan) {
         return congDanService.update(congDan);
     }
+
+    @Override
+    public void deleteById(long id) {
+        congDanService.deleteById(id);
+    }
 }

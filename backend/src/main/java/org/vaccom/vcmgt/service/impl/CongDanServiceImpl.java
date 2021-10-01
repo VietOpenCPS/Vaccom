@@ -48,4 +48,9 @@ public class CongDanServiceImpl implements CongDanService {
     public CongDan findByHoVaTenAndSoDienThoai(String hoVaTen, String sdt) {
         return congDanRepository.findByHoVaTenAndSoDienThoai(hoVaTen, sdt);
     }
+
+    @Override
+    public void deleteById(long id) {
+        congDanRepository.deleteById(id);
+    }
 }
