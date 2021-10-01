@@ -108,6 +108,9 @@
                         prepend-inner-icon="mdi-account-check-outline"
                         dense
                         clearable
+                        :rules="[rules.counter]"
+                        counter
+                        maxlength="30"
                     ></v-text-field>
                     <v-text-field
                         class="flex xs12 md12"
@@ -253,6 +256,9 @@
               } 
           }
         ],
+        rules: {
+          counter: value => value.length <= 30 || 'Tên cơ sở tối đa 30 ký tự'
+        },
         headers: [
           {
             sortable: false,
