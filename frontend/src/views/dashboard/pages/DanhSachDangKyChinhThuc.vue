@@ -544,7 +544,7 @@
   import Pagination from './Pagination'
   export default {
     name: 'Customers',
-    props: ['addLichTiem', 'loaiVaccine'],
+    props: ['addLichTiem', 'loaiVaccine', 'lichTiemChungId'],
     components: {
     'tim-kiem': Search,
     'pagination': Pagination
@@ -820,6 +820,7 @@
         }
         if (vm.addLichTiem) {
           filter['isDatTieuChuan'] = dataSearch && dataSearch['isDatTieuChuan'] ? 1 : 0
+          filter['lichTiemChungId'] = vm.lichTiemChungId
         }
         vm.$store.dispatch('getNguoiTiemChung', filter).then(function(result) {
           vm.loadingData = false

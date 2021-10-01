@@ -367,7 +367,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text class="mt-2 py-0" style="max-height: calc(100vh - 130px) !important;overflow: auto;">
-            <dang-ky-chinh-thuc :loaiVaccine="lichTiemSelected['loaiThuocTiem']" ref="dangkychinhthuc" :addLichTiem="lichTiem"></dang-ky-chinh-thuc>
+            <dang-ky-chinh-thuc :lichTiemChungId="lichTiemSelected['id']" :loaiVaccine="lichTiemSelected['loaiThuocTiem']" ref="dangkychinhthuc" :addLichTiem="lichTiem"></dang-ky-chinh-thuc>
           </v-card-text>
           <v-card-actions class="justify-end" style="max-width: 1366px!important;margin: 0 auto;">
             <v-btn small color="red" class="white--text mr-2" :loading="loading" :disabled="loading" @click="cancelAddNguoiTiem">

@@ -1210,6 +1210,9 @@ export default new Vuex.Store({
         if (filter.hasOwnProperty('isDatTieuChuan')) {
           param.params['isDatTieuChuan'] = filter.isDatTieuChuan
         }
+        if (filter.hasOwnProperty('lichTiemChungId')) {
+          param.params['lichTiemChungId'] = filter.lichTiemChungId
+        }
         if (filter.hasOwnProperty('page')) {
           param.params['page'] = filter.page
           param.params['size'] = filter.size
