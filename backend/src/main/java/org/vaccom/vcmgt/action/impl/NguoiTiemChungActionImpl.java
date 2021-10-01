@@ -670,20 +670,24 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio, Long lichtiemchungid, Long tinhtrangxacnhan,
+									List<Integer> listtinhtrangdangki) {
 		return nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio,
+				lichtiemchungid, tinhtrangxacnhan, listtinhtrangdangki);
 	}
 
 	@Override
 	public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
 			String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangky, Integer kiemtratrung,
 			Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan,
+													 String loaiThuocTiem, String diachinoio, Long lichtiemchungid, Long tinhtrangxacnhan, List<Integer> listtinhtrangdangki) {
 		return nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangky, kiemtratrung, page, size,  tinhthanhma,  tinhthanhten,  quanhuyenma
-				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem, diachinoio);
+				,   quanhuyenten,  phuongxama,  phuongxaten, isDatTieuChuan, loaiThuocTiem,
+				diachinoio, lichtiemchungid, tinhtrangxacnhan, listtinhtrangdangki);
 	}
 
 	@Override

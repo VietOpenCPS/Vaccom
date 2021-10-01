@@ -17,13 +17,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.vaccom.vcmgt.dto.NguoiTiemChungDto;
 import org.vaccom.vcmgt.dto.ResultSearchDto;
-import org.vaccom.vcmgt.entity.CongDan;
-import org.vaccom.vcmgt.entity.MuiTiemChung;
-import org.vaccom.vcmgt.entity.NguoiTiemChung;
-import org.vaccom.vcmgt.entity.PhieuHenTiem;
+import org.vaccom.vcmgt.entity.*;
+import org.vaccom.vcmgt.repository.LichTiemChungRepository;
 import org.vaccom.vcmgt.repository.MuiTiemChungRepository;
 import org.vaccom.vcmgt.repository.NguoiTiemChungRepository;
 import org.vaccom.vcmgt.repository.PhieuHenTiemRepository;
+import org.vaccom.vcmgt.service.LichTiemChungService;
 import org.vaccom.vcmgt.service.MuiTiemChungService;
 import org.vaccom.vcmgt.service.NguoiTiemChungService;
 
@@ -40,6 +39,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
     @Autowired
     private PhieuHenTiemRepository phieuHenTiemRepository;
+
+    @Autowired
+    private LichTiemChungService lichTiemChungService;
 
     @Autowired
     private EntityManager em;
@@ -111,7 +113,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     public NguoiTiemChung findById(long id) {
 
         Optional<NguoiTiemChung> result = nguoiTiemChungRepository.findById(id);
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             return result.get();
         }
 
@@ -159,7 +161,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     @Override
     public long countNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
                                     Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
-            , String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
+            , String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio, Long lichtiemchungid, Long tinhtrangxacnhan, List<Integer> listtinhtrangdangki) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -171,6 +173,13 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
 
         List<Predicate> predicates = new ArrayList<Predicate>();
 
+        if (lichtiemchungid > 0 & tinhtrangxacnhan >= 0) {
+            Root<PhieuHenTiem> phieuHenTiemRoot = cq.from(PhieuHenTiem.class);
+            predicates.add(cb.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
+            predicates.add(cb.equal(phieuHenTiemRoot.get("lichTiemChungId"), lichtiemchungid));
+            predicates.add(cb.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), tinhtrangxacnhan));
+        }
+
         if (Validator.isNotNull(cmtcccd)) {
             // ParameterExpression<String> p = cb.parameter(String.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("cmtcccd"), cmtcccd));
@@ -180,6 +189,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("nhomDoiTuong"), nhomdoituong));
         }
+
 
         if (Validator.isNotNull(ngaydangki)) {
             // ParameterExpression<String> p = cb.parameter(String.class);
@@ -220,7 +230,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             predicates.add(cb.equal(nguoiTiemChungRoot.get("diaBanCoSoId"), diabancosoid));
         }
 
-        if(Validator.isNotNull(diachinoio)){
+        if (Validator.isNotNull(diachinoio)) {
             predicates.add(cb.like(nguoiTiemChungRoot.get("diaChiNoiO"), "%" + diachinoio + "%"));
         }
 
@@ -243,36 +253,49 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("kiemTraTrung"), kiemtratrung));
         }
-        if(Validator.isNotNull(loaiThuocTiem) && !isDatTieuChuan){
-            List<MuiTiemChung> muiTiemChungs =  muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%");
-            if(Validator.isNotNull(muiTiemChungs)){
+        if (Validator.isNotNull(loaiThuocTiem) && !isDatTieuChuan) {
+
+
+            List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%");
+            if (Validator.isNotNull(muiTiemChungs)) {
                 List<Long> congDanDatDieuKien = new ArrayList<>();
-                for (MuiTiemChung muiTiemChung: muiTiemChungs) {
+                for (MuiTiemChung muiTiemChung : muiTiemChungs) {
                     congDanDatDieuKien.add(muiTiemChung.getCongDanID());
                 }
-                if(Validator.isNotNull(congDanDatDieuKien)){
+                if (Validator.isNotNull(congDanDatDieuKien)) {
                     predicates.add((nguoiTiemChungRoot.get("congDanID").in(congDanDatDieuKien)));
                 }
             }
+
+
         }
 
-        if(isDatTieuChuan && Validator.isNotNull(loaiThuocTiem)){
-            int soNgayTiem = 0;
-            if(loaiThuocTiem.toLowerCase().contains("astra")){
-                soNgayTiem = 8*7;
-            } else if(loaiThuocTiem.toLowerCase().contains("moderna")){
-                soNgayTiem = 8*7;
-            } else if(loaiThuocTiem.toLowerCase().contains("vero")){
-                soNgayTiem = 3*7;
-            } else {
-                soNgayTiem = 8*7;
+        if(Validator.isNotNull(listtinhtrangdangki) && listtinhtrangdangki.size()>0){
+            predicates.add(nguoiTiemChungRoot.get("tinhTrangDangKi").in(listtinhtrangdangki));
+        }
+
+        if (isDatTieuChuan && Validator.isNotNull(loaiThuocTiem)) {
+            LichTiemChung lichTiemChung = lichTiemChungService.findById(lichtiemchungid);
+            if (Validator.isNotNull(lichTiemChung)) {
+                int soNgayTiem = 0;
+                if (loaiThuocTiem.toLowerCase().contains("astra")) {
+                    soNgayTiem = 8 * 7;
+                } else if (loaiThuocTiem.toLowerCase().contains("moderna")) {
+                    soNgayTiem = 8 * 7;
+                } else if (loaiThuocTiem.toLowerCase().contains("vero")) {
+                    soNgayTiem = 3 * 7;
+                } else {
+                    soNgayTiem = 8 * 7;
+                }
+                List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%", lichtiemchungid, soNgayTiem);
+                List<Long> listCongDan = new ArrayList<>();
+                for (MuiTiemChung muitiemchung : muiTiemChungs) {
+                    listCongDan.add(muitiemchung.getCongDanID());
+                }
+                predicates.add((nguoiTiemChungRoot.get("congDanID").in(listCongDan)));
             }
-            List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%",soNgayTiem );
-            List<Long> listCongDan = new ArrayList<>();
-            for (MuiTiemChung muitiemchung:muiTiemChungs) {
-                listCongDan.add(muitiemchung.getCongDanID());
-            }
-            predicates.add((nguoiTiemChungRoot.get("congDanID").in(listCongDan)));
+
+
         }
 
         if (!predicates.isEmpty()) {
@@ -292,7 +315,6 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         em.close();
 
 
-
         return typedQuery.getSingleResult();
     }
 
@@ -300,7 +322,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     public List<NguoiTiemChung> searchNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki,
                                                      String hovaten, Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung,
                                                      Integer page, Integer size, String tinhthanhma, String tinhthanhten, String quanhuyenma,
-                                                     String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan, String loaiThuocTiem, String diachinoio) {
+                                                     String quanhuyenten, String phuongxama, String phuongxaten, Boolean isDatTieuChuan,
+                                                     String loaiThuocTiem, String diachinoio, Long lichtiemchungid, Long tinhtrangxacnhan, List<Integer> listtinhtrangdangki) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -313,6 +336,12 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         // Predicate[] predicates = new Predicate[] {};
         List<Predicate> predicates = new ArrayList<Predicate>();
 
+        if (lichtiemchungid > 0 && tinhtrangxacnhan >= 0) {
+            Root<PhieuHenTiem> phieuHenTiemRoot = cq.from(PhieuHenTiem.class);
+            predicates.add(cb.equal(nguoiTiemChungRoot.get("id"), phieuHenTiemRoot.get("nguoiTiemChungId")));
+            predicates.add(cb.equal(phieuHenTiemRoot.get("lichTiemChungId"), lichtiemchungid));
+            predicates.add(cb.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), tinhtrangxacnhan));
+        }
 
         if (Validator.isNotNull(cmtcccd)) {
             // ParameterExpression<String> p = cb.parameter(String.class);
@@ -377,8 +406,8 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             // ParameterExpression<Integer> p = cb.parameter(Integer.class);
             predicates.add(cb.equal(nguoiTiemChungRoot.get("tinhTrangDangKi"), tinhtrangdangki));
         }
-        if(Validator.isNotNull(diachinoio)){
-            predicates.add(cb.like(nguoiTiemChungRoot.get("diaChiNoiO"), "%"+diachinoio+"%"));
+        if (Validator.isNotNull(diachinoio)) {
+            predicates.add(cb.like(nguoiTiemChungRoot.get("diaChiNoiO"), "%" + diachinoio + "%"));
         }
 
         if (kiemtratrung != null && kiemtratrung >= 0) {
@@ -386,52 +415,63 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             predicates.add(cb.equal(nguoiTiemChungRoot.get("kiemTraTrung"), kiemtratrung));
         }
 
-        if(Validator.isNotNull(loaiThuocTiem) && !isDatTieuChuan){
-            List<MuiTiemChung> muiTiemChungs =  muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%");
-            if(Validator.isNotNull(muiTiemChungs)){
+        if (Validator.isNotNull(loaiThuocTiem) && !isDatTieuChuan) {
+            List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%");
+            if (Validator.isNotNull(muiTiemChungs)) {
                 List<Long> congDanDatDieuKien = new ArrayList<>();
-                for (MuiTiemChung muiTiemChung: muiTiemChungs) {
+                for (MuiTiemChung muiTiemChung : muiTiemChungs) {
                     congDanDatDieuKien.add(muiTiemChung.getCongDanID());
                 }
-                if(Validator.isNotNull(congDanDatDieuKien)){
+                if (Validator.isNotNull(congDanDatDieuKien)) {
                     predicates.add((nguoiTiemChungRoot.get("congDanID").in(congDanDatDieuKien)));
                 }
             }
         }
+        if(Validator.isNotNull(listtinhtrangdangki) && listtinhtrangdangki.size()> 0){
+            predicates.add(nguoiTiemChungRoot.get("tinhTrangDangKi").in(listtinhtrangdangki));
+        }
 
-        if(isDatTieuChuan){
-            int soNgayTiem = 0;
-            loaiThuocTiem = loaiThuocTiem.toLowerCase();
-            List<MuiTiemChung> listMuiDatDieuKien = new ArrayList<>();
-            List<MuiTiemChung> list2 = new ArrayList<>();
-            if(loaiThuocTiem.toLowerCase().contains("astra")){
-                soNgayTiem = 8*7;
-                listMuiDatDieuKien= muiTiemChungRepository.findMuiTiemChungDatDieuKien("%astra%", soNgayTiem);
-                list2 = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%", soNgayTiem);
-                listMuiDatDieuKien.addAll(list2);
-            } else if(loaiThuocTiem.toLowerCase().contains("moderna")){
-                soNgayTiem = 8*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%moderna%", soNgayTiem);
-            } else if(loaiThuocTiem.toLowerCase().contains("vero")){
-                soNgayTiem = 3*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%vero%", soNgayTiem);
-            } if(loaiThuocTiem.toLowerCase().contains("pfizer")){
-                soNgayTiem = 3*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%", soNgayTiem);
+        if (isDatTieuChuan) {
+            LichTiemChung lichTiemChung = lichTiemChungService.findById(lichtiemchungid);
+            if(Validator.isNotNull(lichTiemChung)){
+                int soNgayTiem = 0;
+                loaiThuocTiem = loaiThuocTiem.toLowerCase();
+                List<MuiTiemChung> listMuiDatDieuKien = new ArrayList<>();
+                List<MuiTiemChung> list2 = new ArrayList<>();
+                if (loaiThuocTiem.toLowerCase().contains("astra")) {
+                    soNgayTiem = 8 * 7;
+                    listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%astra%",lichtiemchungid, soNgayTiem);
+                    list2 = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%",lichtiemchungid, soNgayTiem);
+                    listMuiDatDieuKien.addAll(list2);
+                } else if (loaiThuocTiem.toLowerCase().contains("moderna")) {
+                    soNgayTiem = 8 * 7;
+                    listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%moderna%",lichtiemchungid, soNgayTiem);
+                } else if (loaiThuocTiem.toLowerCase().contains("vero")) {
+                    soNgayTiem = 3 * 7;
+                    listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%vero%",lichtiemchungid, soNgayTiem);
+                }
+                else if (loaiThuocTiem.toLowerCase().contains("pfizer")) {
+                    soNgayTiem = 3 * 7;
+                    listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%",lichtiemchungid, soNgayTiem);
+                } else {
+                    soNgayTiem = 8 * 7;
+                    listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%",lichtiemchungid, soNgayTiem);
+                }
+
+                if (Validator.isNotNull(listMuiDatDieuKien)) {
+                    List<Long> congDanDatDieuKien = new ArrayList<>();
+                    for (MuiTiemChung muiTiemChung : listMuiDatDieuKien) {
+                        congDanDatDieuKien.add(muiTiemChung.getCongDanID());
+                    }
+                    if (Validator.isNotNull(congDanDatDieuKien)) {
+                        predicates.add((nguoiTiemChungRoot.get("congDanID").in(congDanDatDieuKien)));
+                    }
+                }
             } else {
-                soNgayTiem = 8*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+                System.out.println("lichTiemChung.not.found");
+                return null;
             }
 
-            if(Validator.isNotNull(listMuiDatDieuKien)){
-                List<Long> congDanDatDieuKien = new ArrayList<>();
-                for (MuiTiemChung muiTiemChung: listMuiDatDieuKien) {
-                    congDanDatDieuKien.add(muiTiemChung.getCongDanID());
-                }
-                if(Validator.isNotNull(congDanDatDieuKien)){
-                    predicates.add((nguoiTiemChungRoot.get("congDanID").in(congDanDatDieuKien)));
-                }
-            }
         }
 
 
@@ -461,11 +501,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         result = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 
 
-
 //		List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.setFirstResult(offset).setMaxResults(size).getResultList();
 
         em.close();
-
         return result;
     }
 
@@ -513,6 +551,11 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
                 predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
             }
         }
+        if (nguoiTiemChungDto.listtinhtrangdangki != null && nguoiTiemChungDto.listtinhtrangdangki.size() > 0) {
+            predicates.add((nguoiTiemChungRoot.get("tinhTrangDangKi").in(nguoiTiemChungDto.listtinhtrangdangki)));
+        }
+
+
 
         if (nguoiTiemChungDto.soMuiTiem > 0) {
             predicates.add(builder.equal(congDanRoot.get("soMuiTiem"), nguoiTiemChungDto.soMuiTiem));
@@ -828,6 +871,7 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         List<NguoiTiemChung> lstNguoiTiemChung = typedQuery.getResultList();
 
         em.close();
+
         return lstNguoiTiemChung;
     }
 

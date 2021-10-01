@@ -80,6 +80,7 @@ public class NguoiTiemChungDto {
     public int tinhtrangxacnhan;
 
     public List<Integer> listtinhtrangxacnhan;
+    public List<Integer> listtinhtrangdangki;
 
     public int typeGet;
 

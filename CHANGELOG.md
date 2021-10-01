@@ -110,3 +110,6 @@
 + Chỉnh sửa lỗi trùng lặp người tiêm chủng khi đã xóa và thêm bản ghi mới không vào chính thức
 + Cấu hình lại gửi tin nhắn SMS và ZALO theo dạng template mới
 + Cấu hình giá trị tối đa của tên cơ sở là 30 kí tự theo template của Zalo
++ Thêm chức năng export với từng trạng thái phiếu hẹn
++ Sửa lại tính ngày trong lọc lịch
++ Sửa cơ chế đóng lịch tiêm
