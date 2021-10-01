@@ -581,7 +581,7 @@
           data: {
             page: -1,
             size: -1,
-            tinhtrangdangky: 4,
+            listtinhtrangdangki:  vm.trangThaiFilter != null && vm.trangThaiFilter == 4 ? "1,3" : "1,4",
             cmtcccd: vm.dataInputSearch && vm.dataInputSearch['CMTCCCD'] ? vm.dataInputSearch['CMTCCCD'] : '',
             nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
             ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
@@ -681,7 +681,7 @@
               quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
               phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
               listtinhtrangxacnhan: vm.trangThaiFilter != null ? [vm.trangThaiFilter] : [],
-              tinhtrangdangki: vm.trangThaiFilter == 4 ? 3 : 4,
+              listtinhtrangdangki: vm.trangThaiFilter == 4 ? [1,3] : [1,4],
               soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
               loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
               diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
