@@ -2,14 +2,18 @@ package org.vaccom.vcmgt.controler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,19 +41,22 @@ public class ExportControler {
 
 	@RequestMapping(value = "/nguoitiemchung", method = RequestMethod.POST, produces = "application/octet-stream")
 	public ResponseEntity<?> exportNguoiTiemChung(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
-			@RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
-			@RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
-		    @RequestParam("tinhthanhma") String tinhthanhma,
-		    @RequestParam("tinhthanhten") String tinhthanhten,
-		    @RequestParam("quanhuyenma") String quanhuyenma,
-		    @RequestParam("quanhuyenten") String quanhuyenten,
-		    @RequestParam("phuongxama") String phuongxama,
-		    @RequestParam("phuongxaten") String phuongxaten,
-			@RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
-			@RequestParam("cosoytema") String cosoytema,
-			@RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangki,
-			@RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung) {
+												  @RequestParam(name = "cmtcccd", defaultValue = "") String cmtcccd,
+												  @RequestParam(name = "nhomdoituong", defaultValue = "-1") Integer nhomdoituong,
+												  @RequestParam("ngaydangki") String ngaydangki, @RequestParam("hovaten") String hovaten,
+												  @RequestParam("tinhthanhma") String tinhthanhma,
+												  @RequestParam("tinhthanhten") String tinhthanhten,
+												  @RequestParam("quanhuyenma") String quanhuyenma,
+												  @RequestParam("quanhuyenten") String quanhuyenten,
+												  @RequestParam("phuongxama") String phuongxama,
+												  @RequestParam("phuongxaten") String phuongxaten,
+												  @RequestParam(name = "diabancosoid", defaultValue = "-1") Long diabancosoid,
+												  @RequestParam("cosoytema") String cosoytema,
+												  @RequestParam(name = "lichtiemchungid", defaultValue =  "0") Long lichtiemchungid,
+												  @RequestParam(name = "tinhtrangxacnhan", defaultValue =  "-1") long tinhtrangxacnhan,
+												  @RequestParam(name = "tinhtrangdangky", defaultValue = "-1") Integer tinhtrangdangki,
+												  @RequestParam(name = "kiemtratrung", defaultValue = "-1") Integer kiemtratrung,
+												  @RequestParam(name = "listtinhtrangdangki", defaultValue = StringPool.BLANK) String listtinhtrangdangki) {
 		try {
 
 			VaiTro vaiTro = (VaiTro) request.getAttribute("_VAI_TRO");
@@ -59,9 +66,19 @@ public class ExportControler {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN)
 						.body(MessageUtil.getVNMessageText("data.export.permission_error"));
 			}
+			List<Integer> list = new ArrayList<>();
+
+			if(Validator.isNotNull(listtinhtrangdangki)){
+
+				String[] split = listtinhtrangdangki.split(",");
+				for(int i=0;i<split.length;i++){
+					list.add(Integer.parseInt(split[i]));
+				}
+			}
 
 			File file = exportDataAction.exportNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
-					cosoytema, tinhtrangdangki, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten);
+					cosoytema, tinhtrangdangki, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten,
+					phuongxama, phuongxaten, lichtiemchungid, tinhtrangxacnhan, list);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nguoitiemchung.xls");

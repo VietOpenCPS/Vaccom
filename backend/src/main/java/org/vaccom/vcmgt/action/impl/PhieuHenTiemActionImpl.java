@@ -447,6 +447,11 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 	}
 
 	@Override
+	public List<PhieuHenTiem> findByLichTiemChungId_TinhTrangXacNhan(long LichTiemChungID, int tinhTrangXacNhan) {
+		return phieuHenTiemService.findByLichTiemChungId_TinhTrangXacNhan(LichTiemChungID, tinhTrangXacNhan);
+	}
+
+	@Override
 	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem) {
 		return phieuHenTiemService.update(phieuHenTiem);
 	}

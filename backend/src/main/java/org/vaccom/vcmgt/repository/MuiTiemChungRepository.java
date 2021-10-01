@@ -34,8 +34,8 @@ public interface MuiTiemChungRepository extends JpaRepository<MuiTiemChung, Long
 	@Query(value="SELECT * FROM " + DBConstant._MUITIEMCHUNG_TABLE_NAME + " WHERE loaiThuocTiem like %:loaiThuocTiem%", nativeQuery = true)
 	public List<MuiTiemChung> findByLoaiThuocTiem(@Param("loaiThuocTiem") String loaiThuocTiem);
 
-	@Query(value="SELECT * FROM t_muitiemchung tn WHERE (CongDan_ID,LanTiem) IN ( SELECT CongDan_ID, MAX(LanTiem) FROM t_muitiemchung GROUP BY CongDan_ID ) and LoaiThuocTiem LIKE :loaiThuocTiem and DATEDIFF((select current_date()), (SELECT STR_TO_DATE(NgayTiemChung , '%d/%m/%Y'))) > :soNgayTiem", nativeQuery = true)
-	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(@Param("loaiThuocTiem") String loaiThuocTiem,@Param("soNgayTiem") int soNgayTiem);
+	@Query(value="SELECT * FROM t_muitiemchung tn WHERE (CongDan_ID,LanTiem) IN ( SELECT CongDan_ID, MAX(LanTiem) FROM t_muitiemchung GROUP BY CongDan_ID ) and LoaiThuocTiem LIKE :loaiThuocTiem and DATEDIFF((SELECT STR_TO_DATE((SELECT NgayBatDau FROM t_lichtiemchung where id = :lichtiemchungid) , '%d/%m/%Y')), (SELECT STR_TO_DATE(NgayTiemChung , '%d/%m/%Y'))) > :soNgayTiem", nativeQuery = true)
+	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(@Param("loaiThuocTiem") String loaiThuocTiem, @Param("lichtiemchungid") long lichtiemchungid, @Param("soNgayTiem") int soNgayTiem);
 
 	@Query(value="SELECT * FROM t_muitiemchung tn WHERE (CongDan_ID,LanTiem) IN ( SELECT CongDan_ID, MAX(LanTiem) FROM t_muitiemchung GROUP BY CongDan_ID ) and LoaiThuocTiem LIKE :loaiThuocTiem", nativeQuery = true)
 	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(@Param("loaiThuocTiem") String loaiThuocTiem);

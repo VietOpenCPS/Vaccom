@@ -46,7 +46,7 @@ public class ExportDataActionImpl implements ExportDataAction {
 	@Override
 	public File exportNguoiTiemChung(String cmtcccd, Integer nhomdoituong, String ngaydangki, String hovaten,
 			Long diabancosoid, String cosoytema, Integer tinhtrangdangki, Integer kiemtratrung, String tinhthanhma, String tinhthanhten, String quanhuyenma
-			,  String quanhuyenten, String phuongxama, String phuongxaten) throws Exception {
+			,  String quanhuyenten, String phuongxama, String phuongxaten, Long lichtiemchungid, Long tinhtrangxacnhan, List<Integer> listtinhtrangdangki) throws Exception {
 
 		File destDir = new File(exportDir);
 
@@ -60,11 +60,13 @@ public class ExportDataActionImpl implements ExportDataAction {
 
 		long total = nguoiTiemChungService.countNguoiTiemChung(cmtcccd, nhomdoituong, ngaydangki, hovaten, diabancosoid,
 				cosoytema, tinhtrangdangki, kiemtratrung, tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama,
-				phuongxaten, false, null, null);
+				phuongxaten, false, null, null, lichtiemchungid, tinhtrangxacnhan, listtinhtrangdangki);
 
 		List<NguoiTiemChung> lstNguoiTiemChung = nguoiTiemChungService.searchNguoiTiemChung(cmtcccd, nhomdoituong,
 				ngaydangki, hovaten, diabancosoid, cosoytema, tinhtrangdangki, kiemtratrung, 0, (int) total,
-				tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten, false, null, null);
+				tinhthanhma, tinhthanhten, quanhuyenma, quanhuyenten, phuongxama, phuongxaten,
+				false, null, null, lichtiemchungid, tinhtrangxacnhan, listtinhtrangdangki);
+
 
 		if (lstNguoiTiemChung != null) {
 

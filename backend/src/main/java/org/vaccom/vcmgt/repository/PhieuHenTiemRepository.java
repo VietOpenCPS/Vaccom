@@ -30,6 +30,9 @@ public interface PhieuHenTiemRepository extends JpaRepository<PhieuHenTiem, Long
 
 	public List<PhieuHenTiem> findByNguoiTiemChungId(long id);
 
+	@Query(value="SELECT * FROM " + DBConstant._PHIEUTIEM_TABLE_NAME + " WHERE LichTiemChungID = :lichTiemChungID and TinhTrangXacNhan = :tinhTrangXacNhan", nativeQuery = true)
+	public List<PhieuHenTiem> findByLichTiemChungId_TinhTrangXacNhan(@Param(value = "lichTiemChungID") long lichTiemChungID, @Param(value = "tinhTrangXacNhan") int tinhTrangXacNhan);
+
 	@Query(value="SELECT * FROM " + DBConstant._PHIEUTIEM_TABLE_NAME + " WHERE LichTiemChungID = :lichTiemChungID", nativeQuery = true)
 	public List<PhieuHenTiem> findByLichTiemChungID(@Param(value = "lichTiemChungID") long lichTiemChungID);
 
