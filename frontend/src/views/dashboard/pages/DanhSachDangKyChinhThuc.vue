@@ -748,6 +748,7 @@
         vm.page = 0
         vm.totalItem = 0
         vm.pageCount = 0
+        vm.selected = []
         vm.getDanhSachDangKyChinhThuc(0, vm.dataInputSearch)
       },
       searchDangKyTiem (data) {
