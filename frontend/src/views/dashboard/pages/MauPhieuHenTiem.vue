@@ -16,19 +16,19 @@
               {{dataInfo.Donvicap}}
             </h4>
             <p style="font-weight: 600;text-align: center;text-transform: uppercase;" class="mb-3">Thông báo lịch hẹn gọi tiêm chủng</p>
-            <!-- <p class="mb-2">
-              <span>Kính gửi ông/bà: </span>
+            <p class="mb-2">
+              <span>Họ và tên: </span>
               <span style="font-weight: 600;text-transform: uppercase;">{{dataInfo.HoVaTen}}</span>
-            </p> -->
+            </p>
             <!-- <p class="mb-2">
               <span>Ngày tháng năm sinh: </span>
               <span style="font-weight: 600">{{dataInfo.Donvicap}}</span>
             </p> -->
-            <!-- <p class="mb-2">
+            <p class="mb-2">
               <span>Số CCCD/CMTND: </span>
               <span style="font-weight: 600;">{{dataInfo.cmtcccd}}</span>
             </p>
-            <p class="mb-2" style="text-align: justify;">
+            <!-- <p class="mb-2" style="text-align: justify;">
               <span>Ông/bà được </span>
               <span style="font-weight: 600;">{{dataInfo.CoSoYTe}}</span>
               <span> gọi tiêm chủng theo lịch như sau:</span>

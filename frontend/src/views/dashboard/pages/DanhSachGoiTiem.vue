@@ -124,6 +124,7 @@
             <span class="mr-auto pt-2" v-else>
               Tổng số: <span style="font-weight: bold; color: green">{{totalItem}}</span>
             </span>
+
             <!-- <v-btn v-if="selected.length" color="green" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 2, 'multiple')">
               Xác nhận lịch hẹn
             </v-btn>
@@ -138,13 +139,14 @@
             </v-btn>
             <v-btn v-if="selected.length" color="amber" small class="mx-2 mr-4" @click.stop="xacNhanTinhTrangPhieuHen(selected, 2, 'multiple')">
               In phiếu hẹn xác nhận
-            </v-btn>
-            <v-btn color="#0072bc" small class="mr-0" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
+            </v-btn> -->
+            <v-btn color="#0072bc" small class="mr-2" @click.stop="exportDanhSach" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
               </v-icon>
               Xuất danh sách
-            </v-btn> -->
+            </v-btn>
+
             <v-btn v-if="trangThaiFilter == 0" color="#0072bc" small class="mr-0" @click.stop="guiThongBaoTatCa" :loading="processingAction" :disabled="processingAction">
               <v-icon left size="20">
                 mdi-export
@@ -571,6 +573,37 @@
       }
     },
     methods: {
+      exportDanhSach () {
+        let vm = this
+        vm.processingAction = true
+        let filter = {
+          typeList: 'DanhSachTiemChinhThuc',
+          data: {
+            page: -1,
+            size: -1,
+            tinhtrangdangky: 4,
+            cmtcccd: vm.dataInputSearch && vm.dataInputSearch['CMTCCCD'] ? vm.dataInputSearch['CMTCCCD'] : '',
+            nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
+            ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
+            hovaten: vm.dataInputSearch && vm.dataInputSearch['HoVaTen'] ? vm.dataInputSearch['HoVaTen'] : '',
+            diabancosoid: vm.dataInputSearch && vm.dataInputSearch.hasOwnProperty('DiaBanCoSo_ID') ? vm.dataInputSearch['DiaBanCoSo_ID'] : '',
+            cosoytema: vm.dataInputSearch && vm.dataInputSearch['CoSoYTe_Ma'] ? vm.dataInputSearch['CoSoYTe_Ma'] : '',
+            kiemtratrung: vm.dataInputSearch && vm.dataInputSearch['KiemTraTrung'] ? vm.dataInputSearch['KiemTraTrung'] : -1,
+            tinhthanhma: vm.dataInputSearch && vm.dataInputSearch['TinhThanh_Ma'] ? vm.dataInputSearch['TinhThanh_Ma'] : '',
+            quanhuyenma: vm.dataInputSearch && vm.dataInputSearch['QuanHuyen_Ma'] ? vm.dataInputSearch['QuanHuyen_Ma'] : '',
+            phuongxama: vm.dataInputSearch && vm.dataInputSearch['PhuongXa_Ma'] ? vm.dataInputSearch['PhuongXa_Ma'] : '',
+            tinhthanhten: '',
+            quanhuyenten: '',
+            phuongxaten: '',
+            lichtiemchungid: vm.lichTiemChungFilter
+          }
+        }
+        vm.$store.dispatch('exportDanhSach', filter).then(function(result) {
+          vm.processingAction = false
+        }).catch(function () {
+          vm.processingAction = false
+        })
+      },
       formatNgayHenTiem () {
         let vm = this
         let lengthDate = String(vm.muiTiemChung.NgayHenTiem).trim().length
@@ -646,7 +679,7 @@
               tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
               quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
               phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
-              listtinhtrangxacnhan: [vm.trangThaiFilter],
+              listtinhtrangxacnhan: vm.trangThaiFilter != null ? [vm.trangThaiFilter] : [],
               tinhtrangdangki: vm.trangThaiFilter == 4 ? 3 : 4,
               soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
               loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
