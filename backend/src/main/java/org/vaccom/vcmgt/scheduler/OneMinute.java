@@ -119,6 +119,7 @@ public class OneMinute {
 
                                     try {
                                         code = ZaloNotificationUtil.sendNotification(body.toString(), oaid_access_token);
+
                                     } catch (Exception ex) {
                                         log.error(ex.getMessage());
                                     }
@@ -150,10 +151,12 @@ public class OneMinute {
                                                 paramSMS = SMSConstant.MSISDN + StringPool.EQUAL + phoneNumber + StringPool.AMPERSAND +
                                                         SMSConstant.SMS_TEMPLATE_CODE + StringPool.EQUAL + template_sms_id + StringPool.AMPERSAND +
                                                         "param1" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.HoVaTen).asText(), "UTF-8") + StringPool.AMPERSAND +
-                                                        "param2" + StringPool.EQUAL + payloadJson.get(ZaloConstant.LanTiem).asText() + StringPool.AMPERSAND +
-                                                        "param3" + StringPool.EQUAL + gioHen + StringPool.AMPERSAND +
-                                                        "param4" + StringPool.EQUAL + ngayHen + StringPool.AMPERSAND +
-                                                        "param5" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.DiaDiem).asText(), "UTF-8");
+                                                        "param2" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.NamSinh).asText(), "UTF-8") + StringPool.AMPERSAND +
+                                                        "param3" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.LoaiThuocTiem).asText(), "UTF-8") + StringPool.AMPERSAND +
+                                                        "param4" + StringPool.EQUAL + URLEncoder.encode(payloadJson.get(ZaloConstant.DiaDiem).asText(), "UTF-8") + StringPool.AMPERSAND +
+                                                        "param5" + StringPool.EQUAL + gioHen + StringPool.AMPERSAND +
+                                                        "param6" + StringPool.EQUAL + ngayHen;
+
                                             } else if (loaiThongBao.equals(ZaloConstant.Loai_Giay_Di_Duong)) {
                                                 String LinkGiayDiDuong = URLEncoder.encode(domainUrl + "/#/pages/giay-di-duong/" + payloadJson.get(ZaloConstant.QrCodeID).asText(), "UTF-8");
 

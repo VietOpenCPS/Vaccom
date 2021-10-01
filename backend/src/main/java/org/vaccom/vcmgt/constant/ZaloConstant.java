@@ -24,6 +24,7 @@ public class ZaloConstant {
     public final static String DonViTiem = "DonViTiem";
     public final static String SoDonViCap = "sodonvicap";
     public final static String CMTCCCD = "cmtcccd";
+    public final static String NamSinh = "namsinh";
 
     public final static String NgayCap = "ngaycap";
 
