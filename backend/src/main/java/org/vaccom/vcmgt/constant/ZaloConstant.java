@@ -19,7 +19,7 @@ public class ZaloConstant {
     public final static String NgayHenTiem = "NgayHenTiem";
     public final static String GioHenTiem = "GioHenTiem";
     public final static String DiaDiem = "DiaDiem";
-    public final static String LanTiem = "LanTiem";
+    public final static String LanTiem = "muitiem";
     public final static String LoaiThuocTiem = "LoaiThuocTiem";
     public final static String DonViTiem = "DonViTiem";
     public final static String SoDonViCap = "sodonvicap";

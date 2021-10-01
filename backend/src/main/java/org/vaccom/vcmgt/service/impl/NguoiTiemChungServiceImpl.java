@@ -415,6 +415,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             } else if(loaiThuocTiem.toLowerCase().contains("vero")){
                 soNgayTiem = 3*7;
                 listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%vero%", soNgayTiem);
+            } if(loaiThuocTiem.toLowerCase().contains("pfizer")){
+                soNgayTiem = 3*7;
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%", soNgayTiem);
             } else {
                 soNgayTiem = 8*7;
                 listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);

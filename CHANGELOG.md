@@ -98,8 +98,15 @@
 + Verocell : 4 tuần
 + Astra : 8 tuần
 + Moderna : 8 tuần
++ Pfizer : 3 tuần
 * Bổ sung chức năng check-in, check-out trong trang QRCode
 * Tối ưu danh sách chính thức
 + Bổ sung nhập thông tin mũi tiêm chủng trong form tạo ds chính thức
 + Bổ sung import danh sách đã tiêm vào danh sách chính thức
-+ Thêm sửa xóa theo ds gọi tiêm 
+
+#Release 01/10/2021
++ Thêm tính năng lọc theo loại thuốc và điều kiện đạt tiêu chuẩn ngày tiêm
++ Chỉnh sửa lại lỗi pending khi thêm danh sách gọi tiêm
++ Chỉnh sửa lỗi trùng lặp người tiêm chủng khi đã xóa và thêm bản ghi mới không vào chính thức
++ Cấu hình lại gửi tin nhắn SMS và ZALO theo dạng template mới
++ Cấu hình giá trị tối đa của tên cơ sở là 30 kí tự theo template của Zalo
