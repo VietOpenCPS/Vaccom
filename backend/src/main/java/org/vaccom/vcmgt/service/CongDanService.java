@@ -17,4 +17,6 @@ public interface CongDanService {
     public CongDan update(CongDan congDan);
 
     public CongDan findByHoVaTenAndSoDienThoai(String hoVaTen, String sdt);
+
+    public void deleteById(long id);
 }

@@ -343,23 +343,29 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
-
-		if (countByCmtcccd > 0) {
-			/*
-			 * List<NguoiTiemChung> lstNguoiTiemChung =
-			 * nguoiTiemChungService.findByCmtcccd(cmtcccd); for (NguoiTiemChung
-			 * nguoiTiemChungTmp : lstNguoiTiemChung) {
-			 * if(nguoiTiemChungTmp.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
-			 * nguoiTiemChungTmp.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
-			 * nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp); }
-			 * 
-			 * }
-			 */
-			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
-		} else {
+		if(Validator.isNull(cmtcccd)){
 			nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+		} else {
+			long countByCmtcccd = nguoiTiemChungService.countByCmtcccd(cmtcccd, VaccomUtil.MOIDANGKY);
+
+			if (countByCmtcccd > 0) {
+				/*
+				 * List<NguoiTiemChung> lstNguoiTiemChung =
+				 * nguoiTiemChungService.findByCmtcccd(cmtcccd); for (NguoiTiemChung
+				 * nguoiTiemChungTmp : lstNguoiTiemChung) {
+				 * if(nguoiTiemChungTmp.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
+				 * nguoiTiemChungTmp.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+				 * nguoiTiemChungService.updateNguoiTiemChung(nguoiTiemChungTmp); }
+				 *
+				 * }
+				 */
+				nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRACOTRUNG);
+			} else {
+				nguoiTiemChung.setKiemTraTrung(VaccomUtil.KIEMTRAKHONGTRUNG);
+			}
 		}
+
+
 
 		nguoiTiemChung.setKetQuaKiemTra("{\"nguoikiemtra\": \"auto\"}");
 
@@ -624,6 +630,18 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
 								nguoiTiemChungService.deleteNguoiTiemChung(id);
+								long congDanId = nguoiTiemChung.getCongDanID();
+								List<MuiTiemChung> muiTiemChungs = muiTiemChungService.findByCongDan_ID(congDanId);
+
+								if(Validator.isNotNull(muiTiemChungs)){
+									for (MuiTiemChung muitiemchung: muiTiemChungs) {
+										muiTiemChungService.deleteById(muitiemchung.getId());
+									}
+								};
+//								CongDan congDan = congDanService.findByCongDanId(congDanId);
+//								if(Validator.isNotNull(congDan)){
+//									congDanService.deleteById(congDan.getId());
+//								}
 							} catch (Exception e) {
 								_log.warn(e.getMessage());
 							}

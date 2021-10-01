@@ -822,10 +822,25 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
 			*/
+            NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
+            long congDanId = nguoiTiemChung.getCongDanID();
 
             boolean result = nguoiTiemChungAction.deleteNguoiTiemChung(id);
 
             if (result) {
+                List<MuiTiemChung> muiTiemChungs = muiTiemChungAction.findByCongDan_ID(congDanId);
+
+                if(Validator.isNotNull(muiTiemChungs)){
+                    for (MuiTiemChung muitiemchung: muiTiemChungs) {
+                        muiTiemChungAction.deleteById(muitiemchung.getId());
+                    }
+                };
+//                CongDan congDan = congDanAction.findByCongDanId(congDanId);
+//                _log.info("congDan :" + congDan);
+//                if(Validator.isNotNull(congDan)){
+//                    congDanAction.deleteById(congDan.getId());
+//                }
+
                 String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
 
                 return ResponseEntity.status(HttpStatus.OK).body(msg);
@@ -1046,7 +1061,9 @@ public class ApplicationControler {
 						.body(MessageUtil.getVNMessageText("nguoitiemchung.delete.permission_error"));
 			}
 			*/
+
             nguoiTiemChungAction.deleteNguoiTiemChung(reqBody);
+
 
             String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
 
@@ -1195,14 +1212,6 @@ public class ApplicationControler {
                 }
 
                 jsonArrayObj = mapper.convertValue(lstPhieuHenTiem, ArrayNode.class);
-
-                // Thêm status phiếu gửi :
-                for (JsonNode jsonNode : jsonArrayObj) {
-                    HangChoThongBao hangChoThongBao = hangChoThongBaoAction.findByLoaiThongBao_mappingKey(jsonNode.get("id").asLong(), ZaloConstant.Loai_Hen_TiemChung);
-                    if (Validator.isNotNull(hangChoThongBao)) {
-                        ((ObjectNode) jsonNode).put(ZaloConstant.statusGuiTinNhan, hangChoThongBao.getStatus());
-                    }
-                }
 
                 node.put("phieuHenTiem", jsonArrayObj);
 

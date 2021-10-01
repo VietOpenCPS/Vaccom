@@ -34,4 +34,5 @@ public interface MuiTiemChungService {
 	public MuiTiemChung create(MuiTiemChung muiTiemChung);
 
 	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(String loaiThuocTiem, int soNgayTiem);
+	public List<MuiTiemChung> findMuiTiemChungDatDieuKien(String loaiThuocTiem);
 }
