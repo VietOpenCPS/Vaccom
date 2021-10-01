@@ -406,15 +406,15 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
             List<MuiTiemChung> list2 = new ArrayList<>();
             if(loaiThuocTiem.toLowerCase().contains("astra")){
                 soNgayTiem = 8*7;
-                listMuiDatDieuKien= muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
-                list2 = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+"pfizer"+"%", soNgayTiem);
+                listMuiDatDieuKien= muiTiemChungRepository.findMuiTiemChungDatDieuKien("%astra%", soNgayTiem);
+                list2 = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%pfizer%", soNgayTiem);
                 listMuiDatDieuKien.addAll(list2);
             } else if(loaiThuocTiem.toLowerCase().contains("moderna")){
                 soNgayTiem = 8*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%moderna%", soNgayTiem);
             } else if(loaiThuocTiem.toLowerCase().contains("vero")){
                 soNgayTiem = 3*7;
-                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
+                listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%vero%", soNgayTiem);
             } else {
                 soNgayTiem = 8*7;
                 listMuiDatDieuKien = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%"+loaiThuocTiem+"%", soNgayTiem);
