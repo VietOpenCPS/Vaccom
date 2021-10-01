@@ -366,6 +366,8 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(phieuHenTiem.getNguoiTiemChungId());
 										UyBanNhanDan uyBanNhanDan = uyBanNhanDanAction.findById(lichTiemChung.getUyBanNhanDanID());
 
+
+
 										String TenCoSo = lichTiemChung.getTenCoSo();
 										String DiaDiem = lichTiemChung.getDiaDiemTiemChung();
 
@@ -384,6 +386,9 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 										template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
 										template_data.put(ZaloConstant.SoDonViCap, uyBanNhanDan.getSoDienThoai());
 										template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+										String namSinh = nguoiTiemChung.getNgaySinh();
+										Date namSinhDate = DatetimeUtil.stringToDate(namSinh, DatetimeUtil._VN_DATE_FORMAT);
+										template_data.put(ZaloConstant.NamSinh, namSinhDate.getYear() + 1900);
 
 
 										hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),

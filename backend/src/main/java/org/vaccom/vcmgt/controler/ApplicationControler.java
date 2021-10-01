@@ -3822,6 +3822,10 @@ public class ApplicationControler {
 
                                     template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
 
+                                    String namSinh = nguoiTiemChung.getNgaySinh();
+                                    Date namSinhDate = DatetimeUtil.stringToDate(namSinh, DatetimeUtil._VN_DATE_FORMAT);
+                                    template_data.put(ZaloConstant.NamSinh, namSinhDate.getYear() + 1900);
+
 
                                     hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
                                             nguoiTiemChung.getSoDienThoai(),
@@ -3873,6 +3877,12 @@ public class ApplicationControler {
                             template_data.put(ZaloConstant.QrCodeID, phieuHenTiem.getMaQR());
 
                             template_data.put(ZaloConstant.LanTiem, phieuHenTiem.getLanTiem());
+
+                            String namSinh = nguoiTiemChung.getNgaySinh();
+
+                            Date namSinhDate = DatetimeUtil.stringToDate(namSinh, DatetimeUtil._VN_DATE_FORMAT);
+
+                            template_data.put(ZaloConstant.NamSinh, namSinhDate.getYear() + 1900);
 
 
                             hangChoThongBaoAction.addHangChoThongBao(template_data.toString(),
