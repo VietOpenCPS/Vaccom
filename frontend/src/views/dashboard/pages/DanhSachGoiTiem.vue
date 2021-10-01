@@ -595,7 +595,8 @@
             tinhthanhten: '',
             quanhuyenten: '',
             phuongxaten: '',
-            lichtiemchungid: vm.lichTiemChungFilter
+            lichtiemchungid: vm.lichTiemChungFilter,
+            tinhtrangxacnhan: vm.trangThaiFilter != null ? vm.trangThaiFilter : ''
           }
         }
         vm.$store.dispatch('exportDanhSach', filter).then(function(result) {

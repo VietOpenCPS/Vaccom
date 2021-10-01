@@ -20,14 +20,14 @@
               <span>Họ và tên: </span>
               <span style="font-weight: 600;text-transform: uppercase;">{{dataInfo.HoVaTen}}</span>
             </p>
-            <!-- <p class="mb-2">
-              <span>Ngày tháng năm sinh: </span>
-              <span style="font-weight: 600">{{dataInfo.Donvicap}}</span>
-            </p> -->
             <p class="mb-2">
+              <span>Ngày sinh: </span>
+              <span style="font-weight: 600">{{dataInfo.hasOwnProperty('ngaySinh') ? dataInfo.ngaySinh : ''}}</span>
+            </p>
+            <!-- <p class="mb-2">
               <span>Số CCCD/CMTND: </span>
               <span style="font-weight: 600;">{{dataInfo.cmtcccd}}</span>
-            </p>
+            </p> -->
             <!-- <p class="mb-2" style="text-align: justify;">
               <span>Ông/bà được </span>
               <span style="font-weight: 600;">{{dataInfo.CoSoYTe}}</span>
