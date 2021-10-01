@@ -2068,7 +2068,7 @@ public class ApplicationControler {
                     phieuHenTiem.setCaTiemChungId(0);
                     phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
                     phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
-                    phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 6));
+                    phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 4));
                     phieuHenTiem.setLanTiem(lanTiem);
                     phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
                     phieuHenTiem.setNgayCheckin(StringPool.BLANK);
