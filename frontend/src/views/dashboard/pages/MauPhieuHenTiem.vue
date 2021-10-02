@@ -57,7 +57,8 @@
               <span>Mũi tiêm: </span>
               <span style="font-weight: 600;">{{dataInfo.lanTiem}}</span>
             </p>
-            <p style="font-weight: 600;" class="mb-2">Lưu ý:</p>
+            <i style="color: #2196f3">"Thông báo này thay thế cho các thông báo trước đây"</i>
+            <p style="font-weight: 600;" class="mb-2">Lưu ý: </p>
             <div class="mb-2" style="text-align: justify;">
               <span class="mb-2">-	Đến đúng giờ. Có thể chụp lại màn hình điện thoại để xuất trình mã QR code tại bàn đón tiếp tại điểm tiêm;</span><br>
               <span class="mb-2">-	Mang theo: CMTND/CCCD, Giấy xác nhận tiêm mũi 1(nếu tiêm mũi 2); Thẻ bảo hiểm y tế (nếu có);</span><br>
