@@ -160,6 +160,15 @@
                       :rules="required"
                       required
                     ></v-autocomplete>
+                    <v-text-field
+                      label="Tên lịch tiêm chủng"
+                      class="flex xs12 md12"
+                      v-model="thongTinLichTiem.TenLich"
+                      dense
+                      outlined
+                      :rules="required"
+                      required
+                    ></v-text-field>
                     <v-autocomplete
                       class="flex xs12 md12"
                       hide-no-data
@@ -445,6 +454,7 @@
         ],
         thongTinLichTiem: {
           TenCoSo: '',
+          TenLich: '',
           UyBanNhanDan_ID: '',
           CoSoYTe_ID: '',
           MaDot: '',
@@ -486,6 +496,12 @@
           //   align: 'left',
           //   value: 'maDot'
           // },
+          {
+            sortable: false,
+            text: 'Tên lịch tiêm',
+            align: 'left',
+            value: 'tenLich'
+          },
           {
             sortable: false,
             text: 'Ngày tiêm',
@@ -575,6 +591,7 @@
         vm.thongTinLichTiem.BacSiKham = item.bacSiKham
         vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
         vm.thongTinLichTiem.UyBanNhanDan_ID = item.uyBanNhanDanID
+        vm.thongTinLichTiem.TenLich = item.tenLich
         vm.coSoYTe = item.coSoYTeId
         vm.dialogAddMember = true
       },
@@ -595,6 +612,7 @@
         vm.thongTinLichTiem.TinhTrangLich = 1
         vm.thongTinLichTiem.BacSiKham = item.bacSiKham
         vm.thongTinLichTiem.SoDienThoai = item.soDienThoai
+        vm.thongTinLichTiem.TenLich = item.tenLich
         let filter = {
           id: item['id'],
           data: vm.thongTinLichTiem

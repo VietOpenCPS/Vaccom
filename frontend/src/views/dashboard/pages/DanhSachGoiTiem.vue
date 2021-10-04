@@ -49,10 +49,10 @@
                 clearable
             >
               <template v-slot:selection="data">
-                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
+                <span>{{ data.item.tenLich ? data.item.tenLich : data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
               </template>
               <template v-slot:item="data">
-                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
+                <span>{{ data.item.tenLich ? data.item.tenLich : data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
               </template>
             </v-autocomplete>
             </v-col>
@@ -168,7 +168,7 @@
             hide-default-footer
             class="elevation-1"
             no-data-text="Không có"
-            :loading="loadingData"
+            :loading="loading"
             loading-text="Đang tải... "
             :items-per-page="itemsPerPage"
           >
@@ -452,7 +452,7 @@
         items: [],
         coSoYTe: '',
         ngayCheckinFomarted: '',
-        trangThaiFilter: 0,
+        trangThaiFilter: null,
         danhSachLichTiemChung: [],
         danhSachCaTiemChungFilte: [],
         danhSachCaTiemChung: [],
@@ -550,13 +550,13 @@
         vm.lichTiemChungFilter = Number(query.lichTiemId)
       }
       vm.getLichTiem()
-      // vm.getDanhSachPhieuHenTiem(0)
+      vm.getDanhSachPhieuHenTiem(0)
     },
     watch: {
       lichTiemChungFilter (val) {
-        if (val) {
+        // if (val) {
           this.getDanhSachPhieuHenTiem(0)
-        }
+        // }
       },
       // caTiemChungFilter (val) {
       //   if (val) {
@@ -581,7 +581,7 @@
           data: {
             page: -1,
             size: -1,
-            listtinhtrangdangki:  vm.trangThaiFilter != null && vm.trangThaiFilter == 4 ? "1,3" : "1,4",
+            listtinhtrangdangki:  vm.trangThaiFilter != null && vm.trangThaiFilter == 4 ? "1,3" : "1,3,4",
             cmtcccd: vm.dataInputSearch && vm.dataInputSearch['CMTCCCD'] ? vm.dataInputSearch['CMTCCCD'] : '',
             nhomdoituong: vm.dataInputSearch && vm.dataInputSearch['NhomDoiTuong'] ? vm.dataInputSearch['NhomDoiTuong'] : '',
             ngaydangki: vm.dataInputSearch && vm.dataInputSearch['NgayDangKi'] ? vm.dataInputSearch['NgayDangKi'] : '',
@@ -657,56 +657,57 @@
       },
       getDanhSachPhieuHenTiem (pageIn, dataSearch) {
         let vm = this
+        let param = {
+          headers: {
+          },
+          params: {
+              page: pageIn,
+              size: vm.itemsPerPage
+          }
+        }
+        try {
+        if (Vue.$cookies.get('Token')) {
+            param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
+        }
+        } catch (error) {
+        }
+        let dataPost = {
+            cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
+            hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
+            diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
+            tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
+            quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
+            phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
+            listtinhtrangxacnhan: vm.trangThaiFilter != null ? [vm.trangThaiFilter] : [],
+            listtinhtrangdangki: vm.trangThaiFilter == 4 ? [1,3] : [1,3,4],
+            soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
+            loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
+            diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
+        }
         if (vm.lichTiemChungFilter) {
-          let param = {
-            headers: {
-            },
-            params: {
-                page: pageIn,
-                size: vm.itemsPerPage
-            }
-          }
-          try {
-          if (Vue.$cookies.get('Token')) {
-              param.headers['Authorization'] = 'Bearer ' + Vue.$cookies.get('Token')
-          }
-          } catch (error) {
-          }
-          let dataPost = {
-              lichTiemChungId: vm.lichTiemChungFilter ? vm.lichTiemChungFilter : '',
-              cmtcccd: dataSearch && dataSearch['CMTCCCD'] ? dataSearch['CMTCCCD'] : '',
-              hovaten: dataSearch && dataSearch['HoVaTen'] ? dataSearch['HoVaTen'] : '',
-              diabancosoid: dataSearch && dataSearch.hasOwnProperty('DiaBanCoSo_ID') ? dataSearch['DiaBanCoSo_ID'] : '',
-              tinhthanhma: dataSearch && dataSearch['TinhThanh_Ma'] ? dataSearch['TinhThanh_Ma'] : '',
-              quanhuyenma: dataSearch && dataSearch['QuanHuyen_Ma'] ? dataSearch['QuanHuyen_Ma'] : '',
-              phuongxama: dataSearch && dataSearch['PhuongXa_Ma'] ? dataSearch['PhuongXa_Ma'] : '',
-              listtinhtrangxacnhan: vm.trangThaiFilter != null ? [vm.trangThaiFilter] : [],
-              listtinhtrangdangki: vm.trangThaiFilter == 4 ? [1,3] : [1,4],
-              soMuiTiem: dataSearch && dataSearch['soMuiTiem'] ? dataSearch['soMuiTiem'] : '',
-              loaiThuocTiem: dataSearch && dataSearch['loaiThuocTiem'] ? dataSearch['loaiThuocTiem'] : '',
-              diachinoio: dataSearch && dataSearch['diachinoio'] ? dataSearch['diachinoio'] : '',
-          }
-          vm.loading = true
-          axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
-              vm.loading = false
-              if (response.data.data && response.data.data.length) {
-                vm.items = vm.handleArrPhieu(response.data.data)
-                // vm.items = response.data.data
-                vm.totalItem = response.data.hasOwnProperty('total') ? response.data.total : 0
-                vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
-              } else {
-                vm.items = []
-                vm.totalItem = 0
-                vm.pageCount = 0
-              }
-              
-          }).catch(function (error) {
-              vm.loading = false
+          dataPost['lichTiemChungId'] = vm.lichTiemChungFilter
+        }
+        vm.loading = true
+        axios.post('/rest/v1/app/get/search-nguoitiemchung', dataPost, param).then(function (response) {
+            vm.loading = false
+            if (response.data.data && response.data.data.length) {
+              vm.items = vm.handleArrPhieu(response.data.data)
+              // vm.items = response.data.data
+              vm.totalItem = response.data.hasOwnProperty('total') ? response.data.total : 0
+              vm.pageCount = Math.ceil(vm.totalItem / vm.itemsPerPage)
+            } else {
               vm.items = []
               vm.totalItem = 0
               vm.pageCount = 0
-          })
-        }
+            }
+            
+        }).catch(function (error) {
+            vm.loading = false
+            vm.items = []
+            vm.totalItem = 0
+            vm.pageCount = 0
+        })
+        
       },
       guiThongBao () {
         let vm = this
