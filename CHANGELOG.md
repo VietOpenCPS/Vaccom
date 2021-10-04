@@ -113,3 +113,7 @@
 + Thêm chức năng export với từng trạng thái phiếu hẹn
 + Sửa lại tính ngày trong lọc lịch
 + Sửa cơ chế đóng lịch tiêm
+
+#update 04/10/2021
++ Cho phép import trùng sdt 
++ Thêm thời gian vào trang hiển thị danh sách lịch tiêm

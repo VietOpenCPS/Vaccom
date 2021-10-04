@@ -284,7 +284,9 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
                     soNgayTiem = 8 * 7;
                 } else if (loaiThuocTiem.toLowerCase().contains("vero")) {
                     soNgayTiem = 3 * 7;
-                } else {
+                } else if (loaiThuocTiem.toLowerCase().contains("pfizer")) {
+                    soNgayTiem = 3 * 7;
+                }else {
                     soNgayTiem = 8 * 7;
                 }
                 List<MuiTiemChung> muiTiemChungs = muiTiemChungRepository.findMuiTiemChungDatDieuKien("%" + loaiThuocTiem + "%", lichtiemchungid, soNgayTiem);
@@ -819,6 +821,11 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     @Override
     public NguoiTiemChung findBycongDanID(long id) {
         return nguoiTiemChungRepository.findBycongDanID(id);
+    }
+
+    @Override
+    public long countByTen_SDT(String hovaten, String sodienthoai) {
+        return nguoiTiemChungRepository.countByTen_SDT(hovaten, sodienthoai);
     }
 
     @Override

@@ -321,7 +321,7 @@ public class ImportDataActionImpl implements ImportDataAction {
 					nguoiTiemChungDto.ngaysinh = rowData[2];
 					if(rowData[4] != null && !rowData[4].isEmpty()) {
 						nguoiTiemChungDto.gioitinh = StringUtils.stripAccents(rowData[4])
-								.equalsIgnoreCase("Nu") ? 1 : 0;
+								.equalsIgnoreCase("nu") ? 1 : 0;
 					} else {
 						int lgbt = 2;
 						nguoiTiemChungDto.gioitinh = lgbt;
