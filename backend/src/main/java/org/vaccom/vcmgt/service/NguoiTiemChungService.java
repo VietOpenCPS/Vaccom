@@ -56,6 +56,6 @@ public interface NguoiTiemChungService {
 
 	public NguoiTiemChung findBycongDanID(long id);
 
-
+	public long countByTen_SDT(String hovaten, String sodienthoai);
 
 }

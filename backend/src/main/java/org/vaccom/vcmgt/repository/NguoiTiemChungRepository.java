@@ -58,6 +58,10 @@ public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, 
 			@Param(value = "cosoytema") String cosoytema, @Param(value = "page") Integer page,
 			@Param(value = "size") Integer size);
 
+	@Query(value = "SELECT count(*) FROM " + DBConstant._NGUOITIEMCHUNG_TABLE_NAME
+			+ " n WHERE n.HoVaTen = :hovaten AND n.SoDienThoai =:sodienthoai", nativeQuery = true)
+	public long countByTen_SDT(@Param(value = "hovaten") String hovaten, @Param(value = "sodienthoai") String sodienthoai);
+
 
 
 

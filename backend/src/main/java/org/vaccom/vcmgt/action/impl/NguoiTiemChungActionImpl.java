@@ -93,12 +93,18 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	public void addNguoiTiemChung(NguoiTiemChungDto nguoiTiemChungDto) throws Exception {
 		NguoiTiemChung nguoiTiemChung = new NguoiTiemChung();
 
-		long countUser = !nguoiTiemChungDto.cmtcccd.isEmpty()
-				? nguoiTiemChungService.countByCmtcccd(nguoiTiemChungDto.cmtcccd) : 0;
+//		long countUser = !nguoiTiemChungDto.cmtcccd.isEmpty()
+//				? nguoiTiemChungService.countByCmtcccd(nguoiTiemChungDto.cmtcccd) : 0;
+//
+//		if(countUser == 0 && nguoiTiemChungDto.cmtcccd.isEmpty()) {
+//			countUser = nguoiTiemChungService.countBySoDienThoai(nguoiTiemChungDto.sodienthoai);
+//		}
+//
+//		if (countUser > 0) {
+//			return;
+//		}
 
-		if(countUser == 0 && nguoiTiemChungDto.cmtcccd.isEmpty()) {
-			countUser = nguoiTiemChungService.countBySoDienThoai(nguoiTiemChungDto.sodienthoai);
-		}
+		long countUser = nguoiTiemChungService.countByTen_SDT(nguoiTiemChungDto.hovaten, nguoiTiemChungDto.sodienthoai);
 
 		if (countUser > 0) {
 			return;
@@ -115,6 +121,7 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 		nguoiTiemChung.setCmtcccd(nguoiTiemChungDto.cmtcccd);
 		nguoiTiemChung.setSoTheBHYT(nguoiTiemChungDto.sothebhyt);
 		nguoiTiemChung.setDiaChiNoiO(nguoiTiemChungDto.diachinoio);
+		nguoiTiemChung.setPhuongXaMa(nguoiTiemChungDto.phuongxama);
 		nguoiTiemChung.setPhuongXaTen(nguoiTiemChungDto.phuongxaten);
 		nguoiTiemChung.setQuanHuyenTen(nguoiTiemChungDto.quanhuyenten);
 		nguoiTiemChung.setTinhThanhTen(nguoiTiemChungDto.tinhthanhten);
