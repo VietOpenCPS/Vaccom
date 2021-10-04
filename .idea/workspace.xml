@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="thêm changelog" />
+    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="thêm changelog">
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelogdb.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelogdb.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -393,7 +396,21 @@
       <option name="project" value="LOCAL" />
       <updated>1633107211073</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="thêm changelog">
+      <created>1633320460991</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1633320460991</updated>
+    </task>
+    <task id="LOCAL-00039" summary="thêm changelog">
+      <created>1633333637815</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1633333637815</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

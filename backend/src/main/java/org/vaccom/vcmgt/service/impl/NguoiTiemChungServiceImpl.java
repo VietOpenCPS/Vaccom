@@ -547,11 +547,12 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
         if (nguoiTiemChungDto.listtinhtrangxacnhan != null && nguoiTiemChungDto.listtinhtrangxacnhan.size() > 0) {
             predicates.add((phieuHenTiemRoot.get("tinhTrangXacNhan").in(nguoiTiemChungDto.listtinhtrangxacnhan)));
         } else {
-            if (nguoiTiemChungDto.typeGet == 0) {
-                predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
-            } else {
-                predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
-            }
+//            if (nguoiTiemChungDto.typeGet == 0) {
+//                predicates.add(builder.equal(phieuHenTiemRoot.get("tinhTrangXacNhan"), nguoiTiemChungDto.tinhtrangxacnhan));
+//            }
+//            else {
+//                predicates.add(builder.notEqual(phieuHenTiemRoot.get("tinhTrangXacNhan"), 0));
+//            }
         }
         if (nguoiTiemChungDto.listtinhtrangdangki != null && nguoiTiemChungDto.listtinhtrangdangki.size() > 0) {
             predicates.add((nguoiTiemChungRoot.get("tinhTrangDangKi").in(nguoiTiemChungDto.listtinhtrangdangki)));

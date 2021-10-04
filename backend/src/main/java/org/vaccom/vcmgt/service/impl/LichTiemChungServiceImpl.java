@@ -54,7 +54,7 @@ public class LichTiemChungServiceImpl implements LichTiemChungService {
 
 		if (page < 0 || size < 0) {
 			page = 0;
-			size = 30;
+			size = (int) lichTiemChungRepository.count();
 		}
 		Sort sort = Sort.by(Sort.Direction.ASC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
@@ -71,7 +71,7 @@ public class LichTiemChungServiceImpl implements LichTiemChungService {
 	public List<LichTiemChung> findByCoSoYTeId(long id, int page, int size) {
 		if (page < 0 || size < 0) {
 			page = 0;
-			size = 30;
+			size = (int) lichTiemChungRepository.countByCoSoYTeId(id);
 		}
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);

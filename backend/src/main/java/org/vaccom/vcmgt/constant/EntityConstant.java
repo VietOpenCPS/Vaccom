@@ -71,6 +71,7 @@ public class EntityConstant {
 	public static final String IS_AUTO_ACCEPT = "isAutoAccept";
 	public static final String COUNT_ACCEPT = "countAccept";
 	public static final String CONGDAN_ID = "CongDan_ID";
+	public static final String TENLICH = "TenLich";
 
 	public static final String STT = "STT";
 	public static final String GIODUOCTIEM = "GioDuocTiem";

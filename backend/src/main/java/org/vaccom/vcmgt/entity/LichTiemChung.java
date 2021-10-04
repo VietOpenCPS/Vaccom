@@ -37,6 +37,11 @@ public class LichTiemChung implements Serializable {
 	@Column(name = "MaDot")
 	private String maDot;
 
+
+
+	@Column(name = "TenLich")
+	private String tenLich;
+
 	@Column(name = "NgayBatDau")
 	private String ngayBatDau;
 
@@ -84,6 +89,15 @@ public class LichTiemChung implements Serializable {
 
 	@Column(name = "GioHenTiem")
 	private String gioHenTiem;
+
+
+	public String getTenLich() {
+		return tenLich;
+	}
+
+	public void setTenLich(String tenLich) {
+		this.tenLich = tenLich;
+	}
 
 	public long getId() {
 		return id;
