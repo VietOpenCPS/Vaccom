@@ -118,3 +118,5 @@
 + Cho phép import trùng sdt 
 + Thêm thời gian vào trang hiển thị danh sách lịch tiêm
 + fix cơ chế lấy danh sách lịch tiêm chủng trong ds gọi tiêm (size = -1, page = -1)
++ Thêm cột tên lịch 
++ Sửa lại filter toàn bộ trong màn hình gọi tiêm

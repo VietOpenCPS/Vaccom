@@ -175,6 +175,9 @@ ALTER TABLE vaccom.t_giaydiduong ADD COLUMN  `CongDan_ID` bigint(20) DEFAULT 0;
 
 ALTER TABLE vaccom.t_muitiemchung DROP COLUMN `NguoiTiemChungID`;
 
+#update 04/10/2021
+ALTER TABLE vaccom.t_lichtiemchung ADD COLUMN `TenLich` varchar(64) DEFAULT NULL;
+
 
 
 

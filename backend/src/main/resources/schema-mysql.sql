@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `t_lichtiemchung` (
   `UyBanNhanDanID` bigint(20) DEFAULT 0,
   `TenCoSo` varchar(256) DEFAULT NULL,
   `GioHenTiem` varchar(6) DEFAULT NULL,
+  `TenLich` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ;
 
