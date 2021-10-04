@@ -80,6 +80,9 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		String gioHenTiem = bodyData.has(EntityConstant.GIOHENTIEM) ? bodyData.get(EntityConstant.GIOHENTIEM).textValue()
 				: StringPool.BLANK;
 
+		String tenLich = bodyData.has(EntityConstant.TENLICH) ? bodyData.get(EntityConstant.TENLICH).textValue()
+				: StringPool.BLANK;
+
 		long uyBanNhanDanID = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
 				: 0;
 
@@ -145,6 +148,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setUyBanNhanDanID(uyBanNhanDanID);
 		lichTiemChung.setTenCoSo(tenCoSo);
 		lichTiemChung.setGioHenTiem(gioHenTiem);
+		lichTiemChung.setTenLich(tenLich);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}
@@ -237,6 +241,9 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		long uyBanNhanDanID = bodyData.has(EntityConstant.UYBANNHANDAN_ID) ? bodyData.get(EntityConstant.UYBANNHANDAN_ID).longValue()
 				: 0;
 
+		String tenLich = bodyData.has(EntityConstant.TENLICH) ? bodyData.get(EntityConstant.TENLICH).textValue()
+				: StringPool.BLANK;
+
 		String tenCoSo = null;
 
 		if(coSoYTeId > 0){
@@ -280,6 +287,7 @@ public class LichTiemChungActionImpl implements LichTiemChungAction {
 		lichTiemChung.setGioHenTiem(gioHenTiem);
 		lichTiemChung.setUyBanNhanDanID(uyBanNhanDanID);
 		lichTiemChung.setTenCoSo(tenCoSo);
+		lichTiemChung.setTenLich(tenLich);
 
 		return lichTiemChungService.updateLichTiemChung(lichTiemChung);
 	}
