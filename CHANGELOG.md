@@ -117,3 +117,4 @@
 #update 04/10/2021
 + Cho phép import trùng sdt 
 + Thêm thời gian vào trang hiển thị danh sách lịch tiêm
++ fix cơ chế lấy danh sách lịch tiêm chủng trong ds gọi tiêm (size = -1, page = -1)
