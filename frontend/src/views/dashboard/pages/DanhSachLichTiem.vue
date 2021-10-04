@@ -49,6 +49,9 @@
             <template v-slot:item.index="{ item, index }">
               <span>{{ (page + 1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
+            <template v-slot:item.ngayBatDau="{ item, index }">
+                {{item.gioHenTiem}} - {{item.ngayBatDau}}
+            </template>
             <template v-slot:item.tongSoMuiTiem="{ item, index }">
                 {{item.tongSoMuiTiem}}
                 <p class="mb-2">Số ca: {{ item.soCaTiem}} </p>

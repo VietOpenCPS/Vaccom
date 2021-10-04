@@ -49,10 +49,10 @@
                 clearable
             >
               <template v-slot:selection="data">
-                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.ngayBatDau}})</span>
+                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
               </template>
               <template v-slot:item="data">
-                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.ngayBatDau}})</span>
+                <span>{{ data.item.diaDiemTiemChung }} (Ngày tiêm: {{data.item.gioHenTiem}} - {{data.item.ngayBatDau}})</span>
               </template>
             </v-autocomplete>
             </v-col>
