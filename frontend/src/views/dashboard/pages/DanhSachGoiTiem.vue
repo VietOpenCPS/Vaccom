@@ -175,6 +175,11 @@
             <template v-slot:item.index="{ item, index }">
               <span>{{ (page + 1) * itemsPerPage - itemsPerPage + index + 1 }}</span>
             </template>
+            <template v-slot:item.hoVaTen="{ item, index }">
+                <p class="mb-2">{{ item.hoVaTen}}</p>
+                <p class="mb-2" style="color: blue">Ngày sinh: {{ item.ngaySinh}}</p>
+                <p class="mb-2" style="color: blue">Sđt: {{ item.soDienThoai}}</p>
+            </template>
             <template v-slot:item.diaChiNoiO="{ item, index }">
                 <p class="mb-2">{{ item.diaChiNoiO}} - {{item.phuongXaTen}} - {{item.quanHuyenTen}} - {{item.tinhThanhTen}}</p>
             </template>
