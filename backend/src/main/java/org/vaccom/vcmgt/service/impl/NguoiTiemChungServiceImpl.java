@@ -830,6 +830,11 @@ public class NguoiTiemChungServiceImpl implements NguoiTiemChungService {
     }
 
     @Override
+    public List<NguoiTiemChung> findBycongDanIDReturnList(long id) {
+        return nguoiTiemChungRepository.findBycongDanIDReturnList(id);
+    }
+
+    @Override
     public List<NguoiTiemChung> searchListChuyenDangKyChinhThuc(NguoiTiemChungDto nguoiTiemChungDto) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
 

@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="thêm changelog">
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/changelogdb.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelogdb.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -825,7 +825,19 @@ public class ApplicationControler {
             NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(id);
             long congDanId = nguoiTiemChung.getCongDanID();
 
-            boolean result = nguoiTiemChungAction.deleteNguoiTiemChung(id);
+
+            List<NguoiTiemChung> lst = nguoiTiemChungAction.findBycongDanIDReturnList(congDanId);
+
+            _log.info(lst.size());
+
+            boolean result = false;
+            for (NguoiTiemChung nguoiTiemChungEntity: lst) {
+                _log.info(nguoiTiemChungEntity.getId());
+                result = nguoiTiemChungAction.deleteNguoiTiemChung(nguoiTiemChungEntity.getId());
+                if(!result){
+                    break;
+                }
+            }
 
             if (result) {
                 List<MuiTiemChung> muiTiemChungs = muiTiemChungAction.findByCongDan_ID(congDanId);
@@ -836,11 +848,11 @@ public class ApplicationControler {
                     }
                 }
                 ;
-//                CongDan congDan = congDanAction.findByCongDanId(congDanId);
-//                _log.info("congDan :" + congDan);
-//                if(Validator.isNotNull(congDan)){
-//                    congDanAction.deleteById(congDan.getId());
-//                }
+                CongDan congDan = congDanAction.findByCongDanId(congDanId);
+
+                if(Validator.isNotNull(congDan)){
+                    congDanAction.deleteById(congDan.getId());
+                }
 
                 String msg = MessageUtil.getVNMessageText("nguoitiemchung.delete.success");
 

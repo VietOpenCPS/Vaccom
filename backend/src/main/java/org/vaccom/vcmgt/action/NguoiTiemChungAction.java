@@ -64,4 +64,6 @@ public interface NguoiTiemChungAction {
 
 	public NguoiTiemChung findBycongDanID(long id);
 
+	public List<NguoiTiemChung> findBycongDanIDReturnList(long id);
+
 }
