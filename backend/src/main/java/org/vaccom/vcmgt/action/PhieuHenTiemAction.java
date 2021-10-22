@@ -54,5 +54,6 @@ public interface PhieuHenTiemAction {
 
 	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem);
 
+	public List<PhieuHenTiem> findExist(long lichTiemChungId, long nguoiTiemChungId);
 }
 

@@ -2081,31 +2081,39 @@ public class ApplicationControler {
                     } else {
                         lanTiem = muiTiemChungList.size() + 1;
                     }
+                    List<PhieuHenTiem> findExist = phieuHenTiemAction.findExist(phieuHenTiemDto.LichTiemChungID, nguoiTiemChungID);
 
                     if (Validator.isNull(nguoiTiemChung)) {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(MessageUtil.getVNMessageText("nguoiTiemChung.chitiet.not_found"));
                     }
-                    PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
 
-                    phieuHenTiem.setGioHenTiem(lichTiemChung.getGioHenTiem());
-                    phieuHenTiem.setLichTiemChungId(lichTiemChung.getId());
-                    phieuHenTiem.setCaTiemChungId(0);
-                    phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
-                    phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
-                    phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 4));
-                    phieuHenTiem.setLanTiem(lanTiem);
-                    phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
-                    phieuHenTiem.setNgayCheckin(StringPool.BLANK);
-                    phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
-                    phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
-                    phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
-                    phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
+                    if(findExist.size() == 0 || findExist.isEmpty()){
+                        PhieuHenTiem phieuHenTiem = new PhieuHenTiem();
 
-                    phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+                        phieuHenTiem.setGioHenTiem(lichTiemChung.getGioHenTiem());
+                        phieuHenTiem.setLichTiemChungId(lichTiemChung.getId());
+                        phieuHenTiem.setCaTiemChungId(0);
+                        phieuHenTiem.setNgayHenTiem(lichTiemChung.getNgayBatDau());
+                        phieuHenTiem.setNguoiTiemChungId(nguoiTiemChung.getId());
+                        phieuHenTiem.setMaQR(VaccomUtil.generateQRCode("pht", 4));
+                        phieuHenTiem.setLanTiem(lanTiem);
+                        phieuHenTiem.setTinhTrangXacNhan(VaccomUtil.DUKIEN);
+                        phieuHenTiem.setNgayCheckin(StringPool.BLANK);
+                        phieuHenTiem.setThongTinCheckin(StringPool.BLANK);
+                        phieuHenTiem.setGioDuocTiem(StringPool.BLANK);
+                        phieuHenTiem.setTrieuChungSauTiem(StringPool.BLANK);
+                        phieuHenTiem.setDieuTriTrieuChung(StringPool.BLANK);
 
+                        phieuHenTiemAction.addPhieuHenTiem(phieuHenTiem);
+
+
+                    } else {
+                        _log.error("Phieu hen tiem da ton tai : lichtiemchungId : " + phieuHenTiemDto.LichTiemChungID + " - nguoitiemchungid: " + nguoiTiemChungID + " - hovaten : " + nguoiTiemChung.getHoVaTen());
+                    }
                     nguoiTiemChung.setTinhTrangDangKi(VaccomUtil.DACHUYENSANGPHIEUHEN);
                     nguoiTiemChungAction.update(nguoiTiemChung);
+
 
                 }
 

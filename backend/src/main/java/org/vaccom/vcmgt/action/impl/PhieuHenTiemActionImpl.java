@@ -455,6 +455,11 @@ public class PhieuHenTiemActionImpl implements PhieuHenTiemAction {
 		return phieuHenTiemService.update(phieuHenTiem);
 	}
 
+	@Override
+	public List<PhieuHenTiem> findExist(long lichTiemChungId, long nguoiTiemChungId) {
+		return phieuHenTiemService.findExist(lichTiemChungId, nguoiTiemChungId);
+	}
+
 
 	private final Log _log = LogFactory.getLog(PhieuHenTiemActionImpl.class);
 }

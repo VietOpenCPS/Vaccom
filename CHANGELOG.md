@@ -120,3 +120,8 @@
 + fix cơ chế lấy danh sách lịch tiêm chủng trong ds gọi tiêm (size = -1, page = -1)
 + Thêm cột tên lịch 
 + Sửa lại filter toàn bộ trong màn hình gọi tiêm
+
+
+#update 21/10/2021
++ Sửa lỗi xóa không hết người tiêm chủng trong danh sách ban đầu
++ Fix lỗi dublicate phiếu hẹn

@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="thêm changelog">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="267d0985-07b5-4f91-b8b4-24b65815e03f" name="Default Changelist" comment="fix lỗi xóa người tiêm chủng không xóa hết">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/NguoiTiemChungAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/NguoiTiemChungActionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/PhieuHenTiemAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/PhieuHenTiemAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/PhieuHenTiemActionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/action/impl/PhieuHenTiemActionImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/controler/ApplicationControler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/NguoiTiemChungRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/NguoiTiemChungService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/NguoiTiemChungServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/PhieuHenTiemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/repository/PhieuHenTiemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/PhieuHenTiemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/PhieuHenTiemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/PhieuHenTiemServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/org/vaccom/vcmgt/service/impl/PhieuHenTiemServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -417,7 +416,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633333637815</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="fix lỗi xóa người tiêm chủng không xóa hết">
+      <created>1634803732277</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1634803732277</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -433,7 +439,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Done import excel + gửi tin nhắn hàng loạt" />
     <MESSAGE value="NGăn việc update status lùi trong phần gửi tin nhắn hàng loạt" />
     <MESSAGE value="update Vaccom.postman_collection.json" />
     <MESSAGE value="Tắt log ImportDataActionImpl" />
@@ -458,6 +463,7 @@
     <MESSAGE value="Cho phép chỉnh sửa khi đã duyệt giấy đi đường" />
     <MESSAGE value="Fix conflict" />
     <MESSAGE value="thêm changelog" />
-    <option name="LAST_COMMIT_MESSAGE" value="thêm changelog" />
+    <MESSAGE value="fix lỗi xóa người tiêm chủng không xóa hết" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix lỗi xóa người tiêm chủng không xóa hết" />
   </component>
 </project>

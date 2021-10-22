@@ -214,4 +214,9 @@ public class PhieuHenTiemServiceImpl implements PhieuHenTiemService {
 		return phieuHenTiemRepository.save(phieuHenTiem);
 	}
 
+	@Override
+	public List<PhieuHenTiem> findExist(long lichTiemChungId, long nguoiTiemChungId) {
+		return phieuHenTiemRepository.findExist(lichTiemChungId, nguoiTiemChungId);
+	}
+
 }
