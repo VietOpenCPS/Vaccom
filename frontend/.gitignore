@@ -7,8 +7,8 @@ package-lock.json
 /tests/e2e/screenshots/
 
 # local env files
-.env.local
-.env.*.local
+# .env.local
+# .env.*.local
 
 # Log files
 npm-debug.log*
