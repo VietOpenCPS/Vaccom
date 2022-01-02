@@ -55,14 +55,14 @@
             </p>
             <p class="mb-2">
               <span>Mũi tiêm: </span>
-              <!-- <span style="font-weight: 600;">{{dataInfo.lanTiem}}</span> -->
-              <span style="font-weight: 600;">3</span>
+              <span style="font-weight: 600;">{{dataInfo.lanTiem}}</span>
+              <!-- <span style="font-weight: 600;">3</span> -->
             </p>
             <i style="color: #2196f3">"Thông báo này thay thế cho các thông báo trước đây"</i>
             <p style="font-weight: 600;" class="mb-2">Lưu ý: </p>
             <div class="mb-2" style="text-align: justify;">
               <span class="mb-2">-	Đến đúng giờ. Có thể chụp lại màn hình điện thoại để xuất trình mã QR code tại bàn đón tiếp tại điểm tiêm;</span><br>
-              <span class="mb-2">-	Mang theo: CMTND/CCCD, Phiếu sàng lọc; Thẻ bảo hiểm y tế (nếu có);</span><br>
+              <span class="mb-2">-	Mang theo: CMTND/CCCD, Giấy xác nhận tiêm mũi 1, 2; Thẻ bảo hiểm y tế (nếu có);</span><br>
               <span class="mb-2">-	Khai báo đầy đủ các biểu mẫu tại điểm tiêm; (Để giảm ùn tắc tại điểm tiêm: Có thể tải và in ra giấy, điền đầy đủ thông tin trước khi đến điểm tiêm theo đường dẫn sau đây);</span><br>
               <p class="my-2">
                 <v-icon size="20" color="blue" class="mr-2">mdi-file-word-outline</v-icon> 
@@ -71,9 +71,9 @@
               
               <span class="mb-2">-	Tải/ cài đặt “ Sổ sức khỏe điện tử” cập nhật đầy đủ, chính xác thông tin cá nhân để giảm thiểu các thủ tục kiểm soát tại điểm tiêm;</span><br>
             </div>
-            <p class="mb-2">
+            <!-- <p class="mb-2">
               Trường hợp đã tiêm mũi 3 hoặc không đến được điểm tiêm: Vui lòng thông tin lại ngay lý do cho tổ trưởng tổ dân phố.
-            </p>
+            </p> -->
           </div>
           <div v-if="isSigned" class="pl-2">
             <span>Tình trạng đăng ký: </span>
