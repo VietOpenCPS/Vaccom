@@ -2074,13 +2074,15 @@ public class ApplicationControler {
                 for (Integer nguoiTiemChungID : NguoiTiemChungIdList) {
                     NguoiTiemChung nguoiTiemChung = nguoiTiemChungAction.findById(nguoiTiemChungID);
 
-                    List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
-                    int lanTiem = 0;
-                    if (Validator.isNull(muiTiemChungList)) {
-                        lanTiem = 1;
-                    } else {
-                        lanTiem = muiTiemChungList.size() + 1;
-                    }
+//                    List<MuiTiemChung> muiTiemChungList = muiTiemChungAction.findByCongDan_ID(nguoiTiemChung.getCongDanID());
+//                    int lanTiem = 0;
+//                    if (Validator.isNull(muiTiemChungList)) {
+//                        lanTiem = 1;
+//                    } else {
+//                        lanTiem = muiTiemChungList.size() + 1;
+//                    }
+//                    Fix cứng mũi tiêm = 3 (04/01/2022)
+                    int lanTiem = 3;
                     List<PhieuHenTiem> findExist = phieuHenTiemAction.findExist(phieuHenTiemDto.LichTiemChungID, nguoiTiemChungID);
 
                     if (Validator.isNull(nguoiTiemChung)) {
