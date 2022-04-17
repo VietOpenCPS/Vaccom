@@ -634,9 +634,14 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 					long id = GetterUtil.getLong(strId, 0);
 					if (id > 0) {
 						NguoiTiemChung nguoiTiemChung = nguoiTiemChungService.findById(id);
+
 						if (nguoiTiemChung != null && nguoiTiemChung.getTinhTrangDangKi() == VaccomUtil.MOIDANGKY) {
 							try {
-								nguoiTiemChungService.deleteNguoiTiemChung(id);
+								List<NguoiTiemChung> listXoa = nguoiTiemChungService.findBycongDanIDReturnList(nguoiTiemChung.getCongDanID());
+								for(NguoiTiemChung nguoitiemChung1 :listXoa){
+									nguoiTiemChungService.deleteNguoiTiemChung(nguoitiemChung1.getId());
+								}
+
 								long congDanId = nguoiTiemChung.getCongDanID();
 								List<MuiTiemChung> muiTiemChungs = muiTiemChungService.findByCongDan_ID(congDanId);
 
@@ -1025,6 +1030,11 @@ public class NguoiTiemChungActionImpl implements NguoiTiemChungAction {
 	@Override
 	public NguoiTiemChung findBycongDanID(long id) {
 		return nguoiTiemChungService.findBycongDanID(id);
+	}
+
+	@Override
+	public List<NguoiTiemChung> findBycongDanIDReturnList(long id) {
+		return nguoiTiemChungService.findBycongDanIDReturnList(id);
 	}
 
 	@Override

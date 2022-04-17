@@ -31,6 +31,8 @@ public interface NguoiTiemChungRepository extends JpaRepository<NguoiTiemChung, 
 	
 	public List<NguoiTiemChung> findByCmtcccd(String cmtcccd);
 
+	@Query(value="SELECT * FROM " + DBConstant._NGUOITIEMCHUNG_TABLE_NAME + " WHERE CongDan_ID = :id", nativeQuery = true)
+	public List<NguoiTiemChung> findBycongDanIDReturnList(@Param(value = "id")long id);
 
 	public NguoiTiemChung findBycongDanID(long id);
 

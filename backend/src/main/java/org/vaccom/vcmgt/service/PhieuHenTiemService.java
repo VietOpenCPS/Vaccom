@@ -44,4 +44,6 @@ public interface PhieuHenTiemService {
 public List<PhieuHenTiem> findByLichTiemChungId_TinhTrangXacNhan(long LichTiemChungID, int TinhTrangXacNhan);
 	public PhieuHenTiem update(PhieuHenTiem phieuHenTiem);
 
+public List<PhieuHenTiem> findExist (long lichTiemChungId, long nguoiTiemChungId);
+
 }
